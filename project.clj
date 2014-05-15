@@ -9,6 +9,6 @@
                  [clj-time "0.4.4"]
                  [prismatic/plumbing "0.1.0"]]
   :profiles {:dev {:dependencies [[org.clojure/tools.trace "0.7.6"]]}
-             :uberjar {:aot [wit.picsou]}}
+             :uberjar {:aot [picsou.core]}}
   :test-selectors {:default (complement :benchmark)
                    :benchmark :benchmark})
