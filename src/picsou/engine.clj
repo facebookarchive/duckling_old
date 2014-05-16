@@ -218,7 +218,7 @@
   Unresolved tokens are returned as is."
   [token context module]
   (let [values (time/resolve token context)]
-    (if (empty? values)
+    (if-not (empty? values)
       (map #(assoc token :value %) values)
       [(assoc token :not-resolved true)]))) ; return token if not resolved with flag
 
