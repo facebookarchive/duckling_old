@@ -1,3 +1,18 @@
+#Deployment on our private s3 repository
+
+export you AWS/IAM key_id && access key:
+
+```
+LEIN_PASSPHRASE=RNGJuL********
+LEIN_USERNAME=AKIA****
+```
+Deploy using lein from your picsou folder.
+
+```bash
+lein deploy private
+```
+
+
 # Usage
 
 Load nlp.picsou.core
