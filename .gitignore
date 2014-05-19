@@ -1,1 +1,6 @@
 .DS_Store
+.lein-repl-history
+picsou.iml
+pom.xml
+target
+.idea

@@ -13,21 +13,19 @@
 (def rules-map (atom {}))
 (def corpus-map (atom {}))
 (def classifiers-map (atom {}))
-(def default-lang "en")
-(def default-module :en$datetime) ; for repl usage
-(def default-context {:reference-time (time/local-date-time [2013 2 12 4 30])})
+(def default-context {:reference-time (time/now)})
 
-(defn get-classifier
+(defn- get-classifier
   [id]
   (when id
     (get @classifiers-map (keyword id))))
 
-(defn get-rules
+(defn- get-rules
   [id]
   (when id
     (get @rules-map (keyword id))))
 
-(defn compare-tokens
+(defn- compare-tokens
   "Compares two candidate tokens a and b for runtime selection.
   wanted-dim is a hash whose keys are the :dim wanted by the caller, the value
   can be anything truthy.
@@ -51,7 +49,7 @@
             pb (learn/route-prob b classifiers)]
         (compare pa pb))))))
 
-(defn parse
+(defn- parse
   "Parse a sentence. Returns the stash and a curated list of winners.
    Targets is a coll of {:dim dim :label label} : only winners of these dims are
    kept, and they receive a :label key = the label provided.
@@ -88,35 +86,29 @@
                                      :body (:text %)})))]
     {:stash stash :winners winners}))
 
-(defn print-stash
+(defn- print-stash
   "Print stash to STDOUT"
-  ([stash] (print-stash stash default-module))
-  ([stash lang] (print-stash stash lang (get-classifier lang)))
-  ([stash lang classifiers]
-    (let [width (count (:text (first stash)))]
-      (doseq [[tok i] (reverse (map vector stash (iterate inc 0)))]
-        (let [pos (:pos tok)
-              end (:end tok)]
-          (if pos
-            (println
-              (format "%s%s%s %2d | %-9s | %-25s | P = % 04.4f | %s"
-                (apply str (repeat pos \space))
-                (apply str (repeat (- end pos) \-))
-                (apply str (repeat (- width end -1) \space))
-                i
-                (when-let [x (:dim tok)] (name x))
-                (when-let [x (-> tok :rule :name )] (name x))
-                (float (learn/route-prob tok classifiers))
-                (strings/join " + " (mapv #(get-in % [:rule :name ]) (:route tok)))))
-            (println (:text tok))))))))
+  [stash classifiers]
+  (let [width (count (:text (first stash)))]
+    (doseq [[tok i] (reverse (map vector stash (iterate inc 0)))]
+      (let [pos (:pos tok)
+            end (:end tok)]
+        (if pos
+          (println
+            (format "%s%s%s %2d | %-9s | %-25s | P = % 04.4f | %s"
+                    (apply str (repeat pos \space))
+                    (apply str (repeat (- end pos) \-))
+                    (apply str (repeat (- width end -1) \space))
+                    i
+                    (when-let [x (:dim tok)] (name x))
+                    (when-let [x (-> tok :rule :name)] (name x))
+                    (float (learn/route-prob tok classifiers))
+                    (strings/join " + " (mapv #(get-in % [:rule :name]) (:route tok)))))
+          (println (:text tok)))))))
 
-(defn print-tokens
+(defn- print-tokens
   "Recursively prints a tree representing a route"
-  ([tokens]
-    (print-tokens tokens default-module))
-  ([tokens lang]
-    (print-tokens tokens lang (get-classifier lang)))
-  ([tokens lang classifiers]
+  ([tokens classifiers]
     {:pre [(coll? tokens)]}
     (let [tokens (if (vector? tokens)
                    tokens
@@ -124,8 +116,8 @@
           tokens (if (= 1 (count tokens))
                    tokens
                    [{:route tokens :rule {:name "root"}}])]
-      (print-tokens tokens lang classifiers 0 "")))
-  ([tokens lang classifiers depth prefix]
+      (print-tokens tokens classifiers 0 "")))
+  ([tokens classifiers depth prefix]
     (doseq [[token i] (map vector tokens (iterate inc 1))]
       (let [;; determine name to display
             name (if-let [name (get-in token [:rule :name ])]
@@ -142,89 +134,16 @@
                    (if last? \` \|))))
         (println (format "%s (%s)" name p))
         (print-tokens (:route token)
-          lang
           classifiers
           (inc depth)
           (if (pos? depth) new-prefix ""))))))
 
-;; default context is the same as the corpus context
-(defn play
-  "Show processing details for one sentence. Defines a 'details' function."
-  ([s]
-    (play s default-module))
-  ([s lang]
-    (play s lang nil))
-  ([s lang targets]
-    (play s lang targets default-context))
-  ([s lang targets context]
-    (let [targets (when targets (map (fn [dim] {:dim dim :label dim}) targets))
-          {stash :stash
-           winners :winners} (parse s context lang targets)]
-      ;; 1. print stash
-      (print-stash stash lang)
-      (printf "%d tokens in stash\n" (count stash))
-
-      ;; 2. print winners
-      (print "Winners: ")
-      (doseq [winner winners]
-        (case (:dim winner)
-          :time (println "Time" (:value winner))
-          :duration (println "Duration" (select-keys winner [:grain :fuzzy :units :val]))
-          :number (println "Number" "integer?" (:integer winner) (:value winner) (:body winner))
-          :pnl (println "Potential named location: " (:pnl winner) " Within n :" (:n winner))
-          :unit (println "Unit :" (:cat winner) " => " (:val winner))
-          (println "Other: " (:dim winner) (:val winner)))
-        (when (:latent winner) (println "Latent token"))
-        (print-tokens winner lang))
-
-      ;; 3. ask for details
-      (println)
-      (println (format "For further info: (details idx) where 0 < idx < %d" (dec (count stash))))
-      (def details (fn [n]
-                     (print-tokens (nth stash n) lang (get-classifier lang))
-                     (println (nth stash n))))
-      (def token (fn [n]
-                   (nth stash n))))))
-
-(defn run-corpus
-  "Run the corpus"
-  ([data]
-    (run-corpus data default-module))
-  ([{context :context, tests :tests} lang]
-    (for [test tests
-          text (:text test)]
-      (try
-        (let [stash (engine/pass-all text (get-rules lang))
-              ;; _ (prn (get-classifier lang))
-              winners (->> stash
-                        (filter :pos )
-                        (util/keep-partial-max
-                          #(compare-tokens %1 %2 (get-classifier lang) {})))
-              winner (when (= 1 (count winners)) (first winners))
-              winner-count (count winners)
-              ;; in this context, several winners means failure
-              check (first (:checks test))]
-          (if (some #(check % context) winners)
-            [0 (str "OK  " (str "\"" text "\""))]
-            [1 (str "FAIL" (str "\"" text "\"") " none of the " winner-count " winners did pass the test")]))
-        (catch Exception e
-          [1 (str "FAIL caught" (.getMessage e))])))))
-
-(defn show-corpus
-  "Runs the corpus and prints the results to the terminal."
-  ([] (show-corpus default-module))
-  ([lang]
-    (let [output (run-corpus (lang @corpus-map) lang)]
-      (doseq [line output]
-        (println (second line)))
-      (printf "%d examples, %d failed.\n" (count output) (->> output (map first) (reduce +))))))
-
-(defn merge-rules
+(defn- merge-rules
   [current config-key new-file]
   (let [new-file (io/resource (str "picsou/rules/" new-file ".clj"))
         new-rules (engine/rules (read-string (slurp new-file)))]
     (assoc
-      current
+        current
       config-key
       (concat (config-key current) new-rules))))
 
@@ -233,27 +152,98 @@
   (let [new-file (io/resource (str "picsou/corpus/" new-file ".clj"))
         new-corpus (corpus/read-corpus new-file)]
     (assoc
-      current
+        current
       config-key
       (util/merge-according-to {:tests concat :context merge} (config-key current) new-corpus))))
 
-(defn reload!
-  "Reload all corpus, rules and classifiers"
-  [config]
-  (reset! rules-map {})
-  (reset! corpus-map {})
-  (reset! classifiers-map {})
-  (doseq [[config-key {corpus-files :corpus rules-files :rules}] config]
-    (info "Loading picsou config " config-key)
-    (doseq [corpus-file corpus-files]
-      (swap! corpus-map merge-corpus config-key corpus-file))
-    (doseq [rules-file rules-files]
-      (swap! rules-map merge-rules config-key rules-file)))
-  (doseq [[config-key rules] @rules-map]
-    (swap! classifiers-map assoc config-key
-                                 (learn/train-classifiers (get @corpus-map config-key)
-                                                          rules
-                                                          learn/extract-route-features))))
+(defn run-corpus
+  "Run the corpus given in parameter for the given module"
+  [{context :context, tests :tests} module-id]
+  (for [test tests
+        text (:text test)]
+    (try
+      (let [stash (engine/pass-all text (get-rules module-id))
+            winners (->> stash
+                         (filter :pos)
+                         (util/keep-partial-max
+                           #(compare-tokens %1 %2 (get-classifier module-id) {})))
+            winner-count (count winners)
+            ;; in this context, several winners means failure
+            check (first (:checks test))]
+        (if (some #(check % context) winners)
+          [0 (str "OK  " (str "\"" text "\""))]
+          [1 (str "FAIL" (str "\"" text "\"") " none of the " winner-count " winners did pass the test")]))
+      (catch Exception e
+        [1 (str "FAIL caught" (.getMessage e))]))))
+
+;; default context is the same as the corpus context
+(defn play
+  "Show processing details for one sentence. Defines a 'details' function."
+  ([s module-id]
+   (play s module-id nil))
+  ([s module-id targets]
+   (play s module-id targets default-context))
+  ([s module-id targets context]
+   (let [targets (when targets (map (fn [dim] {:dim dim :label dim}) targets))
+         {stash :stash
+          winners :winners} (parse s context module-id targets)]
+     ;; 1. print stash
+     (print-stash stash module-id)
+     (printf "%d tokens in stash\n" (count stash))
+
+     ;; 2. print winners
+     (print "Winners: ")
+     (doseq [winner winners]
+       (case (:dim winner)
+         :time (println "Time" (:value winner))
+         :duration (println "Duration" (select-keys winner [:grain :fuzzy :units :val]))
+         :number (println "Number" "integer?" (:integer winner) (:value winner) (:body winner))
+         :pnl (println "Potential named location: " (:pnl winner) " Within n :" (:n winner))
+         :unit (println "Unit :" (:cat winner) " => " (:val winner))
+         (println "Other: " (:dim winner) (:val winner)))
+       (when (:latent winner) (println "Latent token"))
+       (print-tokens winner module-id))
+
+     ;; 3. ask for details
+     (println)
+     (println (format "For further info: (details idx) where 0 < idx < %d" (dec (count stash))))
+     (def details (fn [n]
+                    (print-tokens (nth stash n) module-id (get-classifier module-id))
+                    (println (nth stash n))))
+     (def token (fn [n]
+                  (nth stash n))))))
+
+(defn run
+  "Runs the corpus and prints the results to the terminal."
+  ([] (doseq [module-id (keys @corpus-map)]
+        (run module-id)))
+  ([module-id]
+    (let [output (run-corpus (module-id @corpus-map) module-id)]
+      (doseq [line output]
+        (println (second line)))
+      (printf "%d examples, %d failed.\n" (count output) (->> output (map first) (reduce +))))))
+
+(defn load!
+  "Load/Reload rules and classifiers from the config in parameter.
+  If no config provided, load the default config"
+  ([]
+   (let [config (-> "default-config.clj" io/resource slurp read-string)]
+     (load! config)))
+  ([config]
+   (reset! rules-map {})
+   (reset! corpus-map {})
+   (reset! classifiers-map {})
+   (doseq [[config-key {corpus-files :corpus rules-files :rules}] config]
+     (info "Loading picsou config " config-key)
+     (doseq [corpus-file corpus-files]
+       (swap! corpus-map merge-corpus config-key corpus-file))
+     (doseq [rules-file rules-files]
+       (swap! rules-map merge-rules config-key rules-file)))
+   (doseq [[config-key rules] @rules-map]
+     (swap! classifiers-map assoc config-key
+            (learn/train-classifiers (get @corpus-map config-key)
+                                     rules
+                                     learn/extract-route-features)))))
 
 (defn extract
   "Public API. Leven-stash is ignored for the moment.
@@ -269,10 +259,7 @@
     (infof "Extracting from '%s' with targets %s" sentence targets)
     (letfn [(extract'
               [module targets] ; targets specify all the dims we should extract
-              (let [module (keyword module)
-                    module (if (module @rules-map)
-                             module
-                             (keyword (str default-lang "$" (-> module str (strings/split #"\$") second))))]
+              (let [module (keyword module)]
                 (when-not (module @rules-map)
                   (throw (ex-info "Unknown picsou config" {:module module})))
                 (->> (parse sentence context module targets)
