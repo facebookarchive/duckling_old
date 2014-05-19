@@ -1,0 +1,5 @@
+deployment:
+  master:
+    branch: master
+    commands:
+      - lein deploy private
