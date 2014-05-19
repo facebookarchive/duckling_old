@@ -1,6 +1,5 @@
 (ns picsou.util-test
   (:use [clojure.test]
-        [plumbing.core]
         [picsou.util])
   (:require [clojure.string :as string]))
 

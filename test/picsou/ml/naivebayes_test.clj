@@ -43,6 +43,3 @@
     (is (= ["c" -8.245676055817812]
            (classify text-classifier (count-words "chinese chinese chinese tokyo japan"))))))
 
-
-(run-tests 'picsou.ml.naivebayes-test)
-

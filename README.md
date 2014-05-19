@@ -12,7 +12,6 @@ Deploy using lein from your picsou folder.
 lein deploy private
 ```
 
-
 # Usage
 
 Load nlp.picsou.core

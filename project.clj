@@ -4,7 +4,8 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :url "https://github.com/oliviervaussy/picsou"
-  :plugins [[s3-wagon-private "1.1.2"]]
+  :plugins [[s3-wagon-private "1.1.2"]
+            [quickie "0.2.5"]]
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/tools.nrepl "0.2.3"]
                  [org.clojure/tools.logging "0.2.6"]
