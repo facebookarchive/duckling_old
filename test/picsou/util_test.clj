@@ -1,7 +1,6 @@
 (ns picsou.util-test
   (:use [clojure.test]
-        [picsou.util])
-  (:require [clojure.string :as string]))
+        [picsou.util]))
 
 
 (deftest mergings
