@@ -1,4 +1,4 @@
-(defproject wit/picsou "0.1.0"
+(defproject wit/picsou (str "0.1." (or (System/getenv "CIRCLE_BUILD_NUM") 0))
   :description "Date & Number parser"
   :main picsou.core
   :license {:name "Eclipse Public License"
