@@ -179,11 +179,11 @@
 ;; default context is the same as the corpus context
 (defn play
   "Show processing details for one sentence. Defines a 'details' function."
-  ([s module-id]
-   (play s module-id nil))
-  ([s module-id targets]
-   (play s module-id targets default-context))
-  ([s module-id targets context]
+  ([module-id s]
+   (play module-id s nil))
+  ([module-id s targets]
+   (play module-id s targets default-context))
+  ([module-id s targets context]
    (let [targets (when targets (map (fn [dim] {:dim dim :label dim}) targets))
          {stash :stash
           winners :winners} (parse s context module-id targets)]
