@@ -215,13 +215,20 @@
 
 (defn run
   "Runs the corpus and prints the results to the terminal."
-  ([] (doseq [module-id (keys @corpus-map)]
-        (run module-id)))
+  ([]
+   (let [results (mapv run (keys @corpus-map))]
+     (println "Results :")
+     (doseq [[module-id ex-count failed] results]
+       (printf "%s: %d examples, %d failed.\n" module-id ex-count failed))
+     (println "Global Failed count: " (reduce + (map last results)))))
   ([module-id]
-    (let [output (run-corpus (module-id @corpus-map) module-id)]
+    (let [output (run-corpus (module-id @corpus-map) module-id)
+          ex-count (count output)
+          failed (->> output (map first) (reduce +))]
       (doseq [line output]
         (println (second line)))
-      (printf "%d examples, %d failed.\n" (count output) (->> output (map first) (reduce +))))))
+      (printf "%d examples, %d failed.\n" ex-count failed)
+      [module-id ex-count failed])))
 
 (defn load!
   "Load/Reload rules and classifiers from the config in parameter.
