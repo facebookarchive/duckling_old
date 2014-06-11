@@ -38,9 +38,9 @@ Load Picsou with the default configuration file:
 
 ```
 picsou.core=> (load!)
-INFO: Loading picsou config  :fr$datetime
-INFO: Loading picsou config  :en$datetime
-INFO: Loading picsou config  :es$datetime
+INFO: Loading module  :fr$datetime
+INFO: Loading module  :en$datetime
+INFO: Loading module  :es$datetime
 nil
 ```
 
@@ -163,9 +163,9 @@ To load Picsou with all the modules defined in the default configuration file `r
 
 ```
 picsou.core=> (load!)
-INFO: Loading picsou config  :fr$datetime
-INFO: Loading picsou config  :en$datetime
-INFO: Loading picsou config  :es$datetime
+INFO: Loading module  :fr$datetime
+INFO: Loading module  :en$datetime
+INFO: Loading module  :es$datetime
 nil
 ```
 
@@ -173,7 +173,7 @@ Alternatively, to load Picsou without using a configuration file, you can define
 
 ```
 (load! {:en$location {:corpus ["en.location"] :rules ["en.location"]}})
-INFO: Loading picsou config  :en$location
+INFO: Loading module  :en$location
 ```
 
 # Corpus
@@ -365,11 +365,11 @@ When a corpus test doesn’t pass and you don’t understand why, you can have a
 
 ```
 picsou.core=> (play :en$datetime "45 degrees")
-----------   5 | temperature | <latent temp> degrees     | P =  0.0000 | number as temp +
---           4 | distance    | number as distance        | P =  0.0000 | integer (numeric)
---           3 | temperature | number as temp            | P =  0.0000 | integer (numeric)
---           2 | null        | number (as relative minutes) | P =  0.0000 | integer (numeric)
---           1 | number      | integer (numeric)         | P =  0.0000 |
+----------   5 | temperature | <latent temp> degrees     | P = -1.9167 | number as temp +
+--           4 | distance  | number as distance        | P = -1.5638 | integer (numeric)
+--           3 | temperature | number as temp            | P = -1.9167 | integer (numeric)
+--           2 | null      | number (as relative minutes) | P = -1.1749 | integer (numeric)
+--           1 | number    | integer (numeric)         | P = -0.1501 |
 45 degrees
 6 tokens in stash
 ```
@@ -382,14 +382,21 @@ Columns:
 2. Token index (starting at 1, since the input string itself is token 0)
 3. :dim
 4. Label of the rule that produced the token (that’s why labeling your rules clearly is important)
-5. Probability
+5. Probability (the higher the most probable -- and it's actually the log of the probabily, hence the negative value)
 6. Labels of the rules that produced the tokens in the slots below
 
 If you need more information about a specific token, call the `details` function with the token index:
 
 ```
-(details 3)
+picsou.core=> (details 5)
+<latent temp> degrees (-1.916684190532246)
+|-- number as temp (-1.916684190532246)
+|   `-- integer (numeric) (-0.15006069457573323)
+|       `-- text: 45 (0)
+`-- text: degrees (0)
 ```
+
+If you really need to examine token 5 in depth, you can get the full map with `(token 5)`.
 
 # FAQ
 

@@ -95,7 +95,7 @@
             end (:end tok)]
         (if pos
           (println
-            (format "%s%s%s %2d | %-9s | %-25s | P = % 04.4f | %s"
+            (format "%s%s%s %2d | %-9s | %-25s | P = %04.4f | %s"
                     (apply str (repeat pos \space))
                     (apply str (repeat (- end pos) \-))
                     (apply str (repeat (- width end -1) \space))
@@ -116,7 +116,9 @@
           tokens (if (= 1 (count tokens))
                    tokens
                    [{:route tokens :rule {:name "root"}}])]
-      (print-tokens tokens classifiers 0 "")))
+      (print-tokens tokens classifiers 0)))
+  ([tokens classifiers depth]
+    (print-tokens tokens classifiers depth ""))
   ([tokens classifiers depth prefix]
     (doseq [[token i] (map vector tokens (iterate inc 1))]
       (let [;; determine name to display
@@ -188,7 +190,7 @@
          {stash :stash
           winners :winners} (parse s context module-id targets)]
      ;; 1. print stash
-     (print-stash stash module-id)
+     (print-stash stash (get-classifier module-id))
      (printf "%d tokens in stash\n" (count stash))
 
      ;; 2. print winners
@@ -206,10 +208,9 @@
 
      ;; 3. ask for details
      (println)
-     (println (format "For further info: (details idx) where 0 < idx < %d" (dec (count stash))))
+     (println (format "For further info: (details idx) where 1 <= idx <= %d" (dec (count stash))))
      (def details (fn [n]
-                    (print-tokens (nth stash n) module-id (get-classifier module-id))
-                    (println (nth stash n))))
+                    (print-tokens (nth stash n) (get-classifier module-id))))
      (def token (fn [n]
                   (nth stash n))))))
 
@@ -241,7 +242,7 @@
    (reset! corpus-map {})
    (reset! classifiers-map {})
    (doseq [[config-key {corpus-files :corpus rules-files :rules}] config]
-     (info "Loading picsou config " config-key)
+     (info "Loading module " config-key)
      (doseq [corpus-file corpus-files]
        (swap! corpus-map merge-corpus config-key corpus-file))
      (doseq [rules-file rules-files]
