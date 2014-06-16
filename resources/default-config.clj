@@ -1,4 +1,4 @@
-{:fr$datetime {:corpus ["fr.time"
+{:fr$core {:corpus ["fr.time"
                         "fr.numbers"
                         "fr.temperature"
                         "fr.finance"
@@ -10,7 +10,7 @@
                         "fr.temperature"
                         "en.finance" ; sic
                         "en.communication"]} ; sic
- :en$datetime {:corpus ["en.time"
+ :en$core {:corpus ["en.time"
                         "en.numbers"
                         "en.temperature"
                         "en.finance"
@@ -22,7 +22,7 @@
                         "en.temperature"
                         "en.finance"
                         "en.communication"]}
- :es$datetime {:corpus ["es.time"
+ :es$core {:corpus ["es.time"
                         "es.numbers"
                         "es.temperature"
                         "es.finance"

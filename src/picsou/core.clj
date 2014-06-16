@@ -256,7 +256,7 @@
 (defn extract
   "Public API. Leven-stash is ignored for the moment.
    targets is a coll of maps {:module :dim :label} for instance:
-   {:module fr$datetime, :dim duration, :label wit$duration} to get duration results
+   {:module fr$core, :dim duration, :label wit$duration} to get duration results
    Returns a single coll of tokens with :body :value :start :end :label (=wisp) :latent"
   [sentence context leven-stash targets]
   {:pre [(string? sentence)

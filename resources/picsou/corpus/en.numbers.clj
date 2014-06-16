@@ -6,7 +6,6 @@
   "naught"
   "nought"
   "zero"
-  "boule à zéro"
   (number 0)
 
   "1"
