@@ -12,10 +12,10 @@
 (deftest datetime-corpus-runs-without-failure
   (load!)
   (testing "fr"
-    (is (= (-> (get @corpus-map "fr$datetime") (run-corpus "fr$datetime") diag-corpus) :ok)))
+    (is (= (-> (get @corpus-map "fr$core") (run-corpus "fr$core") diag-corpus) :ok)))
 
   (testing "en"
-    (is (= (-> (get @corpus-map "en$datetime") (run-corpus "en$datetime") diag-corpus) :ok)))
+    (is (= (-> (get @corpus-map "en$core") (run-corpus "en$core") diag-corpus) :ok)))
 
   (testing "Public API (extract)"
     (is (= [{:end 7,
@@ -24,7 +24,7 @@
                      :to "2014-02-01T00:00:00.000-02:00"},
              :body "january",
              :label "T"}]
-           (extract "january" {:reference-time (time/local-date-time [2013 7 14])} nil [{:module "en$datetime"
+           (extract "january" {:reference-time (time/local-date-time [2013 7 14])} nil [{:module "en$core"
                                                                                          :dim "time"
                                                                                          :label "T"}])))))
 

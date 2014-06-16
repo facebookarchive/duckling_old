@@ -95,7 +95,7 @@
             end (:end tok)]
         (if pos
           (println
-            (format "%s%s%s %2d | %-9s | %-25s | P = % 04.4f | %s"
+            (format "%s%s%s %2d | %-9s | %-25s | P = %04.4f | %s"
                     (apply str (repeat pos \space))
                     (apply str (repeat (- end pos) \-))
                     (apply str (repeat (- width end -1) \space))
@@ -116,7 +116,9 @@
           tokens (if (= 1 (count tokens))
                    tokens
                    [{:route tokens :rule {:name "root"}}])]
-      (print-tokens tokens classifiers 0 "")))
+      (print-tokens tokens classifiers 0)))
+  ([tokens classifiers depth]
+    (print-tokens tokens classifiers depth ""))
   ([tokens classifiers depth prefix]
     (doseq [[token i] (map vector tokens (iterate inc 1))]
       (let [;; determine name to display
@@ -188,7 +190,7 @@
          {stash :stash
           winners :winners} (parse s context module-id targets)]
      ;; 1. print stash
-     (print-stash stash module-id)
+     (print-stash stash (get-classifier module-id))
      (printf "%d tokens in stash\n" (count stash))
 
      ;; 2. print winners
@@ -206,22 +208,28 @@
 
      ;; 3. ask for details
      (println)
-     (println (format "For further info: (details idx) where 0 < idx < %d" (dec (count stash))))
+     (println (format "For further info: (details idx) where 1 <= idx <= %d" (dec (count stash))))
      (def details (fn [n]
-                    (print-tokens (nth stash n) module-id (get-classifier module-id))
-                    (println (nth stash n))))
+                    (print-tokens (nth stash n) (get-classifier module-id))))
      (def token (fn [n]
                   (nth stash n))))))
 
 (defn run
   "Runs the corpus and prints the results to the terminal."
-  ([] (doseq [module-id (keys @corpus-map)]
-        (run module-id)))
+  ([]
+   (let [results (mapv run (keys @corpus-map))]
+     (println "Results :")
+     (doseq [[module-id ex-count failed] results]
+       (printf "%s: %d examples, %d failed.\n" module-id ex-count failed))
+     (println "Global Failed count: " (reduce + (map last results)))))
   ([module-id]
-    (let [output (run-corpus (module-id @corpus-map) module-id)]
+    (let [output (run-corpus (module-id @corpus-map) module-id)
+          ex-count (count output)
+          failed (->> output (map first) (reduce +))]
       (doseq [line output]
         (println (second line)))
-      (printf "%d examples, %d failed.\n" (count output) (->> output (map first) (reduce +))))))
+      (printf "%d examples, %d failed.\n" ex-count failed)
+      [module-id ex-count failed])))
 
 (defn load!
   "Load/Reload rules and classifiers from the config in parameter.
@@ -234,7 +242,7 @@
    (reset! corpus-map {})
    (reset! classifiers-map {})
    (doseq [[config-key {corpus-files :corpus rules-files :rules}] config]
-     (info "Loading picsou config " config-key)
+     (info "Loading module " config-key)
      (doseq [corpus-file corpus-files]
        (swap! corpus-map merge-corpus config-key corpus-file))
      (doseq [rules-file rules-files]
@@ -248,7 +256,7 @@
 (defn extract
   "Public API. Leven-stash is ignored for the moment.
    targets is a coll of maps {:module :dim :label} for instance:
-   {:module fr$datetime, :dim duration, :label wit$duration} to get duration results
+   {:module fr$core, :dim duration, :label wit$duration} to get duration results
    Returns a single coll of tokens with :body :value :start :end :label (=wisp) :latent"
   [sentence context leven-stash targets]
   {:pre [(string? sentence)
