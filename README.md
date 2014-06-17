@@ -85,21 +85,21 @@ See the detailed parsing of a given string like "in two hours":
 
 ```
 picsou.core=> (play :en$core "in two hours")
-------------  11 | time      | in/after <duration>       | P =  0.0000 |  + <integer> <unit-of-duration>
-   ---        10 | distance  | number as distance        | P =  0.0000 | integer (0..19)
-   ---         9 | temperature | number as temp            | P =  0.0000 | integer (0..19)
-   ---------   8 | duration  | <integer> <unit-of-duration> | P =  0.0000 | integer (0..19) + hour (unit-of-duration)
-   ---         7 | null      | number (as relative minutes) | P =  0.0000 | integer (0..19)
-   ---         6 | time      | <integer> (latent time-of-day) | P =  0.0000 | integer (0..19)
-   ---         5 | time      | month (numeric)           | P =  0.0000 | integer (0..19)
-   ---         4 | time      | day of month (numeric)    | P =  0.0000 | integer (0..19)
-       -----   3 | unit-of-duration | hour (unit-of-duration)   | P =  0.0000 |
-       -----   2 | cycle     | hour (cycle)              | P =  0.0000 |
-   ---         1 | number    | integer (0..19)           | P =  0.0000 |
-in two hours
+------------  11 | time      | in/after <duration>       | P = -3.2070 |  + <integer> <unit-of-duration>
+   ---        10 | distance  | number as distance        | P = -2.2455 | integer (0..19)
+   ---         9 | temperature | number as temp            | P = -2.2501 | integer (0..19)
+   ---------   8 | duration  | <integer> <unit-of-duration> | P = -2.7215 | integer (0..19) + hour (unit-of-duration)
+   ---         7 | null      | number (as relative minutes) | P = -1.7314 | integer (0..19)
+   ---         6 | time      | <integer> (latent time-of-day) | P = -1.3509 | integer (0..19)
+   ---         5 | time      | month (numeric)           | P = -1.0430 | integer (0..19)
+   ---         4 | time      | day of month (numeric)    | P = -1.5284 | integer (0..19)
+       -----   3 | unit-of-duration | hour (unit-of-duration)   | P = 0.0000 |
+       -----   2 | cycle     | hour (cycle)              | P = 0.0000 |
+   ---         1 | number    | integer (0..19)           | P = -0.1957 |
 12 tokens in stash
 [...]
 ```
+
 
 # Workflow
 
@@ -292,17 +292,17 @@ Here is an illustration of this process, with a stash containing 11 tokens:
 
 ```
 picsou.core=> (play :en$core "in two hours")
-------------  11 | time      | in/after <duration>       | P =  0.0000 |  + <integer> <unit-of-duration>
-   ---        10 | distance  | number as distance        | P =  0.0000 | integer (0..19)
-   ---         9 | temperature | number as temp            | P =  0.0000 | integer (0..19)
-   ---------   8 | duration  | <integer> <unit-of-duration> | P =  0.0000 | integer (0..19) + hour (unit-of-duration)
-   ---         7 | null      | number (as relative minutes) | P =  0.0000 | integer (0..19)
-   ---         6 | time      | <integer> (latent time-of-day) | P =  0.0000 | integer (0..19)
-   ---         5 | time      | month (numeric)           | P =  0.0000 | integer (0..19)
-   ---         4 | time      | day of month (numeric)    | P =  0.0000 | integer (0..19)
-       -----   3 | unit-of-duration | hour (unit-of-duration)   | P =  0.0000 |
-       -----   2 | cycle     | hour (cycle)              | P =  0.0000 |
-   ---         1 | number    | integer (0..19)           | P =  0.0000 |
+------------  11 | time      | in/after <duration>       | P = -3.2070 |  + <integer> <unit-of-duration>
+   ---        10 | distance  | number as distance        | P = -2.2455 | integer (0..19)
+   ---         9 | temperature | number as temp            | P = -2.2501 | integer (0..19)
+   ---------   8 | duration  | <integer> <unit-of-duration> | P = -2.7215 | integer (0..19) + hour (unit-of-duration)
+   ---         7 | null      | number (as relative minutes) | P = -1.7314 | integer (0..19)
+   ---         6 | time      | <integer> (latent time-of-day) | P = -1.3509 | integer (0..19)
+   ---         5 | time      | month (numeric)           | P = -1.0430 | integer (0..19)
+   ---         4 | time      | day of month (numeric)    | P = -1.5284 | integer (0..19)
+       -----   3 | unit-of-duration | hour (unit-of-duration)   | P = 0.0000 |
+       -----   2 | cycle     | hour (cycle)              | P = 0.0000 |
+   ---         1 | number    | integer (0..19)           | P = -0.1957 |
 in two hours
 [...]
 ```
