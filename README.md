@@ -1,4 +1,4 @@
-![build status](https://circleci.com/gh/oliviervaussy/picsou.png?circle-token=402928d80776c89e28c621d690201d1ff3b994e2)
+![build status](https://circleci.com/gh/wit-ai/picsou.png?circle-token=402928d80776c89e28c621d690201d1ff3b994e2)
 
 # What is Picsou
 
