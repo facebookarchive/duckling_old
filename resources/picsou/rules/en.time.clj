@@ -87,6 +87,26 @@
   "named-month"
   #"(?i)december|dec\.?"
   (assoc (month-of-year 12) :form :named-month)
+
+  "season"
+  #"(?i)summer" ;could be smarter and take the exact hour into account... also some years the day can change
+  (assoc (between-dates 21 6 23 9) :form :named-season)
+
+  "season"
+  #"(?i)fall|autumn"
+  (assoc (between-dates 23 9 21 12) :form :named-season)
+
+  "season"
+  #"(?i)winter"
+  (assoc (between-dates 21 12 20 3) :form :named-season)
+
+  "season"
+  #"(?i)spring"
+  (assoc (between-dates 20 3 21 6) :form :named-season)
+
+  "christmas"
+  #"(?i)xmas|christmas"
+  (parse-dmy "25" "12" nil true)
   
   "absorption of , after named day"
   [{:form :named-day} #","]

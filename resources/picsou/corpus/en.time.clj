@@ -326,4 +326,15 @@
   "eight tonight"
   "8 this evening"
   (datetime 2013 2 12 20 - 21)
+
+  "this summer"
+  (datetime 2013 6 21 - 2013 9 23)
+
+  "this winter"
+  (datetime 2013 12 21 - 2014 3 20)
+
+  "xmas"
+  "christmas"
+  (datetime 2013 12 25 - 26)
+
 )

@@ -125,6 +125,22 @@
                 (t/plus end (t/weeks 1)))]
       (modulo [start end] (t/weeks 1) t ctx))))
 
+(defn between-dates [d1 m1 d2 m2]
+  "[20 3 21 6] => 3/20 to 6/21"
+  {:pre [(<= 0 d1 31) (<= 0 d2 31)]} ; note that d2 can be < d1
+  (fn& time [t ctx]
+    (let [rounded (round-to-grain t days)
+          start (-> rounded
+                    (.withMonthOfYear m1)
+                    (.withDayOfMonth d1))
+          end (-> rounded
+                  (.withMonthOfYear m2)
+                  (.withDayOfMonth d2))
+          end (if (t< end start)
+                (t/plus end (t/years 1))
+                end)]
+      (modulo [start end] (t/years 1) t ctx))))
+
 ;; 
 ;; functions that need a reference date (provided by context)
 ;;
