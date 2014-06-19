@@ -33,4 +33,6 @@
                    "es.duration"
                    "es.temperature"
                    "en.finance"
-                   "en.communication"]}}
+                   "en.communication"]}
+ :cn$core {:corpus ["cn.numbers"]
+           :rules ["cn.numbers"]}}
