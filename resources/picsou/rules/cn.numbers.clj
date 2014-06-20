@@ -63,7 +63,7 @@
 
   ;; negative number
   "numbers prefix with -, negative or minus"
-  [#"(?i)-|负\s?" (dim :number #(not (:number-prefixed %)))]
+  [#"(?i)-|负\s?|負\s?" (dim :number #(not (:number-prefixed %)))]
   (let [multiplier -1
         value      (* (:val %2) multiplier)
         int?       (zero? (mod value 1)) ; often true, but we could have 1.1111K
