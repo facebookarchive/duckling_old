@@ -34,5 +34,9 @@
                    "es.temperature"
                    "en.finance"
                    "en.communication"]}
- :cn$core {:corpus ["cn.numbers"]
-           :rules ["cn.numbers"]}}
+ :cn$core {:corpus ["cn.numbers"
+                    "cn.time"]
+           :rules ["cn.numbers"
+                   "cn.time"
+                   "cn.cycles"
+                   "cn.duration"]}}
