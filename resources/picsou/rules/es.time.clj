@@ -160,15 +160,18 @@
 
   "morning"
   #"(?i)ma(ñ|n)ana"
-  (assoc (between-hours 4 12) :form :part-of-day :latent true)
+  (assoc (between-hours 4 12) :form :part-of-day :latent true
+  	:extended (between-hours 0 12))
 
   "afternoon"
   #"(?i)tarde"
-  (assoc (between-hours 12 19) :form :part-of-day :latent true)
+  (assoc (between-hours 12 19) :form :part-of-day :latent true
+  	:extended (between-hours 12 0))
 
   "evening"
   #"(?i)noche"
-  (assoc (between-hours 18 0) :form :part-of-day :latent true)
+  (assoc (between-hours 18 0) :form :part-of-day :latent true
+  	:extended (between-hours 12 0))
 
   "in the <part-of-day>" ;; removes latent
   [#"(?i)(de|por) la" {:form :part-of-day}]
@@ -181,6 +184,10 @@
   "<dim time> <part-of-day>" ; since "morning" "evening" etc. are latent, general time+time is blocked
   [(dim :time) {:form :part-of-day}]
   (intersect %1 %2)
+
+  "<time-of-day> <part-of-day>" ; since "morning" "evening" etc. are latent, general time+time is blocked
+  [{:form :time-of-day} {:form :part-of-day}]
+  (intersect %1 (:extended %2))
 
   ;; hours and minutes (absolute time)
 

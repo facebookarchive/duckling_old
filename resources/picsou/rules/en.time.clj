@@ -6,10 +6,16 @@
   (intersect %1 %2)
 
   ; same thing, with "of" in between like "Sunday of last week"
-  "two time tokens separated by 'of, from, 's"
+  "two time tokens separated by \"of\", \"from\", \"'s\""
   [(dim :time #(not (:latent %))) #"(?i)of|from|'s" (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
 
+  ; mostly for January 12, 2005
+  ; this is a separate rule, because commas separate very specific tokens
+  ; so we want this rule's classifier to learn this
+  "two time tokens separated by \",\""
+  [(dim :time #(not (:latent %))) #"," (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
+  (intersect %1 %3)
   ;;
   
   "named-day"
@@ -333,4 +339,21 @@
   "<time> timezone"
   [(dim :time) (dim :timezone)]
   (assoc %1 :timezone (:value %2))
+
+  ;; Intervals
+  "<month> dd-dd (interval)"
+  [{:form :named-month} #"([012]?\d|30|31)" #"\-|to" #"([012]?\d|30|31)"]
+  (intersect %1 (between-days (Integer/parseInt (-> %2 :groups first))
+  	                          (Integer/parseInt (-> %4 :groups first))))
+
+  "<datetime> - <datetime> (interval)"
+  [(dim :time) #"\-|to" (dim :time)]
+  (interval %1 %3 :inclusive)
+
+  ;; In this special case, the upper limit is exclusive
+  "<hour-of-day> - <hour-of-day> (interval)"
+  [{:form :time-of-day} #"-|to" #(and (= :time-of-day (:form %))
+  									  (not (:latent %)))]
+  (interval %1 %3 :exclusive)
+
 )
