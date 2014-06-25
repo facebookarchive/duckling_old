@@ -101,18 +101,17 @@
       (let [pos (:pos tok)
             end (:end tok)]
         (if pos
-          (println
-            (format "%s %s%s%s %2d | %-9s | %-25s | P = %04.4f | %s"
-                    (if (some #{(:index tok)} winners-indices) "W" " ")
-                    (apply str (repeat pos \space))
-                    (apply str (repeat (- end pos) \-))
-                    (apply str (repeat (- width end -1) \space))
-                    i
-                    (when-let [x (:dim tok)] (name x))
-                    (when-let [x (-> tok :rule :name)] (name x))
-                    (float (learn/route-prob tok classifiers))
-                    (strings/join " + " (mapv #(get-in % [:rule :name]) (:route tok)))))
-          (println (:text tok)))))))
+          (printf "%s %s%s%s %2d | %-9s | %-25s | P = %04.4f | %s\n"
+                  (if (some #{(:index tok)} winners-indices) "W" " ")
+                  (apply str (repeat pos \space))
+                  (apply str (repeat (- end pos) \-))
+                  (apply str (repeat (- width end -1) \space))
+                  i
+                  (when-let [x (:dim tok)] (name x))
+                  (when-let [x (-> tok :rule :name)] (name x))
+                  (float (learn/route-prob tok classifiers))
+                  (strings/join " + " (mapv #(get-in % [:rule :name]) (:route tok))))
+          (printf "  %s\n" (:text tok)))))))
 
 (defn- print-tokens
   "Recursively prints a tree representing a route"

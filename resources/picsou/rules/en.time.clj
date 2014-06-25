@@ -350,10 +350,18 @@
   [(dim :time) #"\-|to" (dim :time)]
   (interval %1 %3 :inclusive)
 
+  "from <datetime> - <datetime> (interval)"
+  [#"(?i)from" (dim :time) #"\-|to" (dim :time)]
+  (interval %2 %4 :inclusive)
+
   ;; In this special case, the upper limit is exclusive
   "<hour-of-day> - <hour-of-day> (interval)"
   [{:form :time-of-day} #"-|to" #(and (= :time-of-day (:form %))
   									  (not (:latent %)))]
   (interval %1 %3 :exclusive)
 
+  "from <hour-of-day> - <hour-of-day> (interval)"
+  [#"(?i)from" {:form :time-of-day} #"-|to" #(and (= :time-of-day (:form %))
+  									              (not (:latent %)))]
+  (interval %2 %4 :exclusive)
 )
