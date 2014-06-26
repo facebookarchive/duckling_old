@@ -346,6 +346,8 @@
 
   "July 13-15"
   "July 13 to 15"
+  "July 13 thru 15"
+  "July 13 through 15"
   "July 13 - July 15"
   (datetime 2013 7 13 - 16)
 

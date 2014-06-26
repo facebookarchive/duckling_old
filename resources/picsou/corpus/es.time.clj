@@ -207,6 +207,9 @@
   "a las 15 horas"
   (datetime 2013 2 12 15 - 16)
 
+  "a las ocho de la tarde"
+  (datetime 2013 2 12 20 - 21)
+
   "15:00"
   "15.00"
   (datetime 2013 2 12 15 00 - 01)
