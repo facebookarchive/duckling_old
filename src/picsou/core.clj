@@ -13,7 +13,7 @@
 (def rules-map (atom {}))
 (def corpus-map (atom {}))
 (def classifiers-map (atom {}))
-(def default-context {:reference-time (time/now)})
+(def default-context {:reference-time (time/local-date-time [2013 2 12 4 30])})
 
 (defn- get-classifier
   [id]
@@ -38,6 +38,7 @@
         cmp-interval (util/compare-intervals
                        [(:pos a) (:end a)]
                        [(:pos b) (:end b)])] ; +1 0 -1 nil
+  ;(printf "Comparing %d and %d \n" (:index a) (:index b))
   (if-not same-dim
     ; unless a is wanted and covers b, or the contrary, they are not comparable
     (cond (and wanted-a (= 1 cmp-interval)) 1
@@ -46,7 +47,8 @@
     (if (not= 0 cmp-interval)
       cmp-interval ; one interval recovers the other
       (let [pa (learn/route-prob a classifiers) ; same interval
-            pb (learn/route-prob b classifiers)]
+            pb (learn/route-prob b classifiers)] 
+        ;(printf "Comparing %d (%f) and %d (%f) \n" (:index a) pa (:index b) pb)
         (compare pa pb))))))
 
 (defn- parse
@@ -62,6 +64,10 @@
                    s module (util/spprint targets)))
         rules (get-rules module)
         stash (engine/pass-all s rules)
+        ; add an index to tokens in the stash
+        stash (map #(if (map? %1) (assoc %1 :index %2) %1)
+                   stash
+                   (iterate inc 0))
         dim-label (when targets (into {} (for [{:keys [dim label]} targets]
                                            [(keyword dim) label])))
         winners (->> stash
@@ -88,23 +94,24 @@
 
 (defn- print-stash
   "Print stash to STDOUT"
-  [stash classifiers]
-  (let [width (count (:text (first stash)))]
+  [stash classifiers winners]
+  (let [width (count (:text (first stash)))
+        winners-indices (map :index winners)]
     (doseq [[tok i] (reverse (map vector stash (iterate inc 0)))]
       (let [pos (:pos tok)
             end (:end tok)]
         (if pos
-          (println
-            (format "%s%s%s %2d | %-9s | %-25s | P = %04.4f | %s"
-                    (apply str (repeat pos \space))
-                    (apply str (repeat (- end pos) \-))
-                    (apply str (repeat (- width end -1) \space))
-                    i
-                    (when-let [x (:dim tok)] (name x))
-                    (when-let [x (-> tok :rule :name)] (name x))
-                    (float (learn/route-prob tok classifiers))
-                    (strings/join " + " (mapv #(get-in % [:rule :name]) (:route tok)))))
-          (println (:text tok)))))))
+          (printf "%s %s%s%s %2d | %-9s | %-25s | P = %04.4f | %s\n"
+                  (if (some #{(:index tok)} winners-indices) "W" " ")
+                  (apply str (repeat pos \space))
+                  (apply str (repeat (- end pos) \-))
+                  (apply str (repeat (- width end -1) \space))
+                  i
+                  (when-let [x (:dim tok)] (name x))
+                  (when-let [x (-> tok :rule :name)] (name x))
+                  (float (learn/route-prob tok classifiers))
+                  (strings/join " + " (mapv #(get-in % [:rule :name]) (:route tok))))
+          (printf "  %s\n" (:text tok)))))))
 
 (defn- print-tokens
   "Recursively prints a tree representing a route"
@@ -160,18 +167,13 @@
 
 (defn run-corpus
   "Run the corpus given in parameter for the given module"
-  [{context :context, tests :tests} module-id]
+  [{context :context, tests :tests} module]
   (for [test tests
         text (:text test)]
     (try
-      (let [stash (engine/pass-all text (get-rules module-id))
-            winners (->> stash
-                         (filter :pos)
-                         (util/keep-partial-max
-                           #(compare-tokens %1 %2 (get-classifier module-id) {})))
+      (let [{:keys [stash winners]} (parse text context module)
             winner-count (count winners)
-            ;; in this context, several winners means failure
-            check (first (:checks test))]
+            check (first (:checks test))] ; only one test is supported
         (if (some #(check % context) winners)
           [0 (str "OK  " (str "\"" text "\""))]
           [1 (str "FAIL" (str "\"" text "\"") " none of the " winner-count " winners did pass the test")]))
@@ -190,7 +192,7 @@
          {stash :stash
           winners :winners} (parse s context module-id targets)]
      ;; 1. print stash
-     (print-stash stash (get-classifier module-id))
+     (print-stash stash (get-classifier module-id) winners)
      (printf "%d tokens in stash\n" (count stash))
 
      ;; 2. print winners
@@ -227,7 +229,8 @@
           ex-count (count output)
           failed (->> output (map first) (reduce +))]
       (doseq [line output]
-        (println (second line)))
+        (when (= 1 (first line))
+        	(println (second line))))
       (printf "%d examples, %d failed.\n" ex-count failed)
       [module-id ex-count failed])))
 

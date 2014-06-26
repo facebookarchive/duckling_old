@@ -56,20 +56,28 @@
             end   (t/plus start (t/years 1))]
         (filter-interval t ctx [start end])))))
  
-(defn day-of-month [day]
-  {:pre [(integer? day) (<= 1 day 31)]}
-  ; 'seek' the next date where day-of-month exists
-  ; copes with August 31 + 1 mon => Sep 31 !!! and February leap years
-  (letfn [(seek [start step tgt-day] ; step is -1 or +1
-                       (->> (iterate #(+ % step) 0) ; 0 1 2 3 4 ...
-                            (map #(t/plus (round-to-grain start days) (t/days %))) ; d d+1 d+2 ...
-                            (drop-while #(or (not= (t/day %) tgt-day)
-                                             (and (= -1 step) (= start %))))
-                            first))]
-	  (fn& time [t ctx]
-      (let [pos (seek t (if (bwd ctx) -1 1) day)
+(defn day-of-month
+  ([day]
+    (day-of-month day 1))
+  ([day width-in-days]
+   {:pre [(integer? day) (<= 1 day 31)
+          (integer? width-in-days) (<= 0 width-in-days)]}
+   ; 'seek' the next date where day-of-month exists
+   ; copes with August 31 + 1 mon => Sep 31 !!! and February leap years
+   (letfn [(seek [start step tgt-day] ; step is -1 or +1
+                        (->> (iterate #(+ % step) 0) ; 0 1 2 3 4 ...
+                             (map #(t/plus (round-to-grain start days) (t/days %))) ; d d+1 d+2 ...
+                             (drop-while #(or (not= (t/day %) tgt-day)
+                                              (and (= -1 step) (= start %))))
+                             first))]
+	   (fn& time [t ctx]
+         (let [pos (seek t (if (bwd ctx) -1 1) day)
             start (round-to-grain pos days)]
-  			[start (t/plus start (t/days 1))]))))
+  			[start (t/plus start (t/days width-in-days))])))))
+
+(defn between-days [day1 day2]
+  {:pre [(integer? day1) (integer? day2) (<= 1 day1 day2 31)]}
+  (day-of-month day1 (inc (- day2 day1))))
 
 (defn month-of-year [month]
   {:pre [(<= 1 month 12)]}
@@ -124,6 +132,22 @@
           end (if (t< end start)
                 (t/plus end (t/weeks 1)))]
       (modulo [start end] (t/weeks 1) t ctx))))
+
+(defn between-dates [d1 m1 d2 m2]
+  "[20 3 21 6] => 3/20 to 6/21"
+  {:pre [(<= 0 d1 31) (<= 0 d2 31)]} ; note that d2 can be < d1
+  (fn& time [t ctx]
+    (let [rounded (round-to-grain t days)
+          start (-> rounded
+                    (.withMonthOfYear m1)
+                    (.withDayOfMonth d1))
+          end (-> rounded
+                  (.withMonthOfYear m2)
+                  (.withDayOfMonth d2))
+          end (if (t< end start)
+                (t/plus end (t/years 1))
+                end)]
+      (modulo [start end] (t/years 1) t ctx))))
 
 ;; 
 ;; functions that need a reference date (provided by context)
@@ -258,4 +282,16 @@
         y   (when y-string (year (Integer/parseInt y-string) convert-two-digit-year?))
         v (remove nil? [day mo y])]
     (if (= 1 (count v)) (first v) (apply intersect v))))
+
+(defn interval
+  "Build interval between date1 and date2
+  If :inclusive, it ends at the :to of date2
+  If :exclusive, it ends at the :from of date2"
+  [date1 date2 options]
+  {:pre [(#{:inclusive :exclusive} options)]}
+  (fn& time [t ctx]
+    (let [start (first ((:pred date1) t ctx))
+          end ((if (= :inclusive options) second first)
+               ((:pred date2) start ctx))]
+      [start end])))
 

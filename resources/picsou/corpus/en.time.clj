@@ -99,7 +99,11 @@
   "february 15"
   "2/15"
   "on 2/15"
+  "February 15, 2013"
   (datetime 2013 2 15 - 16)
+
+  "Aug 8"
+  (datetime 2013 8 8 - 9)
   
   "10/31/1974"
   "10/31/74"
@@ -320,10 +324,40 @@
   (datetime-withzone "PST" 2013 2 12 16 - 17)
 
   "14april 2015"
+  "April 14, 2015"
   (datetime 2015 4 14 - 15)
 
   "8 tonight"
   "eight tonight"
   "8 this evening"
   (datetime 2013 2 12 20 - 21)
+
+  "this summer"
+  (datetime 2013 6 21 - 2013 9 23)
+
+  "this winter"
+  (datetime 2013 12 21 - 2014 3 20)
+
+  "xmas"
+  "christmas"
+  (datetime 2013 12 25 - 26)
+
+  ;; Intervals
+
+  "July 13-15"
+  "July 13 to 15"
+  "July 13 thru 15"
+  "July 13 through 15"
+  "July 13 - July 15"
+  (datetime 2013 7 13 - 16)
+
+  "Aug 8 - Aug 12"
+  (datetime 2013 8 8 - 13)
+
+  "from 9:30 - 11:00 on Thursday"
+  "9:30 - 11:00 on Thursday"
+  "Thursday from 9:30 to 11:00"
+  "Thursday from 9:30a to 11a"
+  (datetime 2013 2 14 9 30 - 11 00)
+
 )

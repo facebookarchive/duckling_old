@@ -43,6 +43,12 @@
    :grain years
    :in-width (years 1)}
   
+  "half an <unit-of-duration>"
+  [#"(?i)half an" (dim :unit-of-duration)]
+  {:dim :duration
+   :val ((:grain %2) 0.5)
+   :in-width (:in-width %2)}
+
   "<integer> <unit-of-duration>"
   [(integer) (dim :unit-of-duration)]
   {:dim :duration

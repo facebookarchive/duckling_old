@@ -6,10 +6,16 @@
   (intersect %1 %2)
 
   ; same thing, with "of" in between like "Sunday of last week"
-  "two time tokens separated by 'of, from, 's"
+  "two time tokens separated by \"of\", \"from\", \"'s\""
   [(dim :time #(not (:latent %))) #"(?i)of|from|'s" (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
 
+  ; mostly for January 12, 2005
+  ; this is a separate rule, because commas separate very specific tokens
+  ; so we want this rule's classifier to learn this
+  "two time tokens separated by \",\""
+  [(dim :time #(not (:latent %))) #"," (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
+  (intersect %1 %3)
   ;;
   
   "named-day"
@@ -87,6 +93,26 @@
   "named-month"
   #"(?i)december|dec\.?"
   (assoc (month-of-year 12) :form :named-month)
+
+  "season"
+  #"(?i)summer" ;could be smarter and take the exact hour into account... also some years the day can change
+  (assoc (between-dates 21 6 23 9) :form :named-season)
+
+  "season"
+  #"(?i)fall|autumn"
+  (assoc (between-dates 23 9 21 12) :form :named-season)
+
+  "season"
+  #"(?i)winter"
+  (assoc (between-dates 21 12 20 3) :form :named-season)
+
+  "season"
+  #"(?i)spring"
+  (assoc (between-dates 20 3 21 6) :form :named-season)
+
+  "christmas"
+  #"(?i)xmas|christmas"
+  (parse-dmy "25" "12" nil true)
   
   "absorption of , after named day"
   [{:form :named-day} #","]
@@ -313,4 +339,29 @@
   "<time> timezone"
   [(dim :time) (dim :timezone)]
   (assoc %1 :timezone (:value %2))
+
+  ;; Intervals
+  "<month> dd-dd (interval)"
+  [{:form :named-month} #"([012]?\d|30|31)" #"\-|to|thru|through" #"([012]?\d|30|31)"]
+  (intersect %1 (between-days (Integer/parseInt (-> %2 :groups first))
+  	                          (Integer/parseInt (-> %4 :groups first))))
+
+  "<datetime> - <datetime> (interval)"
+  [(dim :time) #"\-|to|thru|through" (dim :time)]
+  (interval %1 %3 :inclusive)
+
+  "from <datetime> - <datetime> (interval)"
+  [#"(?i)from" (dim :time) #"\-|to|thru|through" (dim :time)]
+  (interval %2 %4 :inclusive)
+
+  ;; In this special case, the upper limit is exclusive
+  "<hour-of-day> - <hour-of-day> (interval)"
+  [{:form :time-of-day} #"-|to|thru|through" #(and (= :time-of-day (:form %))
+  									  (not (:latent %)))]
+  (interval %1 %3 :exclusive)
+
+  "from <hour-of-day> - <hour-of-day> (interval)"
+  [#"(?i)from" {:form :time-of-day} #"-|to|thru|through" #(and (= :time-of-day (:form %))
+  									              (not (:latent %)))]
+  (interval %2 %4 :exclusive)
 )
