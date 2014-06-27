@@ -110,10 +110,43 @@
   #"(?i)spring"
   (assoc (between-dates 20 3 21 6) :form :named-season)
 
+  ; Holiday TODO: check online holidays
   "christmas"
-  #"(?i)xmas|christmas"
+  #"(?i)(xmas|christmas)( day)?"
   (parse-dmy "25" "12" nil true)
   
+  "new year's eve"
+  #"(?i)new year'?s? eve"
+  (parse-dmy "31" "12" nil true)
+
+  "new year's day"
+  #"(?i)new year'?s?( day)?"
+  (parse-dmy "1" "1" nil true)
+
+  "valentine's day"
+  #"(?i)valentine'?s?( day)?"
+  (parse-dmy "14" "2" nil true) 
+
+  "memorial day"
+  #"(?i)memorial day"
+  (parse-dmy "26" "5" nil true) 
+
+  "independence day"
+  #"(?i)independence day"
+  (parse-dmy "4" "7" nil true) 
+
+  "labor day"
+  #"(?i)labor day"
+  (parse-dmy "1" "9" nil true) 
+
+  "halloween day"
+  #"(?i)hall?owe?en( day)?"
+  (parse-dmy "31" "10" nil true) 
+
+  "thanksgiving day"
+  #"(?i)thanks?giving( day)?"
+  (parse-dmy "27" "11" nil true) 
+
   "absorption of , after named day"
   [{:form :named-day} #","]
   %1
@@ -342,7 +375,7 @@
 
   ;; Intervals
   "<month> dd-dd (interval)"
-  [{:form :named-month} #"([012]?\d|30|31)" #"\-|to|thru|through" #"([012]?\d|30|31)"]
+  [{:form :named-month} #"([012]?\d|30|31)" #"\-|to|th?ru|through" #"([012]?\d|30|31)"]
   (intersect %1 (between-days (Integer/parseInt (-> %2 :groups first))
   	                          (Integer/parseInt (-> %4 :groups first))))
 

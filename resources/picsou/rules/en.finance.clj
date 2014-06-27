@@ -46,4 +46,12 @@
  :val {:amount (:val %1)
  	   :currency (:currency %2)}}
 
+;precision for "under $15"
+;"<precision> <amount-of-money>"
+;[#"(?i)under|(no more |less |no greater )than" (dim :amount-of-money)]
+;{:dim :amount-of-money
+; :val {:amount (-> %2 :val :amount)
+; 	   :currency (-> %2 :val :currency)
+; 	   :precision "<"}}
+
 )

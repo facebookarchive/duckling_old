@@ -7,6 +7,12 @@
 "ten dollars"
 (money 10 "$")
 
+;"under $15"
+;"no more than 15$"
+;"no greater than 15$"
+;"less than fifteen dollars"
+;(money 15 "$" "<")
+
 "$10,000"
 "10K$"
 "$10k"
@@ -37,3 +43,6 @@
 (money 3.01 "GBP")
 
 )
+
+;around $200
+;between $200 and $300
