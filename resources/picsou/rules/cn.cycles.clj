@@ -12,17 +12,17 @@
 
 (
   "second (cycle)"
-  #"秒钟?"
+  #"秒[钟|鐘]?"
   {:dim :cycle
    :grain seconds}
 
   "minute (cycle)"
-  #"分钟?"
+  #"分[钟|鐘]?"
   {:dim :cycle
    :grain minutes}
 
   "hour (cycle)"
-  #"小时"
+  #"小时|小時"
   {:dim :cycle
    :grain hours}
 
@@ -32,7 +32,7 @@
    :grain days}
 
   "week (cycle)"
-  #"周|礼拜"
+  #"周|週|礼拜|禮拜"
   {:dim :cycle
    :grain weeks}
 
@@ -47,19 +47,19 @@
    :grain years}
   
   "this <cycle>"
-  [#"这一?" (dim :cycle)]
+  [#"[这這]一?" (dim :cycle)]
   (this-cycle (:grain %2) 0)
 
   "last <cycle>"
-  [#"上个?" (dim :cycle)]
+  [#"上[个|個]?" (dim :cycle)]
   (this-cycle (:grain %2) -1)
 
   "next <cycle>"
-  [#"下个?" (dim :cycle)]
+  [#"下[个|個]?" (dim :cycle)]
   (this-cycle (:grain %2) 1)
   
   "the <cycle> after <time>"
-  [#"那" (dim :cycle) #"之?后" (dim :time)]
+  [#"那" (dim :cycle) #"之?[后後]" (dim :time)]
   (cycle-relative %4 (:grain %2) 1)
   
   "the <cycle> before <time>"
@@ -71,6 +71,6 @@
   (this-cycle (:grain %3) (- (:val %2)) (:val %2))
   
   "next n <cycle>"
-  [#"下|后" (integer 2 9999) (dim :cycle)]
+  [#"下|后|後" (integer 2 9999) (dim :cycle)]
   (this-cycle (:grain %3) 1 (:val %2))
 )

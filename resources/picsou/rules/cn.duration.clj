@@ -2,19 +2,19 @@
 
 (
   "second (unit-of-duration)"
-  #"秒钟?"
+  #"秒[钟|鐘]?"
   {:dim :unit-of-duration
    :grain seconds
    :in-width (seconds 1)} ; width of interval when "in 10 secs"
 
   "minute (unit-of-duration)"
-  #"分钟?"
+  #"分[钟|鐘]?"
   {:dim :unit-of-duration
    :grain minutes
    :in-width (minutes 1)} 
 
   "hour (unit-of-duration)"
-  #"小时"
+  #"小时|小時"
   {:dim :unit-of-duration
    :grain hours
    :in-width (hours 1)} 
@@ -26,7 +26,7 @@
    :in-width (days 1)}
 
   "week (unit-of-duration)"
-  #"周|礼拜"
+  #"周|週|礼拜|禮拜"
   {:dim :unit-of-duration
    :grain weeks
    :in-width (weeks 1)}
@@ -54,7 +54,7 @@
   (in-duration (:val %2) (:in-width %2))
 
   "<duration> from now"
-  [(dim :duration) #"后"]
+  [(dim :duration) #"后|後"]
   (in-duration (:val %2) (:in-width %2))
 
   "<duration> ago"

@@ -5,7 +5,7 @@
   (intersect %1 %2)
   
   "now"
-  #"现在|此时|此刻|当前"
+  #"现在|此时|此刻|当前|現在|此時|當前"
   (this-cycle seconds 0)
 
   "the day before yesterday"
@@ -25,7 +25,7 @@
   (this-cycle days 1)
 
   "the day after tomorrow"
-  #"后天"
+  #"后天|後天"
   (this-cycle days 2)
 
   "last year"
@@ -41,39 +41,39 @@
   (this-cycle years 1)
 
   "named-day"
-  #"星期一|周一|礼拜一"
+  #"星期一|周一|礼拜一|禮拜一|週一"
   (assoc (day-of-week 1) :not-immediate true :form :named-day)
 
   "named-day"
-  #"星期二|周二|礼拜二"
+  #"星期二|周二|礼拜二|禮拜二|週二"
   (assoc (day-of-week 2) :not-immediate true :form :named-day)
 
   "named-day"
-  #"星期三|周三|礼拜三"
+  #"星期三|周三|礼拜三|禮拜三|週三"
   (assoc (day-of-week 3) :not-immediate true :form :named-day)
 
   "named-day"
-  #"星期四|周四|礼拜四"
+  #"星期四|周四|礼拜四|禮拜四|週四"
   (assoc (day-of-week 4) :not-immediate true :form :named-day)
 
   "named-day"
-  #"星期五|周五|礼拜五"
+  #"星期五|周五|礼拜五|禮拜五|週五"
   (assoc (day-of-week 5) :not-immediate true :form :named-day)
 
   "named-day"
-  #"星期六|周六|礼拜六"
+  #"星期六|周六|礼拜六|禮拜六|週六"
   (assoc (day-of-week 6) :not-immediate true :form :named-day)
 
   "named-day"
-  #"星期日|星期天|礼拜天|周日"
+  #"星期日|星期天|礼拜天|周日|禮拜天|週日"
   (assoc (day-of-week 7) :not-immediate true :form :named-day)
 
   "week-end"
-  #"周末"
+  #"周末|週末"
   (assoc (between-days-of-weeks-hours 5 18 1 0) :form :named-day)
 
   "this <day-of-week>" ; assumed to be in the future
-  [#"这" {:form :named-day}]
+  [#"这|這" {:form :named-day}]
   (this-pred %2 1)
 
   "last tuesday, last july"
@@ -163,7 +163,7 @@
   (assoc (month-of-year 12) :form :named-month)
 
   "day of month (numeric with day symbol)"
-  [(dim :number) #"号|日"]
+  [(dim :number) #"号|號|日"]
   (assoc (day-of-month (:val %1)) :latent true :form :day-of-month)
 
   "month (numeric with month symbol)"
@@ -215,7 +215,7 @@
   (assoc (intersect (this-cycle days 1) (between-hours 18 0)) :form :part-of-day) ;; removes :latent
 
   "in|during the <part-of-day>" ;; removes latent
-  [{:form :part-of-day} #"点"]
+  [{:form :part-of-day} #"点|點"]
   (dissoc %1 :latent)
 
   "hh:mm (time-of-day)"
@@ -268,11 +268,11 @@
   {:relative-minutes (:val %1)}
 
   "relative minutes after|past <integer> (hour-of-day)"
-  [(integer 0 23) #"点" #(:relative-minutes %)]
+  [(integer 0 23) #"点|點" #(:relative-minutes %)]
   (hour-relativemin (:val %1) true (:relative-minutes %3))
   
   "relative minutes to|till|before <integer> (hour-of-day)"
-  [(integer 0 23) #"点差" #(:relative-minutes %)]
+  [(integer 0 23) #"[点點]差" #(:relative-minutes %)]
   (hour-relativemin (:val %1) true (- (:relative-minutes %3)))
 
   ; special forms for midnight and noon
