@@ -74,8 +74,10 @@
 
   ;; suffixes
 
+  ; note that we check for a space-like char after the M, K or G
+  ; to avoid matching 3 Mandarins
   "numbers suffixes (K, M, G)"
-  [(dim :number #(not (:number-suffixed %))) #"(?i)([kmg])"]
+  [(dim :number #(not (:number-suffixed %))) #"(?i)([kmg])(?=[\W\$€]|$)"]
   (let [multiplier (get {"k" 1000 "m" 1000000 "g" 1000000000}
                         (-> %2 :groups first .toLowerCase))
         value      (* (:val %1) multiplier)
@@ -90,11 +92,11 @@
   ;;
   
   "ordinals (first..19th)"
-  #"(?i)(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelveth|thirteenth|fourteenth|fifteenth|sixteenth|seventeenth|eighteenth|nineteenth)"
+  #"(?i)(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth|thirteenth|fourteenth|fifteenth|sixteenth|seventeenth|eighteenth|nineteenth)"
   {:dim :ordinal
    :val (get {"first" 1 "second" 2 "third" 3 "fourth" 4 "fifth" 5
-              "sixth" 6 "seventh" 7 "eighth" 8 "nineth" 9 "tenth" 10 "eleventh" 11
-              "twelveth" 12 "thirteenth" 13 "fourteenth" 14 "fifteenth" 15 "sixteenth" 16
+              "sixth" 6 "seventh" 7 "eighth" 8 "ninth" 9 "tenth" 10 "eleventh" 11
+              "twelfth" 12 "thirteenth" 13 "fourteenth" 14 "fifteenth" 15 "sixteenth" 16
               "seventeenth" 17 "eighteenth" 18 "nineteenth" 19}
               (-> %1 :groups first .toLowerCase))}
 
