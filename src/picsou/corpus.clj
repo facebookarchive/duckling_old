@@ -51,11 +51,12 @@
 
 (defn money
   "Create a amount-of-money condition"
-  [value & [currency]]
+  [value & [currency precision]]
   (fn [token _] (and
                   (= :amount-of-money (:dim token))
                   (= value (-> token :val :amount))
-                  (= currency (-> token :val :currency)))))
+                  (= currency (-> token :val :currency))
+                  (= precision (-> token :val :precision)))))
 
 (defn place
   "Create a place checker"

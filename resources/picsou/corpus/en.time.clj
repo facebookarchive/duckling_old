@@ -338,9 +338,43 @@
   "this winter"
   (datetime 2013 12 21 - 2014 3 20)
 
+  ;; US holidays
+  ;; http://www.timeanddate.com/holidays/us/
   "xmas"
   "christmas"
+  "christmas day"
   (datetime 2013 12 25 - 26)
+
+  "new year's eve"
+  "new years eve"
+  (datetime 2013 12 31 - 2014 1 1)
+
+  "new year's day"
+  "new years day"
+  (datetime 2014 1 1 - 2)
+
+  "valentine's day"
+  "valentine day"
+  (datetime 2013 2 14 - 15)
+
+  "memorial day"
+  (datetime 2013 5 26 - 27)
+
+  "independence day"
+  "4th of July"
+  "4 of july"
+  (datetime 2013 7 4 - 5)
+
+  "labor day"
+  (datetime 2013 9 1 - 2)
+
+  "halloween"
+  (datetime 2013 10 31 - 11 1)
+
+  "thanksgiving day"
+  "thanksgiving"
+  (datetime 2013 11 27 - 28)
+
 
   ;; Intervals
 
