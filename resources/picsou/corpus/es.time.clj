@@ -5,6 +5,7 @@
   "ahora"
   "ya"
   "ahorita"
+  "cuanto antes"
   (datetime 2013 2 12 4 30 00 - 01)
   
   "hoy"
@@ -256,6 +257,12 @@
   "las once y cuarenta y cinco"
   "hoy a 11:45"
   (datetime 2013 2 12 11 45 - 46)
+
+  "5 y cuarto"
+  (datetime 2013 2 12 5 15 - 16)
+
+;  "6 de la mañana"
+;  (datetime 2013 2 12 6 - 7)
   
   "miércoles a las once de la mañana"
   "mañana a las once"

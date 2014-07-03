@@ -89,7 +89,7 @@
   (assoc (month-of-year 12) :form :named-month)
 
   "right now"
-  #"ahor(it)?a|ya|en\s?seguida"
+  #"ahor(it)?a|ya|en\s?seguida|cuanto antes"
   (this-cycle seconds 0)
   
   "now"
@@ -189,6 +189,13 @@
   [{:form :time-of-day} {:form :part-of-day}]
   (intersect %1 (:extended %2))
 
+   ;"<integer> <part-of-day>" ; 7 de la manana always means a las 7 de la manana
+  ;[(integer 0 23) {:form :part-of-day}]
+  ;(intersect (assoc (hour (:val %1) true)
+  ;  :form :time-of-day
+  ;  :for-relative-minutes true
+  ;  :val (:val %1)) (:extended %2))
+
   ;; hours and minutes (absolute time)
 
   "<integer> hours (time-of-day)"
@@ -282,6 +289,13 @@
   
   "<hour-of-day> and <relative minutes>"
   [{:for-relative-minutes true} #"y" #(:relative-minutes %)]
+  (hour-relativemin 
+    (:val %1)
+    (:ambiguous-am-pm %1)
+    (:relative-minutes %3))
+
+  "<integer> and <relative minutes>" ;5 y cuarto
+  [(integer 0 23) #"y" #(:relative-minutes %)]
   (hour-relativemin 
     (:val %1)
     (:ambiguous-am-pm %1)
