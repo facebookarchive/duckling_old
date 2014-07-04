@@ -183,35 +183,35 @@
   (intersect %1 %2)
 
   "new year's day"
-  #"元旦|元旦节"
+  #"元旦[节節]?"
   (parse-dmy "1" "1" nil true)
 
   "valentine's day"
-  #"情人节"
+  #"情人[节節]"
   (parse-dmy "14" "2" nil true) 
 
   "women's day"
-  #"妇女节"
+  #"[妇婦]女[节節]"
   (parse-dmy "8" "3" nil true)
 
   "labor day"
-  #"劳动节"
+  #"劳动节|勞動節"
   (parse-dmy "1" "5" nil true)
 
   "children's day"
-  #"儿童节"
+  #"[儿兒]童[节節]"
   (parse-dmy "1" "6" nil true)
 
   "army's day"
-  #"建军节"
+  #"建(军节|軍節)"
   (parse-dmy "1" "8" nil true)
 
   "national day"
-  #"国庆节?"
+  #"(国庆|國慶)[节節]?"
   (parse-dmy "1" "10" nil true)
 
   "christmas"
-  #"圣诞节?"
+  #"(圣诞|聖誕)[节節]?"
   (parse-dmy "25" "12" nil true)
 
   ; ;; Hours and minutes (absolute time)
