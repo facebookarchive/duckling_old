@@ -189,15 +189,6 @@
   [{:form :time-of-day} {:form :part-of-day}]
   (intersect %1 (:extended %2))
 
-   ;"<integer> <part-of-day>" ; 7 de la manana always means a las 7 de la manana
-  ;[(integer 0 23) {:form :part-of-day}]
-  ;(intersect (assoc (hour (:val %1) true)
-  ;  :form :time-of-day
-  ;  :for-relative-minutes true
-  ;  :val (:val %1)) (:extended %2))
-
-  ;; hours and minutes (absolute time)
-
   "<integer> hours (time-of-day)"
   [(integer 0 23) #"(?i)h\.?(ora)?s?"]
   (assoc (hour (:val %1) true)
@@ -298,13 +289,22 @@
   [(integer 0 23) #"y" #(:relative-minutes %)]
   (hour-relativemin 
     (:val %1)
-    (:ambiguous-am-pm %1)
+    true
     (:relative-minutes %3))
+
+  "<integer> in the <part-of-day>" ; 7 de la manana always means a las 7 de la manana
+  [(integer 0 23) #"(?i)(de|por) la" {:form :part-of-day}]
+  (intersect (assoc (hour (:val %1) true)
+    :form :time-of-day
+    :for-relative-minutes true
+    :val (:val %1)) (:extended %3))
+
+  ;; hours and minutes (absolute time);
 
   ;; formatted
 
-  "dd[/-]mm[/-]yyyy"
-  #"([012]?\d|30|31)[/-](0?\d|10|11|12)[/-](\d{2,4})"
+  "dd[/-.]mm[/-.]yyyy"
+  #"([012]?\d|30|31)[\./-](0?\d|10|11|12)[\./-](\d{2,4})"
   (parse-dmy (first (:groups %1)) (second (:groups %1)) (nth (:groups %1) 2) true)
 
   "yyyy-mm-dd"
