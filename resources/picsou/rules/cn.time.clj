@@ -182,6 +182,38 @@
   [{:form :named-month} {:form :day-of-month}]
   (intersect %1 %2)
 
+  "new year's day"
+  #"元旦|元旦节"
+  (parse-dmy "1" "1" nil true)
+
+  "valentine's day"
+  #"情人节"
+  (parse-dmy "14" "2" nil true) 
+
+  "women's day"
+  #"妇女节"
+  (parse-dmy "8" "3" nil true)
+
+  "labor day"
+  #"劳动节"
+  (parse-dmy "1" "5" nil true)
+
+  "children's day"
+  #"儿童节"
+  (parse-dmy "1" "6" nil true)
+
+  "army's day"
+  #"建军节"
+  (parse-dmy "1" "8" nil true)
+
+  "national day"
+  #"国庆节?"
+  (parse-dmy "1" "10" nil true)
+
+  "christmas"
+  #"圣诞节?"
+  (parse-dmy "25" "12" nil true)
+
   ; ;; Hours and minutes (absolute time)
 
   "<integer> (latent time-of-day)"
