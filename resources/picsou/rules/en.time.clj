@@ -375,26 +375,26 @@
 
   ;; Intervals
   "<month> dd-dd (interval)"
-  [{:form :named-month} #"([012]?\d|30|31)" #"\-|to|th?ru|through" #"([012]?\d|30|31)"]
+  [{:form :named-month} #"([012]?\d|30|31)" #"\-|to|th?ru|through|until" #"([012]?\d|30|31)"]
   (intersect %1 (between-days (Integer/parseInt (-> %2 :groups first))
   	                          (Integer/parseInt (-> %4 :groups first))))
 
   "<datetime> - <datetime> (interval)"
-  [(dim :time) #"\-|to|thru|through" (dim :time)]
+  [(dim :time) #"\-|to|th?ru|through" (dim :time)]
   (interval %1 %3 :inclusive)
 
   "from <datetime> - <datetime> (interval)"
-  [#"(?i)from" (dim :time) #"\-|to|thru|through" (dim :time)]
+  [#"(?i)from" (dim :time) #"\-|to|th?ru|through|until" (dim :time)]
   (interval %2 %4 :inclusive)
 
   ;; In this special case, the upper limit is exclusive
   "<hour-of-day> - <hour-of-day> (interval)"
-  [{:form :time-of-day} #"-|to|thru|through" #(and (= :time-of-day (:form %))
+  [{:form :time-of-day} #"-|to|th?ru|through|until" #(and (= :time-of-day (:form %))
   									  (not (:latent %)))]
   (interval %1 %3 :exclusive)
 
   "from <hour-of-day> - <hour-of-day> (interval)"
-  [#"(?i)from" {:form :time-of-day} #"-|to|thru|through" #(and (= :time-of-day (:form %))
+  [#"(?i)from" {:form :time-of-day} #"-|to|th?ru|through|until" #(and (= :time-of-day (:form %))
   									              (not (:latent %)))]
   (interval %2 %4 :exclusive)
 )

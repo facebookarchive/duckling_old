@@ -94,9 +94,8 @@
               :number-prefixed true)) ; prevent "- -3km" to be 3 billions
 
   ;; suffixes
-  
   "numbers suffixes (K, M, G)"
-  [(dim :number #(not (:number-suffixed %))) #"(?i)([kmg])"]
+  [(dim :number #(not (:number-suffixed %))) #"(?i)([kmg])(?=[\W\$€]|$)"]
   (let [multiplier (get {"k" 1000 "m" 1000000 "g" 1000000000}
                         (-> %2 :groups first .toLowerCase))
         value      (* (:val %1) multiplier)
