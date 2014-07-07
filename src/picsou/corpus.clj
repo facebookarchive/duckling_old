@@ -35,27 +35,29 @@
 
 (defn temperature
   "Create a temp condition"
-  [value & [unit]]
+  [value & [unit precision]]
   (fn [token _] (and
                   (= :temperature (:dim token))
                   (== value (-> token :val :temperature))
-                  (= unit  (-> token :val :unit)))))
+                  (= unit  (-> token :val :unit))
+                  (= precision (-> token :val :precision)))))
 
 (defn distance
   "Create a distance condition"
-  [value & [unit]]
+  [value & [unit precision]]
   (fn [token _] (and
                   (= :distance (:dim token))
                   (== value (-> token :val :distance))
-                  (= unit  (-> token :val :unit)))))
+                  (= unit  (-> token :val :unit))
+                  (= precision (-> token :val :precision)))))
 
 (defn money
   "Create a amount-of-money condition"
-  [value & [currency precision]]
+  [value & [unit precision]]
   (fn [token _] (and
                   (= :amount-of-money (:dim token))
                   (= value (-> token :val :amount))
-                  (= currency (-> token :val :currency))
+                  (= unit (-> token :val :unit))
                   (= precision (-> token :val :precision)))))
 
 (defn place

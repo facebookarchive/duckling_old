@@ -196,7 +196,7 @@
      (printf "%d tokens in stash\n" (count stash))
 
      ;; 2. print winners
-     (print "Winners: ")
+     (print "Winners: \n")
      (doseq [winner winners]
        (case (:dim winner)
          :time (println "Time" (:value winner))

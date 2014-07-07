@@ -2,56 +2,63 @@
  
 "$"
 #"\$|dollars?"
-{:dim :currency
- :currency "$"} ; ambiguous
+{:dim :unit
+ :unit "$"} ; ambiguous
  
 "€"
 #"(?i)€|([e€]uro?s?)"
-{:dim :currency
- :currency "EUR"} ; not ambiguous
+{:dim :unit
+ :unit "EUR"} ; not ambiguous
 
 "£"
 #"(?i)£|pounds?"
-{:dim :currency
- :currency "£"}
+{:dim :unit
+ :unit "£"}
 
 "USD"
 #"(?i)US[D\$]"
-{:dim :currency
- :currency "USD"}
+{:dim :unit
+ :unit "USD"}
 
 "GBP"
 #"(?i)GBP"
-{:dim :currency
- :currency "GBP"}
+{:dim :unit
+ :unit "GBP"}
 
 "PTS"
 #"(?i)pta?s?"
-{:dim :currency
- :currency "PTS"}
+{:dim :unit
+ :unit "PTS"}
 
 "unnamed currency"
 #"(?i)(buck|balle|pouloute)s?"
-{:dim :currency}
+{:dim :unit}
 
-"<currency> <amount>"
-[(dim :currency) (dim :number)]
+"<unit> <amount>"
+[(dim :unit) (dim :number)]
 {:dim :amount-of-money
  :val {:amount (:val %2)
- 	   :currency (:currency %1)}}
+ 	   :unit (:unit %1)}}
 
-"<amount> <currency>"
-[(dim :number) (dim :currency)]
+"<amount> <unit>"
+[(dim :number) (dim :unit)]
 {:dim :amount-of-money
  :val {:amount (:val %1)
- 	   :currency (:currency %2)}}
+ 	   :unit (:unit %2)}}
 
-;precision for "under $15"
-;"<precision> <amount-of-money>"
-;[#"(?i)under|(no more |less |no greater )than" (dim :amount-of-money)]
-;{:dim :amount-of-money
-; :val {:amount (-> %2 :val :amount)
-; 	   :currency (-> %2 :val :currency)
-; 	   :precision "<"}}
+;precision for "about $15"
+"about <amount-of-money>"
+[#"(?i)about|approx(\.|imately)?|close to|near( to)?|around|almost" (dim :amount-of-money)]
+{:dim :amount-of-money
+ :val {:amount (-> %2 :val :amount)
+ 	   :unit (-> %2 :val :unit)
+ 	   :precision false}}
+
+"exactly <amount-of-money>"
+[#"(?i)exactly|precisely" (dim :amount-of-money)]
+{:dim :amount-of-money
+ :val {:amount (-> %2 :val :amount)
+ 	   :unit (-> %2 :val :unit)
+ 	   :precision true}}
 
 )
