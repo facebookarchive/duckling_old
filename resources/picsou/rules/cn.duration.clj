@@ -38,7 +38,7 @@
    :in-width (months 1)}
   
   "year (unit-of-duration)"
-  #"年"
+  #"年(?=[前|后|後])"
   {:dim :unit-of-duration
    :grain years
    :in-width (years 1)}
