@@ -65,4 +65,33 @@
     (assoc-in [:val :unit] "miles")
     (dissoc :latent))
 
+;; volume
+
+; latent volume
+"number as volume"
+(dim :number)
+{:dim :volume
+ :latent true
+ :val {:volume (:val %1)}}
+
+ "<latent vol> ml"
+[(dim :volume) #"(?i)m(l|ililitros?)"]
+(-> %1
+    (dissoc  :latent)
+    (assoc-in [:val :volume] (* 0.001 (-> %1 :val :volume)))
+    (assoc-in [:val :unit] "litre"))
+
+"<vol> litre"
+[(dim :volume) #"(?i)l(itros?)?"]
+(-> %1
+    (assoc-in [:val :unit] "litre")
+    (dissoc :latent))
+
+"<latent vol> galon"
+[(dim :volume) #"(?i)gal[oó]ne?s?"]
+(-> %1
+    (dissoc  :latent)
+    (assoc-in [:val :volume] (* 3.785 (-> %1 :val :volume)))
+    (assoc-in [:val :unit] "litre"))
+
 )

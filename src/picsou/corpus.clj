@@ -48,7 +48,13 @@
                   (= :distance (:dim token))
                   (== value (-> token :val :distance))
                   (= unit  (-> token :val :unit)))))
-
+(defn volume
+  "Create a volume condition"
+  [value & [unit]]
+  (fn [token _] (and
+                  (= :volume (:dim token))
+                  (== value (-> token :val :volume))
+                  (= unit  (-> token :val :unit)))))
 (defn money
   "Create a amount-of-money condition"
   [value & [currency precision]]
