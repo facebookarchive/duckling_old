@@ -13,25 +13,25 @@
     (dissoc %1 :latent)
 
     "<temp> Celcius"
-    [(dim :temperature) #"摄氏[°度]|°C"]
+    [(dim :temperature) #"[摄攝]氏[°度]|°C"]
     (-> %1
         (assoc-in [:val :unit] "C")
         (dissoc :latent))
 
     "Celcius <temp>"
-    [#"摄氏" (dim :temperature) #"度|°"]
+    [#"[摄攝]氏" (dim :temperature) #"度|°"]
     (-> %2
         (assoc-in [:val :unit] "C")
         (dissoc :latent))
 
     "<temp> Fahrenheit"
-    [(dim :temperature) #"华氏[°度]|°F"]
+    [(dim :temperature) #"[华華]氏[°度]|°F"]
     (-> %1
         (assoc-in [:val :unit] "F")
         (dissoc :latent))
 
     "Fahrenheit <temp>"
-    [#"华氏" (dim :temperature) #"度|°"]
+    [#"[华華]氏" (dim :temperature) #"度|°"]
     (-> %2
         (assoc-in [:val :unit] "F")
         (dissoc :latent))
