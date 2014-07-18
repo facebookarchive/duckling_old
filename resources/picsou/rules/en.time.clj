@@ -115,6 +115,10 @@
   #"(?i)(xmas|christmas)( day)?"
   (parse-dmy "25" "12" nil true)
   
+  "christmas eve"
+  #"(?i)(xmas|christmas)( day)?('s)? eve"
+  (parse-dmy "24" "12" nil true)
+  
   "new year's eve"
   #"(?i)new year'?s? eve"
   (parse-dmy "31" "12" nil true)

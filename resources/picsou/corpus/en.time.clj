@@ -345,6 +345,11 @@
   "christmas day"
   (datetime 2013 12 25 - 26)
 
+  "Christmas Eve"
+  "christmas day's eve"
+  "xmas eve"
+  (datetime 2013 12 24 - 25)
+
   "new year's eve"
   "new years eve"
   (datetime 2013 12 31 - 2014 1 1)
