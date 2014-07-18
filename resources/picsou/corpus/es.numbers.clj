@@ -80,4 +80,9 @@
   "-,0012G"
   (number -1200000)
 
+  "1 punto cinco"
+  "una punto cinco"
+  "1,5"
+  (number 1.5)
+
   )

@@ -59,5 +59,11 @@
 "3 galón"
 (volume 11.355 "litre")
 
+"3 hectolitros"
+(volume 300 "litre")
+
+"medio litro"
+(volume 0.5 "litre")
+
 )
 

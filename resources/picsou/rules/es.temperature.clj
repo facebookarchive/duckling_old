@@ -81,11 +81,23 @@
     (assoc-in [:val :volume] (* 0.001 (-> %1 :val :volume)))
     (assoc-in [:val :unit] "litre"))
 
+ "<vol> hectolitres"
+[(dim :volume) #"(?i)hectolitros?"]
+(-> %1
+    (dissoc  :latent)
+    (assoc-in [:val :volume] (* 100 (-> %1 :val :volume)))
+    (assoc-in [:val :unit] "litre"))
+
 "<vol> litre"
 [(dim :volume) #"(?i)l(itros?)?"]
 (-> %1
     (assoc-in [:val :unit] "litre")
     (dissoc :latent))
+
+"half litre"
+[#"(?i)medio litros?"]
+{:dim :volume
+ :val {:volume 0.5 :unit "litre"}}
 
 "<latent vol> galon"
 [(dim :volume) #"(?i)gal[oó]ne?s?"]
