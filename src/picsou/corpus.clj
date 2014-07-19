@@ -1,4 +1,5 @@
 (ns picsou.corpus
+  (:use     [picsou.time.util]) ; use grains in corpus
   (:require [clj-time.core :as t]
             [picsou.time :as time]
             [picsou.util :as util]))
@@ -6,15 +7,16 @@
 (defn datetime
   "Creates a datetime condition to check if the token is valid"
   [& args] ; '2013 2 13 - 14' means "from 13 feb to 14 feb"
-  (let [[arg-from [_ & arg-to-short]] (split-with #(not= - %) args)
-        arg-to (concat (drop-last (count arg-to-short) arg-from) arg-to-short)
-        from (time/local-date-time arg-from)
-        to (time/local-date-time arg-to)]
+  (let [[date-fields [grain & other-keys-and-values]] (split-with integer? args)
+        date (time/local-date-time date-fields)
+        token-fields (into {:grain grain} 
+                           (map vec (partition 2 other-keys-and-values)))]
     (fn
       [token context]
       (and
         (= :time (:dim token))
-        (->> (time/resolve-time token context) (filter #(= [from to] %)) first)))))
+        (util/hash-match token-fields (:value token))
+        (= (-> token :value :from) (str date))))))
 
 (defn datetime-withzone
   "Like datetime, but also specify a timezone"

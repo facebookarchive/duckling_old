@@ -14,6 +14,13 @@
            [java.io StringWriter]
            [org.joda.time DateTimeZone DateTime]))
 
+(defn hash-match
+  "Matching hashmap over hashmap. Keys can be functions.
+  WARNING THIS IS NOT RECURSIVE FOR THE MOMENT"
+  [pattern input]
+  (every? (fn [[key val]] (= val (key input)))
+    pattern))
+
 (defn valid-limit?
   "Decide if two adjacent chars are reasonably separated
   ab => false

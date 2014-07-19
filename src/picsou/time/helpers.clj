@@ -16,12 +16,14 @@
 
 (defn fn&field
   "Build a pred from a periodic interval that coincide with a Joda field"
-  [grain field-fn width modulo-step]
-  (fn& time [t ctx]
-    (let [rounded (round-to-grain t grain)
-          start (field-fn rounded)
-          end   (t/plus start width)]
-      (modulo [start end] modulo-step t ctx))))
+  [grain field-fn width modulo-step field-map]
+  {:pre [(or (nil? field-map) (map? field-map))]}
+  (-> (fn& time {:grain grain} [t ctx]
+           (let [rounded (round-to-grain t grain)
+                 start (field-fn rounded)
+                 end   (t/plus start width)]
+             (modulo [start end] modulo-step t ctx)))
+      (?> field-map assoc :fields field-map)))
 
 (defn fn&i
   "Build a pred from a single (not periodic) interval"
@@ -50,7 +52,7 @@
   (let [year (if convert-two-digit-year?
                (-> year (+ 50) (mod 100) (+ 2000) (- 50))
                year)]
-    (fn& time [t ctx]
+    (fn& time {:grain years :fields {:year year}} [t ctx]
       (let [rounded (round-to-grain t years)
             start (.withYear rounded year)
             end   (t/plus start (t/years 1))]
@@ -70,10 +72,11 @@
                              (drop-while #(or (not= (t/day %) tgt-day)
                                               (and (= -1 step) (= start %))))
                              first))]
-	   (fn& time [t ctx]
-         (let [pos (seek t (if (bwd ctx) -1 1) day)
-            start (round-to-grain pos days)]
-  			[start (t/plus start (t/days width-in-days))])))))
+	   (-> (fn& time {:grain days} [t ctx]
+           (let [pos (seek t (if (bwd ctx) -1 1) day)
+                 start (round-to-grain pos days)]
+  			     [start (t/plus start (t/days width-in-days))]))
+         (?> (= 1 width-in-days) assoc :fields {:day day})))))
 
 (defn between-days [day1 day2]
   {:pre [(integer? day1) (integer? day2) (<= 1 day1 day2 31)]}
@@ -81,11 +84,17 @@
 
 (defn month-of-year [month]
   {:pre [(<= 1 month 12)]}
-  (fn&field months #(. % withMonthOfYear month) (t/months 1) (t/years 1)))
+  (fn&field months
+            #(. % withMonthOfYear month)
+            (t/months 1)
+            (t/years 1)
+            {:month month}))
 
 (defn day-of-week [dow]
   {:pre [(<= 1 dow 7)]}
-  (fn&field weeks #(. % withDayOfWeek dow) (t/days 1) (t/weeks 1)))
+  (assoc
+    (fn&field weeks #(. % withDayOfWeek dow) (t/days 1) (t/weeks 1) {:day-of-week dow})
+    :grain days)) ; override the weeks grain set by fn&field
 
 (defn hour 
   "[3 false] => 3am
@@ -96,21 +105,21 @@
   (let [step (if (and ambiguous-am-pm? (<= hour 12))
                (t/hours 12)
                (t/days 1))]
-    (-> (fn&field hours #(. % withHourOfDay hour) (t/hours 1) step)
+    (-> (fn&field hours #(. % withHourOfDay hour) (t/hours 1) step {:hour hour})
         (assoc :ambiguous-am-pm ambiguous-am-pm?))))
 
 (defn minute [minute]
   {:pre [(<= 0 minute 59)]}
-  (fn&field minutes #(. % withMinuteOfHour minute) (t/minutes 1) (t/hours 1)))
+  (fn&field minutes #(. % withMinuteOfHour minute) (t/minutes 1) (t/hours 1) {:minute minute}))
 
 (defn sec [second]
   {:pre [(<= 0 second 59)]}
-  (fn&field seconds #(. % withSecondOfMinute second) (t/secs 1) (t/minutes 1)))
+  (fn&field seconds #(. % withSecondOfMinute second) (t/secs 1) (t/minutes 1) {:second second}))
 
 (defn between-hours [h1 h2]
   "[0 12] => morning"
   {:pre [(<= 0 h1 23) (<= 0 h2 23)]} ; note that h2 can be < h1
-  (fn& time [t ctx]
+  (fn& time {:grain hours} [t ctx]
     (let [rounded (round-to-grain t hours)
           start (.withHourOfDay rounded h1)
           end (-> rounded
@@ -169,7 +178,7 @@
 	[grain & [pos width]]
  		(let [pos (or pos 0)
           width (or width 1)]
-      (fn& time [t ctx]
+      (fn& time {:grain grain} [t ctx]
         (let [reference (rf ctx)
               start (round-to-grain (t/plus reference (grain pos)) grain)
               interval [start (t/plus start (grain width))]]
@@ -180,7 +189,7 @@
 	[{:keys [pred]} grain & [pos width]]
  		(let [pos (or pos 0)
           width (or width 1)]
-     	(fn& time [t ctx]
+     	(fn& time {:grain grain} [t ctx]
         (let [[anchor-s anchor-e :as i] (pred t ctx)]
           (when i
             (let [anchor (if (pos? pos) anchor-e anchor-s)
@@ -201,9 +210,9 @@
    We explicitely seek fwd or bwd depending on the sign of pos.
    ! don't use with pos 0, there is an ambiguity, need a special fn that returns both
    closest backward and forward intervals."
-	[{:keys [pred] :as token} pos]
+	[{:keys [pred fields grain] :as token} pos]
  	{:pre [(not= 0 pos) pred]}
-  (fn& time [t ctx]
+  (fn& time {:fields fields :grain grain} [t ctx]
 	 	(->> (loop [cursor (rf ctx)
                 ; tricky situation. if pos is negative (... ago) we don't want to look forward
                 context (-> ctx (assoc :backward (neg? pos)))
@@ -218,43 +227,59 @@
          (filter-interval t ctx))))
 
 ;;
-;; Higher order functions
+;; Intersection
 ;;
 
-(defn intersect 
-  ([{fn1 :pred :as token1} {fn2 :pred :as token2}]
-  (letfn [(seek [t ctx cnt]
-                ;(prn "seeking" t ctx)
-            (when t
-              (let [[start1 end1 :as i1] (fn1 t ctx)
-        						[start2 end2 :as i2] (fn2 t ctx)]
-                ;(when (zero? cnt)
-                  ;(throw (ex-info "I think I'm looping" {:seek t :tok1 token1 :tok2 token2})))
-                (when (and (i-and i1 i2) ; if one interval in nil, no chance to seek anything
-                           (> cnt 0))    ; too many tries, e.g. "4pm in the morning"
-                	(or
-                  	(i-intersect i1 i2)
-                   	(if-not (bwd ctx)
-                      (cond 
-                        (in? t i1)
-                          (seek (t-max start2
-                                       (first (fn1 start2 ctx))) ctx (dec cnt))
-                        (in? t i2)
-                          (seek (t-max start1
-                                       (first (fn2 start1 ctx))) ctx (dec cnt))
-                        :else
-                        	(seek (t-max start1 start2) ctx (dec cnt)))
-                      (cond 
-                        (t<= t end1)
-                          (seek (t-min end2
-                                       (last (fn1 end2 ctx))) ctx (dec cnt))
-                        (t<= t end2)
-                          (seek (t-min end1
-                                       (last (fn2 end1 ctx))) ctx (dec cnt))
-                        :else
-                        	(seek (t-min end1 end2) ctx (dec cnt)))))))))]
-  (fn& time [t ctx]
-    (seek t ctx 100))))
+(defn merge-fields
+  "Strict mode: we never accept that the same field appears in both entries,
+  because it doesn't seem right that the info is repeated twice. We'll see
+  later if it's a good decision.
+  Returns nil if no merge is possible."
+  [fields1 fields2]
+  (if (some (set (keys fields1)) (keys fields2))
+    nil ; cannot merge because some key is in both fieldsets
+    (merge {} fields1 fields2))) ; even with no fields, we return {} not nil
+
+(defn intersect
+  "General intersection.
+  Fields are merged (no intersection allowed if two fields contradict.
+  Grain is the smallest of the two"
+  ([{fn1 :pred fields1 :fields grain1 :grain} {fn2 :pred fields2 :fields grain2 :grain}]
+    (let [fields (merge-fields fields1 fields2)
+          grain (if (pos? (compare-grains grain1 grain2)) grain2 grain1)]
+      (letfn [(seek [t ctx cnt]
+                (when t
+                  (let [[start1 end1 :as i1] (fn1 t ctx)
+            						[start2 end2 :as i2] (fn2 t ctx)]
+                    ;(when (zero? cnt)
+                      ;(throw (ex-info "I think I'm looping" {:seek t :tok1 token1 :tok2 token2})))
+                    (when (and (i-and i1 i2) ; if one interval in nil, no chance to seek anything
+                               (> cnt 0))    ; too many tries, e.g. "4pm in the morning"
+                    	(or
+                      	(i-intersect i1 i2)
+                       	(if-not (bwd ctx)
+                          (cond 
+                            (in? t i1)
+                              (seek (t-max start2
+                                           (first (fn1 start2 ctx))) ctx (dec cnt))
+                            (in? t i2)
+                              (seek (t-max start1
+                                           (first (fn2 start1 ctx))) ctx (dec cnt))
+                            :else
+                            	(seek (t-max start1 start2) ctx (dec cnt)))
+                          (cond 
+                            (t<= t end1)
+                              (seek (t-min end2
+                                           (last (fn1 end2 ctx))) ctx (dec cnt))
+                            (t<= t end2)
+                              (seek (t-min end1
+                                           (last (fn2 end1 ctx))) ctx (dec cnt))
+                            :else
+                            	(seek (t-min end1 end2) ctx (dec cnt)))))))))]
+        (-> (fn& time {:grain grain} [t ctx]
+              (seek t ctx 100))
+            (?> fields assoc :fields fields)))))
+  
   ([fn1 fn2 fn3 & more]
    (intersect 
      (intersect fn1 fn2)

@@ -13,12 +13,6 @@
 ;;
 ;; Lookup and basic matching functions, used by patterns in rules
 ;;
-(defn hash-match
-  "Matching hashmap over hashmap. Keys can be functions.
-  WARNING THIS IS NOT RECURSIVE FOR THE MOMENT"
-  [pattern input]
-  (every? (fn [[key val]] (= val (key input)))
-    pattern))
 
 (defn- re-pos
   "Finds regex matches in s, with their position and groups.
@@ -78,7 +72,7 @@
 
     (map? pattern)
     (fn [stash position]
-      (lookup-token #(hash-match pattern %) stash))
+      (lookup-token #(util/hash-match pattern %) stash))
 
     (fn? pattern)
     (fn [stash position]
@@ -215,7 +209,8 @@
 (defn resolve-token
   "Resolve a token based on its dimension, predicate, and the context.
   Returns a coll of tokens, since they can have multiple resolutions, or none.
-  Unresolved tokens are returned as is."
+  Unresolved tokens are returned as is.
+  Fields are put at the :value level for all dims"
   [token context module]
   (let [values (time/resolve token context)]
     (if-not (empty? values)

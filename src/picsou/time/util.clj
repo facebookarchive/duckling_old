@@ -48,6 +48,16 @@
                      months  (DurationFieldType/months)
                      years   (DurationFieldType/years)})
 
+(def grain-to-keyword
+                    {millis   :millisecond
+                     seconds  :second
+                     minutes  :minute
+                     hours    :hour
+                     days     :day
+                     weeks    :week
+                     months   :month
+                     years    :year})
+
 (defn period [& args]
   "Builds a period from grains and quantity
    (period days 1 hours 2)"

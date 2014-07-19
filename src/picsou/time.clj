@@ -22,7 +22,7 @@
            (pred (if (:backward ctx) start end) ctx) ; run again because we don't want immediate
            interval))
        (catch Throwable e
-         (warnf "picsou resolve-time' error : %s" (.getMessage e))))) ; OK
+         (warnf "picsou resolve-time' error: %s" (.getMessage e))))) ; OK
 
 (defn resolve-time
   "Returns a collection of date intervals.
@@ -55,16 +55,25 @@
     [val]
     []))
 
+(defn- add-fields-and-grain
+  "Add fields to the value, if the value is a map"
+  [fields grain value]
+  (if (map? value)
+    (->> value
+         (merge fields)
+         (?>> grain merge {:grain grain}))
+    value))
+
 (defn resolve
   "Try to resolve a token. Returns a collection of values ready for external world."
-  [{:keys [dim latent timezone] :as token} context]
-  ;(prn "resolve" token)
-  (case dim
-    :time (map (fn [[start end]] (-> {:from (str start) :to (str end)}
-                                     (?> timezone assoc :timezone timezone))) 
-               (resolve-time token context))
-    :duration (resolve-duration token context)
-    (resolve-default-val token context)))
+  [{:keys [dim latent timezone fields grain] :as token} context]
+  (->> (case dim
+         :time (map (fn [[start end]] (-> {:from (str start) :to (str end)}
+                                          (?> timezone assoc :timezone timezone))) 
+                    (resolve-time token context))
+         :duration (resolve-duration token context)
+         (resolve-default-val token context))
+       (map (partial add-fields-and-grain fields grain))))
 
 (defn local-date-time
   "Builds a non GMT datetime in order to run the corpus etc."

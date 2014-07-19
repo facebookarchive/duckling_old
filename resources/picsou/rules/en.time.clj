@@ -298,6 +298,7 @@
   
   "<time-of-day> am|pm"
   [{:form :time-of-day} #"(?i)([ap])\.?m?\.?"]
+  ;; TODO set_am fn in helpers => add :ampm field
   (-> (intersect %1 (apply between-hours
                        (if (= "a" (-> %2 :groups first .toLowerCase))
                          [0 12]

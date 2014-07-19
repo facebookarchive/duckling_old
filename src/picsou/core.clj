@@ -166,7 +166,8 @@
       (util/merge-according-to {:tests concat :context merge} (config-key current) new-corpus))))
 
 (defn run-corpus
-  "Run the corpus given in parameter for the given module"
+  "Run the corpus given in parameter for the given module.
+  Returns a list of vectors [0|1 text error-msg]"
   [{context :context, tests :tests} module]
   (for [test tests
         text (:text test)]
@@ -175,10 +176,10 @@
             winner-count (count winners)
             check (first (:checks test))] ; only one test is supported
         (if (some #(check % context) winners)
-          [0 (str "OK  " (str "\"" text "\""))]
-          [1 (str "FAIL" (str "\"" text "\"") " none of the " winner-count " winners did pass the test")]))
+          [0 text nil]
+          [1 text (format "None of the %d winners did pass the test" winner-count)]))
       (catch Exception e
-        [1 (str "FAIL caught" (.getMessage e))]))))
+        [1 text (.getMessage e)]))))
 
 ;; default context is the same as the corpus context
 (defn play
@@ -219,20 +220,22 @@
 (defn run
   "Runs the corpus and prints the results to the terminal."
   ([]
-   (let [results (mapv run (keys @corpus-map))]
-     (println "Results :")
-     (doseq [[module-id ex-count failed] results]
-       (printf "%s: %d examples, %d failed.\n" module-id ex-count failed))
-     (println "Global Failed count: " (reduce + (map last results)))))
+   (run (keys @corpus-map)))
   ([module-id]
-    (let [output (run-corpus (module-id @corpus-map) module-id)
-          ex-count (count output)
-          failed (->> output (map first) (reduce +))]
-      (doseq [line output]
-        (when (= 1 (first line))
-        	(println (second line))))
-      (printf "%d examples, %d failed.\n" ex-count failed)
-      [module-id ex-count failed])))
+   (loop [[mod & more] (if (seq? module-id) module-id [module-id])
+          line 0
+          acc []]
+     (if mod
+       (let [output (run-corpus (mod @corpus-map) mod)
+             failed (remove (comp (partial = 0) first) output)]
+         (doseq [[[error-count text error-msg] i] (map vector failed (iterate inc line))]
+           (printf "%d FAIL \"%s\": %s\n" i text error-msg))
+         (printf "%d examples, %d failed.\n" (count output) (count failed))
+         (recur more (+ line (count failed)) (concat acc (map (fn [[_ t _]] [mod t]) failed))))
+       (defn c [n] 
+         (let [[mod text] (nth acc n)]
+           (printf "(play %s \"%s\")\n" mod text)
+           (play mod text)))))))
 
 (defn load!
   "Load/Reload rules and classifiers from the config in parameter.
