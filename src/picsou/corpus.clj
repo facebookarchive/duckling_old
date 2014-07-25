@@ -5,26 +5,26 @@
             [picsou.util :as util]))
 
 (defn datetime
-  "Creates a datetime condition to check if the token is valid"
-  [& args] ; '2013 2 13 - 14' means "from 13 feb to 14 feb"
+  "Creates a datetime checker function to check if the token is valid"
+  [& args]
   (let [[date-fields [grain & other-keys-and-values]] (split-with integer? args)
         date (time/local-date-time date-fields)
         token-fields (into {:grain grain} 
                            (map vec (partition 2 other-keys-and-values)))]
-    (fn
-      [token context]
+    (fn [token context]
       (and
         (= :time (:dim token))
         (util/hash-match token-fields (:value token))
-        (= (-> token :value :from) (str date))))))
+        (= (-> token :value :value) (str date))))))
 
-(defn datetime-withzone
-  "Like datetime, but also specify a timezone"
-  [zone & args]
-  (let [dtfn (apply datetime args)]
-    (fn [token context]
-      (and (dtfn token context)
-           (= zone (:timezone token))))))
+(defn datetime-interval
+  "Creates a datetime interval checker function"
+  [from to]
+  (fn [{:keys [value dim] :as token} context]
+    (and (= :time dim)
+         ; hack to make the from part look like a legit datetime token
+         (from (assoc (:from value) :dim :time :value (:from value)) context)
+         (to   (assoc (:to   value) :dim :time :value (:to   value)) context))))
 
 (defn number
   "check if the token is a number equal to value.

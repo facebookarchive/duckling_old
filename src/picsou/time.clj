@@ -28,7 +28,7 @@
   "Returns a collection of date intervals.
    - if no :direction provided in context, looks forward first, and backward if nothing found.
    - if a :direction (:forward | :backward) is provided, only look there."
-  [{:keys [pred not-immediate] :as token} context]
+  [{:keys [pred not-immediate type from to fields grain] :as token} context]
   {:pre [pred]}
   (let [now     (now context)
         fwd  (when (or (not (:direction context)) (= :forward (:direction context)))
@@ -37,8 +37,27 @@
                     (= :backward (:direction context))
                     (and (not (:direction context)) (nil? fwd)))
               (resolve-time' token (assoc context :backward true)))
-        result  (if (or fwd bwd) [(or fwd bwd)] [])]
-    result))
+        [dfrom dto] (or fwd bwd [nil nil])]
+    (cond
+      (and (nil? dfrom) (nil? dto))
+      []
+      
+      (= :interval type)
+      [{:type :interval
+        :from (-> {:value (str dfrom)}
+                  (merge (:fields from))
+                  (?> grain assoc :grain grain) ; by default, take the global grain
+                  (?> (:grain from) assoc :grain (:grain from)))
+        :to   (-> {:value (str dto)}
+                  (merge (:fields to))
+                  (?> grain assoc :grain grain)
+                  (?> (:grain to) assoc :grain (:grain to)))}]
+      
+      :else
+      (-> {:value (str dfrom) :type :value}
+          (merge fields)
+          (?> grain assoc :grain grain)
+          vector))))
 
 (defn resolve-duration
   "Returns a collection of durations (exactly one) in seconds.
@@ -67,13 +86,10 @@
 (defn resolve
   "Try to resolve a token. Returns a collection of values ready for external world."
   [{:keys [dim latent timezone fields grain] :as token} context]
-  (->> (case dim
-         :time (map (fn [[start end]] (-> {:from (str start) :to (str end)}
-                                          (?> timezone assoc :timezone timezone))) 
-                    (resolve-time token context))
+  (case dim
+         :time (resolve-time token context)
          :duration (resolve-duration token context)
-         (resolve-default-val token context))
-       (map (partial add-fields-and-grain fields grain))))
+         (resolve-default-val token context)))
 
 (defn local-date-time
   "Builds a non GMT datetime in order to run the corpus etc."

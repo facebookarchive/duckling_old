@@ -76,7 +76,8 @@
            (let [pos (seek t (if (bwd ctx) -1 1) day)
                  start (round-to-grain pos days)]
   			     [start (t/plus start (t/days width-in-days))]))
-         (?> (= 1 width-in-days) assoc :fields {:day day})))))
+         (?> (= 1 width-in-days) assoc :fields {:day day})
+         (?> (< 1 width-in-days) assoc :type :interval)))))
 
 (defn between-days [day1 day2]
   {:pre [(integer? day1) (integer? day2) (<= 1 day1 day2 31)]}
@@ -119,7 +120,7 @@
 (defn between-hours [h1 h2]
   "[0 12] => morning"
   {:pre [(<= 0 h1 23) (<= 0 h2 23)]} ; note that h2 can be < h1
-  (fn& time {:grain hours} [t ctx]
+  (fn& time {:type :interval :grain hours} [t ctx]
     (let [rounded (round-to-grain t hours)
           start (.withHourOfDay rounded h1)
           end (-> rounded
@@ -130,7 +131,7 @@
 (defn between-days-of-weeks-hours [d1 h1 d2 h2]
   "[5 18 1 0] => weekend from Friday 18:00 to Sunday midnight"
   {:pre [(<= 0 h1 23) (<= 0 h2 23)]} ; note that h2 can be < h1
-  (fn& time [t ctx]
+  (fn& time {:type :interval :grain hours} [t ctx]
     (let [rounded (round-to-grain t hours)
           start (-> rounded
                     (.withDayOfWeek d1)
@@ -145,7 +146,7 @@
 (defn between-dates [d1 m1 d2 m2]
   "[20 3 21 6] => 3/20 to 6/21"
   {:pre [(<= 0 d1 31) (<= 0 d2 31)]} ; note that d2 can be < d1
-  (fn& time [t ctx]
+  (fn& time {:type :interval :grain days} [t ctx]
     (let [rounded (round-to-grain t days)
           start (-> rounded
                     (.withMonthOfYear m1)
@@ -162,10 +163,10 @@
 ;; functions that need a reference date (provided by context)
 ;;
 
-(defn in-duration [duration & [width negative]] ; a joda duration that can be negative for 'ago'
-  (fn& time [t ctx]
+(defn in-duration [duration & [grain negative]] ; a joda duration that can be negative for 'ago'
+  (fn& time {:grain grain} [t ctx]
     (let [target ((if negative t/minus t/plus) (rf ctx) duration)
-          width (or width (t/hours 1))
+          width (grain 1)
           interval [target (t/plus target width)]]
       (filter-interval t ctx interval))))
  
@@ -174,11 +175,13 @@
    [ref days 0] => today
    [ref weeks 0] => this week
    [ref months 1] => next calendar month
-   [ref months -2 2] => last 2 calendar months"
+   [ref months -2 2] => last 2 calendar months
+  Builds an interval if width>1, a value otherwise"
 	[grain & [pos width]]
  		(let [pos (or pos 0)
-          width (or width 1)]
-      (fn& time {:grain grain} [t ctx]
+          width (or width 1)
+          type (if (> width 1) :interval :value)]
+      (fn& time {:type type :grain grain} [t ctx]
         (let [reference (rf ctx)
               start (round-to-grain (t/plus reference (grain pos)) grain)
               interval [start (t/plus start (grain width))]]
@@ -210,9 +213,9 @@
    We explicitely seek fwd or bwd depending on the sign of pos.
    ! don't use with pos 0, there is an ambiguity, need a special fn that returns both
    closest backward and forward intervals."
-	[{:keys [pred fields grain] :as token} pos]
+	[{:keys [pred fields grain type] :as token} pos]
  	{:pre [(not= 0 pos) pred]}
-  (fn& time {:fields fields :grain grain} [t ctx]
+  (fn& time {:fields fields :grain grain :type (or type :value)} [t ctx]
 	 	(->> (loop [cursor (rf ctx)
                 ; tricky situation. if pos is negative (... ago) we don't want to look forward
                 context (-> ctx (assoc :backward (neg? pos)))
@@ -230,7 +233,7 @@
 ;; Intersection
 ;;
 
-(defn merge-fields
+(defn- merge-fields
   "Strict mode: we never accept that the same field appears in both entries,
   because it doesn't seem right that the info is repeated twice. We'll see
   later if it's a good decision.
@@ -240,13 +243,28 @@
     nil ; cannot merge because some key is in both fieldsets
     (merge {} fields1 fields2))) ; even with no fields, we return {} not nil
 
+(defn- assoc-grains
+  "Add the grain(s) to target-token during intersection"
+  [target-token {g1 :grain f1 :from t1 :to} {g2 :grain f2 :from t2 :to}]
+  (let [smaller-fn (fn [grain1 grain2]
+                     (if (pos? (compare-grains grain1 grain2)) grain2 grain1))
+        from-grain (smaller-fn (or (:grain f1) g1) (or (:grain f2) g2))
+        to-grain   (smaller-fn (or (:grain t1) g1) (or (:grain t2) g2))]
+    (if (= from-grain to-grain)
+      (assoc target-token :grain from-grain)
+      (-> target-token
+          (assoc-in [:from :grain] from-grain)
+          (assoc-in [:to   :grain] to-grain)))))
+
 (defn intersect
   "General intersection.
   Fields are merged (no intersection allowed if two fields contradict.
-  Grain is the smallest of the two"
-  ([{fn1 :pred fields1 :fields grain1 :grain} {fn2 :pred fields2 :fields grain2 :grain}]
+  Grain is the smallest of the two.
+  Type is :interval if one of the args is :interval"
+  ([{fn1 :pred fields1 :fields grain1 :grain type1 :type :as token1}
+    {fn2 :pred fields2 :fields grain2 :grain type2 :type :as token2}]
     (let [fields (merge-fields fields1 fields2)
-          grain (if (pos? (compare-grains grain1 grain2)) grain2 grain1)]
+          type (if (or (= :interval type1) (= :interval type2)) :interval :value)]
       (letfn [(seek [t ctx cnt]
                 (when t
                   (let [[start1 end1 :as i1] (fn1 t ctx)
@@ -276,9 +294,10 @@
                                            (last (fn2 end1 ctx))) ctx (dec cnt))
                             :else
                             	(seek (t-min end1 end2) ctx (dec cnt)))))))))]
-        (-> (fn& time {:grain grain} [t ctx]
+        (-> (fn& time {:type type} [t ctx]
               (seek t ctx 100))
-            (?> fields assoc :fields fields)))))
+            (?> fields assoc :fields fields)
+            (assoc-grains token1 token2)))))
   
   ([fn1 fn2 fn3 & more]
    (intersect 
@@ -309,12 +328,14 @@
     (if (= 1 (count v)) (first v) (apply intersect v))))
 
 (defn interval
-  "Build interval between date1 and date2
+  "Build interval between date1 and date2 (tokens)
   If :inclusive, it ends at the :to of date2
   If :exclusive, it ends at the :from of date2"
   [date1 date2 options]
   {:pre [(#{:inclusive :exclusive} options)]}
-  (fn& time [t ctx]
+  (fn& time {:type :interval
+             :from {:grain (:grain date1)}
+             :to   {:grain (:grain date2)}} [t ctx]
     (let [start (first ((:pred date1) t ctx))
           end ((if (= :inclusive options) second first)
                ((:pred date2) start ctx))]

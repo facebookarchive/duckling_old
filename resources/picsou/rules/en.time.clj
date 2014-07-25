@@ -261,7 +261,7 @@
 
   "<time-of-day> <part-of-day>" ; since "morning" "evening" etc. are latent, general time+time is blocked
   [{:form :time-of-day} {:form :part-of-day}]
-  (intersect %1 %2)
+  (assoc (intersect %1 %2) :type :value)
 
   "<part-of-day> of <dim time>" ; since "morning" "evening" etc. are latent, general time+time is blocked
   [{:form :part-of-day} #"(?i)of" (dim :time)]
@@ -299,11 +299,12 @@
   "<time-of-day> am|pm"
   [{:form :time-of-day} #"(?i)([ap])\.?m?\.?"]
   ;; TODO set_am fn in helpers => add :ampm field
-  (-> (intersect %1 (apply between-hours
-                       (if (= "a" (-> %2 :groups first .toLowerCase))
-                         [0 12]
-                         [12 0])))
-      (assoc :form :time-of-day))
+  (let [[p meridiem] (if (= "a" (-> %2 :groups first .toLowerCase))
+                       [[0 12] :am]
+                       [[12 0] :pm])]
+    (-> (intersect %1 (assoc (apply between-hours p) 
+                             :fields {:meridiem meridiem}))
+        (assoc :form :time-of-day :type :value))) ; not interval
   
   "noon"
   #"(?i)noon"
@@ -372,7 +373,7 @@
   
   "<time> timezone"
   [(dim :time) (dim :timezone)]
-  (assoc %1 :timezone (:value %2))
+  (assoc-in %1 [:fields :timezone] (:value %2))
 
   ;; Intervals
   "<month> dd-dd (interval)"
