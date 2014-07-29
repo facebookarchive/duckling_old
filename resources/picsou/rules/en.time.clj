@@ -342,7 +342,11 @@
   [#(:relative-minutes %) #"(?i)after|past" (integer 0 23)]
   (hour-relativemin (:val %3) true (:relative-minutes %1))
 
-  ; special forms for midnight and noon
+  "half <integer> (UK style hour-of-day)"
+  [#"half" (integer 0 23)]
+  (hour-relativemin (:val %2) true 30)
+
+    ; special forms for midnight and noon
   "relative minutes to|till|before noon|midnight"
   [#(:relative-minutes %) #"(?i)to|till|before|of" #(:for-relative-minutes %)]
   (hour-relativemin (:val %3) true (- (:relative-minutes %1)))

@@ -189,8 +189,11 @@
 ;  "15:30"
   "3:30pm"
   "3:30PM"
-;  "at 3 30"
   (datetime 2013 2 12 15 30 minutes :hour 3 :minute 30 :meridiem :pm)
+  
+  "3:30"
+  "half three"
+  (datetime 2013 2 12 15 30 minutes :hour 3 :minute 30)
 
   "a quarter to noon"
   "11:45am"
