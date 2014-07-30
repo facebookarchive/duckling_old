@@ -9,7 +9,15 @@
    :unit (:value %2)
    :form :no-product}
  
- ; 3 pounds of flour
+  ; a pound
+  "a <unit>"
+  [#"(?i)an?" (dim :leven-unit)]
+  {:dim :quantity
+   :value 1
+   :unit (:value %2)
+   :form :no-product}
+
+   ; 3 pounds of flour
   "<quantity> of product"
   [(dim :quantity #(= :no-product (:form %))) #"(?i)of" (dim :leven-product)]
   (-> %1 
@@ -23,6 +31,13 @@
    :value (:val %1)
    :product (:value %2)}
    
+  ; an apple
+  "a <product>"
+  [#"(?i)an?" (dim :leven-product)]
+  {:dim :quantity
+   :value 1
+   :product (:value %2)}
+
   ; Stubs for corpus
   "pounds"
   #"pounds?"

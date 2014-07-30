@@ -66,7 +66,7 @@
 
 (defn quantity
   "Create a quantity condition"
-  [value unit product]
+  [value unit & [product]]
   (fn [token _] (and
                   (= :quantity (:dim token))
                   (= value (-> token :value :value))
