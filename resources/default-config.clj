@@ -14,14 +14,16 @@
                     "en.numbers"
                     "en.temperature"
                     "en.finance"
-                    "en.communication"]
+                    "en.communication"
+                    "en.quantity"]
            :rules ["en.time"
                    "en.numbers"
                    "en.cycles"
                    "en.duration"
                    "en.temperature"
                    "en.finance"
-                   "en.communication"]}
+                   "en.communication"
+                   "en.quantity"]}
  :es$core {:corpus ["es.time"
                     "es.numbers"
                     "es.temperature"

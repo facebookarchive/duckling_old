@@ -192,8 +192,8 @@
 (defn pass-all
   "Make as many passes as necessary until no new tokens are produced
   (there is a limit to avoid infinite loops though)"
-  [sentence rules]
-  (loop [stash [{:text sentence}]
+  [sentence rules & [starting-stash]]
+  (loop [stash (apply vector {:text sentence} starting-stash)
          prev-stash-size 0
          ; safeguard: number of max iterations (loops DO occur :))
          remaining-iter 10]

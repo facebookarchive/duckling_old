@@ -48,6 +48,10 @@
   [(-> (t/interval (now context) (t/plus (now context) val))
        (t/in-secs))])
 
+(defn resolve-quantity
+  [token context]
+  [(select-keys token [:value :unit :product])])
+
 (defn resolve-default-val
   "Returns a collection of values (the :val field directly)"
   [{:keys [val] :as token} context]
@@ -64,6 +68,7 @@
                                      (?> timezone assoc :timezone timezone))) 
                (resolve-time token context))
     :duration (resolve-duration token context)
+    :quantity (resolve-quantity token context)
     (resolve-default-val token context)))
 
 (defn local-date-time

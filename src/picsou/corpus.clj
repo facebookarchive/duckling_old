@@ -64,6 +64,15 @@
                   (= currency (-> token :val :currency))
                   (= precision (-> token :val :precision)))))
 
+(defn quantity
+  "Create a quantity condition"
+  [value unit product]
+  (fn [token _] (and
+                  (= :quantity (:dim token))
+                  (= value (-> token :value :value))
+                  (= unit (-> token :value :unit))
+                  (= product (-> token :value :product)))))
+
 (defn place
   "Create a place checker"
   [pnl n]

@@ -56,14 +56,14 @@
    Targets is a coll of {:dim dim :label label} : only winners of these dims are
    kept, and they receive a :label key = the label provided.
    If no targets specified, all winners are returned."
-  [s context module & [targets]]
+  [s context module & [targets starting-stash]]
   {:pre [s context module]}
   (let [classifiers (get-classifier module)
         _ (when-not (map? classifiers)
             (warnf "[picsou] classifiers is not a map s=%s module=%s targets=%s"
                    s module (util/spprint targets)))
         rules (get-rules module)
-        stash (engine/pass-all s rules)
+        stash (engine/pass-all s rules starting-stash)
         ; add an index to tokens in the stash
         stash (map #(if (map? %1) (assoc %1 :index %2) %1)
                    stash
@@ -204,6 +204,7 @@
          :number (println "Number" "integer?" (:integer winner) (:value winner) (:body winner))
          :pnl (println "Potential named location: " (:pnl winner) " Within n :" (:n winner))
          :unit (println "Unit :" (:cat winner) " => " (:val winner))
+         :quantity (println "Quantity: " (:value winner) (:unit winner) (:product winner))
          (println "Other: " (:dim winner) (:val winner)))
        (when (:latent winner) (println "Latent token"))
        (print-tokens winner module-id))
@@ -267,13 +268,13 @@
          (:reference-time context)
          (vector? targets)]}
   (try
-    (infof "Extracting from '%s' with targets %s" sentence targets)
+    (infof "Extracting from '%s' with targets %s and stash %s" sentence targets (first leven-stash))
     (letfn [(extract'
               [module targets] ; targets specify all the dims we should extract
               (let [module (keyword module)]
                 (when-not (module @rules-map)
                   (throw (ex-info "Unknown picsou config" {:module module})))
-                (->> (parse sentence context module targets)
+                (->> (parse sentence context module targets leven-stash)
                      :winners
                      (map #(select-keys % [:label :body :value :start :end :latent])))))]
       (->> targets
