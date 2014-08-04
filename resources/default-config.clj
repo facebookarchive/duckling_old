@@ -37,8 +37,10 @@
                    "en.finance"
                    "en.communication"]}
  :cn$core {:corpus ["cn.numbers"
-                    "cn.time"]
+                    "cn.time"
+                    "cn.temperature"]
            :rules ["cn.numbers"
                    "cn.time"
                    "cn.cycles"
-                   "cn.duration"]}}
+                   "cn.duration"
+                   "cn.temperature"]}}
