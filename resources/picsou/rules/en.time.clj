@@ -183,6 +183,10 @@
   [#"(?i)next" (dim :time)]
   (this-pred %2 1)
 
+  "week-end after next"
+  [(dim :time) #"(?i)after next"]
+  (this-pred %1 2)
+
   "last tuesday, last july"
   [#"(?i)last" (dim :time)]
   (this-pred %2 -1)
