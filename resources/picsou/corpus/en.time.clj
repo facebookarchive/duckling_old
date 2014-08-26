@@ -27,7 +27,7 @@
   "monday"
   "mon."
   "this monday"
-  (datetime 2013 2 18 days)
+  (datetime 2013 2 18 days :day-of-week 1)
 
   "Monday, Feb 18"
   "Mon, February 18"
@@ -109,7 +109,7 @@
   
   "14april 2015"
   "April 14, 2015"
-  (datetime 2015 4 14 days)
+  (datetime 2015 4 14 days :day 14 :month 4 :years 2015)
 
   "next tuesday" ; when today is Tuesday, "mardi prochain" is a week from now
   (datetime 2013 2 19 days :day-of-week 2)
@@ -201,7 +201,7 @@
   (datetime 2013 2 12 11 45 minutes :hour 11 :minute 45)
   
   "4pm PST"
-  (datetime 2013 2 12 16 hours :timezone "PST")
+  (datetime 2013 2 12 16 hours :hour 4 :meridiem :pm :timezone "PST")
   
   "8 tonight"
   "eight tonight"
@@ -326,7 +326,7 @@
     (datetime 2013 2 13 00 hours))
 
   "tomorrow evening"
-  "Wednesday evening"
+  ;"Wednesday evening"
   "tomorrow night"
   (datetime-interval
     (datetime 2013 2 13 18 hours)

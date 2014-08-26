@@ -1,6 +1,5 @@
 (; Context map
-  ; Tuesday Feb 12, 2013 at 4:30am is the "now" for the tests
-  {:now (t/date-time 2013 2 12 4 30)}
+  {}
 
   "1"
   "un"

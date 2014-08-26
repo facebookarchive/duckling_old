@@ -1,16 +1,17 @@
 {
- ; :fr$core {:corpus ["fr.time"
- ;                    "fr.numbers"
+  :fr$core {:corpus ["fr.time"
+                     "fr.numbers"
  ;                    "fr.temperature"
  ;                    "fr.finance"
- ;                    "en.communication"]
- ;           :rules ["fr.time"
- ;                   "fr.numbers"
- ;                   "fr.cycles"
- ;                   "fr.duration"
- ;                   "fr.temperature"
- ;                   "en.finance"                             ; sic
- ;                   "en.communication"]}                     ; sic
+ ;                    "en.communication"
+                    ]
+            :rules ["fr.time"
+                    "fr.numbers"
+                    "fr.cycles"
+                    "fr.duration"
+                    "fr.temperature"
+                    "en.finance"                             ; sic
+                    "en.communication"]}                     ; sic
  :en$core {:corpus ["en.time"
                     "en.numbers"
                     ; "en.temperature"
