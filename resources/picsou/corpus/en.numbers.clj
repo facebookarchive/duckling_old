@@ -71,6 +71,9 @@
   (number -1200000)
 
   "4th"
-  (number 4)
+  "fourth"
+  (ordinal 4)
+
+
 )
 

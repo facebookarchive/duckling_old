@@ -119,14 +119,15 @@
   ;; Ordinal numbers
   ;;
   
-  "ordinals (premier..16eme)"
-  #"(?i)premi(ere?|ère)|(deux|trois|quatr|cinqui|six|sept|huit|neuv|dix|onz|douz|treiz|quatorz|quinz|seiz)i[eè]me"
+  "ordinals (premier..seizieme)"
+  #"(?i)(premi(ere?|ère)|(deux|trois|quatr|cinqu|six|sept|huit|neuv|dix|onz|douz|treiz|quatorz|quinz|seiz)i[eè]me)"
   {:dim :ordinal
-   :val (get {"premier" 1 "premiere" 1 "première" 1 "deuxieme" 2 "troisieme" 3 "quatrieme" 4 "cinquiieme" 5 "sixieme" 6 "septieme" 7 "huitieme" 8 "neuvieme" 9 "dixieme" 10 "onzieme" 11 "douzieme" 12 "treizieme" 13 "quatorzieme" 14 "quinzieme" 15 "seizieme" 16 "deuxième" 2 "troisième" 3 "quatrième" 4 "cinquiième" 5 "sixième" 6 "septième" 7 "huitième" 8 "neuvième" 9 "dixième" 10 "onzième" 11 "douzième" 12 "treizième" 13 "quatorzième" 14 "quinzième" 15 "seizième" 16}
+   :val (get {"premier" 1 "premiere" 1 "première" 1 "deuxieme" 2 "troisieme" 3 "quatrieme" 4 "cinquieme" 5 "sixieme" 6 "septieme" 7 "huitieme" 8 "neuvieme" 9 "dixieme" 10 "onzieme" 11 "douzieme" 12 "treizieme" 13 "quatorzieme" 14 "quinzieme" 15 "seizieme" 16 "deuxième" 2 "troisième" 3 "quatrième" 4 "cinquième" 5 "sixième" 6 "septième" 7 "huitième" 8 "neuvième" 9 "dixième" 10 "onzième" 11 "douzième" 12 "treizième" 13 "quatorzième" 14 "quinzième" 15 "seizième" 16}
               (-> %1 :groups first .toLowerCase))}
 
+
   "ordinal (digits)"
-  #"0*(\d+) ?(ere?|ère|ème)"
+  #"0*(\d+) ?(ere?|ère|ème|eme)"
   {:dim :ordinal
    :val (read-string (first (:groups %1)))}  ; read-string not the safest
 

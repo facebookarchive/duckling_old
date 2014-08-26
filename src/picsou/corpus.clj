@@ -33,6 +33,13 @@
                   (or (not (integer? value)) (:integer token))
                   (= (:val token) value))))
 
+(defn ordinal
+  "check if the token is a ordinal equal to value."
+  [value]
+  (fn [token _] (and
+                  (= :ordinal (:dim token))
+                  (= (:val token) value))))
+
 (defn temperature
   "Create a temp condition"
   [value & [unit]]
