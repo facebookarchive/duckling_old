@@ -50,7 +50,7 @@
    :in-width (:in-width %2)}
 
   "<integer> <unit-of-duration>"
-  [(integer) (dim :unit-of-duration)]
+  [(integer 0) (dim :unit-of-duration)] ;duration can't be negative...
   {:dim :duration
    :val ((:grain %2) (:val %1))
    :in-width (:in-width %2)} ; used by "in <duration>"
