@@ -66,10 +66,10 @@
   (cycle-nth-after (:grain %2) -1 %4)
   
   "last n <cycle>"
-  [#"(?i)last" (integer 2 9999) (dim :cycle)]
+  [#"(?i)last" (integer 1 9999) (dim :cycle)]
   (cycle-n-not-immediate (:grain %3) (- (:val %2)))
   
   "next n <cycle>"
-  [#"(?i)next" (integer 2 9999) (dim :cycle)]
+  [#"(?i)next" (integer 1 9999) (dim :cycle)]
   (cycle-n-not-immediate (:grain %3) (:val %2))
 )

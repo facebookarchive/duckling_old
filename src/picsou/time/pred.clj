@@ -2,7 +2,7 @@
   (:use [clojure.tools.logging]
         [plumbing.core])
   (:require [picsou.time.obj :as t])
-  (:refer-clojure :exclude [cycle]))
+  (:refer-clojure :exclude [cycle resolve]))
 
 ;; Contains the time semantics.
 ;; Knows nothing  about tokens, morphology, syntax, forms.

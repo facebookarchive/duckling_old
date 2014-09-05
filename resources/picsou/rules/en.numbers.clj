@@ -13,6 +13,14 @@
               "twelve" 12 "thirteen" 13 "fourteen" 14 "fifteen" 15 "sixteen" 16
               "seventeen" 17 "eighteen" 18 "nineteen" 19}
               (-> %1 :groups first .toLowerCase))}
+  
+  "couple"
+  #"(a )?couple( of)?"
+  {:dim :number :integer true :val 2}
+  
+  "few" ; TODO set assumption
+  #"(a )?few"
+  {:dim :number :integer true :precision :approximate :val 3}
 
   "integer (20..90)"
   #"(?i)(twenty|thirty|fou?rty|fifty|sixty|seventy|eighty|ninety)"

@@ -236,6 +236,14 @@
   
   "in one hour"
   (datetime 2013 2 12 5 30)
+  
+  "in a couple hours"
+  "in a couple of hours"
+  (datetime 2013 2 12 6 30)
+
+  "in a few hours"
+  "in few hours"
+  (datetime 2013 2 12 7 30)
 
   "in 24 hours"
   (datetime 2013 2 13 4 30)
@@ -364,9 +372,9 @@
   "next three minutes"
   (datetime-interval [2013 2 12 4 31] [2013 2 12 4 34])
 
-  "last 2 hours"
-  "last two hours"
-  (datetime-interval [2013 2 12 2] [2013 2 12 4])
+  "last 1 hour"
+  "last one hour"
+  (datetime-interval [2013 2 12 3] [2013 2 12 4])
 
   "next 3 hours"
   "next three hours"
@@ -380,7 +388,10 @@
   "next three days"
   (datetime-interval [2013 2 13] [2013 2 16])
     
-  "last 2 weeks"
+  "next few days"
+  (datetime-interval [2013 2 13] [2013 2 16])
+
+    "last 2 weeks"
   "last two weeks"
   (datetime-interval [2013 1 28 :grain :week] [2013 2 11 :grain :week])
 
@@ -424,4 +435,8 @@
 
   "Thursday from 9a to 11a"
   (datetime-interval [2013 2 14 9] [2013 2 14 12])
+  
+  ;"11:30-1:30 PM on Sat, Sep 21"
+  ;(datetime-interval [2014 9 21 11 30] [2014 9 21 13 31])
+  
 )
