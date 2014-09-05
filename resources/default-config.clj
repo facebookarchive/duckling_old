@@ -11,19 +11,19 @@
  ;                   "fr.temperature"
  ;                   "en.finance"                             ; sic
  ;                   "en.communication"]}                     ; sic
- :en$core {:corpus ["en.time"
-                    "en.numbers"
+ :en$core {:corpus [  "en.time"
+                    ; "en.numbers"
                     ; "en.temperature"
                     ; "en.finance"
                     ; "en.communication"
                     ]
-           :rules ["en.time"
-                   "en.numbers"
-                   "en.cycles"
-                   "en.duration"
-                   "en.temperature"
-                   "en.finance"
-                   "en.communication"]}
+           :rules [  "en.time"
+                     "en.numbers"
+                     "en.cycles"
+                     "en.duration"
+                   ; "en.temperature"
+                   ; "en.finance"
+                   #_"en.communication"]}
  ; :es$core {:corpus ["es.time"
  ;                    "es.numbers"
  ;                    "es.temperature"

@@ -38,13 +38,15 @@
   [{<rule-name> [features, output]}]
   Output is true if the rule was contributing successfully, false otherwise"
   [s context check rules feature-extractor dataset]
-  (debugf "learning %s" s)
+  (debugf "learning %s %s" s check)
   (let [fc-tokens (->> (engine/pass-all s rules) 
-                       (filter #(and (:pos %) (= (count s) (- (:end %) (:pos %))))) ; fully-covering tokens
-                       (map #(assoc % :check (check % context))))
-        fc-tokens-ok (filter :check fc-tokens)
-        fc-tokens-ko (remove :check fc-tokens)
+                       (filter #(and (:pos %) (= (count s) (- (:end %) (:pos %)))))
+                       (mapcat #(engine/resolve-token % context nil)) ; fully-covering tokens
+                       (map #(assoc % :check (check context %))))
+        fc-tokens-ok (remove :check fc-tokens)
+        fc-tokens-ko (filter :check fc-tokens)
         found     (not (empty? fc-tokens-ok))
+        _ (when-not found (prn "not found" s))
         tokens-ok (apply sets/union
                          (for [tok fc-tokens-ok]
                            ;; all subtokens of OK fully covering tokens which have a :rule
@@ -62,6 +64,9 @@
              (update-in ds [(-> tok :rule :name)]
                         #(conj % [(feature-extractor tok) false])))
         final-dataset (reduce f2 dataset-updated-with-positives tokens-ko)]
+    #_(when (= s "from 9:30 - 11:00 on Thursday")
+      (prn (count fc-tokens-ok) (count fc-tokens-ko))
+      (prn final-dataset))
     final-dataset))
 
 (defn corpus->dataset

@@ -1,30 +1,45 @@
 (ns picsou.corpus
-  (:use     [picsou.time.util]) ; use grains in corpus
-  (:require [clj-time.core :as t]
-            [picsou.time :as time]
+  (:use     [clojure.tools.logging]
+            [plumbing.core :except [millis]]) 
+  (:require [picsou.time.obj :as time]
             [picsou.util :as util]))
+
+;; Checker functions return nil when OK, or an explanation string when not OK.
+;; TODO move them to the module namespace
+
+(defn- vec->date-and-map
+  "Turns a vector of args into a date and a map of extra fields"
+  [args]
+  (let [[date-fields other-keys-and-values] (split-with integer? args)
+        token-fields (into {} (map vec (partition 2 other-keys-and-values)))
+        date (-> (apply time/t date-fields)
+                 (?> (:grain token-fields) assoc :grain (:grain token-fields)))]
+    [date token-fields]))
 
 (defn datetime
   "Creates a datetime checker function to check if the token is valid"
   [& args]
-  (let [[date-fields [grain & other-keys-and-values]] (split-with integer? args)
-        date (time/local-date-time date-fields)
-        token-fields (into {:grain grain} 
-                           (map vec (partition 2 other-keys-and-values)))]
-    (fn [token context]
-      (and
-        (= :time (:dim token))
-        (util/hash-match token-fields (:value token))
-        (= (-> token :value :value) (str date))))))
+  (let [[date token-fields] (vec->date-and-map args)]
+    (fn [context token]
+        (when-not
+          (and
+            (= :time (:dim token))
+            #_(util/hash-match token-fields (:value token))
+            (= (-> token :value) date))
+          (format "\nExpected %s\nGot      %s\n" date (:value token))))))
 
 (defn datetime-interval
   "Creates a datetime interval checker function"
   [from to]
-  (fn [{:keys [value dim] :as token} context]
-    (and (= :time dim)
-         ; hack to make the from part look like a legit datetime token
-         (from (assoc (:from value) :dim :time :value (:from value)) context)
-         (to   (assoc (:to   value) :dim :time :value (:to   value)) context))))
+  (let [[start start-fields] (vec->date-and-map from)
+        [end end-fields] (vec->date-and-map to)
+        date (time/interval start end)]
+    (fn [context {:keys [value dim] :as token}]
+      (when-not
+        (and
+          (= :time dim)
+          (= value date))
+        (format "\nExpected %s\nGot      %s\n" date value)))))
 
 (defn number
   "check if the token is a number equal to value.

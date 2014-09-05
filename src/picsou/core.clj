@@ -4,16 +4,19 @@
         [plumbing.core])
   (:require [clojure.string :as strings]
             [picsou.engine :as engine]
-            [picsou.time :as time]
+            [picsou.time.obj :as time]
             [picsou.learn :as learn]
             [picsou.util :as util]
             [clojure.java.io :as io]
-            [picsou.corpus :as corpus]))
+            [picsou.corpus :as corpus]
+            [midje.repl]))
+
+(defn dev [] (midje.repl/autotest))
 
 (def rules-map (atom {}))
 (def corpus-map (atom {}))
 (def classifiers-map (atom {}))
-(def default-context {:reference-time (time/local-date-time [2013 2 12 4 30])})
+(def default-context {:reference-time (time/t 2013 2 12 4 30)})
 
 (defn- get-classifier
   [id]
@@ -174,10 +177,11 @@
     (try
       (let [{:keys [stash winners]} (parse text context module)
             winner-count (count winners)
-            check (first (:checks test))] ; only one test is supported
-        (if (some #(check % context) winners)
+            check (first (:checks test)) ; only one test is supported now
+            check-results (map (partial check context) winners)] ; return nil if OK, explanation string if not OK
+        (if (some nil? check-results)
           [0 text nil]
-          [1 text (format "None of the %d winners did pass the test" winner-count)]))
+          [1 text (reduce str check-results)]))
       (catch Exception e
         [1 text (.getMessage e)]))))
 
@@ -200,14 +204,14 @@
      (print "Winners: \n")
      (doseq [winner winners]
        (case (:dim winner)
-         :time (println "Time" (:value winner))
+         :time (println "Time" (:value winner) (:form winner))
          :duration (println "Duration" (select-keys winner [:grain :fuzzy :units :val]))
          :number (println "Number" "integer?" (:integer winner) (:value winner) (:body winner))
          :pnl (println "Potential named location: " (:pnl winner) " Within n :" (:n winner))
          :unit (println "Unit :" (:cat winner) " => " (:val winner))
          (println "Other: " (:dim winner) (:val winner)))
        (when (:latent winner) (println "Latent token"))
-       (print-tokens winner module-id))
+       #_(print-tokens winner module-id))
 
      ;; 3. ask for details
      (println)

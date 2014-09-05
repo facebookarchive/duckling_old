@@ -8,69 +8,68 @@
 ;
 ; As soon as you put a quantity (2 months), the cycle becomes a duration.
 
-; Not clear if we need hours, etc. What does 'last hour' mean ?
 
 (
   "second (cycle)"
   #"(?i)seconds?"
   {:dim :cycle
-   :grain seconds}
+   :grain :second}
 
   "minute (cycle)"
   #"(?i)minutes?"
   {:dim :cycle
-   :grain minutes}
+   :grain :minute}
 
   "hour (cycle)"
   #"(?i)hours?"
   {:dim :cycle
-   :grain hours}
+   :grain :hour}
 
   "day (cycle)"
   #"(?i)days?"
   {:dim :cycle
-   :grain days}
+   :grain :day}
 
   "week (cycle)"
   #"(?i)weeks?"
   {:dim :cycle
-   :grain weeks}
+   :grain :week}
 
   "month (cycle)"
   #"(?i)months?"
   {:dim :cycle
-   :grain months}
+   :grain :month}
   
   "year (cycle)"
   #"(?i)years?"
   {:dim :cycle
-   :grain years}
+   :grain :year}
   
   "this <cycle>"
   [#"(?i)this" (dim :cycle)]
-  (this-cycle (:grain %2) 0)
+  (cycle-nth (:grain %2) 0)
 
   "last <cycle>"
   [#"(?i)last" (dim :cycle)]
-  (this-cycle (:grain %2) -1)
+  (cycle-nth (:grain %2) -1)
 
   "next <cycle>"
   [#"(?i)next" (dim :cycle)]
-  (this-cycle (:grain %2) 1)
+  (cycle-nth (:grain %2) 1)
   
   "the <cycle> after <time>"
   [#"(?i)the" (dim :cycle) #"(?i)after" (dim :time)]
-  (cycle-relative %4 (:grain %2) 1)
+  (cycle-nth-after (:grain %2) 1 %4)
   
   "the <cycle> before <time>"
   [#"(?i)the" (dim :cycle) #"(?i)before" (dim :time)]
-  (cycle-relative %4 (:grain %2) -1)
+  (cycle-nth-after (:grain %2) -1 %4)
   
   "last n <cycle>"
   [#"(?i)last" (integer 2 9999) (dim :cycle)]
-  (this-cycle (:grain %3) (- (:val %2)) (:val %2))
+  (cycle-n-not-immediate (:grain %3) (- (:val %2)))
   
   "next n <cycle>"
   [#"(?i)next" (integer 2 9999) (dim :cycle)]
-  (this-cycle (:grain %3) 1 (:val %2))
+  (cycle-n-not-immediate (:grain %3) (:val %2))
 )
