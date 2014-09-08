@@ -3,7 +3,8 @@
  ;                    "fr.numbers"
  ;                    "fr.temperature"
  ;                    "fr.finance"
- ;                    "en.communication"]
+ ;                    "en.communication"
+ ;                   ]
  ;           :rules ["fr.time"
  ;                   "fr.numbers"
  ;                   "fr.cycles"
@@ -11,8 +12,8 @@
  ;                   "fr.temperature"
  ;                   "en.finance"                             ; sic
  ;                   "en.communication"]}                     ; sic
- :en$core {:corpus [  "en.time"
-                    ; "en.numbers"
+ :en$core {:corpus ["en.time"
+                    "en.numbers"
                     ; "en.temperature"
                     ; "en.finance"
                     ; "en.communication"
