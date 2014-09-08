@@ -436,7 +436,10 @@
   "Thursday from 9a to 11a"
   (datetime-interval [2013 2 14 9] [2013 2 14 12])
   
-  ;"11:30-1:30 PM on Sat, Sep 21"
-  ;(datetime-interval [2014 9 21 11 30] [2014 9 21 13 31])
+  "11:30-1:30 PM"
+  (datetime-interval [2014 2 12 11 30] [2014 2 12 13 31])
+
+    ; "11:30-1:30 PM on Sat, Sep 21"
+  ; (datetime-interval [2014 9 21 11 30] [2014 9 21 13 31])
   
 )

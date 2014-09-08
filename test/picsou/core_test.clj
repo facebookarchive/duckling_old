@@ -4,6 +4,31 @@
   (:require [picsou.time :as time]
             [clojure.java.io :as io]))
 
+(def tokens (map (fn [x] {:v x}) (range 10)))
+
+; partial order where odd and even numbers are compared naturally between them,
+; but an odd number and an even number are not comparable
+
+(defn compare-fn [a b]
+  (if (= (mod (:v a) 2) (mod (:v b) 2))
+    (compare (:v a) (:v b))
+    nil))
+
+; the token with value 8 is not resolved, all others are
+
+(defn resolve-fn [a]
+  (if (= 8 (:v a))
+    [(assoc a :not-resolved true)]
+    [(assoc a :value "ok")]))
+(def select-winners' @#'picsou.core/select-winners)
+
+; the actual test now
+
+(deftest select-winners-test
+  (is (= '({:value "ok", :v 9} {:value "ok", :v 6})
+         (select-winners' compare-fn resolve-fn tokens))))
+
+
 ;; returns :ok if the corpus runs well, or a string with list of failures otherwise
 ; (defn diag-corpus [run-corpus-output]
 ;   (if (= 0 (reduce #(+ %1 (first %2)) 0 run-corpus-output)) ;; no fail

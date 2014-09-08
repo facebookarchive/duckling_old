@@ -54,6 +54,25 @@
         ;(printf "Comparing %d (%f) and %d (%f) \n" (:index a) pa (:index b) pb)
         (compare pa pb))))))
 
+(defn- select-winners
+  "Winner= token that is not 'smaller' (in the sense of the provided partial
+  order) than another winner, and that resolves to a value"
+  ([compare-fn resolve-fn candidates]
+    (select-winners compare-fn resolve-fn candidates []))
+  ([compare-fn resolve-fn candidates already-selected]
+    (if (seq candidates)
+      (let [[maxima others] (util/split-by-partial-max 
+                              compare-fn
+                              candidates
+                              (concat already-selected candidates))
+            new-winners (->> maxima
+                             (mapcat resolve-fn)
+                             (remove :not-resolved))]
+        (if (seq maxima)
+          (recur compare-fn resolve-fn others (concat already-selected new-winners))
+          already-selected))
+      already-selected)))
+
 (defn- parse
   "Parse a sentence. Returns the stash and a curated list of winners.
    Targets is a coll of {:dim dim :label label} : only winners of these dims are
@@ -79,13 +98,11 @@
                      (?>> dim-label map #(when-let [label (get dim-label (:dim %))]
                                           (assoc % :label label)))
                      (remove nil?)
-                     ; resolve tokens value (one token can have 0 to n resolutions)
-                     (mapcat #(engine/resolve-token % context module))
-                     ; remove non-resolved token
-                     (remove :not-resolved)
-                     ; remove tokens who are recovered by tokens of same dim,
-                     ; or share same interval (and same dim) but stronger probability
-                     (util/keep-partial-max #(compare-tokens %1 %2 classifiers dim-label))
+                     
+                     (select-winners
+                       #(compare-tokens %1 %2 classifiers dim-label)
+                       #(engine/resolve-token % context module))
+                     
                      ; add a confidence key
                      ; low confidence for numbers covered by datetime
                      (engine/estimate-confidence context module)

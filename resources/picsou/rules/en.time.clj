@@ -442,11 +442,11 @@
 
   ; Specific for time-of-day, to help resolve ambiguities
 
-  "<datetime> - <datetime> (interval)"
+  "<time-of-day> - <time-of-day> (interval)"
   [{:form :time-of-day} #"\-|to|th?ru|through" {:form :time-of-day}]
   (interval %1 %3 true)
 
-  "from <datetime> - <datetime> (interval)"
+  "from <time-of-day> - <time-of-day> (interval)"
   [#"(?i)from" {:form :time-of-day} #"\-|to|th?ru|through|until" {:form :time-of-day}]
   (interval %2 %4 true)
 
