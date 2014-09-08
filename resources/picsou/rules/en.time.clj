@@ -131,9 +131,10 @@
   #"(?i)valentine'?s?( day)?"
   (parse-dmy "14" "2" nil true) 
 
-  "memorial day"
+  "memorial day" ; last monday of May - todo memorial day 
   #"(?i)memorial day"
-  (parse-dmy "26" "5" nil true) 
+  (parse-dmy "25" "5" nil true) 
+
 
   "independence day"
   #"(?i)independence day"
@@ -143,6 +144,11 @@
   #"(?i)labor day"
   (parse-dmy "1" "9" nil true) 
 
+  ;"easter sunday"
+  ;"easter monday"
+  ;Martin Luther King Day is a federal holiday held on the third Monday of January
+  ;Father's Day in the United States is on the third Sunday of June.
+  
   "halloween day"
   #"(?i)hall?owe?en( day)?"
   (parse-dmy "31" "10" nil true) 
