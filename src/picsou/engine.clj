@@ -5,8 +5,7 @@
   2. rules are (recursively) matched based on theirs pattern vectors.
   3. tokens containing final info are produced using their production rules"
   (:require [clojure.set :as sets]
-            [picsou.time :as time]
-            [picsou.time.helpers]
+            [picsou.time.prod]
             [picsou.util :as util]
             [clj-time.coerce :as coerce]))
 
@@ -85,7 +84,7 @@
   "Builds a new rule"
   [name pattern production]
   (if (not (string? name)) (throw (Exception. "Can't accept rule without name.")))
-  (let [picsou-helper-ns (the-ns 'picsou.time.helpers)
+  (let [picsou-helper-ns (the-ns 'picsou.time.prod) ; could split time.patterns and time.prod helpers
         pattern (binding [*ns* picsou-helper-ns] (eval pattern))
         pattern-vec (if (vector? pattern) pattern [pattern])]
     {:name name
@@ -131,10 +130,11 @@
       (merge (apply (:production rule) route)
         {:text (subs sentence pos end), :pos pos, :end end, :rule rule, :route route})
       (catch Exception e
-        (throw (ex-info (format "Exception picsou@produce span='%s' rule='%s' sentence='%s'"
+        (throw (ex-info (format "Exception picsou@produce span='%s' rule='%s' sentence='%s' ex='%s' stack=%s"
                                     (subs sentence pos end)
                                     (:name rule)
-                                    sentence)
+                                    sentence
+                                    e (.printStackTrace e))
                         {:exception e}))))))
 
 (defn- never-produced?
@@ -212,7 +212,7 @@
   Unresolved tokens are returned as is.
   Fields are put at the :value level for all dims"
   [token context module]
-  (let [values (time/resolve token context)]
+  (let [values (picsou.time.prod/resolve token context)] ; ns should be dynamic based on dim ; or better use a protocol
     (if-not (empty? values)
       (map #(assoc token :value %) values)
       [(assoc token :not-resolved true)]))) ; return token if not resolved with flag

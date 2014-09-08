@@ -18,13 +18,13 @@
                     ; "en.finance"
                     ; "en.communication"
                     ]
-           :rules ["en.time"
-                   "en.numbers"
-                   "en.cycles"
-                   "en.duration"
-                   "en.temperature"
-                   "en.finance"
-                   "en.communication"]}
+           :rules [  "en.time"
+                     "en.numbers"
+                     "en.cycles"
+                     "en.duration"
+                   ; "en.temperature"
+                   ; "en.finance"
+                   #_"en.communication"]}
  ; :es$core {:corpus ["es.time"
  ;                    "es.numbers"
  ;                    "es.temperature"

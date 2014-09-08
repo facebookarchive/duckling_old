@@ -15,7 +15,7 @@
 (deftest parsing-number
   (is (= (parse-number-fr "1,23") 1.23)))
 
-(deftest basic
+#_(deftest basic
        (testing "day-of-week"
          (are [day ctx res] (= ((:pred (day-of-week day)) now ctx) res)
               5 ctx-fw [(dt 2013 7 26) (dt 2013 7 27)]
@@ -53,7 +53,7 @@
               2013 ctx-fw [(dt 2013) (dt 2014)]
               2013 ctx-bw [(dt 2013) (dt 2014)])))
 
-(deftest higher-level
+#_(deftest higher-level
        (testing "intersect"
          (is (= ((:pred (intersect (day-of-week 4) (hour 13 false) (minute 18) (sec 59))) now ctx-fw)
                 [(dt 2013 7 25 13 18 59) (dt 2013 7 25 13 19 00)]))))
