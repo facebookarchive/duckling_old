@@ -21,11 +21,11 @@
   "monday"
   "mon."
   "this monday"
-  (datetime 2013 2 18 days :day-of-week 1)
+  (datetime 2013 2 18 :day-of-week 1)
 
   "Monday, Feb 18"
   "Mon, February 18"
-  (datetime 2013 2 18 days :day-of-week 1 :day 18 :month 2)
+  (datetime 2013 2 18 :day-of-week 1 :day 18 :month 2)
 
   "tuesday"
   (datetime 2013 2 19)
@@ -89,10 +89,10 @@
   
   "14april 2015"
   "April 14, 2015"
-  (datetime 2015 4 14 days :day 14 :month 4 :years 2015)
+  (datetime 2015 4 14 :day 14 :month 4 :years 2015)
 
   "next tuesday" ; when today is Tuesday, "mardi prochain" is a week from now
-  (datetime 2013 2 19 days :day-of-week 2)
+  (datetime 2013 2 19 :day-of-week 2)
 
   "Sunday, Feb 10"
   (datetime 2019 2 10 :day-of-week 7 :day 10 :month 2) ; with current look-forward default...
@@ -214,12 +214,12 @@
   (datetime 2013 2 12 11 45 :hour 11 :minute 45)
   
   "4pm PST"
-  (datetime 2013 2 12 16 hours :hour 4 :meridiem :pm :timezone "PST")
+  (datetime 2013 2 12 16 :hour 4 :meridiem :pm :timezone "PST")
   
   "8 tonight"
   "eight tonight"
   "8 this evening"
-  (datetime 2013 2 12 20 hours)
+  (datetime 2013 2 12 20)
  
   ;; Mixing date and time
     
@@ -403,7 +403,7 @@
   "next few days"
   (datetime-interval [2013 2 13] [2013 2 16])
 
-    "last 2 weeks"
+  "last 2 weeks"
   "last two weeks"
   (datetime-interval [2013 1 28 :grain :week] [2013 2 11 :grain :week])
 
