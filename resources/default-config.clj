@@ -1,5 +1,5 @@
 {
- ; :fr$core {:corpus ["fr.time"
+;  :fr$core {:corpus ["fr.time"
  ;                    "fr.numbers"
  ;                    "fr.temperature"
  ;                    "fr.finance"
@@ -11,14 +11,14 @@
  ;                   "fr.duration"
  ;                   "fr.temperature"
  ;                   "en.finance"                             ; sic
- ;                   "en.communication"]}                     ; sic
+ ;                   "en.communication"
+ ;                   ]}                     
  :en$core {:corpus ["en.time"
                     "en.numbers"
                     "en.temperature"
                     "en.finance"
-                    "en.communication"
-                    ]
-           :rules [ "en.time"
+                    "en.communication"]
+           :rules  ["en.time"
                     "en.numbers"
                     "en.cycles"
                     "en.duration"

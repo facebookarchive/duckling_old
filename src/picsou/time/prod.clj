@@ -1,7 +1,9 @@
 (ns picsou.time.prod
   (:use [clojure.tools.logging])
   (:require [picsou.time.pred :as p]
-            [picsou.time.obj :as t]))
+            [picsou.time.obj :as t])
+  (:import [java.text NumberFormat]
+           [java.util Locale]))
 
 ;; Production helpers, called from the rules
 
@@ -121,6 +123,15 @@
   [duration]
   (ti (p/shift-duration (p/take-the-nth (p/cycle :second) 0) 
                         (t/negative-period duration))))
+
+; to parse decimal number in picsou FR
+; FIXME shouldn't be a full Locale, we should be more flexible to accept . and ,
+
+(defn parse-number-fr
+  "Parses a string with FRANCE locale. Returns a double"
+  [s]
+  (.doubleValue (.parse (NumberFormat/getInstance Locale/FRANCE) s)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; Patterns (may be moved to their own ns)
