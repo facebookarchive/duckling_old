@@ -24,9 +24,10 @@
             :pred pred}))
 
 (defn intersect
-  "Combines several time tokens"
+  "Combines several time tokens." ; FIXME shouldn't accept that both have timezone
   ([tok1 tok2]
-   (ti (p/compose (:pred tok1) (:pred tok2))))
+   (ti (p/compose (:pred tok1) (:pred tok2))
+       {:timezone (or (:timezone tok1) (:timezone tok2))}))
   ([tok1 tok2 & more]
    (apply intersect (intersect tok1 tok2) more)))
 
@@ -35,7 +36,8 @@
   and ends at the *start* of tok2.
   If to-inclusive? is true, it ends at the *end* of tok2."
   [tok1 tok2 & [to-inclusive?]]
-  (ti (p/intervals (:pred tok1) (:pred tok2) to-inclusive?)))
+  (ti (p/intervals (:pred tok1) (:pred tok2) to-inclusive?)
+      {:timezone (or (:timezone tok1) (:timezone tok2))}))
 
 ;; if we say "Monday" and today is Monday, we mean next Monday
 ;; hence the :not-immediate that modifies resolution
@@ -93,10 +95,10 @@
   (ti (p/take-n (p/cycle grain) n {:not-immediate true})))
 
 (defn pred-nth [{:keys [pred] :as token} n]
-  (ti (p/take-the-nth pred n)))
+  (ti (p/take-the-nth pred n) {:timezone (:timezone token)}))
 
 (defn pred-nth-not-immediate [{:keys [pred] :as token} n]
-  (ti (p/take-the-nth pred n {:not-immediate true})))
+  (ti (p/take-the-nth pred n {:not-immediate true}) {:timezone (:timezone token)}))
 
 (defn parse-dmy
   "Build date from day, month, year as strings of numerics.
@@ -123,6 +125,11 @@
   [duration]
   (ti (p/shift-duration (p/take-the-nth (p/cycle :second) 0) 
                         (t/negative-period duration))))
+
+(defn set-timezone
+  "Sets the provided timezone. Must be a java.util.TimeZone compatible ID."
+  [token timezone-id]
+  (assoc token :timezone timezone-id))
 
 ; to parse decimal number in picsou FR
 ; FIXME shouldn't be a full Locale, we should be more flexible to accept . and ,

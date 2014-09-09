@@ -212,10 +212,7 @@
   "11:45am"
   "15 to noon" ; Ambiguous with interval
   (datetime 2013 2 12 11 45 :hour 11 :minute 45)
-  
-  "4pm PST"
-  (datetime 2013 2 12 16 :hour 4 :meridiem :pm :timezone "PST")
-  
+    
   "8 tonight"
   "eight tonight"
   "8 this evening"
@@ -460,4 +457,11 @@
   "1:30 PM on Sat, Sep 21"
   (datetime 2013 9 21 13 30)
   
+  ; Timezones
+  
+  "4pm CET"
+  (datetime 2013 2 12 16 :hour 4 :meridiem :pm :timezone "CET")
+
+  "Thursday 8:00 GMT"
+  (datetime 2013 2 14 8 00 :timezone "GMT")  
 )

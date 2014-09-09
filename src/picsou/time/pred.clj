@@ -310,7 +310,7 @@
   "Turns a token into a list of actual possible time values.
   Behavior depends on the ref-time in context, and token fields like
   :not-immediate."
-  [{:keys [dim pred not-immediate] :as token} {:keys [reference-time] :as context}]
+  [{:keys [dim pred not-immediate timezone] :as token} {:keys [reference-time] :as context}]
   {:pre [reference-time]}
   ;(prn "Resolving" (:text token)) (print-token token)
   (try
@@ -325,7 +325,9 @@
                       second-ahead
                       first-ahead)]
           (->> (vector ahead first-behind)
-               (remove nil?))))
+               (remove nil?)
+               ; FIXME use timezone in resolution instead of just adding the field
+               (?>> timezone map #(assoc % :timezone timezone)))))
       
       [(:val token)]) ; default for other dims
     (catch Throwable e
