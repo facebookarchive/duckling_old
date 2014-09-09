@@ -301,6 +301,38 @@
                           (t/plus-period duration)))]
     (seq-map f base-pred)))
 
+(defn- print-token [{:keys [text rule route] :as token} & [prefix]]
+  (printf "%s\"%s\" as %s\n" (or prefix "") text (:name rule))
+  (doseq [child route]
+    (print-token child (str "--" (or prefix "")))))
+
+(defn resolve ; TODO not immediate + expain two ways
+  "Turns a token into a list of actual possible time values.
+  Behavior depends on the ref-time in context, and token fields like
+  :not-immediate."
+  [{:keys [dim pred not-immediate] :as token} {:keys [reference-time] :as context}]
+  {:pre [reference-time]}
+  ;(prn "Resolving" (:text token)) (print-token token)
+  (try
+    (case dim
+      :time
+      (do
+        (assert pred (format "Cannot resolve token without pred: %s" token))
+        ; we use ref-time twice
+        ; as the first arg of pred, it's just as a lookup starting point
+        (let [[[first-ahead second-ahead] [first-behind]] (pred reference-time context)
+              ahead (if (and not-immediate (t/intersect first-ahead reference-time))
+                      second-ahead
+                      first-ahead)]
+          (->> (vector ahead first-behind)
+               (remove nil?))))
+      
+      [(:val token)]) ; default for other dims
+    (catch Throwable e
+      (.printStackTrace e)
+      (print-token token)
+      (throw (ex-info (format "Error while resolving %s" (dissoc token :route)) {})))))
+
 ; Debug utlity
 
 (defn show [f]

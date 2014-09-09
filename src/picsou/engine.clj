@@ -212,7 +212,7 @@
   Unresolved tokens are returned as is.
   Fields are put at the :value level for all dims"
   [token context module]
-  (let [values (picsou.time.prod/resolve token context)] ; ns should be dynamic based on dim ; or better use a protocol
+  (let [values (picsou.time.pred/resolve token context)] ; ns should be dynamic based on dim ; or better use a protocol
     (if-not (empty? values)
       (map #(assoc token :value %) values)
       [(assoc token :not-resolved true)]))) ; return token if not resolved with flag

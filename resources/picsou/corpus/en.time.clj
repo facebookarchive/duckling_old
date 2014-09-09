@@ -72,7 +72,7 @@
   (datetime 2013 2 15 :day 15)
 
   "the 15th of february"
-  "the 15 of february"
+  "15 of february"
   "february the 15th"
   "february 15"
   "2/15"
@@ -448,10 +448,16 @@
   "Thursday from 9a to 11a"
   (datetime-interval [2013 2 14 9] [2013 2 14 12])
   
-  "11:30-1:30 PM"
-  (datetime-interval [2014 2 12 11 30] [2014 2 12 13 31])
+  "11:30-1:30" ; go train this rule!
+  "11:30-1:30"
+  "11:30-1:30"
+  "11:30-1:30"
+  "11:30-1:30"
+  "11:30-1:30"
+  "11:30-1:30"
+  (datetime-interval [2013 2 12 11 30] [2013 2 12 13 31])
 
-    ; "11:30-1:30 PM on Sat, Sep 21"
-  ; (datetime-interval [2014 9 21 11 30] [2014 9 21 13 31])
+  "1:30 PM on Sat, Sep 21"
+  (datetime 2013 9 21 13 30)
   
 )

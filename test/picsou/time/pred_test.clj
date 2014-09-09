@@ -1,7 +1,7 @@
 (ns picsou.time.pred-test
   (:use [clojure.test]
         [picsou.time.pred])
-  (:refer-clojure :exclude [cycle]))
+  (:refer-clojure :exclude [cycle resolve]))
 
 (def evening (intervals (hour 18 false) (hour 0 false) false))
 

@@ -196,7 +196,7 @@
             winner-count (count winners)
             check (first (:checks test)) ; only one test is supported now
             check-results (map (partial check context) winners)] ; return nil if OK, explanation string if not OK
-        (if (some nil? check-results)
+        (if (some #(or (nil? %) (false? %)) check-results)
           [0 text nil]
           [1 text (reduce str check-results)]))
       (catch Exception e

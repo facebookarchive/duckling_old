@@ -45,37 +45,48 @@
   "check if the token is a number equal to value.
   If value is integer, it also checks :integer true"
   [value]
-  (fn [token _] (and
-                  (= :number (:dim token))
-                  (or (not (integer? value)) (:integer token))
-                  (= (:val token) value))))
+  (fn [_ token] (when-not 
+                  (and
+                    (= :number (:dim token))
+                    (or (not (integer? value)) (:integer token))
+                    (= (:val token) value))
+                  "\nExpected number %s, got %s\n" value (:val token))))
+
+(defn ordinal
+  [value]
+  (fn [_ token] (when-not 
+                  (and
+                    (= :ordinal (:dim token))
+                    (= (:val token) value))
+                  "\nExpected ordinal %s, got %s\n" value (:val token))))
 
 (defn temperature
   "Create a temp condition"
-  [value & [unit precision]]
-  (fn [token _] (and
-                  (= :temperature (:dim token))
-                  (== value (-> token :val :temperature))
-                  (= unit  (-> token :val :unit))
-                  (= precision (-> token :val :precision)))))
+  [val & [unit precision]]
+  (fn [_ {:keys [dim value] :as token}] 
+    (not (and
+                  (= :temperature dim)
+                  (== val (-> value :temperature))
+                  (= unit  (-> value :unit))
+                  (= precision (-> value :precision))))))
 
 (defn distance
   "Create a distance condition"
-  [value & [unit precision]]
-  (fn [token _] (and
-                  (= :distance (:dim token))
-                  (== value (-> token :val :distance))
-                  (= unit  (-> token :val :unit))
-                  (= precision (-> token :val :precision)))))
+  [val & [unit precision]]
+  (fn [_ {:keys [dim value] :as token}] (not (and
+                  (= :distance dim)
+                  (== val (-> value :distance))
+                  (= unit  (-> value :unit))
+                  (= precision (-> value :precision))))))
 
 (defn money
   "Create a amount-of-money condition"
-  [value & [unit precision]]
-  (fn [token _] (and
-                  (= :amount-of-money (:dim token))
-                  (= value (-> token :val :amount))
-                  (= unit (-> token :val :unit))
-                  (= precision (-> token :val :precision)))))
+  [val & [unit precision]]
+  (fn [_ {:keys [dim value] :as token}] (not (and
+                  (= :amount-of-money dim)
+                  (= val (-> value :amount))
+                  (= unit (-> value :unit))
+                  (= precision (-> value :precision))))))
 
 (defn place
   "Create a place checker"
