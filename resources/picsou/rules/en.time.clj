@@ -205,7 +205,7 @@
   (integer 2101 10000)
   (assoc (year (:val %1)) :latent true)
 
-    ; Day of month appear in the following context:
+    ; Day of month appears in the following context:
   ; - the nth
   ; - March nth
   ; - nth of March
