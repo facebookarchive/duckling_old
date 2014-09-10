@@ -129,8 +129,8 @@
   "mardi prochain" ; when today is Tuesday, "mardi prochain" is a week from now
   (datetime 2013 2 19 :day-of-week 2)
 
-  "mercredi prochain" ; when today is Tuesday, "mercredi prochain" is tomorrow
-  (datetime 2013 2 13 :day-of-week 3)
+  "mercredi prochain" ; when today is Tuesday, "mercredi prochain" should be tomorrow (will need assumption here)
+  (datetime 2013 2 20 :day-of-week 3)
 
   "mercredi la semaine prochaine"
   "mercredi de la semaine prochaine"
@@ -142,7 +142,7 @@
 
   "mardi en huit" ; today is Tuesday, so "mardi en huit" is in 2 weeks
   "mardi en 8"
-  (datetime 2013 2 26 :day-of-week 2)
+  (datetime 2013 2 19 :day-of-week 2)
 
   "mercredi en huit" ;
   "mercredi en 8"
@@ -154,7 +154,7 @@
 
   "mardi en quinze" ; today is Tuesday, so "mardi en huit" is in 2 weeks
   "mardi en 15"
-  (datetime 2013 3 5 :day-of-week 2)
+  (datetime 2013 2 26  :day-of-week 2)
 
   "mercredi en quinze" ;
   "mercredi en 15"
@@ -304,10 +304,10 @@
   (datetime 2013 2 13 4 30)
   
   "dans un jour"
-  (datetime 2013 2 13 4 30);ALEX
+  (datetime 2013 2 13 4);ALEX before (datetime 2013 2 13 4 30)
   
   "dans 7 jours"
-  (datetime 2013 2 19 4 30);ALEX
+  (datetime 2013 2 19 4);ALEX
   
   "dans 1 semaine"
   "dans une semaine"

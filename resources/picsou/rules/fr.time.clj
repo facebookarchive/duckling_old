@@ -136,13 +136,13 @@
   [(dim :time) #"(?i)dernier|pass[ée]e?"]
   (pred-nth %1 -1)
 
-  "<named-day> en huit" ;;TO BE CHECKED
-  [{:form :named-day} #"(?i)en (huit|8)"]
-  (pred-nth %1 2)
+  "<named-day> en huit" ; would need assumption to handle 1 or 2 weeks depending on the day-of-week
+  [{:form :day-of-week} #"(?i)en (huit|8)"]
+  (pred-nth %1 1)
 
-  "<named-day> en quinze"
-  [{:form :named-day} #"(?i)en (quinze|15)"]
-  (pred-nth %1 3)
+  "<named-day> en quinze" ; would need assumption to handle 2 or 3 weeks depending on the day-of-week
+  [{:form :day-of-week} #"(?i)en (quinze|15)"]
+  (pred-nth %1 2)
 
   ; Years
   ; Between 1000 and 2100 we assume it's a year
@@ -176,18 +176,24 @@
   (assoc (day-of-month (:val %2)) :latent true)
   
   "<day-of-month> <named-month>" ; 12 mars
-  [{:form :day-of-month} {:form :named-month}]
-  (intersect %1 %2)
+  [(integer 1 31) {:form :month}]
+  (intersect %2 (day-of-month (:val %1)))
+
+
+
 
   ;; hours and minutes (absolute time)
+  "<integer> (latent time-of-day)"
+  (integer 0 23)
+  (assoc (hour (:val %1) true) :latent true)
 
-  "<integer> heures (time-of-day)" ; in english use integer latent
-  [(integer 0 23) #"(?i)h\.?(eure)?s?"]
-  (assoc (hour (:val %1) true))
+  "<time-of-day> heures"
+  [{:form :time-of-day}  #"(?i)h\.?(eure)?s?"]
+  (dissoc %1 :latent) 
   
   "à|vers <time-of-day>" ; absorption
   [#"(?i)[aà]|vers" {:form :time-of-day}]
-  %2 ; (dissoc %2 :latent)
+  (dissoc %2 :latent) 
 
   "hh(:|h)mm (time-of-day)"
   #"(?i)((?:[01]?\d)|(?:2[0-3]))[:h]([0-5]\d)"
@@ -230,12 +236,21 @@
   (integer 1 59)
   {:relative-minutes (:val %1)}
   
-  "<integer> minutes (as relative minutes)"; tobechecked
-  [(integer 1 59) #"(?i)min\.?(ute)?s?"]
-  {:relative-minutes (:val %1)}
+  ;"<integer> minutes (as relative minutes)"; tobechecked
+  ;[(integer 1 59) #"(?i)min\.?(ute)?s?"]
+  ;{:relative-minutes (:val %1)}
 
   "<hour-of-day> <integer> (as relative minutes)"
   [(integer 0 23) #(:relative-minutes %)] ;before  [{:for-relative-minutes true} #(:relative-minutes %)]
+  (hour-relativemin (:val %1) (:relative-minutes %2) true)
+
+  "<hour-of-day> heures <integer> (as relative minutes)" ;ALEX: to manage  quinze heure quinze
+  [(integer 0 23) #"(?i)h\.?(eure)?s?( et)?" #(:relative-minutes %)] ;before  [{:for-relative-minutes true} #(:relative-minutes %)]
+  (hour-relativemin (:val %1) (:relative-minutes %3) true)
+
+  ;special forms for midnight and noon
+  "relative minutes <integer> (as relative minutes for noon midnight)"
+  [#(:for-relative-minutes %) #(:relative-minutes %)]
   (hour-relativemin (:val %1) (:relative-minutes %2) true)
 
   ;"<hour-of-day> moins <integer> (as relative minutes)"
@@ -248,16 +263,18 @@
   [(integer 0 23) #"moins( le)?" #(:relative-minutes %)]
   (hour-relativemin (:val %1) (- (:relative-minutes %3)) true)
 
-  ;"<hour-of-day> et|passé de <relative minutes>"
-  ;[{:for-relative-minutes true} #"et|(pass[ée]e? de)" #(:relative-minutes %)]
-  ;(hour-relativemin 
-  ;  (:val %1)
-  ;  (:ambiguous-am-pm %1)
-  ;  (:relative-minutes %3))
   "<hour-of-day> et|passé de <relative minutes>"
   [(integer 0 23) #"et|(pass[ée]e? de)" #(:relative-minutes %)]
   (hour-relativemin (:val %1) (:relative-minutes %3) true)
   
+  ; special forms for midnight and noon
+  "relative minutes (noon or midnight) et|passé de <relative minutes>"
+  [#(:for-relative-minutes %) #"et|(pass[ée]e? de)" #(:relative-minutes %)]
+  (hour-relativemin (:val %1) (:relative-minutes %3) true)
+  
+  "relative minutes (noon or midnight) moins <integer> (as relative minutes)"
+  [#(:for-relative-minutes %) #"moins( le)?" #(:relative-minutes %)]
+  (hour-relativemin (:val %1) (- (:relative-minutes %3)) true)
 
   ;; Formatted dates and times
 
