@@ -62,7 +62,10 @@
   (intersect (month mo) (day-of-month d)))
 
 (defn hour [h & [twelve-hour-clock?]]
-  (ti (p/hour h twelve-hour-clock?) {:form :time-of-day}))
+  (ti (p/hour h twelve-hour-clock?) {:form :time-of-day
+                                     ; the 2 following fields are used for relative-minutes
+                                     :full-hour h
+                                     :twelve-hour-clock? twelve-hour-clock?}))
 
 (defn minute [m]
   {:pre [(<= 0 m 59)]}

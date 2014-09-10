@@ -14,7 +14,7 @@
   ;; Named things
 
   "named-day"
-  #"(?i)lundi|lun|lun\."
+  #"(?i)lundi|lun\.?"
   (day-of-week 1)
 
   "named-day"
@@ -186,9 +186,17 @@
   "<integer> (latent time-of-day)"
   (integer 0 23)
   (assoc (hour (:val %1) true) :latent true)
+  
+  "midi"
+  #"(?i)midi"
+  (hour 12 false)
+
+  "minuit"
+  #"(?i)minuit"
+  (hour 0 false)
 
   "<time-of-day> heures"
-  [{:form :time-of-day}  #"(?i)h\.?(eure)?s?"]
+  [#(:full-hour %) #"(?i)h\.?(eure)?s?"]
   (dissoc %1 :latent) 
   
   "à|vers <time-of-day>" ; absorption
@@ -208,18 +216,6 @@
                 false) ; not a 12-hour clock
       (assoc :latent true))
     
-  "midi"
-  #"(?i)midi"
-  (-> (hour 12 false)
-      (assoc :form :time-of-day
-             :for-relative-minutes true :val 12))
-
-  "minuit"
-  #"(?i)minuit"
-  (-> (hour 0 false)
-      (assoc :form :time-of-day
-             :for-relative-minutes true :val 0))
-
   "quart (relative minutes)"
   #"(?i)quart"
   {:relative-minutes 15}
@@ -236,47 +232,22 @@
   (integer 1 59)
   {:relative-minutes (:val %1)}
   
-  ;"<integer> minutes (as relative minutes)"; tobechecked
-  ;[(integer 1 59) #"(?i)min\.?(ute)?s?"]
-  ;{:relative-minutes (:val %1)}
+  "number minutes (as relative minutes)"
+  [(integer 1 59) #"(?i)min\.?(ute)?s?"]
+  {:relative-minutes (:val %1)}
 
   "<hour-of-day> <integer> (as relative minutes)"
-  [(integer 0 23) #(:relative-minutes %)] ;before  [{:for-relative-minutes true} #(:relative-minutes %)]
-  (hour-relativemin (:val %1) (:relative-minutes %2) true)
+  [(dim :time :full-hour) #(:relative-minutes %)] ;before  [{:for-relative-minutes true} #(:relative-minutes %)]
+  (hour-relativemin (:full-hour %1) (:relative-minutes %2) (:twelve-hour-clock? %1))
 
-  "<hour-of-day> heures <integer> (as relative minutes)" ;ALEX: to manage  quinze heure quinze
-  [(integer 0 23) #"(?i)h\.?(eure)?s?( et)?" #(:relative-minutes %)] ;before  [{:for-relative-minutes true} #(:relative-minutes %)]
-  (hour-relativemin (:val %1) (:relative-minutes %3) true)
-
-  ;special forms for midnight and noon
-  ;for-relative-minutes is only for midnight and noon hence calling hour-relativemin with false
-  "relative minutes <integer> (as relative minutes for noon midnight)"
-  [#(:for-relative-minutes %) #(:relative-minutes %)]
-  (hour-relativemin (:val %1) (:relative-minutes %2) false)
-
-  ;"<hour-of-day> moins <integer> (as relative minutes)"
-  ;[{:for-relative-minutes true} #"moins( le)?" #(:relative-minutes %)]
-  ;(hour-relativemin 
-  ;  (:val %1)
-  ;  (:ambiguous-am-pm %1)
-  ;  (- (:relative-minutes %3)))
   "<hour-of-day> moins <integer> (as relative minutes)"
-  [(integer 0 23) #"moins( le)?" #(:relative-minutes %)]
-  (hour-relativemin (:val %1) (- (:relative-minutes %3)) true)
+  [(dim :time :full-hour) #"moins( le)?" #(:relative-minutes %)]
+  (hour-relativemin (:full-hour %1) (- (:relative-minutes %3)) (:twelve-hour-clock? %1))
 
   "<hour-of-day> et|passé de <relative minutes>"
-  [(integer 0 23) #"et|(pass[ée]e? de)" #(:relative-minutes %)]
-  (hour-relativemin (:val %1) (:relative-minutes %3) true)
+  [(dim :time :full-hour) #"et|(pass[ée]e? de)" #(:relative-minutes %)]
+  (hour-relativemin (:full-hour %1) (:relative-minutes %3) (:twelve-hour-clock? %1))
   
-  ; special forms for midnight and noon
-  ;for-relative-minutes is only for midnight and noon hence calling hour-relativemin with false
-  "relative minutes (noon or midnight) et|passé de <relative minutes>"
-  [#(:for-relative-minutes %) #"et|(pass[ée]e? de)" #(:relative-minutes %)]
-  (hour-relativemin (:val %1) (:relative-minutes %3) false)
-  
-  "relative minutes (noon or midnight) moins <integer> (as relative minutes)"
-  [#(:for-relative-minutes %) #"moins( le)?" #(:relative-minutes %)]
-  (hour-relativemin (:val %1) (- (:relative-minutes %3)) false)
 
   ;; Formatted dates and times
 
@@ -341,16 +312,24 @@
   "season"
   #"(?i)printemps"
   (interval (month-day 3 20) (month-day 6 21) false)
+  
+  ; Absorptions
+  
+  ; a specific version of "le", above, removes :latent for integer as day of month
+  ; this one is more general but does not remove latency
+  "le <time>"
+  [#"(?i)le" (dim :time #(not (:latent %)))]
+  %2
 
-  ;; Time zones
+  ; Time zones
   
-  ;"timezone"
-  ;#"(?i)(YEKT|YEKST|YAPT|YAKT|YAKST|WT|WST|WITA|WIT|WIB|WGT|WGST|WFT|WEZ|WET|WESZ|WEST|WAT|WAST|VUT|VLAT|VLAST|VET|UZT|UYT|UYST|UTC|ULAT|TVT|TMT|TLT|TKT|TJT|TFT|TAHT|SST|SRT|SGT|SCT|SBT|SAST|SAMT|RET|PYT|PYST|PWT|PT|PST|PONT|PMST|PMDT|PKT|PHT|PHOT|PGT|PETT|PETST|PET|PDT|OMST|OMSST|NZST|NZDT|NUT|NST|NPT|NOVT|NOVST|NFT|NDT|NCT|MYT|MVT|MUT|MST|MSK|MSD|MMT|MHT|MEZ|MESZ|MDT|MAWT|MART|MAGT|MAGST|LINT|LHST|LHDT|KUYT|KST|KRAT|KRAST|KGT|JST|IST|IRST|IRKT|IRKST|IRDT|IOT|IDT|ICT|HOVT|HNY|HNT|HNR|HNP|HNE|HNC|HNA|HLV|HKT|HAY|HAT|HAST|HAR|HAP|HAE|HADT|HAC|HAA|GYT|GST|GMT|GILT|GFT|GET|GAMT|GALT|FNT|FKT|FKST|FJT|FJST|ET|EST|EGT|EGST|EET|EEST|EDT|ECT|EAT|EAST|EASST|DAVT|ChST|CXT|CVT|CST|COT|CLT|CLST|CKT|CHAST|CHADT|CET|CEST|CDT|CCT|CAT|CAST|BTT|BST|BRT|BRST|BOT|BNT|AZT|AZST|AZOT|AZOST|AWST|AWDT|AST|ART|AQTT|ANAT|ANAST|AMT|AMST|ALMT|AKST|AKDT|AFT|AEST|AEDT|ADT|ACST|ACDT)"
-  ;{:dim :timezone
-  ; :value (-> %1 :groups first .toUpperCase)}
+  "timezone"
+  #"(?i)(YEKT|YEKST|YAPT|YAKT|YAKST|WT|WST|WITA|WIT|WIB|WGT|WGST|WFT|WEZ|WET|WESZ|WEST|WAT|WAST|VUT|VLAT|VLAST|VET|UZT|UYT|UYST|UTC|ULAT|TVT|TMT|TLT|TKT|TJT|TFT|TAHT|SST|SRT|SGT|SCT|SBT|SAST|SAMT|RET|PYT|PYST|PWT|PT|PST|PONT|PMST|PMDT|PKT|PHT|PHOT|PGT|PETT|PETST|PET|PDT|OMST|OMSST|NZST|NZDT|NUT|NST|NPT|NOVT|NOVST|NFT|NDT|NCT|MYT|MVT|MUT|MST|MSK|MSD|MMT|MHT|MEZ|MESZ|MDT|MAWT|MART|MAGT|MAGST|LINT|LHST|LHDT|KUYT|KST|KRAT|KRAST|KGT|JST|IST|IRST|IRKT|IRKST|IRDT|IOT|IDT|ICT|HOVT|HNY|HNT|HNR|HNP|HNE|HNC|HNA|HLV|HKT|HAY|HAT|HAST|HAR|HAP|HAE|HADT|HAC|HAA|GYT|GST|GMT|GILT|GFT|GET|GAMT|GALT|FNT|FKT|FKST|FJT|FJST|ET|EST|EGT|EGST|EET|EEST|EDT|ECT|EAT|EAST|EASST|DAVT|ChST|CXT|CVT|CST|COT|CLT|CLST|CKT|CHAST|CHADT|CET|CEST|CDT|CCT|CAT|CAST|BTT|BST|BRT|BRST|BOT|BNT|AZT|AZST|AZOT|AZOST|AWST|AWDT|AST|ART|AQTT|ANAT|ANAST|AMT|AMST|ALMT|AKST|AKDT|AFT|AEST|AEDT|ADT|ACST|ACDT)"
+  {:dim :timezone
+   :value (-> %1 :groups first .toUpperCase)}
   
-  ;"<time> timezone"
-  ;[(dim :time) (dim :timezone)]
-  ;(assoc %1 :timezone (:value %2))
+  "<time> timezone"
+  [(dim :time) (dim :timezone)]
+  (set-timezone %1 (:value %2))
 
 )
