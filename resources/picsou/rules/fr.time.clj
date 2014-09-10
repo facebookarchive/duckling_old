@@ -249,9 +249,10 @@
   (hour-relativemin (:val %1) (:relative-minutes %3) true)
 
   ;special forms for midnight and noon
+  ;for-relative-minutes is only for midnight and noon hence calling hour-relativemin with false
   "relative minutes <integer> (as relative minutes for noon midnight)"
   [#(:for-relative-minutes %) #(:relative-minutes %)]
-  (hour-relativemin (:val %1) (:relative-minutes %2) true)
+  (hour-relativemin (:val %1) (:relative-minutes %2) false)
 
   ;"<hour-of-day> moins <integer> (as relative minutes)"
   ;[{:for-relative-minutes true} #"moins( le)?" #(:relative-minutes %)]
@@ -268,13 +269,14 @@
   (hour-relativemin (:val %1) (:relative-minutes %3) true)
   
   ; special forms for midnight and noon
+  ;for-relative-minutes is only for midnight and noon hence calling hour-relativemin with false
   "relative minutes (noon or midnight) et|passé de <relative minutes>"
   [#(:for-relative-minutes %) #"et|(pass[ée]e? de)" #(:relative-minutes %)]
-  (hour-relativemin (:val %1) (:relative-minutes %3) true)
+  (hour-relativemin (:val %1) (:relative-minutes %3) false)
   
   "relative minutes (noon or midnight) moins <integer> (as relative minutes)"
   [#(:for-relative-minutes %) #"moins( le)?" #(:relative-minutes %)]
-  (hour-relativemin (:val %1) (- (:relative-minutes %3)) true)
+  (hour-relativemin (:val %1) (- (:relative-minutes %3)) false)
 
   ;; Formatted dates and times
 

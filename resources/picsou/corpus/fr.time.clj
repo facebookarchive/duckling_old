@@ -304,10 +304,10 @@
   (datetime 2013 2 13 4 30)
   
   "dans un jour"
-  (datetime 2013 2 13 4);ALEX before (datetime 2013 2 13 4 30)
+  (datetime 2013 2 13 4); look for grain-after-shift
   
   "dans 7 jours"
-  (datetime 2013 2 19 4);ALEX
+  (datetime 2013 2 19 4)
   
   "dans 1 semaine"
   "dans une semaine"
