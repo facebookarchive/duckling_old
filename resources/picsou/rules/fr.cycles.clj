@@ -63,4 +63,12 @@
   "n prochains <cycle>"
   [(integer 2 9999) #"(?i)prochaine?s?" (dim :cycle)]
   (cycle-n-not-immediate (:grain %3) (:val %1))
+
+  "n <cycle> passes|precedents"
+  [(integer 2 9999) (dim :cycle) #"(?i)pass[eèé][eèé]?s?"]
+  (cycle-n-not-immediate (:grain %2) (- (:val %1)))
+  
+  "n <cycle> suivants"
+  [(integer 2 9999) (dim :cycle) #"(?i)suivante?s?" ]
+  (cycle-n-not-immediate (:grain %2) (:val %1))
 )

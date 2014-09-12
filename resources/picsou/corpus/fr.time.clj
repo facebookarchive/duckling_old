@@ -329,9 +329,28 @@
   "il y a deux ans"
   (datetime 2011 2)
 
-  ;; TODO SEASONS AND HOLIDAYS
-  
-;; Part of day (morning, afternoon...)
+  ; Seasons
+
+  "cet été"
+  (datetime-interval [2013 6 21] [2013 9 23])
+
+  "cet hiver"
+  (datetime-interval [2012 12 21] [2013 3 20])
+
+  ; FR holidays 
+
+  "Noel"
+  "noël"
+  "jour de noel"
+  (datetime 2013 12 25)
+
+
+  "jour de l'an"
+  "nouvel an"
+  "premier janvier"
+  (datetime 2014 1 1)
+
+  ; Part of day (morning, afternoon...)
 
   "ce soir"
   (datetime-interval [2013 2 12 18] [2013 2 13 00])
@@ -342,6 +361,108 @@
   
   "hier soir"
   (datetime-interval [2013 2 11 18] [2013 2 12 00])
+    
+  "ce week-end"
+  (datetime-interval [2013 2 15 18] [2013 2 18 00])
+
+  "lundi matin"
+  (datetime-interval [2013 2 18 4] [2013 2 18 12])
+
+  "le 15 février dans la matinée" 
+  ;"matinée du 15 février" ;ALEX  
+  ;"matinée le 15 février"
+  ;"le 15 février le matinée"
+  (datetime-interval [2013 2 15 4] [2013 2 15 12])
+
+  "8 heures ce soir"
+  "8h du soir"
+  (datetime 2013 2 12 20)
+  
+  ;"3 heures du matin" ; ALEX
+  ;"3h du mat"
+  ;(datetime 2013 2 12 3)
+
+ ; Intervals involving cycles
+  
+  "2 dernières secondes"
+  "deux dernieres secondes"
+  (datetime-interval [2013 2 12 4 29 58] [2013 2 12 4 30 00])
+
+  "3 prochaines secondes"
+  "trois prochaines secondes"
+  (datetime-interval [2013 2 12 4 30 01] [2013 2 12 4 30 04])
+
+  "2 dernieres minutes"
+  "deux dernières minutes"
+  (datetime-interval [2013 2 12 4 28] [2013 2 12 4 30])
+
+  "3 prochaines minutes"
+  "trois prochaines minutes"
+  (datetime-interval [2013 2 12 4 31] [2013 2 12 4 34])
+
+  "3 prochaines heures"
+  "3 heures suivantes"
+  (datetime-interval [2013 2 12 5] [2013 2 12 8])
+
+  "2 dernier jours"
+  "deux derniers jour"
+  (datetime-interval [2013 2 10] [2013 2 12])
+
+  "3 prochains jours"
+  (datetime-interval [2013 2 13] [2013 2 16])
+
+  "2 dernieres semaines"
+  "2 semaines passées"
+  (datetime-interval [2013 1 28 :grain :week] [2013 2 11 :grain :week])
+
+  "3 prochaines semaines"
+  (datetime-interval [2013 2 18 :grain :week] [2013 3 11 :grain :week])
+
+  "2 derniers mois"
+  (datetime-interval [2012 12] [2013 02])
+
+  "3 prochains mois"
+  "3 mois suivant"
+  (datetime-interval [2013 3] [2013 6])
+
+  "2 dernieres annees"
+  "2 années passées"
+  (datetime-interval [2011] [2013])
+  
+  "3 prochaines années"
+  (datetime-interval [2014] [2017]) 
+
+  ; Explicit intervals
+
+  ; "13-15 juillet"
+  ; "13 au 15 juillet"
+  ; "13 jusqu'au 15 juillet" ;ALEX inclu
+  ; "13 juillet au 15 juillet"
+  ; "13 juillet - 15 juillet"
+  ; (datetime-interval [2013 7 13] [2013 7 16])
+
+  ; "de 9 heures 30 jusqu'à 11h jeudi"
+  ; "9h30 - 11h00 Jeudi"
+  ; "jeudi de 9h30 à 11h"
+  ; (datetime-interval [2013 2 14 9 30] [2013 2 14 11 01])
+
+  ;"à partir de 9h30 jeudi"
+
+  ; "Thursday from 9a to 11a"
+  ; (datetime-interval [2013 2 14 9] [2013 2 14 12])
+  
+  ; "11:30-1:30" ; go train this rule!
+  ; "11:30-1:30"
+  ; "11:30-1:30"
+  ; "11:30-1:30"
+  ; "11:30-1:30"
+  ; "11:30-1:30"
+  ; "11:30-1:30"
+  ; (datetime-interval [2013 2 12 11 30] [2013 2 12 13 31])
+
+  ; "1:30 PM on Sat, Sep 21"
+  ; (datetime 2013 9 21 13 30)
+
   
   "à seize heures PST"
   (datetime 2013 2 12 16 :hour 16 :timezone "PST")

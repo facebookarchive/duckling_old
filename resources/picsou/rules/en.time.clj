@@ -281,15 +281,11 @@
   
   "noon"
   #"(?i)noon"
-  (-> (hour 12 false)
-      (assoc :form :time-of-day
-             :for-relative-minutes true :val 12))
+  (hour 12 false)
 
   "midnight"
   #"(?i)midni(ght|te)"
-  (-> (hour 0 false)
-      (assoc :form :time-of-day
-             :for-relative-minutes true :val 0))
+  (hour 0 false)
 
   "quarter (relative minutes)"
   #"(?i)(a|one)? ?quarter"
@@ -304,29 +300,20 @@
   {:relative-minutes (:val %1)}
 
   "<hour-of-day> <integer> (as relative minutes)"
-  [(integer 0 23) #(:relative-minutes %)]
-  (hour-relativemin (:val %1) (:relative-minutes %2) true)
+  [(dim :time :full-hour) #(:relative-minutes %)]
+  (hour-relativemin (:full-hour %1) (:relative-minutes %2) true)
 
   "relative minutes to|till|before <integer> (hour-of-day)"
-  [#(:relative-minutes %) #"(?i)to|till|before|of" (integer 0 23)]
-  (hour-relativemin (:val %3) (- (:relative-minutes %1)) true)
+  [#(:relative-minutes %) #"(?i)to|till|before|of" (dim :time :full-hour)]
+  (hour-relativemin (:full-hour %3) (- (:relative-minutes %1)) true)
   
   "relative minutes after|past <integer> (hour-of-day)"
-  [#(:relative-minutes %) #"(?i)after|past" (integer 0 23)]
-  (hour-relativemin (:val %3) (:relative-minutes %1) true)
+  [#(:relative-minutes %) #"(?i)after|past" (dim :time :full-hour)]
+  (hour-relativemin (:full-hour %3) (:relative-minutes %1) true)
 
   "half <integer> (UK style hour-of-day)"
-  [#"half" (integer 0 23)]
-  (hour-relativemin (:val %2) 30 true)
-
-    ; special forms for midnight and noon
-  "relative minutes to|till|before noon|midnight"
-  [#(:relative-minutes %) #"(?i)to|till|before|of" #(:for-relative-minutes %)]
-  (hour-relativemin (:val %3) (- (:relative-minutes %1)) true)
-  
-  "relative minutes after|past noon|midnight"
-  [#(:relative-minutes %) #"(?i)after|past" #(:for-relative-minutes %)]
-  (hour-relativemin (:val %3) (:relative-minutes %1) true)
+  [#"half" (dim :time :full-hour)]
+  (hour-relativemin (:full-hour %2) 30 true)
 
   
   ; Formatted dates and times

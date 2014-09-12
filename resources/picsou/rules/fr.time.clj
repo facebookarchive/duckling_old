@@ -89,6 +89,15 @@
   #"(?i)décembre|decembre|déc\.?|dec\.?"
   (month 12)
 
+  ; Holiday TODO: check online holidays
+  "noel"
+  #"(?i)(jour de )?no[eë]l"
+  (month-day 12 25)
+  
+  "jour de l'an"
+  #"(?i)(jour de l'|nouvel )an"
+  (month-day 1 1)
+
   "maintenant"
   #"maintenant|(tout de suite)"
   (cycle-nth :second 0)
@@ -128,8 +137,8 @@
   [#"(?i)ce" (dim :time)]
   (pred-nth %2 0)
 
-  "<named-month|named-day> prochain"
-  [(dim :time) #"(?i)prochain"]
+  "<named-month|named-day> prochain|suivant"
+  [(dim :time) #"(?i)prochain|suivant"]
   (pred-nth %1 1)
 
   "<named-month|named-day> dernier|passé"
@@ -267,7 +276,7 @@
   ; Part of day (morning, evening...). They are intervals.
 
   "matin"
-  #"(?i)matin[ée]?e?"
+  #"(?i)mat(in[ée]?e?)?"
   (assoc (interval (hour 4 false) (hour 12 false) false) :form :part-of-day :latent true)
 
   "après-midi"
@@ -278,8 +287,8 @@
   #"(?i)soir[ée]?e?"
   (assoc (interval (hour 18 false) (hour 0 false) false) :form :part-of-day :latent true)
   
-  "dans le <part-of-day>" ;; removes latent
-  [#"(?i)dans l[ae']? ?" {:form :part-of-day}]
+  "du|dans le <part-of-day>" ;; removes latent
+  [#"(?i)du|dans l[ae']? ?" {:form :part-of-day}]
   (dissoc %2 :latent)
   
   "ce <part-of-day>"
@@ -290,6 +299,10 @@
   [(dim :time) {:form :part-of-day}]
   (intersect %1 %2)
 
+   "<part-of-day> du <dim time>"
+   [{:form :part-of-day} #"(?i)du" (dim :time)]
+   (intersect %3 %1)
+
   ; Other intervals: week-end, seasons
   "week-end"
   #"(?i)week(\s|-)?end"
@@ -298,19 +311,19 @@
             false)
 
   "season"
-  #"(?i)été" ;could be smarter and take the exact hour into account... also some years the day can change
+  #"(?i)(cet )?été" ;could be smarter and take the exact hour into account... also some years the day can change
   (interval (month-day 6 21) (month-day 9 23) false)
 
   "season"
-  #"(?i)automne"
+  #"(?i)(cet )?automne"
   (interval (month-day 9 23) (month-day 12 21) false)
 
   "season"
-  #"(?i)hiver"
+  #"(?i)(cet )?hiver"
   (interval (month-day 12 21) (month-day 3 20) false)
 
   "season"
-  #"(?i)printemps"
+  #"(?i)(ce )?printemps"
   (interval (month-day 3 20) (month-day 6 21) false)
   
   ; Absorptions
