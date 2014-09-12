@@ -434,19 +434,23 @@
 
   ; Explicit intervals
 
-  ; "13-15 juillet"
-  ; "13 au 15 juillet"
-  ; "13 jusqu'au 15 juillet" ;ALEX inclu
-  ; "13 juillet au 15 juillet"
-  ; "13 juillet - 15 juillet"
-  ; (datetime-interval [2013 7 13] [2013 7 16])
+
+  "13-15 juillet"
+  "13 au 15 juillet"
+  "13 jusqu'au 15 juillet" ;ALEX inclu
+  "13 juillet au 15 juillet"
+  "13 juillet - 15 juillet"
+  (datetime-interval [2013 7 13] [2013 7 16])
 
   ; "de 9 heures 30 jusqu'à 11h jeudi"
+  ; "de 9 heures 30 à 11h jeudi"
   ; "9h30 - 11h00 Jeudi"
   ; "jeudi de 9h30 à 11h"
   ; (datetime-interval [2013 2 14 9 30] [2013 2 14 11 01])
 
   ;"à partir de 9h30 jeudi"
+  ;"entre midi et deux"
+  ;"de 5 à 7"
 
   ; "Thursday from 9a to 11a"
   ; (datetime-interval [2013 2 14 9] [2013 2 14 12])

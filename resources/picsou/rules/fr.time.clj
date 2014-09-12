@@ -345,4 +345,33 @@
   [(dim :time) (dim :timezone)]
   (set-timezone %1 (:value %2))
 
+  ; Intervals
+
+  "<month> dd-dd (interval)"
+  [#"([012]?\d|30|31)" #"\-|au|jusqu'au" #"([012]?\d|30|31)" {:form :month}]
+  (interval (intersect %4 (day-of-month (Integer/parseInt (-> %1 :groups first))))
+            (intersect %4 (day-of-month (Integer/parseInt (-> %3 :groups first))))
+            true)
+
+  ; Blocked for :latent time. May need to accept certain latents only, like hours
+
+  "<datetime> - <datetime> (interval)"
+  [(dim :time #(not (:latent %))) #"\-|à|au|jusqu'au" (dim :time #(not (:latent %)))]
+  (interval %1 %3 true)
+
+  "de <datetime> - <datetime> (interval)"
+  [#"(?i)de|depuis" (dim :time) #"\-|à|au|jusqu'au" (dim :time)]
+  (interval %2 %4 true)
+
+  ; ; Specific for time-of-day, to help resolve ambiguities
+
+  ; "<time-of-day> - <time-of-day> (interval)"
+  ; [{:form :time-of-day} #"\-|to|th?ru|through" {:form :time-of-day}]
+  ; (interval %1 %3 true)
+
+  ; "from <time-of-day> - <time-of-day> (interval)"
+  ; [#"(?i)from" {:form :time-of-day} #"\-|to|th?ru|through|until" {:form :time-of-day}]
+  ; (interval %2 %4 true)
+
+
 )
