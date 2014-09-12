@@ -299,6 +299,11 @@
   [(dim :time) {:form :part-of-day}]
   (intersect %1 %2)
 
+  ;specific rule to address "3 in the morning","3h du matin" and extend morning span from 0 to 12
+  "<dim time> du matin" 
+  [{:form :time-of-day} #"du mat(in)?"]
+  (intersect %1 (assoc (interval (hour 0 false) (hour 12 false) false) :form :part-of-day :latent true))
+
    "<part-of-day> du <dim time>"
    [{:form :part-of-day} #"(?i)du" (dim :time)]
    (intersect %3 %1)
@@ -347,31 +352,44 @@
 
   ; Intervals
 
-  "<month> dd-dd (interval)"
+  "dd-dd <month>(interval)"
   [#"([012]?\d|30|31)" #"\-|au|jusqu'au" #"([012]?\d|30|31)" {:form :month}]
   (interval (intersect %4 (day-of-month (Integer/parseInt (-> %1 :groups first))))
             (intersect %4 (day-of-month (Integer/parseInt (-> %3 :groups first))))
             true)
 
+  "entre dd et dd <month>(interval)"
+  [#"entre( le)?" #"([012]?\d|30|31)" #"et( le)?" #"([012]?\d|30|31)" {:form :month}]
+  (interval (intersect %5 (day-of-month (Integer/parseInt (-> %2 :groups first))))
+            (intersect %5 (day-of-month (Integer/parseInt (-> %4 :groups first))))
+            true)
+
   ; Blocked for :latent time. May need to accept certain latents only, like hours
 
   "<datetime> - <datetime> (interval)"
-  [(dim :time #(not (:latent %))) #"\-|à|au|jusqu'au" (dim :time #(not (:latent %)))]
+  [(dim :time #(not (:latent %))) #"\-|au|jusqu'(au|à)" (dim :time #(not (:latent %)))]
   (interval %1 %3 true)
 
   "de <datetime> - <datetime> (interval)"
-  [#"(?i)de|depuis" (dim :time) #"\-|à|au|jusqu'au" (dim :time)]
+  [#"(?i)de|depuis" (dim :time) #"\-|au|jusqu'(au|à)" (dim :time)]
   (interval %2 %4 true)
 
-  ; ; Specific for time-of-day, to help resolve ambiguities
+  "entre <datetime> et <datetime> (interval)"
+  [#"(?i)entre" (dim :time) #"et" (dim :time)]
+  (interval %2 %4 true)
 
-  ; "<time-of-day> - <time-of-day> (interval)"
-  ; [{:form :time-of-day} #"\-|to|th?ru|through" {:form :time-of-day}]
-  ; (interval %1 %3 true)
+  ; Specific for time-of-day, to help resolve ambiguities
 
-  ; "from <time-of-day> - <time-of-day> (interval)"
-  ; [#"(?i)from" {:form :time-of-day} #"\-|to|th?ru|through|until" {:form :time-of-day}]
-  ; (interval %2 %4 true)
+  "<time-of-day> - <time-of-day> (interval)"
+  [{:form :time-of-day} #"\-|à|au|jusqu'(au|à)" {:form :time-of-day}]
+  (interval %1 %3 true)
 
+  "de <time-of-day> - <time-of-day> (interval)"
+  [#"(?i)de" {:form :time-of-day} #"\-|à|au|jusqu'(au|à)" {:form :time-of-day}]
+  (interval %2 %4 true)
+
+  "entre <time-of-day> et <time-of-day> (interval)"
+  [#"(?i)entre" {:form :time-of-day} #"et" {:form :time-of-day}]
+  (interval %2 %4 true)
 
 )

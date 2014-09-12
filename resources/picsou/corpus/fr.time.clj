@@ -50,18 +50,6 @@
   "dimanche"
   (datetime 2013 2 17)
 
-;"ce week-end"
-  ;(datetime 2013 2 15 18 - 18 0)
-
- ; "dimanche dernier"
- ; "dimanche la semaine dernière"
- ; "dimanche de la semaine derniere"
- ; "dimanche la semaine passée"
- ; (datetime 2013 2 10 day-of-week 7)
-
- ; "mardi dernier"
- ; (datetime 2013 2 5 day-of-week 2)
-
   "le 1er mars"
   "premier mars"
   "le 1 mars"
@@ -130,8 +118,6 @@
   (datetime 2013 2 19 :day-of-week 2)
 
   "mercredi prochain" ; when today is Tuesday, "mercredi prochain" should be tomorrow (will need assumption here)
-  (datetime 2013 2 20 :day-of-week 3)
-
   "mercredi la semaine prochaine"
   "mercredi de la semaine prochaine"
   (datetime 2013 2 20 :day-of-week 3)
@@ -167,9 +153,10 @@
   (datetime 2013 2 12 :day-of-week 2)
 
   "mercredi cette semaine"
-  (datetime 2013 2 13 :day-of-week 3)
+  (datetime 2013 2 13 :day-of-week 2)
 
-;; Cycles
+  ;; Cycles
+
   "cette semaine"
   "dans la semaine"
   (datetime 2013 2 11 :grain :week)
@@ -197,9 +184,9 @@
 
   "dimanche dernier"
   "dimanche de la semaine dernière"
-  (datetime 2013 2 10)
+  (datetime 2013 2 10 :day-of-week 7)
 
-;; Hours
+  ;; Hours
 
   "à quinze heures"
   "à 15 heures"
@@ -213,12 +200,12 @@
   "15H00"
   (datetime 2013 2 12 15 0)
 
-  ;"minuit"
-  ;(datetime 2013 2 13 00 - 01)
+  "minuit"
+  (datetime 2013 2 13 00)
 
-  ;"midi"
-  ;"aujourd'hui à midi"
-  ;(datetime 2013 2 12 12 - 13)
+  "midi"
+  "aujourd'hui à midi"
+  (datetime 2013 2 12 12)
 
   "midi et quart"
   "midi quinze"
@@ -240,7 +227,7 @@
   "à quinze heures quinze"
   "à quinze heures et quinze minutes"
   "15h passé de 15 minutes"
-  ;"à trois heures et quart cet après-midi"
+  ;"à trois heures et quart cet après-midi" ALEX Conflict with timezone
   "15:15"
   "15h15"
   (datetime 2013 2 12 15 15 :hour 15 :minute 15)
@@ -378,9 +365,9 @@
   "8h du soir"
   (datetime 2013 2 12 20)
   
-  ;"3 heures du matin" ; ALEX
-  ;"3h du mat"
-  ;(datetime 2013 2 12 3)
+  "3 heures du matin"
+  "3h du mat"
+  (datetime 2013 2 12 3)
 
  ; Intervals involving cycles
   
@@ -437,35 +424,42 @@
 
   "13-15 juillet"
   "13 au 15 juillet"
-  "13 jusqu'au 15 juillet" ;ALEX inclu
+  "13 jusqu'au 15 juillet"
   "13 juillet au 15 juillet"
   "13 juillet - 15 juillet"
+  "entre le 13 et le 15 juillet"
   (datetime-interval [2013 7 13] [2013 7 16])
 
-  ; "de 9 heures 30 jusqu'à 11h jeudi"
-  ; "de 9 heures 30 à 11h jeudi"
-  ; "9h30 - 11h00 Jeudi"
-  ; "jeudi de 9h30 à 11h"
-  ; (datetime-interval [2013 2 14 9 30] [2013 2 14 11 01])
+  "de 9h30 jusqu'à 11h jeudi"
+  "de 9 heures 30 à 11h jeudi"
+  "9h30 - 11h00 Jeudi"
+  "entre 9h30 et 11h jeudi"
+  (datetime-interval [2013 2 14 9 30] [2013 2 14 11 01])
 
+  ;TO BE ADDRESSED
   ;"à partir de 9h30 jeudi"
   ;"entre midi et deux"
   ;"de 5 à 7"
 
-  ; "Thursday from 9a to 11a"
+  ; "jeudi de 9h à 11h" ; ALEX
   ; (datetime-interval [2013 2 14 9] [2013 2 14 12])
   
-  ; "11:30-1:30" ; go train this rule!
-  ; "11:30-1:30"
-  ; "11:30-1:30"
-  ; "11:30-1:30"
-  ; "11:30-1:30"
-  ; "11:30-1:30"
-  ; "11:30-1:30"
-  ; (datetime-interval [2013 2 12 11 30] [2013 2 12 13 31])
+  ; "entre midi et 2"
+  ; (datetime-interval [2013 2 12 12] [2013 2 12 14])
 
-  ; "1:30 PM on Sat, Sep 21"
-  ; (datetime 2013 9 21 13 30)
+  "11h30-1h30" ; go train this rule!
+  "11h30-1h30"
+  "11h30-1h30"
+  "11h30-1h30"
+  "11h30-1h30"
+  "11h30-1h30"
+  (datetime-interval [2013 2 12 11 30] [2013 2 12 13 31])
+
+  ; "11h30-13h30" ; ALEX
+  ; (datetime-interval [2013 2 12 11 30] [2013 2 12 13 31])
+  
+   "13h30 samedi 21 septembre"
+   (datetime 2013 9 21 13 30)
 
   
   "à seize heures PST"

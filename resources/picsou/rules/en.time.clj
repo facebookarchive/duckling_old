@@ -428,6 +428,10 @@
   [#"(?i)from" (dim :time) #"\-|to|th?ru|through|until" (dim :time)]
   (interval %2 %4 true)
 
+  "between <datetime> and <datetime> (interval)"
+  [#"(?i)between" (dim :time) #"and" (dim :time)]
+  (interval %2 %4 true)
+
   ; Specific for time-of-day, to help resolve ambiguities
 
   "<time-of-day> - <time-of-day> (interval)"
@@ -438,6 +442,9 @@
   [#"(?i)from" {:form :time-of-day} #"\-|to|th?ru|through|until" {:form :time-of-day}]
   (interval %2 %4 true)
 
+  "between <time-of-day> and <time-of-day> (interval)"
+  [#"(?i)between" {:form :time-of-day} #"and" {:form :time-of-day}]
+  (interval %2 %4 true)
     ; ;; In this special case, the upper limit is exclusive
   ; "<hour-of-day> - <hour-of-day> (interval)"
   ; [{:form :time-of-day} #"-|to|th?ru|through|until" #(and (= :time-of-day (:form %))
