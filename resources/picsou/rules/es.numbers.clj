@@ -1,4 +1,7 @@
 (
+  ;;
+  ;; Integers
+  ;;
   "number (0..15)"
   #"(?i)((c|z)ero|un(o|a)?|dos|tr(é|e)s|cuatro|cinco|s(e|é)is|siete|ocho|nueve|die(z|s)|once|doce|trece|catorce|quince)"
   {:dim :number
