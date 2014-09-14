@@ -10,18 +10,25 @@
   [(dim :time #(not (:latent %))) #"(?i)de" (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
   
+  ; mostly for lunes, 18 de febrero
+  ; this is a separate rule, because commas separate very specific tokens
+  ; so we want this rule's classifier to learn this
+  "two time tokens separated by \",\""
+  [(dim :time #(not (:latent %))) #"," (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
+  (intersect %1 %3)
+
   ;;
 
   "named-day"
-  #"(?i)lunes|lun?|lun\."
+  #"(?i)lunes|lun?\.?"
   (day-of-week 1)
 
   "named-day"
-  #"(?i)martes|ma|mar\."
+  #"(?i)martes|mar?\.?"
   (day-of-week 2)
 
   "named-day"
-  #"(?i)mi(e|é)(rcoles)?|mx|mier?\."
+  #"(?i)mi(e|é)\.?(rcoles)?|mx|mier?\."
   (day-of-week 3)
 
   "named-day"
@@ -33,7 +40,7 @@
   (day-of-week 5)
 
   "named-day"
-  #"(?i)sábado|s(á|a)b\.?"
+  #"(?i)s[áa]bado|s(á|a)b\.?"
   (day-of-week 6)
 
   "named-day"
@@ -179,17 +186,18 @@
   [#"(?i)el" (integer 1 31)]
   (assoc (day-of-month (:val %2)) :latent true)
 
-  ; "month (numeric)"
-  ; (integer 1 12)
-  ; (assoc (month-of-year (:val %1)) :latent true)
-  
-  ; "<day-of-month> of <named-month>" ; 4 de julio (this rule removes latency)
-  ; [{:form :day-of-month} #"(?i)de" {:form :named-month}]
-  ; (intersect %1 %3)
 
-  ; "<named-month> <day-of-month>" ; mayo 5 in Latin America mostly (this rule removes latency)
-  ; [{:form :named-month} {:form :day-of-month}]
-  ; (intersect %2 %1)
+  "<day-of-month> de <named-month>" ; 4 de julio
+  [(integer 1 31) #"(?i)de" {:form :month}]
+  (intersect %3 (day-of-month (:val %1)))
+
+  "el <day-of-month> de <named-month>" ; el 4 de julio
+  [#"(?i)el" (integer 1 31) #"(?i)de" {:form :month}]
+  (intersect %4 (day-of-month (:val %2)))
+
+  "<named-month> <day-of-month>" ; mayo 5 in Latin America mostly (this rule removes latency)
+  [{:form :month} (integer 1 31)]
+  (intersect %1 (day-of-month (:val %2)))
 
   ;; hours and minutes (absolute time)
   "noon"

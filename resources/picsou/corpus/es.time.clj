@@ -25,55 +25,55 @@
   "pasado mañana"
   (datetime 2013 2 14)
 
- ;  "lunes"
- ;  "lu"
- ;  "lun."
- ;  "este lunes"
- ;  (datetime 2013 2 18 :day-of-week 1)
+  "lunes"
+  "lu"
+  "lun."
+  "este lunes"
+  (datetime 2013 2 18 :day-of-week 1)
 
- ;  "lunes, 18 de febrero"
- ;  (datetime 2013 2 18 :day-of-week 1 :day 18 :month 2)
+  "lunes, 18 de febrero"
+  (datetime 2013 2 18 :day-of-week 1 :day 18 :month 2)
 
- ;  "martes"
- ;  "ma"
- ;  "ma."
- ;  (datetime 2013 2 19 :day-of-week 2)
+  "martes"
+  "ma"
+  "ma."
+  (datetime 2013 2 19 :day-of-week 2)
 
- ;  "miercoles"
- ;  "miércoles"
- ;  "mx"
- ;  "mié."
- ;  (datetime 2013 2 13 :day-of-week 3)
+  "miercoles"
+  "miércoles"
+  "mx"
+  "mié."
+  (datetime 2013 2 13 :day-of-week 3)
 
- ;  "jueves"
- ;  (datetime 2013 2 14 :day-of-week 4)
+  "jueves"
+  (datetime 2013 2 14 :day-of-week 4)
 
- ;  "viernes"
- ;  (datetime 2013 2 15 :day-of-week 5)
+  "viernes"
+  (datetime 2013 2 15 :day-of-week 5)
 
- ;  "samedi"
- ;  (datetime 2013 2 16 :day-of-week 6)
+  "sabado"
+  (datetime 2013 2 16 :day-of-week 6)
 
- ;  "dimanche"
- ;  (datetime 2013 2 17 :day-of-week 7)
+  "domingo"
+  (datetime 2013 2 17 :day-of-week 7)
 
- ;  "el 5 de mayo"
- ;  "el cinco de mayo"
- ;  (datetime 2013 5 5 :day 5 :month 5)
+  "el 5 de mayo"
+  "el cinco de mayo"
+  (datetime 2013 5 5 :day 5 :month 5)
   
- ;  "el cinco de mayo de 2013"
- ;  "mayo 5 del 2013" ; in part of latin america
- ;  "5-5-2013"
- ;  (datetime 2013 5 5 :day 5 :month 5 :year 2013)
+  "el cinco de mayo de 2013"
+  "mayo 5 del 2013" ; in part of latin america
+  "5-5-2013"
+  (datetime 2013 5 5 :day 5 :month 5 :year 2013)
 
- ;  "el 4 de julio"
- ;  "el 4/7"
- ;  (datetime 2013 7 4 :day 4 :month 7)
+  "el 4 de julio"
+  "el 4/7"
+  (datetime 2013 7 4 :day 4 :month 7)
 
- ;  "el 3 de marzo"
- ;  "3 de marzo"
- ;  "el 3-3"
- ;  (datetime 2013 3 3 :day 3 :month 3)
+  "el 3 de marzo"
+  "3 de marzo"
+  "el 3-3"
+  (datetime 2013 3 3 :day 3 :month 3)
 
  ;  "el 5 de abril"
  ;  "5 de abril"
