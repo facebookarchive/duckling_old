@@ -42,7 +42,7 @@
 
   ; "dentro de <integer> <cycle>"
   ; [#"(?i)dentro de" (integer) (dim :cycle)]
-  ; (this-cycle (:grain %3) 1 (:val %2))
+  ; (cycle-nth  (:grain %3) 1 (:val %2))
 
   "la <cycle> pasado"
   [#"(?i)(el|los|la|las) ?" (dim :cycle) #"(?i)pasad(a|o)s?"]

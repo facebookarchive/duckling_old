@@ -75,248 +75,245 @@
   "el 3-3"
   (datetime 2013 3 3 :day 3 :month 3)
 
- ;  "el 5 de abril"
- ;  "5 de abril"
- ;  (datetime 2013 4 5 :day 5 :month 4)
+  "el 5 de abril"
+  "5 de abril"
+  (datetime 2013 4 5 :day 5 :month 4)
 
- ;  "el 1 de marzo"
- ;  "1 de marzo"
- ;  "el primero de marzo"
- ;  "el uno de marzo"
- ;  "primero de marzo"
- ;  "uno de marzo"
- ;  (datetime 2013 3 1 :day 1 :month 3)
+  "el 1 de marzo"
+  "1 de marzo"
+  "el primero de marzo"
+  "el uno de marzo"
+  "primero de marzo"
+  "uno de marzo"
+  (datetime 2013 3 1 :day 1 :month 3)
 
- ;  "1-3-2013"
- ;  "1.3.2013"
- ;  "1/3/2013"
- ;  (datetime 2013 3 1 :day 1 :month 3 :year 2013)
+  "1-3-2013"
+  "1.3.2013"
+  "1/3/2013"
+  (datetime 2013 3 1 :day 1 :month 3 :year 2013)
 
- ;  "el 16"
- ;  "16 de febrero"
- ;  (datetime 2013 2 16 - 17)
+  "el 16"
+  "16 de febrero"
+  (datetime 2013 2 16 - 17)
 
- ;  "el 17"
- ;  "17 de febrero"
- ;  "2-17"
- ;  "el 02/17"
- ;  (datetime 2013 2 17 :day 17 :month 2)
+  "el 17"
+  "17 de febrero"
+  "17-2"
+  "el 17/2"
+  (datetime 2013 2 17 :day 17 :month 2)
 
- ;  "el 20"
- ;  "20 de febrero"
- ;  "20/2"
- ;  (datetime 2013 2 20 :day 20 :month 2)
+  "el 20"
+  "20 de febrero"
+  "20/2"
+  (datetime 2013 2 20 :day 20 :month 2)
   
- ;  "31/10/1974"
- ;  "31/10/74" ; smart two-digit year resolution
- ;  (datetime 1974 10 31 :day 31 :month 10 :year 1974)
+  "31/10/1974"
+  "31/10/74" ; smart two-digit year resolution
+  (datetime 1974 10 31 :day 31 :month 10 :year 1974)
 
- ;  "el martes que viene" ; when today is Tuesday, "mardi prochain" is a week from now
- ;  (datetime 2013 2 19 :day-of-week 2)
+  "el martes que viene" ; when today is Tuesday, "mardi prochain" is a week from now
+  (datetime 2013 2 19 :day-of-week 2)
 
- ;  "miércoles que viene" ; when today is Tuesday, "mercredi prochain" is tomorrow
- ;  "el miércoles de la semana que viene"
- ;  "miercoles de la próxima semana"
- ;  (datetime 2013 2 20 :day-of-week 3)
+  "miércoles que viene" ; when today is Tuesday, "mercredi prochain" is tomorrow
+  "el miércoles de la semana que viene"
+  "miercoles de la próxima semana"
+  (datetime 2013 2 20 :day-of-week 3)
 
- ;  "el lunes de esta semana"
- ;  (datetime 2013 2 11 :day-of-week 1)
+  "el lunes de esta semana"
+  (datetime 2013 2 11 :day-of-week 1)
 
- ;  "martes de esta semana"
- ;  (datetime 2013 2 12 :day-of-week 2)
+  "martes de esta semana"
+  (datetime 2013 2 12 :day-of-week 2)
 
- ;  "el miércoles de esta semana"
- ;  (datetime 2013 2 12 :day-of-week 2)
+  "el miércoles de esta semana"
+  (datetime 2013 2 13 :day-of-week 2)
   
  ;  ;; Cycles
   
- ;  "esta semana"
- ;  (datetime 2013 2 11 :grain :week)
+  "esta semana"
+  (datetime 2013 2 11 :grain :week)
 
- ;  "la semana pasada"
- ;  (datetime 2013 2 4 :grain :week)
+  "la semana pasada"
+  (datetime 2013 2 4 :grain :week)
   
- ;  "la semana que viene"
- ;  "la proxima semana"
- ;  "dentro de una semana"
- ;  (datetime 2013 2 18 :grain :week)
+  "la semana que viene"
+  "la proxima semana"
+  (datetime 2013 2 18 :grain :week)
   
- ;  "el pasado mes"
- ;  (datetime 2013 1)
+  "el pasado mes"
+  (datetime 2013 1)
 
- ;  "el mes que viene"
- ;  "el proximo mes"
- ;  (datetime 2013 3)
+  "el mes que viene"
+  "el proximo mes"
+  (datetime 2013 3)
   
- ;  "el año pasado"
- ;  (datetime 2012)
+  "el año pasado"
+  (datetime 2012)
   
- ;  "este ano"
- ;  (datetime 2013)
+  "este ano"
+  (datetime 2013)
   
- ;  "el año que viene"
- ;  "el proximo ano"
- ;  (datetime 2014)
+  "el año que viene"
+  "el proximo ano"
+  (datetime 2014)
 
- ;  "el domingo pasado"
- ;  "el domingo de la semana pasada"
- ;  (datetime 2013 2 10 :day-of-week 7)
+  "el domingo pasado"
+  "el domingo de la semana pasada"
+  (datetime 2013 2 10 :day-of-week 7)
 
- ;  "el martes pasado"
- ;  (datetime 2013 2 5 :day-of-week 2)
+  "el martes pasado"
+  (datetime 2013 2 5 :day-of-week 2)
 
  ;  ;; Hours
 
- ;  "a las tres de la tarde"
- ;  "a las tres"
- ;  "a las 3 pm"
- ;  "a las 15 horas"
- ;  (datetime 2013 2 12 15)
+  "a las tres de la tarde"
+  "a las tres"
+  "a las 3 pm"
+  "a las 15 horas"
+  (datetime 2013 2 12 15)
 
- ;  "a las ocho de la tarde"
- ;  (datetime 2013 2 12 20)
+  "a las ocho de la tarde"
+  (datetime 2013 2 12 20)
 
- ;  "15:00"
- ;  "15.00"
- ;  (datetime 2013 2 12 15 0)
+  "15:00"
+  "15.00"
+  (datetime 2013 2 12 15 0)
 
- ;  "medianoche"
- ;  (datetime 2013 2 13 00)
+  "medianoche"
+  (datetime 2013 2 13 00)
 
- ;  "mediodía"
- ;  "las doce"
- ;  "las 12 des medianoche"
- ;  (datetime 2013 2 12 12)
+  "mediodía"
+  "las doce"
+  (datetime 2013 2 12 12)
 
- ;  "las doce y cuarto"
- ;  (datetime 2013 2 12 12 15 :hour 12 :minute 15)
+  "las doce y cuarto"
+  (datetime 2013 2 12 12 15 :hour 12 :minute 15)
 
- ;  "las doce menos cinco"
- ;  (datetime 2013 2 12 11 55 :hour 11 :minute 55)
+  "las doce menos cinco"
+  (datetime 2013 2 12 11 55 :hour 11 :minute 55)
 
- ;  "las doce y media"
- ;  (datetime 2013 2 12 12 30 :hour 12 :minute 30)
+  "las doce y media"
+  (datetime 2013 2 12 12 30 :hour 12 :minute 30)
 
- ;  "las doce y tres de la tarde"
- ;  (datetime 2013 2 13 00 03 :hour 0 :minute 3)
+  "las tres de la manana"
+  (datetime 2013 2 13 3 :hour 3)
 
- ;  "a las tres y quince"
- ;  "a las 3 y cuarto"
- ;  "a las tres y cuarto de la tarde"
- ;  "15:15"
- ;  "15.15"
- ;  (datetime 2013 2 12 15 15 :hour 15 :minute 15)
+  "a las tres y quince"
+  "a las 3 y cuarto"
+  "a las tres y cuarto de la tarde"
+  "15:15"
+  "15.15"
+  (datetime 2013 2 12 15 15 :hour 15 :minute 15)
 
- ;  "a las tres y cuarto mañana por la tarde"
- ;  (datetime 2013 2 13 15 15 :hour 15 :minute 15)
+  ; "a las tres y cuarto mañana por la tarde" ;ALEX
+  ; (datetime 2013 2 13 15 15 :hour 15 :minute 15)
 
- ;  "a las tres y media"
- ;  "a las 3 y treinta"
- ;  "a las tres y media de la tarde"
- ;  "15:30"
- ;  "15.30"
- ;  (datetime 2013 2 12 15 30 :hour 15 :minute 30)
+  "a las tres y media"
+  "a las 3 y treinta"
+  "a las tres y media de la tarde"
+  "15:30"
+  "15.30"
+  (datetime 2013 2 12 15 30 :hour 15 :minute 30)
 
- ;  "las doce menos cuarto"
- ;  "11:45"
- ;  "las once y cuarenta y cinco"
- ;  "hoy a 11:45"
- ;  (datetime 2013 2 12 11 45 :hour 11 :minute 45)
+  "las doce menos cuarto"
+  "11:45"
+  "las once y cuarenta y cinco"
+  "hoy a 11:45"
+  (datetime 2013 2 12 11 45 :hour 11 :minute 45)
 
- ;  "5 y cuarto"
- ;  (datetime 2013 2 12 5 15 :hour 17 :minute 15)
+  "5 y cuarto"
+  (datetime 2013 2 12 5 15 :hour 17 :minute 15)
 
- ;  ;"6 de la mañana"
- ;  ;(datetime 2013 2 12 6 - 7)
+  "6 de la mañana"
+  (datetime 2013 2 12 6 - 7)
   
- ;  "miércoles a las once de la mañana"
- ;  (datetime 2013 2 13 11 :hour 11 :day-of-week 3)
+  "miércoles a las once de la mañana"
+  (datetime 2013 2 13 11 :hour 11 :day-of-week 3)
   
- ;  "mañana a las once"
- ;  "mañana a 11"
- ;  (datetime 2013 2 13 11 :hour 11)
+  "mañana a las once"
+  "mañana a 11"
+  (datetime 2013 2 13 11 :hour 11)
 
- ;  "viernes a las doce"
- ;  (datetime 2013 2 15 12 :hour 12 :day-of-week 5)
+  "viernes a las doce"
+  (datetime 2013 2 15 12 :hour 12 :day-of-week 5)
   
- ;  "viernes a las 12:00 horas"
- ;  (datetime 2013 2 15 12 0 :hour 12 :day-of-week 5 :minute 0)
+  "viernes a las 12:00 horas"
+  (datetime 2013 2 15 12 0 :hour 12 :day-of-week 5 :minute 0)
 
- ;  "viernes, el 12 de septiembre de 2014"
- ;  (datetime 2014 9 12 :day-of-week 5 :day 12 :month 9 :year 2014)
+  "viernes, el 12 de septiembre de 2014"
+  (datetime 2014 9 12 :day-of-week 5 :day 12 :month 9 :year 2014)
 
- ;  ;; Involving periods  ; look for grain-after-shift
+  ;; Involving periods  ; look for grain-after-shift
 
- ;  "en un segundo"
- ;  (datetime 2013 2 12 4 30 1)
+  "en un segundo"
+  (datetime 2013 2 12 4 30 1)
   
- ;  "en un minuto"
- ;  "en 1 min"
- ;  (datetime 2013 2 12 4 31 0)
+  "en un minuto"
+  "en 1 min"
+  (datetime 2013 2 12 4 31 0)
   
- ;  "en 2 minutos"
- ;  "en dos minutos"
- ;  (datetime 2013 2 12 4 32 0)
+  "en 2 minutos"
+  "en dos minutos"
+  (datetime 2013 2 12 4 32 0)
   
- ;  "en 60 minutos"
- ;  (datetime 2013 2 12 5 30 0)
+  "en 60 minutos"
+  (datetime 2013 2 12 5 30 0)
   
- ;  "en una hora"
- ;  (datetime 2013 2 12 5 30)
+  "en una hora"
+  (datetime 2013 2 12 5 30)
 
- ;  "hace dos horas"
- ;  (datetime 2013 2 12 2 30)
+  "hace dos horas"
+  (datetime 2013 2 12 2 30)
   
- ;  "en 24 horas"
- ;  "en veinticuatro horas"
- ;  (datetime 2013 2 13 4 30)
+  "en 24 horas"
+  "en veinticuatro horas"
+  (datetime 2013 2 13 4 30)
   
- ;  "en un dia"
- ;  (datetime 2013 2 13 4)
+  "en un dia"
+  (datetime 2013 2 13 4)
   
- ;  "en 7 dias"
- ;  (datetime 2013 2 19 4)
+  "en 7 dias"
+  (datetime 2013 2 19 4)
   
- ;  "en una semana"
- ;  (datetime 2013 2 19)
+  "en una semana"
+  (datetime 2013 2 19)
   
- ;  "hace tres semanas"
- ;  (datetime 2013 1 22)
+  "hace tres semanas"
+  (datetime 2013 1 22)
   
- ;  "en dos meses"
- ;  (datetime 2013 4 12)
+  "en dos meses"
+  (datetime 2013 4 12)
   
- ;  "hace tres meses"
- ;  (datetime 2012 11 12)
+  "hace tres meses"
+  (datetime 2012 11 12)
 
- ;  "en un ano"
- ;  "en 1 año"
- ;  (datetime 2014 2)
+  "en un ano"
+  "en 1 año"
+  (datetime 2014 2)
   
- ;  "hace dos años"
- ;  (datetime 2011 2)
+  "hace dos años"
+  (datetime 2011 2)
 
- ;  ; Seasons
+  ; Seasons
 
- ;  "este verano"
- ;  (datetime-interval [2013 6 21] [2013 9 23])
+  "este verano"
+  (datetime-interval [2013 6 21] [2013 9 23])
 
- ;  "este invierno"
- ;  (datetime-interval [2012 12 21] [2013 3 20])
+  "este invierno"
+  (datetime-interval [2012 12 21] [2013 3 20])
 
- ;  ; ES holidays 
+  ; ES holidays 
 
- ;  "Navidad"
- ;  "la Navidad"
- ;  "jour de noel"
- ;  (datetime 2013 12 25)
+  "Navidad"
+  "la Navidad"
+  (datetime 2013 12 25)
 
- ;  "Nochevieja"
- ;  (datetime 2013 12 30)
+  "Nochevieja"
+  (datetime 2013 12 31)
 
- ;  "ano nuevo"
- ;  "año nuevo"
- ;  (datetime 2014 1 1)
+  "ano nuevo"
+  "año nuevo"
+  (datetime 2014 1 1)
 
  ;  ; Part of day (morning, afternoon...)
 
@@ -347,7 +344,7 @@
  ;  (datetime 2013 2 12 20)
 
  ; ; Intervals involving cycles
-
+;; "dentro de una semana"
  ;  "pasados 2 segundos"
  ;  (datetime-interval [2013 2 12 4 29 58] [2013 2 12 4 30 00])
 

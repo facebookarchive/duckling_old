@@ -97,7 +97,7 @@
 
 ; Holiday TODO: check online holidays
   "Navidad"
-  #"(?i)navidad"
+  #"(?i)(la )?navidad"
   (month-day 12 25)
 
   "Nochevieja"
@@ -171,6 +171,10 @@
   (integer 2101 10000)
   (assoc (year (:val %1)) :latent true)
 
+  "del <year>"  ; latin america mostly
+  [#"(?i)del( a[ñn]o)?" (integer 1000 2100)]
+  (year (:val %2))
+
   ; Day of month appears in the following context:
   ; - le premier
   ; - le 5
@@ -200,6 +204,10 @@
   (intersect %1 (day-of-month (:val %2)))
 
   ;; hours and minutes (absolute time)
+  "<integer> (latent time-of-day)"
+  (integer 0 23)
+  (assoc (hour (:val %1) true) :latent true)
+
   "noon"
   #"(?i)mediod(í|i)a"
   (hour 12 false)
@@ -208,24 +216,17 @@
   #"(?i)medianoche"
   (hour 0 false)
 
-  "<time-of-day> heures"
+  "<time-of-day> horas"
   [#(:full-hour %) #"(?i)h\.?(ora)?s?"]
   (dissoc %1 :latent) 
   
-  "at <time-of-day>" ; absorption
-  [#"(?i)al?( las?)?" {:form :time-of-day}]
+  "a las <time-of-day>" ;
+  [#"(?i)al?( las?)?|las?" {:form :time-of-day}]
   (dissoc %2 :latent) 
 
-  ; "a las <integer>(time-of-day)" ; a las tres
-  ; [#"(?i)(al?( las?)?|las?)" (integer 0 23)]
-  ; (assoc (hour (:val %2) true)
-  ;   :form :time-of-day
-  ;   :for-relative-minutes true
-  ;   :val (:val %2))
-
-  ; "a las <hour-min>(time-of-day)" ; a las 12:00 horas
-  ; [#"(?i)(al?( las?)?|las?)" {:form :time-of-day} #"horas"]
-  ; %2
+  "a las <hour-min>(time-of-day)" ; a las 12:00 horas
+  [#"(?i)(al?( las?)?|las?)" {:form :time-of-day} #"horas?"]
+  %2
 
   "hh(:|.|h)mm (time-of-day)"
   #"(?i)((?:[01]?\d)|(?:2[0-3]))[:h\.]([0-5]\d)"
@@ -318,10 +319,6 @@
   [#"(?i)est(e|a)" {:form :part-of-day}]
   (assoc (intersect (cycle-nth :day 0) %2) :form :part-of-day) ;; removes :latent
   
-  "<dim time> <part-of-day>" ; since "morning" "evening" etc. are latent, general time+time is blocked
-  [(dim :time) {:form :part-of-day}]
-  (intersect %1 %2)
-
 ; ;specific rule to address "3 in the morning","3h du matin" and extend morning span from 0 to 12
 ;   "<dim time> du matin" 
 ;   [{:form :time-of-day} #"du mat(in)?"]
@@ -331,6 +328,17 @@
   [(dim :time) {:form :part-of-day}]
   (intersect %1 %2)
   
+  ;specific rule to address the ambiguity of noche/tarde and extend tarde span from 12 to 21
+  "<dim time> de la tarde" 
+  [{:form :time-of-day} #"de la tarde"]
+  (intersect %1 (assoc (interval (hour 12 false) (hour 21 false) false) :form :part-of-day :latent true))
+
+  ;specific rule to address the ambiguity of noche/tarde and extend tarde span from 12 to 21
+  "<dim time> de la manana" 
+  [{:form :time-of-day} #"de la ma(ñ|n)ana"]
+  (intersect %1 (assoc (interval (hour 0 false) (hour 12 false) false) :form :part-of-day :latent true))
+
+
   "<integer> in the <part-of-day>" ; 7 de la manana always means a las 7 de la manana
   [{:form :part-of-day} #"(de|por) la" (dim :time)]
   (intersect %3 %1)
@@ -358,6 +366,12 @@
   "season"
   #"(?i)primavera"
   (interval (month-day 3 20) (month-day 6 21) false)
+
+  ; a specific version of "el", above, removes :latent for integer as day of month
+  ; this one is more general but does not remove latency
+  "le <time>"
+  [#"(?i)el" (dim :time #(not (:latent %)))]
+  %2
 
   ;; Time zones
   
