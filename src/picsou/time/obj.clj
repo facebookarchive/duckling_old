@@ -92,7 +92,11 @@
         e2 (end t2)]
   (if (or (= s1 s2) (time/before? s1 s2))
     (when (time/before? s2 e1)
-      (assoc t2 :grain (max-key grain-order (:grain t1) (:grain t2))))
+      (if (or (time/before? e2 e1) (= e1 e2))
+        t2
+        {:start s1
+         :grain (max-key grain-order (:grain t1) (:grain t2))
+         :end e2}))
     (intersect t2 t1))))
 
 (defn year [t]

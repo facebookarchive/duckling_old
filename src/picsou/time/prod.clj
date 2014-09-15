@@ -34,10 +34,17 @@
 (defn interval
   "Interval between two tokens. The interval starts at the start of tok1,
   and ends at the *start* of tok2.
+  The grains of tok1 and tok2 must be equal.
   If to-inclusive? is true, it ends at the *end* of tok2."
   [tok1 tok2 & [to-inclusive?]]
-  (ti (p/intervals (:pred tok1) (:pred tok2) to-inclusive?)
-      {:timezone (or (:timezone tok1) (:timezone tok2))}))
+  (let [grain1 (-> tok1 :pred meta :grain)
+        grain2 (-> tok2 :pred meta :grain)
+        incl (= :day grain1 grain2)]
+  ;(prn "interval called")
+  (if true;(=  )
+    (ti (p/intervals (:pred tok1) (:pred tok2) incl)
+        {:timezone (or (:timezone tok1) (:timezone tok2))})
+    {:dim :invalid})))
 
 ;; if we say "Monday" and today is Monday, we mean next Monday
 ;; hence the :not-immediate that modifies resolution

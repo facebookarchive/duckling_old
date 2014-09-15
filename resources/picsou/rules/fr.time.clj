@@ -288,7 +288,7 @@
   (assoc (interval (hour 18 false) (hour 0 false) false) :form :part-of-day :latent true)
   
   "du|dans le <part-of-day>" ;; removes latent
-  [#"(?i)du|dans l[ae']? ?" {:form :part-of-day}]
+  [#"(?i)du|dans l[ae']? ?|au|le|la" {:form :part-of-day}]
   (dissoc %2 :latent)
   
   "ce <part-of-day>"
@@ -368,28 +368,28 @@
 
   "<datetime> - <datetime> (interval)"
   [(dim :time #(not (:latent %))) #"\-|au|jusqu'(au|à)" (dim :time #(not (:latent %)))]
-  (interval %1 %3 true)
+  (interval %1 %3 false)
 
   "de <datetime> - <datetime> (interval)"
   [#"(?i)de|depuis" (dim :time) #"\-|au|jusqu'(au|à)" (dim :time)]
-  (interval %2 %4 true)
+  (interval %2 %4 false)
 
   "entre <datetime> et <datetime> (interval)"
   [#"(?i)entre" (dim :time) #"et" (dim :time)]
-  (interval %2 %4 true)
+  (interval %2 %4 false)
 
   ; Specific for time-of-day, to help resolve ambiguities
 
   "<time-of-day> - <time-of-day> (interval)"
   [{:form :time-of-day} #"\-|à|au|jusqu'(au|à)" {:form :time-of-day}]
-  (interval %1 %3 true)
+  (interval %1 %3 false)
 
   "de <time-of-day> - <time-of-day> (interval)"
   [#"(?i)de" {:form :time-of-day} #"\-|à|au|jusqu'(au|à)" {:form :time-of-day}]
-  (interval %2 %4 true)
+  (interval %2 %4 false)
 
   "entre <time-of-day> et <time-of-day> (interval)"
   [#"(?i)entre" {:form :time-of-day} #"et" {:form :time-of-day}]
-  (interval %2 %4 true)
+  (interval %2 %4 false)
 
 )

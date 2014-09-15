@@ -127,8 +127,9 @@
   (let [pos (:pos (first route))
         end (:end (last route))]
     (try
-      (merge (apply (:production rule) route)
-        {:text (subs sentence pos end), :pos pos, :end end, :rule rule, :route route})
+      (when-let [product (apply (:production rule) route)]
+        (merge product
+               {:text (subs sentence pos end), :pos pos, :end end, :rule rule, :route route}))
       (catch Exception e
         (throw (ex-info (format "Exception picsou@produce span='%s' rule='%s' sentence='%s' ex='%s' stack=%s"
                                     (subs sentence pos end)
@@ -176,9 +177,9 @@
     (apply concat
       (for [rule rules]
         (try
-          (->> (match (:pattern rule) stash)
-            (filter #(never-produced? stash rule %))
-            (map (fn [route] (produce rule route sentence))))
+          (->> (match (:pattern rule) stash) ; get the routes that match this rule
+               (filter #(never-produced? stash rule %)) ; remove what we already have
+               (map (fn [route] (produce rule route sentence)))) ; produce
           (catch Exception e
             (throw (Exception. (str "Exception matching rule: "
                                  (:name rule) " " e)))))))))

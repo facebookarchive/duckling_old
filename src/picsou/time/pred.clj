@@ -134,26 +134,31 @@
   "Compose several predicates - can see this as intersection"
   ([pred] pred)
   ([pred1' pred2']
+   (assert (fn? pred1') (format "Invalid predicate (1): %s" pred1'))
+   (assert (fn? pred2') (format "Invalid predicate (2): %s" pred2'))
    (let [[pred1 pred2] (sort-by #(-> % meta :grain t/grain-order) [pred1' pred2'])
          grain (-> pred2 meta :grain)] ; finer grain
-     (fn& grain [t ctx] 
+     (fn& grain [t ctx]
+          ;(prn t (-> pred1 meta :grain) (-> pred2 meta :grain))
           (let [;; take the sequence of pred1 forward and backward
                    [seq1-f seq1-b] (pred1 t ctx) 
                    
                    ;; clojure.core/mapcat uses apply which breaks lazyness
                    fwd (my-mapcat (fn [time1] ;(infof "hi %s" time1)
                                     (->> (first (pred2 time1 ctx))
+                                         (take 12)
                                          (take-while #(t/start-before-the-end-of? % time1))
                                          (map #(t/intersect time1 %))
                                          (remove nil?)))
-                                  (take 1000 seq1-f)) ;; we need a safety net for impossible combinations
+                                  (take 12 seq1-f)) ;; we need a safety net for impossible combinations
                    bwd (my-mapcat (fn [time1] 
                                     (->> (first (pred2 time1 ctx))
+                                         (take 12)
                                          (take-while #(t/start-before-the-end-of? % time1))
                                          (map #(t/intersect time1 %))
                                          (remove nil?)))
-                                  (take 1000 seq1-b))]
-              [(take 10 fwd) (take 10 bwd)])))) ; this safety net should not be necessary
+                                  (take 12 seq1-b))]
+              [(take 12 fwd) (take 12 bwd)])))) ; this safety net should not be necessary
   ([pred1 pred2 & more]
      (compose (compose pred1 pred2) (apply compose more))))
 
@@ -239,37 +244,41 @@
   [f pred & [dont-reverse?]]
   (fn& (-> pred meta :grain) [t ctx] (let [;; take the sequence of pred forward and backward
                  [seq1-f seq1-b] (pred t ctx) 
-                 
                  ;; times moved from behind to ahead
                  bh-ah (->> seq1-b
+                            (take 12)
                             (map #(f % ctx))
                             (remove nil?)
                             (take-while #(t/start-before-the-end-of? t %))
-                            (take 1000) ; because reverse is not lazy
+                            (take 12) ; because reverse is not lazy
                             (?>> (not dont-reverse?) reverse))
                  
                  ; times remaining ahead
                  ah-ah (->> seq1-f
+                         (take 12)
                          (map #(f % ctx))
                          (remove nil?)
-                         (take 1000) ; because everything may be filtered out
+                         ;(take 12) ; because everything may be filtered out
                          (filter #(t/start-before-the-end-of? t %)))
                  
                  ahead (concat bh-ah ah-ah)
                  
                  ;; times moved from ahead to behind
                  ah-bh (->> seq1-f
+                            (take 12)
                             (map #(f % ctx))
                             (remove nil?)
                             (take-while #(not (t/start-before-the-end-of? t %)))
-                            (take 1000)
+                            (take 12)
                             (?>> (not dont-reverse?) reverse))
                  
                  ; times remaining behing
                  bh-bh (->> seq1-b
+                         (take 12)
                          (map #(f % ctx))
                          (remove nil?)
-                         (take 1000)
+                         ;(<- doto prn)
+                         (take 12)
                          (filter #(not (t/start-before-the-end-of? t %))))
                  
                  behind (concat ah-bh bh-bh)]

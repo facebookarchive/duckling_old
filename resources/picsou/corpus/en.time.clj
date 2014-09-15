@@ -95,8 +95,8 @@
   (datetime 2013 2 19 :day-of-week 2)
 
   "Sunday, Feb 10"
-  (datetime 2019 2 10 :day-of-week 7 :day 10 :month 2) ; with current look-forward default...
-
+  (datetime 2013 2 10 :day-of-week 7 :day 10 :month 2) 
+  
   "Wed, Feb13"
   (datetime 2013 2 13 :day-of-week 3 :day 13 :month 2)
 
@@ -289,10 +289,10 @@
   ; Seasons
 
   "this summer"
-  (datetime-interval [2013 6 21] [2013 9 23])
+  (datetime-interval [2013 6 21] [2013 9 24])
 
   "this winter"
-  (datetime-interval [2012 12 21] [2013 3 20])
+  (datetime-interval [2012 12 21] [2013 3 21])
 
   ; US holidays (http://www.timeanddate.com/holidays/us/)
 
@@ -441,10 +441,10 @@
   "between 9:30 and 11:00 on thursday"
   "9:30 - 11:00 on Thursday"
   "Thursday from 9:30 to 11:00"
-  (datetime-interval [2013 2 14 9 30] [2013 2 14 11 01])
+  (datetime-interval [2013 2 14 9 30] [2013 2 14 11 00])
 
   "Thursday from 9a to 11a"
-  (datetime-interval [2013 2 14 9] [2013 2 14 12])
+  (datetime-interval [2013 2 14 9] [2013 2 14 11])
   
   "11:30-1:30" ; go train this rule!
   "11:30-1:30"
@@ -453,7 +453,7 @@
   "11:30-1:30"
   "11:30-1:30"
   "11:30-1:30"
-  (datetime-interval [2013 2 12 11 30] [2013 2 12 13 31])
+  (datetime-interval [2013 2 12 11 30] [2013 2 12 13 30])
 
   "1:30 PM on Sat, Sep 21"
   (datetime 2013 9 21 13 30)
