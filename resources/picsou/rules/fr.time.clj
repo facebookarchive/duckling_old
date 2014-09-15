@@ -125,7 +125,6 @@
   ;;
   ;; This, Next, Last
 
-
   "ce <day-of-week>" ; assumed to be in the future "ce dimanche"
   [#"(?i)ce" {:form :day-of-week}]
   (pred-nth-not-immediate %2 0)

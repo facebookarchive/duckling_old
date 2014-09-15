@@ -265,7 +265,7 @@
   (datetime 2013 2 15 12 :hour 12 :day-of-week 4)
 
 
-;; Involving periods  
+;; Involving periods   ; look for grain-after-shift
   "dans une seconde"
   (datetime 2013 2 12 4 30 1)
   
@@ -291,7 +291,7 @@
   (datetime 2013 2 13 4 30)
   
   "dans un jour"
-  (datetime 2013 2 13 4); look for grain-after-shift
+  (datetime 2013 2 13 4)
   
   "dans 7 jours"
   (datetime 2013 2 19 4)
@@ -419,7 +419,6 @@
   (datetime-interval [2014] [2017]) 
 
   ; Explicit intervals
-
 
   "13-15 juillet"
   "13 au 15 juillet"
