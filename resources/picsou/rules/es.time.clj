@@ -369,7 +369,7 @@
 
   ; a specific version of "el", above, removes :latent for integer as day of month
   ; this one is more general but does not remove latency
-  "le <time>"
+  "el <time>"
   [#"(?i)el" (dim :time #(not (:latent %)))]
   %2
 
@@ -393,5 +393,35 @@
   ;   (:relative-minutes %3))
 
   ; Intervals
+  "dd-dd <month>(interval)"
+  [#"([012]?\d|30|31)" #"(?i)\-|al?" #"([012]?\d|30|31)" #"(?i)de" {:form :month}]
+  (interval (intersect %5 (day-of-month (Integer/parseInt (-> %1 :groups first))))
+            (intersect %5 (day-of-month (Integer/parseInt (-> %3 :groups first))))
+            true)
+
+  "entre dd et dd <month>(interval)"
+  [#"entre( el)?" #"([012]?\d|30|31)" #"y( el)?" #"([012]?\d|30|31)" #"(?i)de" {:form :month}]
+  (interval (intersect %6 (day-of-month (Integer/parseInt (-> %2 :groups first))))
+            (intersect %6 (day-of-month (Integer/parseInt (-> %4 :groups first))))
+            true)
+  
+  ; Blocked for :latent time. May need to accept certain latents only, like hours
+
+  "<datetime> - <datetime> (interval)"
+  [(dim :time #(not (:latent %))) #"\-|al?" (dim :time #(not (:latent %)))]
+  (interval %1 %3 false)
+
+  "de <datetime> - <datetime> (interval)" 
+  [#"(?i)del?" (dim :time) #"\-|al?" (dim :time)]
+  (interval %2 %4 false)
+
+  "entre <datetime> et <datetime> (interval)"
+  [#"(?i)entre" (dim :time) #"y" (dim :time)]
+  (interval %2 %4 false)
+
+  ; Specific for within duration... Would need to be reworked
+  "dentre de <duration>"
+  [#"(?i)dentre de" (dim :duration)]
+  (interval (cycle-nth :second 0) (in-duration (:val %2)) false)
 
 )

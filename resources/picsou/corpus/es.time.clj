@@ -297,10 +297,10 @@
   ; Seasons
 
   "este verano"
-  (datetime-interval [2013 6 21] [2013 9 23])
+  (datetime-interval [2013 6 21] [2013 9 24])
 
   "este invierno"
-  (datetime-interval [2012 12 21] [2013 3 20])
+  (datetime-interval [2012 12 21] [2013 3 21])
 
   ; ES holidays 
 
@@ -317,85 +317,94 @@
 
  ;  ; Part of day (morning, afternoon...)
 
- ;  "esta noche"
- ;  (datetime-interval [2013 2 12 18] [2013 2 13 00])
+  "esta noche"
+  (datetime-interval [2013 2 12 18] [2013 2 13 00])
 
- ;  "mañana por la noche"
- ;  ;"miércoles por la noche"
- ;  (datetime-interval [2013 2 13 18] [2013 2 14 00])
+  "mañana por la noche"
+  ;"miércoles por la noche"
+  (datetime-interval [2013 2 13 18] [2013 2 14 00])
   
- ;  "ayer por la noche"
- ;  (datetime-interval [2013 2 11 18] [2013 2 12 00])  
+  "ayer por la noche"
+  (datetime-interval [2013 2 11 18] [2013 2 12 00])  
   
- ;  "este weekend"
- ;  "este fin de semana"
- ;  (datetime-interval [2013 2 15 18] [2013 2 18 00])
+  "este weekend"
+  "este fin de semana"
+  (datetime-interval [2013 2 15 18] [2013 2 18 00])
 
- ;  "lunes por la mañana"
- ;  (datetime-interval [2013 2 18 4] [2013 2 18 12])
+  "lunes por la mañana"
+  (datetime-interval [2013 2 18 4] [2013 2 18 12])
 
- ;  "15 febrero por la mañana" 
- ;  ;"matinée du 15 février" ;ALEX  
- ;  ;"matinée le 15 février"
- ;  ;"le 15 février le matinée"
- ;  (datetime-interval [2013 2 15 4] [2013 2 15 12])
+  "el 15 de febrero por la mañana" 
+  (datetime-interval [2013 2 15 4] [2013 2 15 12])
 
- ;  "a las 8 de la tarde"
- ;  (datetime 2013 2 12 20)
+  "a las 8 de la tarde"
+  (datetime 2013 2 12 20)
 
- ; ; Intervals involving cycles
-;; "dentro de una semana"
- ;  "pasados 2 segundos"
- ;  (datetime-interval [2013 2 12 4 29 58] [2013 2 12 4 30 00])
+ ; Intervals involving cycles
 
- ;  "proximos 3 segundos"
- ;  (datetime-interval [2013 2 12 4 30 01] [2013 2 12 4 30 04])
+  "pasados 2 segundos"
+  (datetime-interval [2013 2 12 4 29 58] [2013 2 12 4 30 00])
 
- ;  "pasados 2 minutos"
- ;  (datetime-interval [2013 2 12 4 28] [2013 2 12 4 30])
+  "proximos 3 segundos"
+  (datetime-interval [2013 2 12 4 30 01] [2013 2 12 4 30 04])
 
- ;  "proximos 3 minutos"
- ;  (datetime-interval [2013 2 12 4 31] [2013 2 12 4 34])
+  "pasados 2 minutos"
+  (datetime-interval [2013 2 12 4 28] [2013 2 12 4 30])
 
- ;  "proximas 3 horas"
- ;  (datetime-interval [2013 2 12 5] [2013 2 12 8])
+  "proximos 3 minutos"
+  (datetime-interval [2013 2 12 4 31] [2013 2 12 4 34])
 
- ;  "pasados 2 dias"
- ;  (datetime-interval [2013 2 10] [2013 2 12])
+  "proximas 3 horas"
+  (datetime-interval [2013 2 12 5] [2013 2 12 8])
 
- ;  "proximos 3 dias"
- ;  (datetime-interval [2013 2 13] [2013 2 16])
+  "pasados 2 dias"
+  (datetime-interval [2013 2 10] [2013 2 12])
+
+  "proximos 3 dias"
+  (datetime-interval [2013 2 13] [2013 2 16])
     
- ;  "pasadas dos semanas"
- ;  (datetime-interval [2013 1 28 :grain :week] [2013 2 11 :grain :week])
+  "pasadas dos semanas"
+  (datetime-interval [2013 1 28 :grain :week] [2013 2 11 :grain :week])
 
- ;  "3 proximas semanas"
- ;  "3 semanas que vienen"
- ;  (datetime-interval [2013 2 18 :grain :week] [2013 3 11 :grain :week])
+  "3 proximas semanas"
+  "3 semanas que vienen"
+  (datetime-interval [2013 2 18 :grain :week] [2013 3 11 :grain :week])
 
- ;  "pasados 2 meses"
- ;  "dos pasados meses"
- ;  (datetime-interval [2012 12] [2013 02])
+  "pasados 2 meses"
+  "dos pasados meses"
+  (datetime-interval [2012 12] [2013 02])
 
- ;  "3 próximos meses"
- ;  "proximos tres meses"
- ;  "tres meses que vienen"
- ;  (datetime-interval [2013 3] [2013 6])
+  "3 próximos meses"
+  "proximos tres meses"
+  "tres meses que vienen"
+  (datetime-interval [2013 3] [2013 6])
 
- ;  "pasados 2 anos"
- ;  "dos pasados años"
- ;  (datetime-interval [2011] [2013])
+  "pasados 2 anos"
+  "dos pasados años"
+  (datetime-interval [2011] [2013])
   
- ;  "3 próximos años"
- ;  "proximo tres años"
- ;  "3 años que vienen"
- ;  (datetime-interval [2014] [2017]) 
+  "3 próximos años"
+  "proximo tres años"
+  "3 años que vienen"
+  (datetime-interval [2014] [2017]) 
   
- ;  ; Explicit intervals
+  ; Explicit intervals
 
+  "13 a 15 de julio"
+  "13 - 15 de julio de 2013"
+  (datetime-interval [2013 7 13] [2013 7 16])
 
+  "9:30 - 11:00"
+  (datetime-interval [2013 2 12 9 30] [2013 2 12 11])
 
- ;  "a las cuatro de la tarde PST"
- ;  (datetime 2013 2 12 16 :hour 16 :timezone "PST")
+  "21 de Dic. a 6 de Ene"
+  (datetime-interval [2013 12 21] [2014 1 7])
+
+  "dentro de tres horas"
+  (datetime-interval [2013 2 12 4 30 0] [2013 2 12 7 30])
+
+  "a las cuatro de la tarde PST"
+  (datetime 2013 2 12 16 :hour 16 :timezone "PST")
+
 
 )

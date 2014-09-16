@@ -458,6 +458,9 @@
   "1:30 PM on Sat, Sep 21"
   (datetime 2013 9 21 13 30)
   
+  "within 2 weeks"
+  (datetime-interval [2013 2 12 4 30 0] [2013 2 26])
+
   ; Timezones
   
   "4pm CET"
