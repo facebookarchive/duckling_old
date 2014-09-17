@@ -1,7 +1,9 @@
 (
   ; Context map
   ; Tuesday Feb 12, 2013 at 4:30am is the "now" for the tests
-  {:reference-time (time/t 2013 2 12 4 30 0)}
+  {:reference-time (time/t 2013 2 12 4 30 0)
+   :min (time/t 1900)
+   :max (time/t 2100)}
 
   "now"
   "right now"
@@ -436,6 +438,9 @@
 
   "Aug 8 - Aug 12"
   (datetime-interval [2013 8 8] [2013 8 13])
+  
+  "9:30 - 11:00"
+  (datetime-interval [2013 2 12 9 30] [2013 2 12 11 0])
 
   "from 9:30 - 11:00 on Thursday"
   "between 9:30 and 11:00 on thursday"

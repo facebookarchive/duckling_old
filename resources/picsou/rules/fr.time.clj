@@ -6,39 +6,39 @@
   (intersect %1 %2)
 
   ; same thing, with "de" in between like "mardi de la semaine dernière"
-  "two time tokens separated by `de`"
-  [(dim :time #(not (:latent %))) #"(?i)de" (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
+  "two time tokens separated by 'de' or ','"
+  [(dim :time #(not (:latent %))) #"(?i)de|," (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
   
    ;;;;;;;;;;;;;;;;;;;
   ;; Named things
 
   "named-day"
-  #"(?i)lundi|lun\.?"
+  #"(?i)lun\.?(di)?"
   (day-of-week 1)
 
   "named-day"
-  #"(?i)mardi|mar|mar\."
+  #"(?i)mar\.?(di)?"
   (day-of-week 2)
 
   "named-day"
-  #"(?i)mercredi|mer|mer\."
+  #"(?i)mer\.?(credi)?"
   (day-of-week 3)
 
   "named-day"
-  #"(?i)jeudi|jeu|jeu\."
+  #"(?i)jeu\.?(di)?"
   (day-of-week 4)
 
   "named-day"
-  #"(?i)vendredi|ven|ven\."
+  #"(?i)ven\.?(dredi)?"
   (day-of-week 5)
 
   "named-day"
-  #"(?i)samedi|sam|sam\."
+  #"(?i)sam\.?(edi)?"
   (day-of-week 6)
 
   "named-day"
-  #"(?i)dimanche|dim|dim\."
+  #"(?i)dim\.?(anche)?"
   (day-of-week 7)
 
   "named-month"
@@ -186,6 +186,10 @@
   "<day-of-month> <named-month>" ; 12 mars
   [(integer 1 31) {:form :month}]
   (intersect %2 (day-of-month (:val %1)))
+  
+  "<day-of-week> <day-of-month>" ; vendredi 13
+  [{:form :day-of-week} (integer 1 31)]
+  (intersect %1 (day-of-month (:val %2)))
 
 
   ;; hours and minutes (absolute time)

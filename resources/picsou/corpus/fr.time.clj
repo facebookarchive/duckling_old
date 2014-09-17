@@ -436,8 +436,15 @@
 
   ;TO BE ADDRESSED
   ;"à partir de 9h30 jeudi"
-  ;14 – 20 sept. 2014
-  ;ven., 19 septembre, 11am – 12pm
+  
+  "14 - 20 sept. 2014"
+  (datetime-interval [2014 9 14] [2014 9 21])
+  
+  ; Alex: need special rule to say that 11h is not ambiguous, because of midi
+  ; "ven., 19 septembre, 11h - midi"
+  ; (datetime-interval [2014 9 19 11] [2014 9 19 12])
+  ; "11h30-13h30" ; TODO
+  ; (datetime-interval [2013 2 12 11 30] [2013 2 12 13 30])
 
   "d'ici 2 semaines"
   (datetime-interval [2013 2 12 4 30 0] [2013 2 26])
@@ -445,26 +452,19 @@
   "de 5 à 7"
   (datetime-interval [2013 2 12 5] [2013 2 12 7])
 
-  "jeudi de 9h à 11h" ; ALEX
+  "jeudi de 9h à 11h"
   (datetime-interval [2013 2 14 9] [2013 2 14 11])
   
   "entre midi et 2"
   (datetime-interval [2013 2 12 12] [2013 2 12 14])
 
-  "11h30-1h30" ; go train this rule!
   "11h30-1h30"
-  "11h30-1h30"
-  "11h30-1h30"
-  "11h30-1h30"
-  "11h30-1h30"
+  "de 11h30 à 1h30"
+  "de 11h30 jusqu'à 1h30"
   (datetime-interval [2013 2 12 11 30] [2013 2 12 13 30])
-
-  ; "11h30-13h30" ; ALEX
-  ; (datetime-interval [2013 2 12 11 30] [2013 2 12 13 31])
   
   "13h30 samedi 21 septembre"
    (datetime 2013 9 21 13 30)
-
   
   "à seize heures PST"
   (datetime 2013 2 12 16 :hour 16 :timezone "PST")

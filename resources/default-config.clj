@@ -25,18 +25,18 @@
                     "en.temperature"
                     "en.finance"
                     "en.communication"]}
-:es$core {:corpus ["es.time"
- ;                    "es.numbers"
- ;                    "es.temperature"
- ;                    "es.finance"
- ;                    "en.communication"
-                  ]
-            :rules ["es.time"
-                    "es.numbers"
-                    "es.cycles"
-                    "es.duration"
- ;                   "es.temperature"
- ;                   "en.finance"
- ;                   "en.communication"
-                    ]}
+; :es$core {:corpus ["es.time"
+;  ;                    "es.numbers"
+;  ;                    "es.temperature"
+;  ;                    "es.finance"
+;  ;                    "en.communication"
+;                   ]
+;             :rules ["es.time"
+;                     "es.numbers"
+;                     "es.cycles"
+;                     "es.duration"
+;  ;                   "es.temperature"
+;  ;                   "en.finance"
+;  ;                   "en.communication"
+;                     ]}
  }

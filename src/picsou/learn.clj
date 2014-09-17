@@ -1,5 +1,6 @@
 (ns picsou.learn
-  (:use clojure.tools.logging)
+  (:use [clojure.tools.logging]
+        [clojure.pprint :only [pprint]])
   (:require
     [picsou.time :as time]
     [picsou.engine :as engine]
@@ -12,10 +13,13 @@
 (defn extract-route-features
   "Extracts names of previous routes used to produce this route token.
    This is the feature extractor we use."
+   ; FIXME the grain feature should be moved to the time module
   [token]
-  (->> (list (reduce str (map #(get-in % [:rule :name]) (:route token))))
-       (keep identity)
-       vec))
+  (let [rules (reduce str (map #(get-in % [:rule :name]) (:route token)))
+        time-tokens (filter #(= :time (:dim %)) (:route token))
+        grains (when (< 0 (count time-tokens))
+                 (reduce str (map #(-> % :pred meta :grain) time-tokens)))]
+    (filter identity [rules grains])))
 
 (defn simple-feature-extractor
   "A very simple one to show if it works. Not used for now.
@@ -64,9 +68,10 @@
              (update-in ds [(-> tok :rule :name)]
                         #(conj % [(feature-extractor tok) false])))
         final-dataset (reduce f2 dataset-updated-with-positives tokens-ko)]
-    #_(when (= s "from 9:30 - 11:00 on Thursday")
+    #_(when (= s "de 9h30 jusqu'à 11h jeudi")
       (prn (count fc-tokens-ok) (count fc-tokens-ko))
-      (prn final-dataset))
+      (doseq [t tokens-ok]
+        (prn (-> t :rule :name) (extract-route-features t))))
     final-dataset))
 
 (defn corpus->dataset
