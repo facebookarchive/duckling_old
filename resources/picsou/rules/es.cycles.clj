@@ -70,21 +70,21 @@
 
   "pasados n <cycle>"
   [#"(?i)pasad(a|o)s?" (integer 2 9999) (dim :cycle)]
-  (cycle-n-not-immediate (:grain %3) (- (:val %2)) (:val %2))
+  (cycle-n-not-immediate (:grain %3) (- (:val %2)))
 
   "n pasados <cycle>"
   [(integer 2 9999) #"(?i)pasad(a|o)s?" (dim :cycle)]
-  (cycle-n-not-immediate (:grain %3) (- (:val %1)) (:val %1))
+  (cycle-n-not-immediate (:grain %3) (- (:val %1)))
   
   "proximas n <cycle>"
   [#"(?i)pr(ó|o)xim(o|a)s?" (integer 2 9999) (dim :cycle)]
-  (cycle-n-not-immediate (:grain %3) 1 (:val %2))
+  (cycle-n-not-immediate (:grain %3) (:val %2))
 
   "n proximas <cycle>"
   [(integer 2 9999) #"(?i)pr(ó|o)xim(o|a)s?" (dim :cycle)]
-  (cycle-n-not-immediate (:grain %3) 1 (:val %1))
+  (cycle-n-not-immediate (:grain %3) (:val %1))
 
   "n <cycle> (proximo|que viene)"
   [(integer 2 9999) (dim :cycle) #"(?i)(pr(ó|o)xim(o|a)s?|que vienen?|siguientes?)"]
-  (cycle-n-not-immediate  (:grain %2) 1 (:val %1))
+  (cycle-n-not-immediate  (:grain %2) (:val %1))
 )

@@ -436,6 +436,11 @@
 
   ;TO BE ADDRESSED
   ;"à partir de 9h30 jeudi"
+  ;14 – 20 sept. 2014
+  ;ven., 19 septembre, 11am – 12pm
+
+  "d'ici 2 semaines"
+  (datetime-interval [2013 2 12 4 30 0] [2013 2 26])
 
   "de 5 à 7"
   (datetime-interval [2013 2 12 5] [2013 2 12 7])

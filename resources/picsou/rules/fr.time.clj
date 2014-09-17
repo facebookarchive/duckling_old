@@ -188,8 +188,6 @@
   (intersect %2 (day-of-month (:val %1)))
 
 
-
-
   ;; hours and minutes (absolute time)
   "<integer> (latent time-of-day)"
   (integer 0 23)
@@ -390,5 +388,10 @@
   "entre <time-of-day> et <time-of-day> (interval)"
   [#"(?i)entre" {:form :time-of-day} #"et" {:form :time-of-day}]
   (interval %2 %4 false)
+
+  ; Specific for within duration... Would need to be reworked to adapt the grain
+  "d'ici <duration>"
+  [#"(?i)d'ici" (dim :duration)]
+  (interval (cycle-nth :second 0) (in-duration (:val %2)) false)
 
 )

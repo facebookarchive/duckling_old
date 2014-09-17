@@ -445,6 +445,12 @@
   "between <time-of-day> and <time-of-day> (interval)"
   [#"(?i)between" {:form :time-of-day} #"and" {:form :time-of-day}]
   (interval %2 %4 true)
+
+  ; Specific for within duration... Would need to be reworked
+  "within <duration>"
+  [#"(?i)within" (dim :duration)]
+  (interval (cycle-nth :second 0) (in-duration (:val %2)) false)
+
     ; ;; In this special case, the upper limit is exclusive
   ; "<hour-of-day> - <hour-of-day> (interval)"
   ; [{:form :time-of-day} #"-|to|th?ru|through|until" #(and (= :time-of-day (:form %))
