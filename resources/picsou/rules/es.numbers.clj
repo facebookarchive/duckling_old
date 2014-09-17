@@ -77,6 +77,11 @@
   {:dim :number
    :val (parse-number-fr (first (:groups %1)))}
 
+  "number dot number"
+  [(dim :number #(not (:number-prefixed %))) #"(?i)punto" (dim :number #(not (:number-suffixed %)))]
+  {:dim :number
+   :val (+ (* 0.1 (:val %3)) (:val %1))}
+
   "decimal with thousands separator"
   #"(\d+(\.\d\d\d)+,\d+)"
   {:dim :number

@@ -16,6 +16,7 @@
  :en$core {:corpus ["en.time"
                     "en.numbers"
                     "en.temperature"
+                    "en.measure"
                     "en.finance"
                     "en.communication"]
            :rules  ["en.time"
@@ -23,6 +24,7 @@
                     "en.cycles"
                     "en.duration"
                     "en.temperature"
+                    "en.measure"
                     "en.finance"
                     "en.communication"]}
 ; :es$core {:corpus ["es.time"

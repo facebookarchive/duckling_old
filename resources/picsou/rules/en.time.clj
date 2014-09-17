@@ -188,6 +188,14 @@
   "last <time>"
   [#"(?i)last" (dim :time)]
   (pred-nth %2 -1)
+
+  "<time> after next"
+  [(dim :time) #"(?i)after next"]
+  (pred-nth %1 2)
+
+   "<time> before last"
+  [(dim :time) #"(?i)before last"]
+  (pred-nth %1 -2)
   
   ; Years
   ; Between 1000 and 2100 we assume it's a year

@@ -43,7 +43,7 @@
   ;  :grain (:grain %2)}
 
   "<integer> <unit-of-duration>"
-  [(integer) (dim :unit-of-duration)]
+  [(integer 0) (dim :unit-of-duration)]; duration can't be negative...
   {:dim :duration
    :val (duration (:grain %2) (:val %1))}
     

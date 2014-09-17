@@ -30,5 +30,6 @@
   (fn [token]
     (and (= :number (:dim token))
          (:integer token)
-         (or (nil? min) (<= min (:val token) max))
+         (or (nil? min) (<= min (:val token)))
+         (or (nil? max) (<= (:val token) max))
          (every? #(% token) predicates))))

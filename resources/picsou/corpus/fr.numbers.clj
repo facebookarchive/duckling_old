@@ -80,6 +80,12 @@
 
   "1er"
   "1ere"
-  (number 1)
+  (ordinal 1)
+
+  "3eme"
+  "3ème"
+  "troisième"
+  "troisieme"
+  (ordinal 3)
 
   )
