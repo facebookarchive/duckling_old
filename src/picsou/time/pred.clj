@@ -31,7 +31,7 @@
 
 ; Limit the space search beam
 
-(def safe-max 10)
+(def safe-max 100)
 (def safe-max-interval 12)
 
 ;; Debug utlity
