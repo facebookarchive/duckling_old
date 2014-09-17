@@ -355,9 +355,10 @@
           (->> (vector ahead first-behind)
                (remove nil?)
                ; FIXME use timezone in resolution instead of just adding the field
-               (?>> timezone map #(assoc % :timezone timezone)))))
+               (?>> timezone map #(assoc % :timezone timezone))
+               (map #(assoc token :value %)))))
       
-      [(:val token)]) ; default for other dims
+      [token]) ; default for other dims
     (catch Throwable e
       (.printStackTrace e)
       (print-token token)

@@ -38,27 +38,23 @@
 [(dim :unit) (dim :number)]
 {:dim :amount-of-money
  :val {:amount (:val %2)
- 	   :unit (:unit %1)}}
+ 	   :unit (:unit %1)
+       :fields {(:unit %1) (:val %2)}}}
 
 "<amount> <unit>"
 [(dim :number) (dim :unit)]
 {:dim :amount-of-money
  :val {:amount (:val %1)
- 	   :unit (:unit %2)}}
+ 	   :unit (:unit %2)
+       :fields {(:unit %1) (:val %2)}}}
 
 ;precision for "about $15"
 "about <amount-of-money>"
 [#"(?i)about|approx(\.|imately)?|close to|near( to)?|around|almost" (dim :amount-of-money)]
-{:dim :amount-of-money
- :val {:amount (-> %2 :val :amount)
- 	   :unit (-> %2 :val :unit)
- 	   :precision false}}
+(assoc %2 :precision "approximate")
 
 "exactly <amount-of-money>"
 [#"(?i)exactly|precisely" (dim :amount-of-money)]
-{:dim :amount-of-money
- :val {:amount (-> %2 :val :amount)
- 	   :unit (-> %2 :val :unit)
- 	   :precision true}}
+(assoc %2 :precision "exact")
 
 )

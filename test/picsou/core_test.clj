@@ -4,28 +4,28 @@
   (:require [picsou.time :as time]
             [clojure.java.io :as io]))
 
-(def tokens (map (fn [x] {:v x}) (range 10)))
+(def tokens (map (fn [x] {:pred x}) (range 10)))
 
 ; partial order where odd and even numbers are compared naturally between them,
 ; but an odd number and an even number are not comparable
 
 (defn compare-fn [a b]
-  (if (= (mod (:v a) 2) (mod (:v b) 2))
-    (compare (:v a) (:v b))
+  (if (= (mod (:pred a) 2) (mod (:pred b) 2))
+    (compare (:pred a) (:pred b))
     nil))
 
-; the token with value 8 is not resolved, all others are
+; the token with pred 8 is not resolved, all others are
 
 (defn resolve-fn [a]
-  (if (= 8 (:v a))
-    [(assoc a :not-resolved true)]
+  (if (= 8 (:pred a))
+    [a]
     [(assoc a :value "ok")]))
 (def select-winners' @#'picsou.core/select-winners)
 
 ; the actual test now
 
 (deftest select-winners-test
-  (is (= '({:value "ok", :v 9} {:value "ok", :v 6})
+  (is (= '({:value "ok", :pred 9} {:value "ok", :pred 6})
          (select-winners' compare-fn resolve-fn tokens))))
 
 

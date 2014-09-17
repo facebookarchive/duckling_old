@@ -65,6 +65,7 @@
   "Create a temp condition"
   [val & [unit precision]]
   (fn [_ {:keys [dim value] :as token}] 
+    (prn value)
     (not (and
                   (= :temperature dim)
                   (== val (-> value :temperature))

@@ -1,6 +1,5 @@
 (ns picsou.core
-  (:use [picsou.helpers]
-        [clojure.tools.logging :exclude [trace]]
+  (:use [clojure.tools.logging :exclude [trace]]
         [plumbing.core])
   (:require [clojure.string :as strings]
             [picsou.engine :as engine]
@@ -67,7 +66,7 @@
                               (concat already-selected candidates))
             new-winners (->> maxima
                              (mapcat resolve-fn)
-                             (remove :not-resolved))]
+                             (filter :value))] ; remove unresolved
         (if (seq maxima)
           (recur compare-fn resolve-fn others (concat already-selected new-winners))
           already-selected))

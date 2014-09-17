@@ -6,8 +6,8 @@
   3. tokens containing final info are produced using their production rules"
   (:require [clojure.set :as sets]
             [picsou.time.prod]
-            [picsou.util :as util]
-            [clj-time.coerce :as coerce]))
+            [picsou.time.api :as time]
+            [picsou.util :as util]))
 
 ;;
 ;; Lookup and basic matching functions, used by patterns in rules
@@ -210,13 +210,10 @@
 (defn resolve-token
   "Resolve a token based on its dimension, predicate, and the context.
   Returns a coll of tokens, since they can have multiple resolutions, or none.
-  Unresolved tokens are returned as is.
-  Fields are put at the :value level for all dims"
+  Unresolved tokens are returned as is, without a :value key."
   [token context module]
-  (let [values (picsou.time.pred/resolve token context)] ; ns should be dynamic based on dim ; or better use a protocol
-    (if-not (empty? values)
-      (map #(assoc token :value %) values)
-      [(assoc token :not-resolved true)]))) ; return token if not resolved with flag
+  ; TODO ns should be dynamic based on dim ; or better use a protocol
+  (time/resolve token context))
 
 (defn estimate-confidence
   "Returns the tokens with :confidence a rough confidence estimation for each.
