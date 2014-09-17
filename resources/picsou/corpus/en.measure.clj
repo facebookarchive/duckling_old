@@ -18,7 +18,7 @@
 	(distance 9 "m")
 
 	"2cm"
-	"2 centímetros"
+	"2 centimeters"
 	(distance 2 "centimeters")
 
 	; Volume
@@ -34,10 +34,10 @@
 	"3 gal"
 	(volume 11.355 "litre")
 
-	"3 hectolitros"
+	"3 hectoliters"
 	(volume 300 "litre")
 
-	"medio litro"
+	"half liter"
 	(volume 0.5 "litre")
 
 	; Quantity
@@ -49,5 +49,8 @@
 	 
 	"a meat"
 	(quantity 1 nil "meat")
+
+	"3 cups of sugar"
+	(quantity 3 "cup" "sugar")
 )
 
