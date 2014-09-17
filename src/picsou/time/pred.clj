@@ -13,6 +13,7 @@
   `(with-meta
      (fn ~args
        (assert (and (:start ~t) (:grain ~t)) (format "Invalid t argument provided to predicate: %s" ~t))
+       (assert (:max ~ctx) "Invalid context, missing :max")
        ~@forms)
      {:grain ~grain})))
 
@@ -27,6 +28,11 @@
      (concat
       (f (first coll))
       (my-mapcat f (rest coll))))))
+
+; Limit the space search beam
+
+(def safe-max 10)
+(def safe-max-interval 12)
 
 ;; Debug utlity
 
@@ -140,27 +146,36 @@
          grain (-> pred2 meta :grain)] ; finer grain
      (fn& grain [t ctx]
           ;(prn t (-> pred1 meta :grain) (-> pred2 meta :grain))
+          ;(prn t (:max ctx) (:min ctx))
           (let [;; take the sequence of pred1 forward and backward
-                   [seq1-f seq1-b] (pred1 t ctx) 
+                   [seq1-f seq1-b] (pred1 t ctx)
                    
                    ;; clojure.core/mapcat uses apply which breaks lazyness
                    fwd (my-mapcat (fn [time1] ;(infof "hi %s" time1)
-                                    (->> (first (pred2 time1 ctx))
-                                         (take 12)
+                                    (->> (first (pred2 time1 (assoc ctx :max time1 :min time1)))
+                                         (take safe-max)
                                          (take-while #(t/start-before-the-end-of? % time1))
                                          (map #(t/intersect time1 %))
                                          (remove nil?)))
-                                  (take 12 seq1-f)) ;; we need a safety net for impossible combinations
+                                  (take safe-max (take-while #(t/start-before-the-end-of? % (:max ctx)) seq1-f))) ;; we need a safety net for impossible combinations
                    bwd (my-mapcat (fn [time1] 
-                                    (->> (first (pred2 time1 ctx))
-                                         (take 12)
+                                    (->> (first (pred2 time1 (assoc ctx :max time1 :min time1)))
+                                         (take safe-max)
                                          (take-while #(t/start-before-the-end-of? % time1))
                                          (map #(t/intersect time1 %))
                                          (remove nil?)))
-                                  (take 12 seq1-b))]
-              [(take 12 fwd) (take 12 bwd)])))) ; this safety net should not be necessary
+                                  (take safe-max (take-while #(t/start-before-the-end-of? (:min ctx) %) seq1-b)))]
+              [(take safe-max fwd) (take safe-max bwd)])))) ; this safety net should not be necessary
   ([pred1 pred2 & more]
      (compose (compose pred1 pred2) (apply compose more))))
+
+; (defn compose-2
+;   ""
+;   [pred1 pred2]
+;   (let [grain (max-key t/grain-order (-> pred1 meta :grain) (-> pred2 meta :grain))]
+;     (fn& grain [t ctx]
+;          (let [a (loop [[head1 & more1 :as seq1] (pred1 )])]))
+;     (loop [])))
 
 (defn take-the-nth ; TODO base-time-pred should actually use seq-map
   "Builds a predicate with only the nth time slot of a presumably cyclical pred after ref-time,
@@ -243,43 +258,46 @@
   intervals though, or it would be much harder to maintain lazyness."
   [f pred & [dont-reverse?]]
   (fn& (-> pred meta :grain) [t ctx] (let [;; take the sequence of pred forward and backward
-                 [seq1-f seq1-b] (pred t ctx) 
+                 [seq1-f seq1-b] (pred t ctx) ; FIXME TOO RESTRICTIVE, AFTER APPLYING F IT WILL MOVE
+                 
+                 ;_ (prn "map" t (:min ctx) (:max ctx) (when (first seq1-f) (f (first seq1-f) ctx)))
+                 
+                 ;seq1-f (take-while #(t/start-before-the-end-of? % (:max ctx)) seq1-f)
+                 ;seq1-b (take-while #(t/start-before-the-end-of? (:min ctx) %) seq1-b)
+                  
                  ;; times moved from behind to ahead
                  bh-ah (->> seq1-b
-                            (take 12)
+                            (take safe-max-interval)
                             (map #(f % ctx))
                             (remove nil?)
                             (take-while #(t/start-before-the-end-of? t %))
-                            (take 12) ; because reverse is not lazy
                             (?>> (not dont-reverse?) reverse))
                  
                  ; times remaining ahead
                  ah-ah (->> seq1-f
-                         (take 12)
+                         (take safe-max-interval)
                          (map #(f % ctx))
                          (remove nil?)
-                         ;(take 12) ; because everything may be filtered out
-                         (filter #(t/start-before-the-end-of? t %)))
+                         (drop-while #(not (t/start-before-the-end-of? t %)))
+                         (take-while #(t/start-before-the-end-of? % (:max ctx))))
                  
                  ahead (concat bh-ah ah-ah)
                  
                  ;; times moved from ahead to behind
                  ah-bh (->> seq1-f
-                            (take 12)
+                            (take safe-max-interval)
                             (map #(f % ctx))
                             (remove nil?)
                             (take-while #(not (t/start-before-the-end-of? t %)))
-                            (take 12)
                             (?>> (not dont-reverse?) reverse))
                  
                  ; times remaining behing
                  bh-bh (->> seq1-b
-                         (take 12)
+                         (take safe-max-interval)
                          (map #(f % ctx))
                          (remove nil?)
-                         ;(<- doto prn)
-                         (take 12)
-                         (filter #(not (t/start-before-the-end-of? t %))))
+                         (drop-while #(t/start-before-the-end-of? t %))
+                         (take-while #(t/start-before-the-end-of? (:min ctx) %)))
                  
                  behind (concat ah-bh bh-bh)]
             [ahead behind])))
@@ -327,9 +345,10 @@
       :time
       (do
         (assert pred (format "Cannot resolve token without pred: %s" token))
+        
         ; we use ref-time twice
         ; as the first arg of pred, it's just as a lookup starting point
-        (let [[[first-ahead second-ahead] [first-behind]] (pred reference-time context)
+        (let [[[first-ahead second-ahead] [first-behind]] (pred reference-time (assoc context :max (t/t 3000) :min (t/t 1000)))
               ahead (if (and not-immediate (t/intersect first-ahead reference-time))
                       second-ahead
                       first-ahead)]
@@ -347,5 +366,10 @@
 ; Debug utlity
 
 (defn show [f]
-  (prn (take 5 (first (f (t/t 2013 2 12 4 30) {:reference-time (t/t 2013 2 12 4 30)}))))
-  (prn (take 5 (second (f (t/t 2013 2 12 4 30) {:reference-time (t/t 2013 2 12 4 30)})))))
+  (time
+    (let [now (t/t 2013 2 12 4 30)
+          ctx {:reference-time (t/t 2013 2 12 4 30)
+               :min (t/t 2000)
+               :max (t/t 2018)}]
+      (prn (take 5 (first (f now ctx))))
+      (prn (take 5 (second (f now ctx)))))))
