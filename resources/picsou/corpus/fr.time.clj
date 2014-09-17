@@ -454,9 +454,17 @@
   "11h30-1h30" ; go train this rule!
   "11h30-1h30"
   "11h30-1h30"
-  "11h30-1h30"
-  "11h30-1h30"
-  "11h30-1h30"
+  "de 11h30 à 1h30"
+  "de 11h30 à 1h30"
+  "de 11h30 jusqu'à 1h30"
+  "de 11h30 jusqu'à 1h30"
+  "de 11h30 jusqu'à 1h30"
+  "de 11h30 jusqu'à 1h30"
+  "de 11h30 jusqu'à 1h30"
+  "de 11h30 jusqu'à 1h30"
+  "de 11h30 jusqu'à 1h30"
+  "de 11h30 jusqu'à 1h30"
+  "de 11h30 jusqu'à 1h30"
   (datetime-interval [2013 2 12 11 30] [2013 2 12 13 30])
 
   ; "11h30-13h30" ; ALEX
