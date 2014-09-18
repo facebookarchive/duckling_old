@@ -108,6 +108,10 @@
   "christmas"
   #"(?i)(xmas|christmas)( day)?"
   (month-day 12 25)
+
+  "christmas eve"
+  #"(?i)(xmas|christmas)( day)?('s)? eve"
+  (month-day 12 24)
   
   "new year's eve"
   #"(?i)new year'?s? eve"

@@ -73,11 +73,12 @@
 
 (defn distance
   "Create a distance condition"
-  [val & [unit precision]]
+  [val & [unit normalized precision]]
   (fn [_ {:keys [dim value] :as token}] (not (and
                   (= :distance dim)
-                  (== val (-> value :distance))
+                  (== value (-> value :distance))
                   (= unit  (-> value :unit))
+                  (= normalized (-> value :normalized))
                   (= precision (-> value :precision))))))
 
 (defn money
@@ -116,11 +117,24 @@
 
 (defn volume
   "Create a volume condition"
-  [value & [unit]]
+  [value unit & [normalized]]
   (fn [token _] (and
                   (= :volume (:dim token))
-                  (== value (-> token :val :volume))
-                  (= unit  (-> token :val :unit)))))
+                  (= value (-> token :value :value))
+                  (= unit  (-> token :value :unit))
+                  (= normalized (-> token :value :normalized)))))
+
+
+(defn integer
+  "Return a func (picsou pattern) checking that dim=number and integer=true,
+  optional range (inclusive), and additional preds"
+  [& [min max & predicates]]
+  (fn [token]
+    (and (= :number (:dim token))
+         (:integer token)
+         (or (nil? min) (<= min (:value token)))
+         (or (nil? max) (<= (:value token) max))
+         (every? #(% token) predicates))))
 
 (defn corpus
   "Parse corpus" ;; TODO should be able to load several files, like rules

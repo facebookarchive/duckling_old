@@ -6,38 +6,45 @@
 	(dim :number)
 	{:dim :distance
 	 :latent true
-	 :value {:distance (:value %1)}}
+	 :value (:value %1)}
+
+	 ; :value {:distance (:value %1)}}
 
 	"<latent dist> km"
 	[(dim :distance) #"(?i)k(ilo)?m?(eter)?s?"]
 	(-> %1
 	    (dissoc  :latent)
-	    (assoc-in [:value :distance] (* 1000 (-> %1 :value :distance)))
-	    (assoc-in [:value :unit] "meters"))
+	   	(merge {:unit "kilometre"
+	    		:normalized {:value (* 1000 (-> %1 :value))
+	    					 :unit "metre"}}))
 
 	"<dist> meters"
 	[(dim :distance) #"(?i)meters?"]
 	(-> %1
-	    (assoc-in [:value :unit] "meters")
-	    (dissoc :latent))
+	    (dissoc  :latent)
+	   	(merge {:unit "metre"}))
 
 	"<dist> centimeters"
 	[(dim :distance) #"(?i)cm|centimeters?"]
 	(-> %1
-	    (assoc-in [:value :unit] "centimeters")
-	    (dissoc :latent))
+	    (dissoc  :latent)
+	   	(merge {:unit "centimetre"
+	    		:normalized {:value (* 0.01 (-> %1 :value))
+	    					 :unit "metre"}}))
 
 	"<dist> miles"
 	[(dim :distance) #"(?i)miles?"]
 	(-> %1
-	    (assoc-in [:value :unit] "miles")
-	    (dissoc :latent))
+	    (dissoc :latent)
+	   	(merge {:unit "mile"
+	    		:normalized {:value (* 1609 (-> %1 :value))
+	    					 :unit "metre"}}))
 
 	"<dist> m (ambiguous miles or meters)"
 	[(dim :distance) #"(?i)m"]
 	(-> %1
-	    (assoc-in [:value :unit] "m")
-	    (dissoc :latent))
+	    (dissoc :latent)
+	   	(merge {:unit "m"}))
 
 	;; volume
 
@@ -46,40 +53,44 @@
 	(dim :number)
 	{:dim :volume
 	 :latent true
-	 :value {:volume (:value %1)}}
+	 :value (:value %1)}
 
 	 "<latent vol> ml"
 	[(dim :volume) #"(?i)m(l|illilit(er|re)s?)"]
 	(-> %1
 	    (dissoc  :latent)
-	    (assoc-in [:value :volume] (* 0.001 (-> %1 :value :volume)))
-	    (assoc-in [:value :unit] "litre"))  ;International spelling as used by the International Bureau of Weights 
+	    (merge {:unit "millilitre"
+	    		:normalized {:value (* 0.001 (-> %1 :value))
+	    					 :unit "litre"}}))
 
-	 "<vol> hectolitres"
+	 "<vol> hectoliters"
 	[(dim :volume) #"(?i)hectolit(er|re)s?"]
 	(-> %1
 	    (dissoc  :latent)
-	    (assoc-in [:value :volume] (* 100 (-> %1 :value :volume)))
-	    (assoc-in [:value :unit] "litre"))
+	   	(merge {:unit "hectolitre"
+	    		:normalized {:value (* 100 (-> %1 :value))
+	    					 :unit "litre"}}))
 
-	"<vol> litre"
+	"<vol> liters"
 	[(dim :volume) #"(?i)l(it(er|re)s?)?"]
 	(-> %1
-	    (assoc-in [:value :unit] "litre")
-	    (dissoc :latent))
-
+	    (dissoc  :latent)
+	   	(merge {:unit "litre"}))
+	
 	"half liter"
 	[#"(?i)half lit(er|re)"]
-	{:dim :volume
-	 :value {:volume 0.5 :unit "litre"}}
+	(-> %1
+	    (dissoc  :latent)
+	   	(merge {:unit "litre"
+	   			:value 0.5}))
 
 	"<latent vol> gallon"
 	[(dim :volume) #"(?i)gal(l?ons?)?"]
 	(-> %1
 	    (dissoc  :latent)
-	    (assoc-in [:value :volume] (* 3.785 (-> %1 :value :volume)))
-	    (assoc-in [:value :unit] "litre"))
-
+	    (merge {:unit "gallon"
+	    		:normalized {:value (* 3.785 (-> %1 :value))
+	    					 :unit "litre"}}))
 	;; Quantity
   
 	; three teaspoons
