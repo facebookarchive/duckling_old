@@ -12,7 +12,8 @@
                  [clj-time "0.4.4"]
                  [prismatic/plumbing "0.1.0"]]
   :deploy-repositories [["private" {:url "s3p://wit-ai/releases" :username :env :passphrase :env :sign-releases false}]]
-  :profiles {:dev {:dependencies [[org.clojure/tools.trace "0.7.6"]]}
+  :profiles {:dev {:dependencies [[org.clojure/tools.trace "0.7.6"]
+                                  [cheshire "5.3.1"]]}
              :uberjar {:aot [picsou.core]}}
   :test-selectors {:default (complement :benchmark)
                    :benchmark :benchmark})
