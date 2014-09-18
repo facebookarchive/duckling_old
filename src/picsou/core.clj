@@ -72,7 +72,7 @@
           already-selected))
       already-selected)))
 
-(defn- parse
+(defn parse
   "Parse a sentence. Returns the stash and a curated list of winners.
    Targets is a coll of {:dim dim :label label} : only winners of these dims are
    kept, and they receive a :label key = the label provided.

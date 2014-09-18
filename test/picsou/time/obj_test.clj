@@ -7,7 +7,10 @@
 (deftest obj-test
   (testing "rounding"
     (is (= (t 2014) (round today :year)))
-    (is (= (t 2014 8 30) (round today :day)))))
+    (is (= (t 2014 8 30) (round today :day))))
+  (testing "days in month"
+    (is (= 31
+           (days-in-month today)))))
 
 (deftest period-test
   (testing "adding"

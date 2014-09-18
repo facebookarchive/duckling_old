@@ -30,7 +30,12 @@
 	               :value (date->str (:start value))
 	               :grain (:grain value)})
      
-     :quantity (select-keys token [:value :unit :product])
+      :duration (let [[[unit val] & more] (seq value)
+                      add-fields (when-not more {:value val
+                                                 :unit unit})]
+                  (merge value add-fields))
+     
+      :quantity (select-keys token [:value :unit :product])
 	    
 	    value))) ; keep value as is for other dims
 

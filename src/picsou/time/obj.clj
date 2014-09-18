@@ -21,7 +21,7 @@
              :day [2 time/day time/days]
              :hour [3 time/hour time/hours]
              :minute [4 time/minute time/minutes]
-             :second [5 time/sec time/secs]})
+             :second [5 time/second time/seconds]})
 
 ; for grain ordering
 (def grain-order (into {} (map vector
@@ -34,7 +34,7 @@
                     :day time/days
                     :hour time/hours
                     :minute time/minutes
-                    :second time/secs})
+                    :second time/seconds})
 
 (defn valid? [{:keys [start grain end] :as t}]
   (and (instance? org.joda.time.DateTime start)
@@ -111,6 +111,10 @@
   "Returns the day of week of a time grain"
   (time/day-of-week (-> t :start)))
 
+(defn day [t]
+  "Returns the day of month"
+  (time/day (:start t)))
+
 (defn hour [t]
   (time/hour (-> t :start)))
 
@@ -118,7 +122,7 @@
   (time/minute (:start t)))
 
 (defn ->fields [{:keys [start] :as t}]
-  [(time/year start) (time/month start) (time/day start) (time/hour start) (time/minute start) (time/sec start)])
+  [(time/year start) (time/month start) (time/day start) (time/hour start) (time/minute start) (time/second start)])
 
 (defn plus
   "Add n grain to tt.
@@ -158,9 +162,14 @@
   (let [t2-end (end t2)]
     (time/before? (:start t1) t2-end)))
 
+(defn days-in-month [tt]
+  "Returns the number of days in the month of tt"
+  (time/day (time/last-day-of-the-month (:start tt))))
+
 ; only for debug purpose!
 (defn now []
   {:start (time/now) :grain :second})
+
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ; Periods

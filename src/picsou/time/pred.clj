@@ -91,14 +91,25 @@
              [(iterate #(t/plus % :year 1) anchor)
               (next (iterate #(t/minus % :year 1) anchor))])))
 
-(defn day-of-month [dom]
-  (fn& :day [t _] (let [rounded (t/t (t/year t) (t/month t) dom)
-                anchor (if (t/start-before-the-end-of? t rounded)
-                         rounded
-                         (t/plus rounded :month 1))]
-            [(iterate #(t/plus % :month 1) anchor)
-             (next (iterate #(t/minus % :month 1) anchor))])))
+; day-of-month is tricky for values 29, 30 and 31 that are not always valid
+; also, adding 1-month steps doesn't work because (Aug 31) + 1-month = (Sep 30)
+; so the following times would be 30 not 31 
 
+(defn day-of-month [dom]
+  (fn& :day [t _] 
+       (let [anchor (if (<= (t/day t) dom)
+                      (t/round t :month)
+                      (t/plus (t/round t :month) :month 1))
+             enough-days (fn [tt] (<= dom (t/days-in-month tt)))
+             add-days (fn [tt] (t/plus tt :day (dec dom)))
+             months-f (->> (iterate #(t/plus % :month 1) anchor)
+                           (filter enough-days)
+                           (map add-days))
+             months-b (->> (iterate #(t/minus % :month 1) (t/minus anchor :month 1))
+                           (filter enough-days)
+                           (map add-days))]
+         [months-f months-b])))
+       
 (defn day-of-week [dow]
   (fn& :day [t _] (let [t-dow (t/day-of-week t)
                 diff (mod (- dow t-dow) 7)

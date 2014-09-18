@@ -5,3 +5,4 @@ picsou.iml
 pom.xml
 target
 .idea
+resources/export.json
