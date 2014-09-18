@@ -5,6 +5,7 @@
 (defn go []
   (let [all (j/parse-string (slurp "resources/export.json"))
         en (get (first (filter #(= "en" (% "body")) all)) "start")
+        ;en (take 100 en)
         results (for [[phrase start' end'] en :when (<= end' (count phrase))]
                   (let [s (subs phrase start' end')
                         {:keys [winners] :as res} (p/parse s p/default-context :en$core [{:dim :time :label "T"}])
@@ -12,6 +13,8 @@
                         covers? (and start
                                      (= 0 start)
                                      (= (count s) end))]
-                    [s covers? value]))]
-    (prn (count results))
-    (prn (count (filter second results)))))
+                    [s covers? value]))
+        ko (remove second results)]
+    (printf "%d/%d passing\n" (- (count results) (count ko)) (count results))
+    (doseq [r ko]
+      (printf "%-40s %s\n" (first r) (-> r last :start)))))
