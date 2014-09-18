@@ -225,8 +225,8 @@
          :duration (println "Duration" (select-keys winner [:grain :fuzzy :units :val]))
          :number (println "Number" "integer?" (:integer winner) (:value winner) (:body winner))
          :pnl (println "Potential named location: " (:pnl winner) " Within n :" (:n winner))
-         :unit (println "Unit :" (:cat winner) " => " (:val winner))
-         (println "Other: " (:dim winner) (:val winner)))
+         :unit (println "Unit :" (:cat winner) " => " (:value winner))
+         (println "Other: " (:dim winner) (dissoc winner :dim :rule :route :text :pos :end :index :body :start)))
        (when (:latent winner) (println "Latent token"))
        #_(print-tokens winner module-id))
 

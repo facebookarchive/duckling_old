@@ -6,7 +6,7 @@
 (dim :number)
 {:dim :temperature
  :latent true
- :val {:temperature (:val %1)}}
+ :value {:temperature (:value %1)}}
 
 "<latent temp> degrees"
 [(dim :temperature) #"(?i)(deg(r[éeè])?s?\.?)|°"]
@@ -15,13 +15,13 @@
 "<temp> Celsius"
 [(dim :temperature) #"(?i)c(el[cs]?(ius)?)?\.?"]
 (-> %1
-    (assoc-in [:val :unit] "C")
+    (assoc-in [:value :unit] "C")
     (dissoc :latent))
 
 "<temp> Fahrenheit"
 [(dim :temperature) #"(?i)f(ah?reh?n(h?eit)?)?\.?"]
 (-> %1
-    (assoc-in [:val :unit] "F")
+    (assoc-in [:value :unit] "F")
     (dissoc :latent))
 
 ;; Distance
@@ -33,25 +33,25 @@
 (dim :number)
 {:dim :distance
  :latent true
- :val {:distance (:val %1)}}
+ :value {:distance (:value %1)}}
 
 "<latent dist> km"
 [(dim :distance) #"(?i)k(ilo)?m?([eéè]tre)?s?"]
 (-> %1
     (dissoc  :latent)
-    (assoc-in [:val :distance] (* 1000 (-> %1 :val :distance)))
-    (assoc-in [:val :unit] "meters"))
+    (assoc-in [:value :distance] (* 1000 (-> %1 :value :distance)))
+    (assoc-in [:value :unit] "meters"))
 
 "<dist> meters"
 [(dim :distance) #"(?i)m([eéè]tres?)?"]
 (-> %1
-    (assoc-in [:val :unit] "meters")
+    (assoc-in [:value :unit] "meters")
     (dissoc :latent))
 
 "<dist> miles"
 [(dim :distance) #"(?i)miles?"]
 (-> %1
-    (assoc-in [:val :unit] "miles")
+    (assoc-in [:value :unit] "miles")
     (dissoc :latent))
 
 )

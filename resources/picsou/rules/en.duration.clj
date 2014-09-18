@@ -43,24 +43,24 @@
   ;  :grain (:grain %2)}
 
   "<integer> <unit-of-duration>"
-  [(integer) (dim :unit-of-duration)]
+  [(integer 0) (dim :unit-of-duration)]; duration can't be negative...
   {:dim :duration
-   :val (duration (:grain %2) (:val %1))}
+   :value (duration (:grain %2) (:value %1))}
     
   "a <unit-of-duration>"
   [#"(?i)an?" (dim :unit-of-duration)]
   {:dim :duration
-   :val (duration (:grain %2) 1)}
+   :value (duration (:grain %2) 1)}
 
   "in/after <duration>"
   [#"(?i)in|after" (dim :duration)]
-  (in-duration (:val %2))
+  (in-duration (:value %2))
 
   "<duration> from now"
   [(dim :duration) #"(?i)from now"]
-  (in-duration (:val %1))
+  (in-duration (:value %1))
 
   "<duration> ago"
   [(dim :duration) #"(?i)ago"]
-  (duration-ago (:val %1))
+  (duration-ago (:value %1))
 )

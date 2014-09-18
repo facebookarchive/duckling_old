@@ -188,6 +188,14 @@
   "last <time>"
   [#"(?i)last" (dim :time)]
   (pred-nth %2 -1)
+
+  "<time> after next"
+  [(dim :time) #"(?i)after next"]
+  (pred-nth %1 2)
+
+   "<time> before last"
+  [(dim :time) #"(?i)before last"]
+  (pred-nth %1 -2)
   
   ; Years
   ; Between 1000 and 2100 we assume it's a year
@@ -195,15 +203,15 @@
   
   "year (1000-2100 not latent)"
   (integer 1000 2100)
-  (year (:val %1))
+  (year (:value %1))
 
   "year (latent)"
   (integer -10000 999)
-  (assoc (year (:val %1)) :latent true)
+  (assoc (year (:value %1)) :latent true)
 
   "year (latent)"
   (integer 2101 10000)
-  (assoc (year (:val %1)) :latent true)
+  (assoc (year (:value %1)) :latent true)
 
     ; Day of month appears in the following context:
   ; - the nth
@@ -213,32 +221,32 @@
   ; In general we are flexible and accept both ordinals (3rd) and numbers (3)
 
   "the <day-of-month> (ordinal)" ; this one is not latent
-  [#"(?i)the" (dim :ordinal #(<= 1 (:val %) 31))]
-  (day-of-month (:val %2))
+  [#"(?i)the" (dim :ordinal #(<= 1 (:value %) 31))]
+  (day-of-month (:value %2))
 
   "the <day-of-month> (non ordinal)" ; this one is latent
   [#"(?i)the" (integer 1 31)]
-  (assoc (day-of-month (:val %2)) :latent true)
+  (assoc (day-of-month (:value %2)) :latent true)
 
   "<named-month> <day-of-month> (ordinal)" ; march 12th
-  [{:form :month} (dim :ordinal #(<= 1 (:val %) 31))]
-  (intersect %1 (day-of-month (:val %2)))
+  [{:form :month} (dim :ordinal #(<= 1 (:value %) 31))]
+  (intersect %1 (day-of-month (:value %2)))
   
   "<named-month> <day-of-month> (non ordinal)" ; march 12
   [{:form :month} (integer 1 31)]
-  (intersect %1 (day-of-month (:val %2)))
+  (intersect %1 (day-of-month (:value %2)))
 
   "<day-of-month> (ordinal) of <named-month>"
-  [(dim :ordinal #(<= 1 (:val %) 31)) #"(?i)of|in" {:form :month}]
-  (intersect %3 (day-of-month (:val %1)))
+  [(dim :ordinal #(<= 1 (:value %) 31)) #"(?i)of|in" {:form :month}]
+  (intersect %3 (day-of-month (:value %1)))
 
   "<day-of-month> (non ordinal) of <named-month>"
   [(integer 1 31) #"(?i)of|in" {:form :month}]
-  (intersect %3 (day-of-month (:val %1)))
+  (intersect %3 (day-of-month (:value %1)))
 
   "<day-of-month> (non ordinal) <named-month>" ; 12 mars
   [(integer 1 31) {:form :month}]
-  (intersect %2 (day-of-month (:val %1)))
+  (intersect %2 (day-of-month (:value %1)))
 
   
 
@@ -247,7 +255,7 @@
   
   "<integer> (latent time-of-day)"
   (integer 0 23)
-  (assoc (hour (:val %1) true) :latent true)
+  (assoc (hour (:value %1) true) :latent true)
   
   "at|around <time-of-day>" ; at four
   [#"(?i)at|around" {:form :time-of-day}]
@@ -297,7 +305,7 @@
 
   "number (as relative minutes)"
   (integer 1 59)
-  {:relative-minutes (:val %1)}
+  {:relative-minutes (:value %1)}
 
   "<hour-of-day> <integer> (as relative minutes)"
   [(dim :time :full-hour) #(:relative-minutes %)]
@@ -449,7 +457,7 @@
   ; Specific for within duration... Would need to be reworked
   "within <duration>"
   [#"(?i)within" (dim :duration)]
-  (interval (cycle-nth :second 0) (in-duration (:val %2)) false)
+  (interval (cycle-nth :second 0) (in-duration (:value %2)) false)
 
     ; ;; In this special case, the upper limit is exclusive
   ; "<hour-of-day> - <hour-of-day> (interval)"

@@ -37,16 +37,16 @@
 "<unit> <amount>"
 [(dim :unit) (dim :number)]
 {:dim :amount-of-money
- :val {:amount (:val %2)
+ :value {:amount (:value %2)
  	   :unit (:unit %1)
-       :fields {(:unit %1) (:val %2)}}}
+       :fields {(:unit %1) (:value %2)}}}
 
 "<amount> <unit>"
 [(dim :number) (dim :unit)]
 {:dim :amount-of-money
- :val {:amount (:val %1)
+ :value {:amount (:value %1)
  	   :unit (:unit %2)
-       :fields {(:unit %1) (:val %2)}}}
+       :fields {(:unit %1) (:value %2)}}}
 
 ;precision for "about $15"
 "about <amount-of-money>"

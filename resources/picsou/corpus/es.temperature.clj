@@ -47,5 +47,23 @@
 "2 centímetros"
 (distance 2 "centimeters")
 
+; Volume
+"250 mililitros"
+"250ml"
+"250 ml"
+(volume  0.250 "litre")
+
+"2 litros"
+(volume 2 "litre")
+
+"3 galón"
+(volume 11.355 "litre")
+
+"3 hectolitros"
+(volume 300 "litre")
+
+"medio litro"
+(volume 0.5 "litre")
+
 )
 

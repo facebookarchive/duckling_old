@@ -29,6 +29,8 @@
 	              {:type "value"
 	               :value (date->str (:start value))
 	               :grain (:grain value)})
+     
+     :quantity (select-keys token [:value :unit :product])
 	    
 	    value))) ; keep value as is for other dims
 

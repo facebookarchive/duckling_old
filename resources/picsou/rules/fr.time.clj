@@ -158,15 +158,15 @@
   
   "year (1000-2100 not latent)"
   (integer 1000 2100)
-  (year (:val %1))
+  (year (:value %1))
 
   "year (latent)"
   (integer -10000 999)
-  (assoc (year (:val %1)) :latent true)
+  (assoc (year (:value %1)) :latent true)
 
   "year (latent)"
   (integer 2101 10000)
-  (assoc (year (:val %1)) :latent true)
+  (assoc (year (:value %1)) :latent true)
 
   ; Day of month appears in the following context:
   ; - le premier
@@ -181,21 +181,21 @@
 
   "le <day-of-month> (non ordinal)" ; this one is latent
   [#"(?i)le" (integer 1 31)]
-  (assoc (day-of-month (:val %2)) :latent true)
+  (assoc (day-of-month (:value %2)) :latent true)
   
   "<day-of-month> <named-month>" ; 12 mars
   [(integer 1 31) {:form :month}]
-  (intersect %2 (day-of-month (:val %1)))
+  (intersect %2 (day-of-month (:value %1)))
   
   "<day-of-week> <day-of-month>" ; vendredi 13
   [{:form :day-of-week} (integer 1 31)]
-  (intersect %1 (day-of-month (:val %2)))
+  (intersect %1 (day-of-month (:value %2)))
 
 
   ;; hours and minutes (absolute time)
   "<integer> (latent time-of-day)"
   (integer 0 23)
-  (assoc (hour (:val %1) true) :latent true)
+  (assoc (hour (:value %1) true) :latent true)
   
   "midi"
   #"(?i)midi"
@@ -240,11 +240,11 @@
 
   "number (as relative minutes)"
   (integer 1 59)
-  {:relative-minutes (:val %1)}
+  {:relative-minutes (:value %1)}
   
   "number minutes (as relative minutes)"
   [(integer 1 59) #"(?i)min\.?(ute)?s?"]
-  {:relative-minutes (:val %1)}
+  {:relative-minutes (:value %1)}
 
   "<hour-of-day> <integer> (as relative minutes)"
   [(dim :time :full-hour) #(:relative-minutes %)] ;before  [{:for-relative-minutes true} #(:relative-minutes %)]
@@ -396,6 +396,6 @@
   ; Specific for within duration... Would need to be reworked to adapt the grain
   "d'ici <duration>"
   [#"(?i)d'ici" (dim :duration)]
-  (interval (cycle-nth :second 0) (in-duration (:val %2)) false)
+  (interval (cycle-nth :second 0) (in-duration (:value %2)) false)
 
 )

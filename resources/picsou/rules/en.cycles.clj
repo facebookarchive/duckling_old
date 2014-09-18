@@ -67,9 +67,9 @@
   
   "last n <cycle>"
   [#"(?i)last" (integer 1 9999) (dim :cycle)]
-  (cycle-n-not-immediate (:grain %3) (- (:val %2)))
+  (cycle-n-not-immediate (:grain %3) (- (:value %2)))
   
   "next n <cycle>"
   [#"(?i)next" (integer 1 9999) (dim :cycle)]
-  (cycle-n-not-immediate (:grain %3) (:val %2))
+  (cycle-n-not-immediate (:grain %3) (:value %2))
 )

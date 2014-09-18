@@ -65,7 +65,6 @@
   "Create a temp condition"
   [val & [unit precision]]
   (fn [_ {:keys [dim value] :as token}] 
-    (prn value)
     (not (and
                   (= :temperature dim)
                   (== val (-> value :temperature))
@@ -105,6 +104,23 @@
                         (= :unit (:dim token))
                         (= val (:val token))
                         (= cat (:cat token)))))
+
+(defn quantity
+  "Create a quantity condition"
+  [value unit & [product]]
+  (fn [token _] (and
+                  (= :quantity (:dim token))
+                  (= value (-> token :value :value))
+                  (= unit (-> token :value :unit))
+                  (= product (-> token :value :product)))))
+
+(defn volume
+  "Create a volume condition"
+  [value & [unit]]
+  (fn [token _] (and
+                  (= :volume (:dim token))
+                  (== value (-> token :val :volume))
+                  (= unit  (-> token :val :unit)))))
 
 (defn corpus
   "Parse corpus" ;; TODO should be able to load several files, like rules
