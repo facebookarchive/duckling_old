@@ -215,6 +215,12 @@
   ; TODO ns should be dynamic based on dim ; or better use a protocol
   (time/resolve token context))
 
+(defn export-value
+  "Transforms a token value for API output. Returns the modified value."
+  [token]
+  ; TODO dynamic ns based on dim
+  (time/export-value token))
+
 (defn estimate-confidence
   "Returns the tokens with :confidence a rough confidence estimation for each.
    Numbers covered by datetime are very unlikely."

@@ -296,9 +296,10 @@
               [module targets] ; targets specify all the dims we should extract
               (let [module (keyword module)]
                 (when-not (module @rules-map)
-                  (throw (ex-info "Unknown picsou config" {:module module})))
+                  (throw (ex-info "Unknown picsou module" {:module module})))
                 (->> (parse sentence context module targets)
                      :winners
+                     (map #(assoc % :value (engine/export-value %)))
                      (map #(select-keys % [:label :body :value :start :end :latent])))))]
       (->> targets
            (group-by :module) ; we want to run each config only once
