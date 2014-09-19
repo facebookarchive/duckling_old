@@ -104,6 +104,9 @@
 (defn cycle-n-not-immediate [grain n]
   (ti (p/take-n (p/cycle grain) n {:not-immediate true})))
 
+(defn pred-last-of [cyclic base]
+  (ti (p/take-the-last-of (:pred cyclic) (:pred base))))
+
 (defn pred-nth [{:keys [pred] :as token} n]
   (ti (p/take-the-nth pred n) {:timezone (:timezone token)}))
 

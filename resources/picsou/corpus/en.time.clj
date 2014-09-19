@@ -165,6 +165,12 @@
   
   "the day before yesterday"
   (datetime 2013 2 10)
+  
+  "last Monday of March"
+  (datetime 2013 3 25)
+  
+  "last Sunday of March 2014"
+  (datetime 2014 3 30)
 
   ;; Hours
   

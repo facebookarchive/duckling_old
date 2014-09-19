@@ -99,6 +99,11 @@
          :end e2}))
     (intersect t2 t1))))
 
+(defn starting-at-the-end-of
+  "Build a time that starts at the end of provided time, with same grain"
+  [tt]
+  {:start (end tt) :grain (:grain tt)})
+
 (defn year [t]
   "Returns the year of the start of a time grain"
   (time/year (-> t :start)))

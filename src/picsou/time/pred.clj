@@ -262,6 +262,17 @@
                    (first (drop (- (inc n)) seq)))))]
     (seq-map f base-pred)))
 
+(defn take-the-last-of
+  "Takes the *last* occurence of cyclic-pred *within* base-pred.
+  For example, cyclic-pred is 'Monday' and base-pred 'October'"
+  
+  [cyclic-pred base-pred]
+  (let [f (fn& (-> cyclic-pred meta :grain) [t ctx]
+               (let [pivot (t/starting-at-the-end-of t)
+                     seq (second (cyclic-pred pivot ctx))]
+                 (first seq)))]
+    (seq-map f base-pred)))
+
 (defn seq-map
   "Applies f to each interval yielded by pred.
   As f changes intervals, an interval that was ahead can become behind, and
