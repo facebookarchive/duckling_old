@@ -4,12 +4,27 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :url "https://github.com/oliviervaussy/picsou"
+  :cljsbuild {
+    :builds [{
+        ; The path to the top-level ClojureScript source directory:
+        :source-paths ["src-cljs"]
+        ; The standard ClojureScript compiler options:
+        ; (See the ClojureScript compiler documentation for details.)
+        :compiler {
+          :output-to "resources/public/main.js"  ; default: target/cljsbuild-main.js
+          :output-dir "resources/public/out"
+          :optimizations :none
+          :pretty-print true
+          :source-map true}}]} ;; will add goog/ cljs/ om/ in public
   :plugins [[s3-wagon-private "1.1.2"]
             [quickie "0.2.5"]
-            [lein-midje "3.1.3"]]
-  :dependencies [[org.clojure/clojure "1.5.1"]
+            [lein-midje "3.1.3"]
+            [lein-cljsbuild "1.0.4-SNAPSHOT"]]
+  :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/tools.nrepl "0.2.3"]
                  [org.clojure/tools.logging "0.2.6"]
+                 [org.clojure/clojurescript "0.0-2311"]
+                 [om "0.7.1"]
                  [clj-time "0.8.0"]
                  [prismatic/plumbing "0.1.0"]]
   :deploy-repositories [["private" {:url "s3p://wit-ai/releases" :username :env :passphrase :env :sign-releases false}]]
