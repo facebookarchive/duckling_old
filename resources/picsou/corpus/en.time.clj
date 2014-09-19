@@ -212,6 +212,7 @@
   "15:30"
   "3:30pm"
   "3:30PM"
+  "330 p.m."
   (datetime 2013 2 12 15 30 :hour 3 :minute 30 :meridiem :pm)
   
   "3:30"
@@ -324,7 +325,10 @@
   (datetime 2013 2 14)
 
   "memorial day"
-  (datetime 2013 5 26)
+  (datetime 2013 5 27)
+
+  "memorial day week-end"
+  (datetime-interval [2013 5 24 18] [2013 5 28 00])
 
   "independence day"
   "4th of July"
@@ -332,14 +336,14 @@
   (datetime 2013 7 4)
 
   "labor day"
-  (datetime 2013 9 1)
+  (datetime 2013 9 2)
 
   "halloween"
   (datetime 2013 10 31)
 
   "thanksgiving day"
   "thanksgiving"
-  (datetime 2013 11 27)
+  (datetime 2013 11 28)
   
   ; Part of day (morning, afternoon...)
   
