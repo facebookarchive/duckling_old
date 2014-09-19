@@ -376,7 +376,7 @@
   (dissoc %2 :latent)
   
   "this <part-of-day>"
-  [#"(?i)this" {:form :part-of-day}]
+  [#"(?i)this|coming" {:form :part-of-day}]
   (assoc (intersect (cycle-nth :day 0) %2) :form :part-of-day) ;; removes :latent
 
   "tonight"
@@ -471,6 +471,10 @@
   "between <time-of-day> and <time-of-day> (interval)"
   [#"(?i)between" {:form :time-of-day} #"and" {:form :time-of-day}]
   (interval %2 %4 true)
+
+  "until <time-of-day>(interval)"
+  [#"(?i)until|up to" {:form :time-of-day}]
+  (interval (cycle-nth :second 0) %2 false)
 
   ; Specific for within duration... Would need to be reworked
   "within <duration>"

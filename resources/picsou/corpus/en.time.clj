@@ -110,6 +110,7 @@
 ;   ;; Cycles
   
   "this week"
+  "coming week"
   (datetime 2013 2 11 :grain :week)
 
   "last week"
@@ -467,6 +468,8 @@
   "within 2 weeks"
   (datetime-interval [2013 2 12 4 30 0] [2013 2 26])
 
+  "until 2:00pm"
+  (datetime-interval [2013 2 12 4 30 0] [2013 2 12 14])
   ; Timezones
   
   "4pm CET"
