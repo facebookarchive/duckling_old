@@ -73,13 +73,15 @@
 
 (defn distance
   "Create a distance condition"
-  [val & [unit normalized precision]]
-  (fn [_ {:keys [dim value] :as token}] (not (and
+  [value' & [unit' normalized' precision']]
+  (fn [_ {:keys [dim value unit normalized precision] :as token}] 
+    (prn value)
+    (not (and
                   (= :distance dim)
-                  (== value (-> value :distance))
-                  (= unit  (-> value :unit))
-                  (= normalized (-> value :normalized))
-                  (= precision (-> value :precision))))))
+                  (= value' value)
+                  (= unit' unit)
+                  (= normalized' normalized)
+                  (= precision' precision)))))
 
 (defn money
   "Create a amount-of-money condition"
