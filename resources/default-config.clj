@@ -2,6 +2,7 @@
   :fr$core {:corpus ["fr.time"
                     "fr.numbers"
                     "fr.temperature"
+                    "fr.measure"
                     "fr.finance"
                     "en.communication"
                     ]
@@ -9,9 +10,10 @@
                     "fr.numbers"
                     "fr.cycles"
                     "fr.duration"
-                   "fr.temperature"
-                   "en.finance"                             ; sic
-                   "en.communication"
+                    "fr.temperature"
+                    "fr.measure"
+                    "en.finance"                             ; sic
+                    "en.communication"
                     ]}                     
  :en$core {:corpus ["en.time"
                     "en.numbers"
@@ -27,18 +29,18 @@
                     "en.measure"
                     "en.finance"
                     "en.communication"]}
-; :es$core {:corpus ["es.time"
-;  ;                    "es.numbers"
-;  ;                    "es.temperature"
-;  ;                    "es.finance"
-;  ;                    "en.communication"
-;                   ]
-;             :rules ["es.time"
-;                     "es.numbers"
-;                     "es.cycles"
-;                     "es.duration"
-;  ;                   "es.temperature"
-;  ;                   "en.finance"
-;  ;                   "en.communication"
-;                     ]}
+:es$core {:corpus ["es.time"
+ ;                    "es.numbers"
+ ;                    "es.temperature"
+ ;                    "es.finance"
+ ;                    "en.communication"
+                  ]
+            :rules ["es.time"
+                    "es.numbers"
+                    "es.cycles"
+                    "es.duration"
+ ;                   "es.temperature"
+ ;                   "en.finance"
+ ;                   "en.communication"
+                    ]}
  }

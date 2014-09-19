@@ -63,19 +63,18 @@
 
 (defn temperature
   "Create a temp condition"
-  [val & [unit precision]]
-  (fn [_ {:keys [dim value] :as token}] 
+  [value' & [unit' precision']]
+  (fn [_ {:keys [dim value unit precision] :as token}] 
     (not (and
                   (= :temperature dim)
-                  (== val (-> value :temperature))
-                  (= unit  (-> value :unit))
-                  (= precision (-> value :precision))))))
+                  (= value' value)
+                  (= unit' unit)
+                  (= precision' precision)))))
 
 (defn distance
   "Create a distance condition"
   [value' & [unit' normalized' precision']]
   (fn [_ {:keys [dim value unit normalized precision] :as token}] 
-    (prn value)
     (not (and
                   (= :distance dim)
                   (= value' value)

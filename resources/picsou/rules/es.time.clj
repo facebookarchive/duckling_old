@@ -161,19 +161,19 @@
   
   "year (1000-2100 not latent)"
   (integer 1000 2100)
-  (year (:val %1))
+  (year (:value %1))
 
   "year (latent)"
   (integer -10000 999)
-  (assoc (year (:val %1)) :latent true)
+  (assoc (year (:value %1)) :latent true)
 
   "year (latent)"
   (integer 2101 10000)
-  (assoc (year (:val %1)) :latent true)
+  (assoc (year (:value %1)) :latent true)
 
   "del <year>"  ; latin america mostly
   [#"(?i)del( a[ñn]o)?" (integer 1000 2100)]
-  (year (:val %2))
+  (year (:value %2))
 
   ; Day of month appears in the following context:
   ; - le premier
@@ -188,25 +188,25 @@
 
   "el <day-of-month> (non ordinal)" ; this one is latent
   [#"(?i)el" (integer 1 31)]
-  (assoc (day-of-month (:val %2)) :latent true)
+  (assoc (day-of-month (:value %2)) :latent true)
 
 
   "<day-of-month> de <named-month>" ; 4 de julio
   [(integer 1 31) #"(?i)de" {:form :month}]
-  (intersect %3 (day-of-month (:val %1)))
+  (intersect %3 (day-of-month (:value %1)))
 
   "el <day-of-month> de <named-month>" ; el 4 de julio
   [#"(?i)el" (integer 1 31) #"(?i)de" {:form :month}]
-  (intersect %4 (day-of-month (:val %2)))
+  (intersect %4 (day-of-month (:value %2)))
 
   "<named-month> <day-of-month>" ; mayo 5 in Latin America mostly (this rule removes latency)
   [{:form :month} (integer 1 31)]
-  (intersect %1 (day-of-month (:val %2)))
+  (intersect %1 (day-of-month (:value %2)))
 
   ;; hours and minutes (absolute time)
   "<integer> (latent time-of-day)"
   (integer 0 23)
-  (assoc (hour (:val %1) true) :latent true)
+  (assoc (hour (:value %1) true) :latent true)
 
   "noon"
   #"(?i)mediod(í|i)a"
@@ -264,11 +264,11 @@
 
   "number (as relative minutes)"
   (integer 1 59)
-  {:relative-minutes (:val %1)}
+  {:relative-minutes (:value %1)}
   
   "<integer> minutes (as relative minutes)"
   [(integer 1 59) #"(?i)min\.?(uto)?s?"]
-  {:relative-minutes (:val %1)}
+  {:relative-minutes (:value %1)}
 
   "<hour-of-day> <integer> (as relative minutes)"
   [(dim :time :full-hour) #(:relative-minutes %)] ;before  [{:for-relative-minutes true} #(:relative-minutes %)]
@@ -388,7 +388,7 @@
   ; "<integer> and <relative minutes>" ;5 y cuarto
   ; [(integer 0 23) #"y" #(:relative-minutes %)]
   ; (hour-relativemin 
-  ;   (:val %1)
+  ;   (:value %1)
   ;   true
   ;   (:relative-minutes %3))
 
@@ -420,8 +420,8 @@
   (interval %2 %4 false)
 
   ; Specific for within duration... Would need to be reworked
-  "dentre de <duration>"
-  [#"(?i)dentre de" (dim :duration)]
-  (interval (cycle-nth :second 0) (in-duration (:val %2)) false)
+  "dentro de <duration>"
+  [#"(?i)dentro de" (dim :duration)]
+  (interval (cycle-nth :second 0) (in-duration (:value %2)) false)
 
 )

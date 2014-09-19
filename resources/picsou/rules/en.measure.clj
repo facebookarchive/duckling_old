@@ -8,8 +8,6 @@
 	 :latent true
 	 :value (:value %1)}
 
-	 ; :value {:distance (:value %1)}}
-
 	"<latent dist> km"
 	[(dim :distance) #"(?i)k(ilo)?m?(eter)?s?"]
 	(-> %1

@@ -145,9 +145,6 @@
   #"(?i)thanks?giving( day)?"
   (month-day 11 27)
   
-  
-  
-  
 
   "absorption of , after named day"
   [{:form :day-of-week} #","]

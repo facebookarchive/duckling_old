@@ -6,7 +6,7 @@
     (dim :number)
     {:dim :temperature
      :latent true
-     :value {:temperature (:value %1)}}
+     :value (:value %1)}
 
     "<latent temp> degrees"
     [(dim :temperature) #"(?i)(deg(ree?)?s?\.?)|°"]
@@ -15,13 +15,13 @@
     "<temp> Celcius"
     [(dim :temperature) #"(?i)c(el[cs]?(ius)?)?\.?"]
     (-> %1
-        (assoc-in [:value :unit] "C")
-        (dissoc :latent))
+        (dissoc :latent)
+        (merge {:unit "C"}))
 
     "<temp> Fahrenheit"
     [(dim :temperature) #"(?i)f(ah?rh?eh?n(h?eit)?)?\.?"]
     (-> %1
-        (assoc-in [:value :unit] "F")
-        (dissoc :latent))
+        (dissoc :latent)
+        (merge {:unit "F"}))
 
 )

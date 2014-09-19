@@ -6,15 +6,15 @@
   
   "meter metric"
   #"(?i)meters?"
-  (metric :distance "metre" 1 "metre")
+  (metric :distance-unit "metre" 1 "metre")
 
   "miles metric"
   #"(?i)miles?"
-  (metric :distance "mile" 1609.34 "metre")
+  (metric :distance-unit "mile" 1609.34 "metre")
 
   "km metric"
   #"(?i)kms?|kilometers?"
-  (metric :distance "kilometre" 1000 "metre")
+  (metric :distance-unit "kilometre" 1000 "metre")
 
   ; "x length"
   ; [(integer) (metric? :length)]

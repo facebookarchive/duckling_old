@@ -39,19 +39,19 @@
   "<integer> <unit-of-duration>"
   [(integer 0) (dim :unit-of-duration)] ;prevent negative duration...
   {:dim :duration
-   :val (duration (:grain %2) (:val %1))}
+   :value (duration (:grain %2) (:value %1))}
 
   ; "uno <unit-of-duration>" not sure we need that one
   ; [#"(?i)une?" (dim :unit-of-duration)]
   ; {:dim :duration
-  ;  :val (duration (:grain %2) 1)}
+  ;  :value (duration (:grain %2) 1)}
 
   "en <duration>"
   [#"(?i)en" (dim :duration)]
-  (in-duration (:val %2))
+  (in-duration (:value %2))
 
   "hace <duration>"
   [#"hace" (dim :duration)]
-  (duration-ago (:val %2))
+  (duration-ago (:value %2))
 
 )

@@ -8,8 +8,10 @@
 	"3 km"
 	"3km"
 	"3k"
-	"3.0 km"
 	(distance 3 "kilometre" {:value 3000 :unit "metre"})
+
+	"3.0 km"
+	(distance 3.0 "kilometre" {:value 3000.0 :unit "metre"})
 
 	"8 miles"
 	(distance 8 "mile" {:value 12872 :unit "metre"})
@@ -22,6 +24,7 @@
 	(distance 2 "centimetre" {:value 0.02 :unit "metre"})
 
 	; Volume
+	
 	"250 milliliters"
 	"250ml"
 	"250 ml"

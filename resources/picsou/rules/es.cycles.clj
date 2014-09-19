@@ -42,7 +42,7 @@
 
   ; "dentro de <integer> <cycle>"
   ; [#"(?i)dentro de" (integer) (dim :cycle)]
-  ; (cycle-nth  (:grain %3) 1 (:val %2))
+  ; (cycle-nth  (:grain %3) 1 (:value %2))
 
   "la <cycle> pasado"
   [#"(?i)(el|los|la|las) ?" (dim :cycle) #"(?i)pasad(a|o)s?"]
@@ -70,21 +70,21 @@
 
   "pasados n <cycle>"
   [#"(?i)pasad(a|o)s?" (integer 2 9999) (dim :cycle)]
-  (cycle-n-not-immediate (:grain %3) (- (:val %2)))
+  (cycle-n-not-immediate (:grain %3) (- (:value %2)))
 
   "n pasados <cycle>"
   [(integer 2 9999) #"(?i)pasad(a|o)s?" (dim :cycle)]
-  (cycle-n-not-immediate (:grain %3) (- (:val %1)))
+  (cycle-n-not-immediate (:grain %3) (- (:value %1)))
   
   "proximas n <cycle>"
   [#"(?i)pr(ó|o)xim(o|a)s?" (integer 2 9999) (dim :cycle)]
-  (cycle-n-not-immediate (:grain %3) (:val %2))
+  (cycle-n-not-immediate (:grain %3) (:value %2))
 
   "n proximas <cycle>"
   [(integer 2 9999) #"(?i)pr(ó|o)xim(o|a)s?" (dim :cycle)]
-  (cycle-n-not-immediate (:grain %3) (:val %1))
+  (cycle-n-not-immediate (:grain %3) (:value %1))
 
   "n <cycle> (proximo|que viene)"
   [(integer 2 9999) (dim :cycle) #"(?i)(pr(ó|o)xim(o|a)s?|que vienen?|siguientes?)"]
-  (cycle-n-not-immediate  (:grain %2) (:val %1))
+  (cycle-n-not-immediate  (:grain %2) (:value %1))
 )
