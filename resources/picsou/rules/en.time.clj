@@ -125,17 +125,24 @@
   #"(?i)valentine'?s?( day)?"
   (month-day 2 14)
 
-  "memorial day"
+  "memorial day" ;the last Monday of May
   #"(?i)memorial day"
-  (month-day 5 26)
+  ;;(month-day 5 26)
+  (cycle-nth-after :week -1 (intersect (day-of-week 1) (month 6)))
 
   "independence day"
   #"(?i)independence day"
   (month-day 7 4)
 
-  "labor day"
+  "labor day" ;first Monday in September
   #"(?i)labor day"
-  (month-day 9 1)
+  (intersect (month 9) (day-of-week 1))
+
+  "labor day weekend" ;weekend before 1st Monday in September
+  #"(?i)labor day week(\s|-)?end"
+  (interval (intersect (cycle-nth-after :day -3 (intersect (day-of-week 1) (month 9))) (hour 18 false))
+            (intersect (month 9) (day-of-week 1) (hour 0 false))
+            true)
 
   "halloween day"
   #"(?i)hall?owe?en( day)?"
@@ -165,6 +172,14 @@
   "yesterday"
   #"(?i)yesterday"
   (cycle-nth :day -1)
+
+  "day after tomorrow"
+  #"(?i)(the )?day after tomorrow"
+  (cycle-nth :day 2)
+
+  "day before yesterday"
+  #"(?i)(the )?day before yesterday"
+  (cycle-nth :day -2)
     
   ;;
   ;; This, Next, Last
@@ -249,7 +264,9 @@
   [(integer 1 31) {:form :month}]
   (intersect %2 (day-of-month (:value %1)))
 
-  
+  "<day-of-month>(ordinal) <named-month>" ; 12nd mars
+  [(dim :ordinal #(<= 1 (:value %) 31)) {:form :month}]
+  (intersect %2 (day-of-month (:value %1)))
 
 
   ; ; ;; Hours and minutes (absolute time)
@@ -385,7 +402,7 @@
   ; Other intervals: week-end, seasons
   
   "week-end" ; from Friday 6pm to Sunday midnight
-  #"(?i)week-?end"
+  #"(?i)week(\s|-)?end"
   (interval (intersect (day-of-week 5) (hour 18 false))
             (intersect (day-of-week 1) (hour 0 false))
             false)

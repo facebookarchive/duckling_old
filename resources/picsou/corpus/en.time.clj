@@ -77,6 +77,7 @@
   "15 of february"
   "february the 15th"
   "february 15"
+  "15th february"
   "2/15"
   "on 2/15"
   "February 15"
