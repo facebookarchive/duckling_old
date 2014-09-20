@@ -127,8 +127,13 @@
 
   "memorial day" ;the last Monday of May
   #"(?i)memorial day"
-  ;;(month-day 5 26)
-  (cycle-nth-after :week -1 (intersect (day-of-week 1) (month 6)))
+  (pred-last-of (day-of-week 1) (month 5))
+
+  "memorial day weekend" ;the weekend leading to the last Monday of May
+  #"(?i)memorial day week(\s|-)?end"
+  (interval (intersect (cycle-nth-after :day -3 (pred-last-of (day-of-week 1) (month 5))) (hour 18 false))
+            (intersect (pred-last-of (day-of-week 2) (month 5)) (hour 0 false)) ;need to use Tuesday to include monday
+            true)
 
   "independence day"
   #"(?i)independence day"
@@ -141,17 +146,18 @@
   "labor day weekend" ;weekend before 1st Monday in September
   #"(?i)labor day week(\s|-)?end"
   (interval (intersect (cycle-nth-after :day -3 (intersect (day-of-week 1) (month 9))) (hour 18 false))
-            (intersect (month 9) (day-of-week 1) (hour 0 false))
+            (intersect (month 9) (day-of-week 2) (hour 0 false)) ;need to use Tuesday to include monday
             true)
 
   "halloween day"
   #"(?i)hall?owe?en( day)?"
   (month-day 10 31)
 
-  "thanksgiving day"
+  "thanksgiving day" ; fourth Thursday of November
   #"(?i)thanks?giving( day)?"
-  (month-day 11 27)
-  
+  ;(intersect (day-of-week 4) (month 11) (cycle-nth-after :week 3 (intersect (day-of-week 1) (month 11))))
+  (intersect (day-of-week 4) (month 11) (cycle-nth-after :week 4 (month-day 11 1)))
+  ;(pred-nth (intersect (day-of-week 4) (month 11)) 3)
 
   "absorption of , after named day"
   [{:form :day-of-week} #","]
@@ -194,7 +200,7 @@
   ;; "this month" => now is part of it
   ; See also: cycles in en.cycles.clj
   "this <time>"
-  [#"(?i)this" (dim :time)]
+  [#"(?i)this|coming" (dim :time)]
   (pred-nth %2 0)
 
   "next <time>"
@@ -300,6 +306,22 @@
                    false) ; not a 12-hour clock)
       (assoc :latent true))
   
+  "hhmm (military time-of-day) am|pm" ; hh only from 00 to 12
+  [#"(?i)((?:1[012]|0?\d))([0-5]\d)" #"(?i)([ap])\.?m?\.?"]
+  ; (-> (hour-minute (Integer/parseInt (first (:groups %1)))
+  ;                  (Integer/parseInt (second (:groups %1)))
+  ;                  false) ; not a 12-hour clock)
+  ;     (assoc :latent true))
+  (let [[p meridiem] (if (= "a" (-> %2 :groups first .toLowerCase))
+                       [[(hour 0) (hour 12) false] :am]
+                       [[(hour 12) (hour 0) false] :pm])]
+    (-> (intersect 
+          (hour-minute (Integer/parseInt (first (:groups %1)))
+                       (Integer/parseInt (second (:groups %1)))
+                   true) 
+          (apply interval p))
+        (assoc :form :time-of-day)))
+
   "<time-of-day> am|pm"
   [{:form :time-of-day} #"(?i)([ap])\.?m?\.?"]
   ;; TODO set_am fn in helpers => add :ampm field
@@ -475,6 +497,10 @@
   "between <time-of-day> and <time-of-day> (interval)"
   [#"(?i)between" {:form :time-of-day} #"and" {:form :time-of-day}]
   (interval %2 %4 true)
+
+  "until <time-of-day>(interval)"
+  [#"(?i)until|up to" {:form :time-of-day}]
+  (interval (cycle-nth :second 0) %2 false)
 
   ; Specific for within duration... Would need to be reworked
   "within <duration>"
