@@ -13,8 +13,8 @@
   (let [[date-fields other-keys-and-values] (split-with integer? args)
         token-fields (into {} (map vec (partition 2 other-keys-and-values)))
         date (-> (apply time/t date-fields)
-                 (?> (:grain token-fields) assoc :grain (:grain token-fields))
-                 (?> (:timezone token-fields) assoc :timezone (:timezone token-fields)))]
+                 (?> (:grain token-fields) (assoc :grain (:grain token-fields)))
+                 (?> (:timezone token-fields) (assoc :timezone (:timezone token-fields))))]
     [date token-fields]))
 
 (defn datetime

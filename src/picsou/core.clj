@@ -94,8 +94,8 @@
         winners (->> stash
                      (filter :pos)
                      ; just keep the dims we want, and add the label key
-                     (?>> dim-label map #(when-let [label (get dim-label (:dim %))]
-                                          (assoc % :label label)))
+                     (?>> dim-label (map #(when-let [label (get dim-label (:dim %))]
+                                            (assoc % :label label))))
                      (remove nil?)
                      
                      (select-winners

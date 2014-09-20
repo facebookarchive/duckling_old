@@ -377,7 +377,7 @@
           (->> (vector ahead first-behind)
                (remove nil?)
                ; FIXME use timezone in resolution instead of just adding the field
-               (?>> timezone map #(assoc % :timezone timezone))
+               (?>> timezone (map #(assoc % :timezone timezone)))
                (map #(assoc token :value %)))))
       
       [token]) ; default for other dims
