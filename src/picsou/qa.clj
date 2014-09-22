@@ -1,13 +1,14 @@
 (ns picsou.qa
   (:require [picsou.core :as p]
+            [clojure.string :as strings]
             [cheshire.core :as j]))
 
 (defn go []
   (let [all (j/parse-string (slurp "resources/export.json"))
-        en (get (first (filter #(= "en" (% "body")) all)) "start")
+        en (get (first (filter #(= "fr" (% "body")) all)) "start")
         ;en (take 100 en)
         results (for [[phrase start' end'] en :when (<= end' (count phrase))]
-                  (let [s (subs phrase start' end')
+                  (let [s (strings/trim (subs phrase start' end')) ;remove whitespaces
                         {:keys [winners] :as res} (p/parse s p/default-context :en$core [{:dim :time :label "T"}])
                         {:keys [start end value] :as first-winner} (first winners)
                         covers? (and start
