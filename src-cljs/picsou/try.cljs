@@ -6,6 +6,7 @@
             [cljs.reader :as reader]
             [goog.events :as events]
             [goog.string :as gstring]
+            [goog.date :as gdate]
             [goog.string.format :as gformat]) ; not sure why I need to import this on top of goog.string?
   (:import [goog.net XhrIo]
            goog.net.EventType
@@ -36,21 +37,30 @@
         #js {"Content-Type" "application/edn"}))))
 
 (defn get-parse [app owner]
-  (let [phrase (.-value (om/get-node owner "phrase"))]
+  (let [phrase (.-value (om/get-node owner "phrase"))
+        now (gdate/DateTime.)
+        fnow (str (.toIsoString now) "/" (.getTimezoneOffset now))]
     (.log js/console "Working on: " phrase)
     (.pushState js/history nil nil (str "#" phrase))
     (edn-xhr {:method "GET"
-              :url (str "parse/" phrase)
+              :url (str "parse/" fnow "/" phrase)
               :on-complete #(do (om/update! app [:parse] (first %)))})))
 
 (defn handle-change [e owner {:keys [text] :as state}]
   (om/set-state! owner :text (.. e -target -value)))
 
+(defn- token->div [{:keys [rule text route] :as token}]
+  (dom/div #js {:className "token"}
+    (if (seq route)
+      (apply dom/div nil (map token->div route))
+      (dom/div #js {:className "text"} text))
+    (dom/div #js {:className "rule"} rule)))
+
 (defn parse-view [cursor owner]
   (reify
     om/IRender
     (render [this]
-      (dom/div nil (:text cursor)))))
+      (token->div cursor))))
 
 (defn main-view [app owner]
   (reify

@@ -10,4 +10,4 @@ goog.addDependency("../cljs/core/async/impl/timers.js", ['cljs.core.async.impl.t
 goog.addDependency("../cljs/core/async.js", ['cljs.core.async'], ['cljs.core.async.impl.channels', 'cljs.core.async.impl.dispatch', 'cljs.core', 'cljs.core.async.impl.buffers', 'cljs.core.async.impl.protocols', 'cljs.core.async.impl.ioc_helpers', 'cljs.core.async.impl.timers']);
 goog.addDependency("../om/core.js", ['om.core'], ['cljs.core', 'om.dom', 'goog.ui.IdGenerator']);
 goog.addDependency("../cljs/reader.js", ['cljs.reader'], ['goog.string', 'cljs.core', 'goog.string.StringBuffer']);
-goog.addDependency("../picsou/try.js", ['picsou.try$'], ['goog.net.XhrIo', 'goog.string', 'cljs.core', 'om.dom', 'cljs.core.async', 'goog.events.EventType', 'goog.string.format', 'om.core', 'cljs.reader', 'goog.events']);
+goog.addDependency("../picsou/try.js", ['picsou.try$'], ['goog.net.XhrIo', 'goog.string', 'cljs.core', 'om.dom', 'cljs.core.async', 'goog.events.EventType', 'goog.string.format', 'om.core', 'cljs.reader', 'goog.events', 'goog.date']);

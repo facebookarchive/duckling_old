@@ -15,7 +15,7 @@
 (def rules-map (atom {}))
 (def corpus-map (atom {}))
 (def classifiers-map (atom {}))
-(def default-context {:reference-time (time/t 2013 2 12 4 30)})
+(def default-context {:reference-time (time/t -2 2013 2 12 4 30)})
 
 (defn- get-classifier
   [id]

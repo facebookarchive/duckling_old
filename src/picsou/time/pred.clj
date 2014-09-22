@@ -80,11 +80,11 @@
                       (-> yyyy (+ 50) (mod 100) (+ 2000) (- 50))
                       yyyy)]
       (if (<= (t/year t) true-year)
-        [[(t/t true-year)] nil]
-        [nil [(t/t true-year)]]))))
+        [[(t/t t true-year)] nil]
+        [nil [(t/t t true-year)]]))))
 
 (defn month [mo]
-  (fn& :month [t _] (let [rounded (t/t (t/year t) mo)
+  (fn& :month [t _] (let [rounded (t/t t (t/year t) mo)
                 anchor (if (t/start-before-the-end-of? t rounded)
                          rounded
                          (t/plus rounded :year 1))]
@@ -370,7 +370,9 @@
         
         ; we use ref-time twice
         ; as the first arg of pred, it's just as a lookup starting point
-        (let [[[first-ahead second-ahead] [first-behind]] (pred reference-time (assoc context :max (t/t 3000) :min (t/t 1000)))
+        (let [ctx (assoc context :max (t/plus reference-time :year 2000)
+                                 :min (t/minus reference-time :year 2000))
+              [[first-ahead second-ahead] [first-behind]] (pred reference-time ctx)
               ahead (if (and not-immediate (t/intersect first-ahead reference-time))
                       second-ahead
                       first-ahead)]

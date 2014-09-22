@@ -1,5 +1,6 @@
 (ns picsou.time.obj
-  (:require [clj-time.core :as time]))
+  (:require [clj-time.core :as time])
+  (:import [org.joda.time DateTimeFieldType DateTime]))
 
 ; This ns constructs and operates time objects. It's a wall between Picsou and
 ; the actual implementation of time (here, clj-time).
@@ -16,12 +17,13 @@
 
 ; week is a special case (it's not a field byitself), it's managed as a special
 ; case in functions
-(def fields {:year [0 time/year time/years]
-             :month [1 time/month time/months]
-             :day [2 time/day time/days]
-             :hour [3 time/hour time/hours]
-             :minute [4 time/minute time/minutes]
-             :second [5 time/second time/seconds]})
+(def time-fields 
+            [[:year    (DateTimeFieldType/year) 0]
+             [:month   (DateTimeFieldType/monthOfYear) 1]
+             [:day     (DateTimeFieldType/dayOfMonth) 1]
+             [:hour    (DateTimeFieldType/hourOfDay) 0]
+             [:minute  (DateTimeFieldType/minuteOfHour) 0]
+             [:second  (DateTimeFieldType/secondOfMinute) 0]])
 
 ; for grain ordering
 (def grain-order (into {} (map vector
@@ -42,16 +44,30 @@
        (grain-order grain)
        (or (nil? end) (instance? org.joda.time.DateTime end))))
 
+(defn zone [timezone]
+  (cond (:start timezone) (.getZone (:start timezone))
+        (instance? DateTime timezone) (.getZone timezone)
+        (integer? timezone) (time/time-zone-for-offset timezone)
+        :else (throw (ex-info "Invalid timezone" {:tz timezone}))))
+
 (defn t
-  "Builds a time object with start and grain"
-  [& [y mo day hour mi sec :as args]]
-  {:start (apply time/date-time args)
-   :grain (cond (nil? mo) :year
-                (nil? day) :month
-                (nil? hour) :day
-                (nil? mi) :hour
-                (nil? sec) :minute
-                :else :second)})
+  "Builds a time object with timezone, start and grain.
+  Timezone is actually extracted from the provided instant."
+  ([timezone year]
+   (t :year timezone year 1 1 0 0 0))
+  ([timezone year month]
+   (t :month timezone year month 1 0 0 0))
+  ([timezone year month day]
+   (t :day timezone year month day 0 0 0))
+  ([timezone year month day hour]
+   (t :hour timezone year month day hour 0 0))
+  ([timezone year month day hour minute]
+   (t :minute timezone year month day hour minute 0))
+  ([timezone year month day hour minute second]
+   (t :second timezone year month day hour minute second))
+  ([grain timezone year month day hour minute second]
+   {:start (DateTime. year month day hour minute second (zone timezone)) 
+    :grain grain})) 
 
 (declare plus)
 
@@ -166,12 +182,14 @@
       (-> (minus t-mo :month mo-delta)
           (assoc :grain :quarter)
           (dissoc :end)))
-    
+  
     :else
-    (let [fields (for [[f idx] (map vector (->fields tt) (range))
-                       :when (<= idx (first (fields grain)))]
-                   f)]
-      (apply t fields))))
+    (let [fields-to-reset (->> time-fields
+                               (drop-while #(not= grain (first %)))
+                               next)]
+          {:start (reduce (fn [tim [_ ty v]] (.withField tim ty v)) (:start tt)
+                          fields-to-reset)
+           :grain grain})))
 
 (defn start-before-the-end-of? [t1 t2] ; TODO equality?
   {:pre [(valid? t1) (valid? t2)]}

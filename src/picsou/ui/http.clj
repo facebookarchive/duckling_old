@@ -5,6 +5,8 @@
         [compojure.handler :only [site]]
         [compojure.route :as route])
   (:require [picsou.core :as pic]
+            [clj-time.core :as t]
+            [clj-time.format :as f]
             [ring.middleware.format-response :refer [wrap-restful-response]]
             [ring.middleware.format-params :refer [wrap-restful-params]]))
 
@@ -22,14 +24,22 @@
       (update-in-when [:value :start] str)
       (update-in-when [:value :end] str))) 
 
-(defn parse-controller [{{:keys [phrase]} :params}]
-  (prn "Parsing" phrase)
-  (let [{:keys [winners stash]} (pic/parse phrase pic/default-context :en$core)]
+(defn parse-controller [{{:keys [phrase reftime reftz]} :params :as params}]
+  (prn "Parsing" phrase reftime reftz)
+  (let [ref-time (t/from-time-zone
+                   (f/parse (f/formatters :basic-date-time-no-ms) (str reftime "Z"))
+                   (t/time-zone-for-offset (- (/ (Integer/parseInt reftz) 60))))
+        context {:reference-time {:start ref-time :grain :second}}
+        {:keys [winners stash]} (pic/parse phrase context :en$core
+                                           [{:dim :time :label :time}
+                                            {:dim :duration :label :period}])]
+    (prn ref-time)
     (prn "Got" (first winners))
+    
     {:body (map trim winners)}))
 
 (defroutes routes
-  (GET "/parse/:phrase" [] parse-controller)
+  (GET "/parse/:reftime/:reftz/:phrase" [] parse-controller)
   (route/resources "/"))
 
 (defonce stop-http-server (atom nil))

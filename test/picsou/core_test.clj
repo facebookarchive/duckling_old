@@ -46,7 +46,7 @@
     (is (= [{:end 12
              :start 0
              :value {:type "value"
-                     :value "2014-01-01T00:00:00.000Z"
+                     :value "2014-01-01T00:00:00.000-02:00"
                      :grain :month}
              :body "january 2014"
              :label "T"}]

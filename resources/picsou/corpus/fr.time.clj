@@ -1,6 +1,6 @@
 (; Context map
   ; Tuesday Feb 12, 2013 at 4:30am is the "now" for the tests
-  {:reference-time (time/t 2013 2 12 4 30 0)}
+  {:reference-time (time/t -2 2013 2 12 4 30 0)}
 
   "maintenant"
   "tout de suite"
