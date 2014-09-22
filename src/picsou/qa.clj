@@ -7,7 +7,7 @@
         en (get (first (filter #(= "en" (% "body")) all)) "start")
         ;en (take 100 en)
         results (for [[phrase start' end'] en :when (<= end' (count phrase))]
-                  (let [s (subs phrase start' end')
+                  (let [s (trim (subs phrase start' end')) ;remove whitespaces
                         {:keys [winners] :as res} (p/parse s p/default-context :en$core [{:dim :time :label "T"}])
                         {:keys [start end value] :as first-winner} (first winners)
                         covers? (and start

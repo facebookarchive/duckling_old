@@ -92,6 +92,7 @@
   
   "14april 2015"
   "April 14, 2015"
+  "14th April 15"
   (datetime 2015 4 14 :day 14 :month 4 :years 2015)
 
   "next tuesday" ; when today is Tuesday, "mardi prochain" is a week from now
@@ -186,8 +187,10 @@
   (datetime 2013 2 12 3 18)
   
   "at 3pm"
+  "@ 3pm"
   "3PM"
   "3pm"
+  "3ish pm"
   "3 oclock pm"
   "3 o'clock in the afternoon"
   (datetime 2013 2 12 15 :hour 3 :meridiem :pm)
@@ -203,6 +206,7 @@
 
   "at 20 past 3pm"
   "3:20 in the afternoon"
+  "3:20 in afternoon"
   "twenty after 3pm"
   "3:20p"
   (datetime 2013 2 12 15 20 :hour 3 :minute 20 :meridiem :pm)
@@ -236,7 +240,11 @@
   (datetime 2013 9 20 19 30 :hour 7 :minute 30 :meridiem :pm)
   
   "at 9am on Saturday"
-  (datetime 2013 2 16 9 :day-of-week 6 :hour 9 :meridiem :am  )
+  (datetime 2013 2 16 9 :day-of-week 6 :hour 9 :meridiem :am)
+
+  "Fri, Jul 18, 2014 07:00 PM"
+  (datetime 2014 7 18 19 0 :day-of-week 5 :hour 7 :meridiem :pm)
+
   
 ; ;; Involving periods  
   
@@ -467,6 +475,7 @@
   "from 9:30 - 11:00 on Thursday"
   "between 9:30 and 11:00 on thursday"
   "9:30 - 11:00 on Thursday"
+  "later than 9:30 but before 11:00 on Thursday"
   "Thursday from 9:30 to 11:00"
   (datetime-interval [2013 2 14 9 30] [2013 2 14 11 00])
 

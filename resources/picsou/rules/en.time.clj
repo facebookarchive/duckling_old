@@ -30,7 +30,7 @@
   (day-of-week 1)
 
   "named-day"
-  #"(?i)tuesday|tue\.?"
+  #"(?i)tuesday|tues?\.?"
   (day-of-week 2)
 
   "named-day"
@@ -78,7 +78,7 @@
   (month 6)
 
   "named-month"
-  #"(?i)july|jul?\."
+  #"(?i)july|jul\.?"
   (month 7)
 
   "named-month"
@@ -124,6 +124,10 @@
   "valentine's day"
   #"(?i)valentine'?s?( day)?"
   (month-day 2 14)
+
+  "MLK Day";third Monday of January
+   #"(?i)(MLK|Martin Luther King) day"
+  (intersect (day-of-week 1) (month 1) (cycle-nth-after :week 3 (month-day 1 1)))
 
   "memorial day" ;the last Monday of May
   #"(?i)memorial day"
@@ -292,6 +296,9 @@
   [(dim :ordinal #(<= 1 (:value %) 31)) {:form :month}]
   (intersect %2 (day-of-month (:value %1)))
 
+  "<day-of-month>(ordinal) <named-month> year" ; 12nd mars 12
+  [(dim :ordinal #(<= 1 (:value %) 31)) {:form :month} #"(\d{2,4})"]
+  (intersect %2 (day-of-month (:value %1)) (year (Integer/parseInt(first (:groups %3)))))
 
   ; ; ;; Hours and minutes (absolute time)
   
@@ -300,15 +307,19 @@
   (assoc (hour (:value %1) true) :latent true)
   
   "at|around <time-of-day>" ; at four
-  [#"(?i)at|around" {:form :time-of-day}]
+  [#"(?i)at|@|around" {:form :time-of-day}]
   (dissoc %2 :latent)
+
+  "<time-of-day>ish" ; 7ish
+  [{:form :time-of-day} #"(?i)-?ish" ]
+  (dissoc %1 :latent)
   
   "<time-of-day> oclock"
   [{:form :time-of-day} #"(?i)o.?clock"]
   (dissoc %1 :latent)
 
   "hh:mm (time-of-day)"
-  #"(?i)((?:[01]?\d)|(?:2[0-3])):([0-5]\d)"
+  #"(?i)((?:[01]?\d)|(?:2[0-3]))[:.]([0-5]\d)"
   (hour-minute (Integer/parseInt (first (:groups %1)))
                (Integer/parseInt (second (:groups %1)))
                true)
@@ -412,7 +423,7 @@
   (assoc (interval (hour 18 false) (hour 0 false) false) :form :part-of-day :latent true)
   
   "in|during the <part-of-day>" ;; removes latent
-  [#"(?i)(in|during) the" {:form :part-of-day}]
+  [#"(?i)(in|during)( the)?" {:form :part-of-day}]
   (dissoc %2 :latent)
   
   "this <part-of-day>"
@@ -423,6 +434,12 @@
   #"(?i)toni(ght|gth|te)"
   (assoc (intersect (cycle-nth :day 0)
                     (interval (hour 18 false) (hour 0 false) false)) 
+         :form :part-of-day) ; no :latent
+
+  "after work"
+  #"(?i)after(-|\s)?work"
+  (assoc (intersect (cycle-nth :day 0)
+                    (interval (hour 17 false) (hour 21 false) false)) 
          :form :part-of-day) ; no :latent
     
   "<dim time> <part-of-day>" ; since "morning" "evening" etc. are latent, general time+time is blocked
@@ -505,7 +522,7 @@
   (interval %1 %3 true)
 
   "from <time-of-day> - <time-of-day> (interval)"
-  [#"(?i)from" {:form :time-of-day} #"\-|to|th?ru|through|until" {:form :time-of-day}]
+  [#"(?i)(later than|from)" {:form :time-of-day} #"((but )?before)|\-|to|th?ru|through|until" {:form :time-of-day}]
   (interval %2 %4 true)
 
   "between <time-of-day> and <time-of-day> (interval)"
