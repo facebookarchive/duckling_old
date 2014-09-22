@@ -40,6 +40,11 @@
   {:dim :cycle
    :grain :month}
   
+  "quarter (cycle)"
+  #"(?i)quarters?"
+  {:dim :cycle
+   :grain :quarter}
+  
   "year (cycle)"
   #"(?i)years?"
   {:dim :cycle
@@ -72,4 +77,14 @@
   "next n <cycle>"
   [#"(?i)next" (integer 1 9999) (dim :cycle)]
   (cycle-n-not-immediate (:grain %3) (:value %2))
+  
+  ; quarters are a little bit different, you can say "3rd quarter" alone
+  
+  "<ordinal> quarter"
+  [(dim :ordinal) (dim :cycle #(= :quarter (:grain %)))]
+  (cycle-nth-after :quarter (dec (:value %1)) (cycle-nth :year 0))
+
+  "<ordinal> quarter <year>"
+  [(dim :ordinal) (dim :cycle #(= :quarter (:grain %))) (dim :time)]
+  (cycle-nth-after :quarter (dec (:value %1)) %3)
 )

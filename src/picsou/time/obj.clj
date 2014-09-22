@@ -25,16 +25,17 @@
 
 ; for grain ordering
 (def grain-order (into {} (map vector
-                      [:year :month :week :day :hour :minute :second]
+                      [:year :quarter :month :week :day :hour :minute :second]
                       (range))))
 
-(def period-fields {:year time/years
-                    :month time/months
-                    :week time/weeks
-                    :day time/days
-                    :hour time/hours
-                    :minute time/minutes
-                    :second time/seconds})
+(def period-fields {:year     [time/years 1]
+                    :quarter  [time/months 3]
+                    :month    [time/months 1]
+                    :week     [time/weeks 1]
+                    :day      [time/days 1]
+                    :hour     [time/hours 1]
+                    :minute   [time/minutes 1]
+                    :second   [time/seconds 1]})
 
 (defn valid? [{:keys [start grain end] :as t}]
   (and (instance? org.joda.time.DateTime start)
@@ -60,7 +61,7 @@
   {:pre [(valid? t)]}
   (or end (time/plus 
             start
-            ((case grain :week time/weeks (nth (fields grain) 2)) 1))))
+            (let [[g n] (period-fields grain)] (g n)))))
 
 (defn interval 
   "Builds a time interval between start of t1 and *start* of t2.
@@ -134,8 +135,8 @@
   Set the grain to the finest between tt's and the added one."
   [tt grain n]
   {:pre [(valid? tt) (grain-order grain) (integer? n)]}
-  (let [g (case grain :week time/weeks (nth (fields grain) 2))
-        duration (g n)
+  (let [[g n'] (period-fields grain)
+        duration (g (* n n'))
         new-start (time/plus (:start tt) duration)
         new-grain (max-key grain-order (:grain tt) grain)
         new-t {:start new-start :grain new-grain}]
@@ -152,11 +153,21 @@
   a grain time objects (rounds start, removes :end)."
   [tt grain]
   {:pre [(valid? tt)]}
-  (if (= :week grain)
+  (cond 
+    (= :week grain)
     (let [t-dow (day-of-week tt)]
       (-> (plus (round tt :day) :day (- 1 t-dow))
           (assoc :grain :week)
           (dissoc :end)))
+    
+    (= :quarter grain)
+    (let [t-mo (round tt :month)
+          mo-delta (mod (dec (month t-mo)) 3)]
+      (-> (minus t-mo :month mo-delta)
+          (assoc :grain :quarter)
+          (dissoc :end)))
+    
+    :else
     (let [fields (for [[f idx] (map vector (->fields tt) (range))
                        :when (<= idx (first (fields grain)))]
                    f)]

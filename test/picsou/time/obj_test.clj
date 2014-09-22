@@ -4,10 +4,15 @@
 
 (def today (t 2014 8 30 5 30 18))
 
-(deftest obj-test
+(deftest time-test
   (testing "rounding"
     (is (= (t 2014) (round today :year)))
     (is (= (t 2014 8 30) (round today :day))))
+  (testing "plus"
+    (is (= (t 2014 8 30 6 30 18)
+           (plus today :hour 1)))
+    (is (= (t 2014 9 13 5 30 18)
+           (plus today :week 2))))
   (testing "days in month"
     (is (= 31
            (days-in-month today)))))

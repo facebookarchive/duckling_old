@@ -136,7 +136,7 @@
   "A sequence of each year, or month, or week, etc.
   Used for 'this year', 'next month', 'last week'.."
   [grain]
-  {:pre [#{:year :month :week :day :hour :minute :second} grain]}
+  {:pre [#{:year :quarter :month :week :day :hour :minute :second} grain]}
   (fn& grain [t _]
           (let [anchor (t/round t grain)]
             [(iterate #(t/plus % grain 1) anchor)
