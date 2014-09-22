@@ -149,22 +149,32 @@
             (intersect (month 9) (day-of-week 2) (hour 0 false)) ;need to use Tuesday to include monday
             true)
 
+  "Father's Day";third Sunday of June
+  #"(?i)father'?s?'? ( day)?"
+  (intersect (day-of-week 7) (month 6) (cycle-nth-after :week 2 (month-day 6 1)))
+
+  "Mother's Day";second Sunday in May.
+  #"(?i)mother'?s?( day)?"
+  (intersect (day-of-week 7) (month 5) (cycle-nth-after :week 1 (month-day 5 1)))
+              
   "halloween day"
   #"(?i)hall?owe?en( day)?"
   (month-day 10 31)
 
   "thanksgiving day" ; fourth Thursday of November
   #"(?i)thanks?giving( day)?"
-  ;(intersect (day-of-week 4) (month 11) (cycle-nth-after :week 3 (intersect (day-of-week 1) (month 11))))
   (intersect (day-of-week 4) (month 11) (cycle-nth-after :week 4 (month-day 11 1)))
-  ;(pred-nth (intersect (day-of-week 4) (month 11)) 3)
+
+  "black fridday"; (the fourth Friday of November),
+  #"(?i)black friday"
+  (intersect (day-of-week 5) (month 11) (cycle-nth-after :week 4 (month-day 11 1)))
 
   "absorption of , after named day"
   [{:form :day-of-week} #","]
   %1
 
   "now"
-  #"(?i)(just|right)? ?now"
+  #"(?i)(just|right)? ?now|immediately"
   (cycle-nth :second 0)
   
   "today"
@@ -172,7 +182,7 @@
   (cycle-nth :day 0)
 
   "tomorrow"
-  #"(?i)tomorrow"
+  #"(?i)tomm?or?row"
   (cycle-nth :day 1)
 
   "yesterday"
@@ -180,7 +190,7 @@
   (cycle-nth :day -1)
 
   "day after tomorrow"
-  #"(?i)(the )?day after tomorrow"
+  #"(?i)(the )?day after tomm?or?row"
   (cycle-nth :day 2)
 
   "day before yesterday"
@@ -249,6 +259,10 @@
   "the <day-of-month> (ordinal)" ; this one is not latent
   [#"(?i)the" (dim :ordinal #(<= 1 (:value %) 31))]
   (day-of-month (:value %2))
+
+  "<day-of-month> (ordinal)" ; this one is latent
+  [(dim :ordinal #(<= 1 (:value %) 31))]
+  (assoc (day-of-month (:value %1)) :latent true)
 
   "the <day-of-month> (non ordinal)" ; this one is latent
   [#"(?i)the" (integer 1 31)]
@@ -323,7 +337,7 @@
         (assoc :form :time-of-day)))
 
   "<time-of-day> am|pm"
-  [{:form :time-of-day} #"(?i)([ap])\.?m?\.?"]
+  [{:form :time-of-day} #"(?i)([ap])(\s|\.)?m?\.?"]
   ;; TODO set_am fn in helpers => add :ampm field
   (let [[p meridiem] (if (= "a" (-> %2 :groups first .toLowerCase))
                        [[(hour 0) (hour 12) false] :am]
@@ -406,7 +420,7 @@
   (assoc (intersect (cycle-nth :day 0) %2) :form :part-of-day) ;; removes :latent
 
   "tonight"
-  #"(?i)toni(ght|te)"
+  #"(?i)toni(ght|gth|te)"
   (assoc (intersect (cycle-nth :day 0)
                     (interval (hour 18 false) (hour 0 false) false)) 
          :form :part-of-day) ; no :latent
@@ -499,7 +513,7 @@
   (interval %2 %4 true)
 
   "until <time-of-day>(interval)"
-  [#"(?i)until|up to" {:form :time-of-day}]
+  [#"(?i)before|until|up to" {:form :time-of-day}]
   (interval (cycle-nth :second 0) %2 false)
 
   ; Specific for within duration... Would need to be reworked

@@ -213,6 +213,7 @@
   "3:30pm"
   "3:30PM"
   "330 p.m."
+  "3:30 p m"
   (datetime 2013 2 12 15 30 :hour 3 :minute 30 :meridiem :pm)
   
   "3:30"
@@ -254,6 +255,9 @@
   "in 60 minutes"
   (datetime 2013 2 12 5 30 0)
   
+  "in half an hour"
+  (datetime 2013 2 12 5 00 0)
+
   "in one hour"
   (datetime 2013 2 12 5 30)
   
@@ -326,6 +330,12 @@
 
   "memorial day"
   (datetime 2013 5 27)
+
+  "Mother's Day"
+  (datetime 2013 5 12)
+  
+  "Father's Day"
+  (datetime 2013 6 16)
 
   "memorial day week-end"
   (datetime-interval [2013 5 24 18] [2013 5 28 00])

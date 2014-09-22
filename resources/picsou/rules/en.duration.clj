@@ -36,11 +36,10 @@
   {:dim :unit-of-duration
    :grain :year}
   
-  ; "half an <unit-of-duration>"
-  ; [#"(?i)half an" (dim :unit-of-duration)]
-  ; {:dim :duration
-  ;  :val ((:grain %2) 0.5)
-  ;  :grain (:grain %2)}
+   "half an hour"
+  [#"(?i)(1/2\s?|half an? )hour"]
+  {:dim :duration
+   :value (duration :minute 30)}
 
   "<integer> <unit-of-duration>"
   [(integer 0) (dim :unit-of-duration)]; duration can't be negative...
