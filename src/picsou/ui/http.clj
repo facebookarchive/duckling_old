@@ -19,7 +19,8 @@
       (dissoc :pred)
       (assoc :rule (-> token :rule :name))
       (assoc :route (map trim (:route token)))
-      #_(update-in [])))
+      (update-in-when [:value :start] str)
+      (update-in-when [:value :end] str))) 
 
 (defn parse-controller [{{:keys [phrase]} :params}]
   (prn "Parsing" phrase)

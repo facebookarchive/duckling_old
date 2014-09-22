@@ -126,6 +126,18 @@
   "next month"
   (datetime 2013 3)
   
+  "this quarter"
+  (datetime 2013 1 1 :grain :quarter)
+  
+  "next quarter"
+  (datetime 2013 4 1 :grain :quarter)
+  
+  "third quarter"
+  (datetime 2013 7 1 :grain :quarter)
+  
+  "4th quarter 2018"
+  (datetime 2018 10 1 :grain :quarter)
+  
   "last year"
   (datetime 2012)
   
