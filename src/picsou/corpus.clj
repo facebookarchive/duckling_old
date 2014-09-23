@@ -4,8 +4,7 @@
   (:require [picsou.time.obj :as time]
             [picsou.util :as util]))
 
-;; Checker functions return nil when OK, or an explanation string when not OK.
-;; TODO move them to the module namespace
+; Checker functions return *nil* when OK, or [expected actual] when not OK
 
 (defn- vec->date-and-map
   "Turns a vector of args into a date and a map of extra fields"
@@ -27,7 +26,7 @@
             (= :time (:dim token))
             #_(util/hash-match (select-keys token-fields [:timezone]) (:value token))
             (= (-> token :value) date))
-          (format "\nExpected %s\nGot      %s\n" date (:value token))))))
+          [date (:value token)]))))
 
 (defn datetime-interval
   "Creates a datetime interval checker function"
@@ -40,7 +39,7 @@
         (and
           (= :time dim)
           (= value date))
-        (format "\nExpected %s\nGot      %s\n" date value)))))
+        [date value]))))
 
 (defn number
   "check if the token is a number equal to value.
@@ -50,16 +49,16 @@
                   (and
                     (= :number (:dim token))
                     (or (not (integer? value)) (:integer token))
-                    (= (:val token) value))
-                  "\nExpected number %s, got %s\n" value (:val token))))
+                    (= (:value token) value))
+                  [value (:value token)])))
 
 (defn ordinal
   [value]
   (fn [_ token] (when-not 
                   (and
                     (= :ordinal (:dim token))
-                    (= (:val token) value))
-                  "\nExpected ordinal %s, got %s\n" value (:val token))))
+                    (= (:value token) value))
+                  [value (:value token)])))
 
 (defn temperature
   "Create a temp condition"

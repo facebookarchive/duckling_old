@@ -191,14 +191,13 @@
   (for [test tests
         text (:text test)]
     (try
-      (prn "run" text)
       (let [{:keys [stash winners]} (parse text context module)
             winner-count (count winners)
             check (first (:checks test)) ; only one test is supported now
-            check-results (map (partial check context) winners)] ; return nil if OK, explanation string if not OK
+            check-results (map (partial check context) winners)] ; return nil if OK, [expected actual] if not OK
         (if (some #(or (nil? %) (false? %)) check-results)
           [0 text nil]
-          [1 text (reduce str check-results)]))
+          [1 text [(first (first check-results)) (map second check-results)]]))
       (catch Exception e
         [1 text (.getMessage e)]))))
 
@@ -250,8 +249,10 @@
        (let [output (run-corpus (mod @corpus-map) mod)
              failed (remove (comp (partial = 0) first) output)]
          (doseq [[[error-count text error-msg] i] (map vector failed (iterate inc line))]
-           (printf "%d FAIL \"%s\": %s\n" i text error-msg))
-         (printf "%d examples, %d failed.\n" (count output) (count failed))
+           (printf "%d FAIL \"%s\"\n    Expected %s\n" i text (first error-msg))
+           (doseq [got (second error-msg)]
+             (printf "    Got      %s\n" got)))
+         (printf "%s: %d examples, %d failed.\n" mod (count output) (count failed))
          (recur more (+ line (count failed)) (concat acc (map (fn [[_ t _]] [mod t]) failed))))
        (defn c [n] 
          (let [[mod text] (nth acc n)]
