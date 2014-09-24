@@ -202,10 +202,17 @@
   "@ 3pm"
   "3PM"
   "3pm"
-  "3ish pm"
   "3 oclock pm"
   "3 o'clock in the afternoon"
   (datetime 2013 2 12 15 :hour 3 :meridiem :pm)
+
+  "3ish pm"
+  "3pm approximately"
+  "at about 3pm"
+  (datetime 2013 2 12 15 :hour 3 :meridiem :pm :precision "approximate")
+
+  "tomorrow 5pm sharp"
+  (datetime 2013 2 13 17 :hour 5 :meridiem :pm :precision "exact")
 
   "at 15 past 3pm"
   "a quarter past 3pm"

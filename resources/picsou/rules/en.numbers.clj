@@ -60,6 +60,12 @@
   {:dim :number
    :value (Double/parseDouble (first (:groups %1)))}
 
+  "number dot number"
+  [(dim :number #(not (:number-prefixed %))) #"(?i)dot|point" (dim :number #(not (:number-suffixed %)))]
+  {:dim :number
+   :value (+ (* 0.1 (:value %3)) (:value %1))}
+   
+
   "decimal with thousands separator"
   #"(\d+(,\d\d\d)+\.\d+)"
   {:dim :number
