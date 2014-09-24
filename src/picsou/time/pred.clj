@@ -384,7 +384,7 @@
       
       [token]) ; default for other dims
     (catch Throwable e
-      (.printStackTrace e)
+      (errorf e "Error while resolving %s" (dissoc token :route))
       (print-token token)
       (throw (ex-info (format "Error while resolving %s" (dissoc token :route)) {})))))
 
