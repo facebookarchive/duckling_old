@@ -4,79 +4,87 @@
   "segundo (cycle)"
   #"(?i)segundos?"
   {:dim :cycle
-   :grain seconds}
+   :grain :second}
 
   "minutos (cycle)"
   #"(?i)minutos?"
   {:dim :cycle
-   :grain minutes}
+   :grain :minute}
 
   "hora (cycle)"
   #"(?i)horas?"
   {:dim :cycle
-   :grain hours}
+   :grain :hour}
 
   "dia (cycle)"
   #"(?i)d(í|i)as?"
   {:dim :cycle
-   :grain days}
+   :grain :day}
 
   "semana (cycle)"
   #"(?i)semanas?"
   {:dim :cycle
-   :grain weeks}
+   :grain :week}
 
   "mes (cycle)"
   #"(?i)mes(es)?"
   {:dim :cycle
-   :grain months}
+   :grain :month}
   
   "año (cycle)"
   #"(?i)a(n|ñ)os?"
   {:dim :cycle
-   :grain years}
+   :grain :year}
   
   "este|en un <cycle>"
   [#"(?i)(est(e|a|os)|en (el|los|la|las) ?)" (dim :cycle)]
-  (this-cycle (:grain %2) 0)
+  (cycle-nth (:grain %2) 0)
 
-  "dentro de <integer> <cycle>"
-  [#"(?i)dentro de" (integer) (dim :cycle)]
-  (this-cycle (:grain %3) 1 (:val %2))
+  ; "dentro de <integer> <cycle>"
+  ; [#"(?i)dentro de" (integer) (dim :cycle)]
+  ; (cycle-nth  (:grain %3) 1 (:value %2))
 
   "la <cycle> pasado"
   [#"(?i)(el|los|la|las) ?" (dim :cycle) #"(?i)pasad(a|o)s?"]
-  (this-cycle (:grain %2) -1)
+  (cycle-nth (:grain %2) -1)
 
   "la pasado <cycle>"
   [#"(?i)(el|los|la|las) ?" #"(?i)pasad(a|o)s?" (dim :cycle)]
-  (this-cycle (:grain %3) -1)
+  (cycle-nth  (:grain %3) -1)
 
   "el <cycle> (proximo|que viene)"
   [#"(?i)(el|los|la|las) ?" (dim :cycle) #"(?i)(pr(ó|o)xim(o|a)s?|que vienen?|siguientes?)"]
-  (this-cycle (:grain %2) 1)
+  (cycle-nth  (:grain %2) 1)
   
   "el proximo <cycle> "
   [#"(?i)(el|los|la|las) ?" #"(?i)pr(ó|o)xim(o|a)s?" (dim :cycle)]
-  (this-cycle (:grain %3) 1)
+  (cycle-nth  (:grain %3) 1)
+
+  "el <cycle> proximo|que viene <time>"
+  [#"(?i)(el|los|la|las)" (dim :cycle) #"(?i)(pr(ó|o)xim(o|a)s?|que vienen?|siguientes?)" (dim :time)]
+  (cycle-nth-after (:grain %2) 1 %4)
+  
+  "el <cycle> antes <time>"
+  [#"(?i)l[ea']? ?" (dim :cycle) #"(?i)antes de" (dim :time)]
+  (cycle-nth-after (:grain %2) -1 %4)
 
   "pasados n <cycle>"
   [#"(?i)pasad(a|o)s?" (integer 2 9999) (dim :cycle)]
-  (this-cycle (:grain %3) (- (:val %2)) (:val %2))
+  (cycle-n-not-immediate (:grain %3) (- (:value %2)))
 
   "n pasados <cycle>"
   [(integer 2 9999) #"(?i)pasad(a|o)s?" (dim :cycle)]
-  (this-cycle (:grain %3) (- (:val %1)) (:val %1))
+  (cycle-n-not-immediate (:grain %3) (- (:value %1)))
   
   "proximas n <cycle>"
   [#"(?i)pr(ó|o)xim(o|a)s?" (integer 2 9999) (dim :cycle)]
-  (this-cycle (:grain %3) 1 (:val %2))
+  (cycle-n-not-immediate (:grain %3) (:value %2))
 
   "n proximas <cycle>"
   [(integer 2 9999) #"(?i)pr(ó|o)xim(o|a)s?" (dim :cycle)]
-  (this-cycle (:grain %3) 1 (:val %1))
+  (cycle-n-not-immediate (:grain %3) (:value %1))
 
   "n <cycle> (proximo|que viene)"
   [(integer 2 9999) (dim :cycle) #"(?i)(pr(ó|o)xim(o|a)s?|que vienen?|siguientes?)"]
-  (this-cycle (:grain %2) 1 (:val %1))
+  (cycle-n-not-immediate  (:grain %2) (:value %1))
 )

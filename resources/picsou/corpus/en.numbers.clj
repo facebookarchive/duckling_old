@@ -73,7 +73,5 @@
   "4th"
   "fourth"
   (ordinal 4)
-
-
 )
 

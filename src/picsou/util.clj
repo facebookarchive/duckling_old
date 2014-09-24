@@ -14,6 +14,13 @@
            [java.io StringWriter]
            [org.joda.time DateTimeZone DateTime]))
 
+(defn hash-match
+  "Matching hashmap over hashmap. Keys can be functions.
+  WARNING THIS IS NOT RECURSIVE FOR THE MOMENT"
+  [pattern input]
+  (every? (fn [[key val]] (= val (key input)))
+    pattern))
+
 (defn valid-limit?
   "Decide if two adjacent chars are reasonably separated
   ab => false
@@ -52,17 +59,19 @@
                 -1 [elems max-val])))]
     (first (reduce f [] coll))))
 
-(defn keep-partial-max
-  "Return the sublist of elem that do not have any elem greater
-   than them according the given partial order function.
-   When the partial order returns nil, it means the 2 elems
-   cannot be compared."
-  [partial-order-fn coll]
-  (filter
-    (fn [x] (every? #(let [p (partial-order-fn x %)]
-                      (or (nil? p) (>= p 0)))
-                    coll))
-    coll))
+(defn split-by-partial-max
+  "Splits coll into two colls. The first one contains the items in coll that do
+   not have any elem greater than them in base-coll according the given partial
+   order function. The second contains the other items in coll.
+   (When the partial order returns nil, it means the 2 elems
+   cannot be compared.)"
+  [partial-order-fn coll base-coll]
+  (let [splitted (group-by
+                   (fn [x] (every? #(let [p (partial-order-fn x %)]
+                                      (or (nil? p) (>= p 0)))
+                                   base-coll))
+                   coll)]
+    [(splitted true) (splitted false)]))
 
 (defn merge-according-to
   "Merges a list of maps from left to right.

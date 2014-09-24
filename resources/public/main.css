@@ -1,0 +1,19 @@
+a {
+	cursor: pointer;
+	color: blue;
+}
+
+.token {
+	border: 1px solid green;
+	padding: 10px;
+	display: inline-block;
+	margin: 10px;
+}
+
+.text {
+	color: black;
+}
+
+.rule {
+	color: gray;
+}

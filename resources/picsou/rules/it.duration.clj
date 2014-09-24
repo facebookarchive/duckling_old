@@ -4,26 +4,22 @@
   "second (unit-of-duration)"
   #"(?i)sec(ond[oi])?"
   {:dim :unit-of-duration
-   :grain seconds
-   :in-width (seconds 1)} ; width of interval when "in 10 secs"
+   :grain :second} ; width of interval when "in 10 secs"
 
   "minute (unit-of-duration)"
   #"(?i)min(ut[oi])?"
   {:dim :unit-of-duration
-   :grain minutes
-   :in-width (minutes 1)} 
+   :grain :minute} 
 
   "hour (unit-of-duration)"
   #"(?i)or[ae]"
   {:dim :unit-of-duration
-   :grain hours
-   :in-width (hours 1)} 
+   :grain :hour} 
 
   "day (unit-of-duration)"
   #"(?i)giorn[oi]"
   {:dim :unit-of-duration
-   :grain days
-   :in-width (days 1)}
+   :grain :day}
 
   "week (unit-of-duration)"
   #"(?i)settiman[ae]"

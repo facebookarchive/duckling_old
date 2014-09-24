@@ -1,84 +1,94 @@
 (ns picsou.corpus
-  (:require [clj-time.core :as t]
-            [picsou.time :as time]
+  (:use     [clojure.tools.logging]
+            [plumbing.core :except [millis]]) 
+  (:require [picsou.time.obj :as time]
             [picsou.util :as util]))
 
-(defn datetime
-  "Creates a datetime condition to check if the token is valid"
-  [& args] ; '2013 2 13 - 14' means "from 13 feb to 14 feb"
-  (let [[arg-from [_ & arg-to-short]] (split-with #(not= - %) args)
-        arg-to (concat (drop-last (count arg-to-short) arg-from) arg-to-short)
-        from (time/local-date-time arg-from)
-        to (time/local-date-time arg-to)]
-    (fn
-      [token context]
-      (and
-        (= :time (:dim token))
-        (->> (time/resolve-time token context) (filter #(= [from to] %)) first)))))
+; Checker functions return *nil* when OK, or [expected actual] when not OK
 
-(defn datetime-withzone
-  "Like datetime, but also specify a timezone"
-  [zone & args]
-  (let [dtfn (apply datetime args)]
-    (fn [token context]
-      (and (dtfn token context)
-           (= zone (:timezone token))))))
+(defn- vec->date-and-map
+  "Turns a vector of args into a date and a map of extra fields"
+  [args]
+  (let [[date-fields other-keys-and-values] (split-with integer? args)
+        token-fields (into {} (map vec (partition 2 other-keys-and-values)))
+        date (-> (apply time/t -2 date-fields)
+                 (?> (:grain token-fields) (assoc :grain (:grain token-fields)))
+                 (?> (:timezone token-fields) (assoc :timezone (:timezone token-fields))))]
+    [date token-fields]))
+
+(defn datetime
+  "Creates a datetime checker function to check if the token is valid"
+  [& args]
+  (let [[date token-fields] (vec->date-and-map args)]
+    (fn [context token]
+        (when-not
+          (and
+            (= :time (:dim token))
+            #_(util/hash-match (select-keys token-fields [:timezone]) (:value token))
+            (= (-> token :value) date))
+          [date (:value token)]))))
+
+(defn datetime-interval
+  "Creates a datetime interval checker function"
+  [from to]
+  (let [[start start-fields] (vec->date-and-map from)
+        [end end-fields] (vec->date-and-map to)
+        date (time/interval start end)]
+    (fn [context {:keys [value dim] :as token}]
+      (when-not
+        (and
+          (= :time dim)
+          (= value date))
+        [date value]))))
 
 (defn number
   "check if the token is a number equal to value.
   If value is integer, it also checks :integer true"
   [value]
-  (fn [token _] (and
-                  (= :number (:dim token))
-                  (or (not (integer? value)) (:integer token))
-                  (= (:val token) value))))
+  (fn [_ token] (when-not 
+                  (and
+                    (= :number (:dim token))
+                    (or (not (integer? value)) (:integer token))
+                    (= (:value token) value))
+                  [value (:value token)])))
 
 (defn ordinal
-  "check if the token is a ordinal equal to value."
   [value]
-  (fn [token _] (and
-                  (= :ordinal (:dim token))
-                  (= (:val token) value))))
+  (fn [_ token] (when-not 
+                  (and
+                    (= :ordinal (:dim token))
+                    (= (:value token) value))
+                  [value (:value token)])))
 
 (defn temperature
   "Create a temp condition"
-  [value & [unit]]
-  (fn [token _] (and
-                  (= :temperature (:dim token))
-                  (== value (-> token :val :temperature))
-                  (= unit  (-> token :val :unit)))))
+  [value' & [unit' precision']]
+  (fn [_ {:keys [dim value unit precision] :as token}] 
+    (not (and
+                  (= :temperature dim)
+                  (= value' value)
+                  (= unit' unit)
+                  (= precision' precision)))))
 
 (defn distance
   "Create a distance condition"
-  [value & [unit]]
-  (fn [token _] (and
-                  (= :distance (:dim token))
-                  (== value (-> token :val :distance))
-                  (= unit  (-> token :val :unit)))))
-(defn volume
-  "Create a volume condition"
-  [value & [unit]]
-  (fn [token _] (and
-                  (= :volume (:dim token))
-                  (== value (-> token :val :volume))
-                  (= unit  (-> token :val :unit)))))
+  [value' & [unit' normalized' precision']]
+  (fn [_ {:keys [dim value unit normalized precision] :as token}] 
+    (not (and
+                  (= :distance dim)
+                  (= value' value)
+                  (= unit' unit)
+                  (= normalized' normalized)
+                  (= precision' precision)))))
+
 (defn money
   "Create a amount-of-money condition"
-  [value & [currency precision]]
-  (fn [token _] (and
-                  (= :amount-of-money (:dim token))
-                  (= value (-> token :val :amount))
-                  (= currency (-> token :val :currency))
-                  (= precision (-> token :val :precision)))))
-
-(defn quantity
-  "Create a quantity condition"
-  [value unit & [product]]
-  (fn [token _] (and
-                  (= :quantity (:dim token))
-                  (= value (-> token :value :value))
-                  (= unit (-> token :value :unit))
-                  (= product (-> token :value :product)))))
+  [val & [unit precision]]
+  (fn [_ {:keys [dim value] :as token}] (not (and
+                  (= :amount-of-money dim)
+                  (= val (-> value :amount))
+                  (= unit (-> value :unit))
+                  (= precision (-> value :precision))))))
 
 (defn place
   "Create a place checker"
@@ -95,6 +105,36 @@
                         (= :unit (:dim token))
                         (= val (:val token))
                         (= cat (:cat token)))))
+
+(defn quantity
+  "Create a quantity condition"
+  [value unit & [product]]
+  (fn [token _] (and
+                  (= :quantity (:dim token))
+                  (= value (-> token :value :value))
+                  (= unit (-> token :value :unit))
+                  (= product (-> token :value :product)))))
+
+(defn volume
+  "Create a volume condition"
+  [value unit & [normalized]]
+  (fn [token _] (and
+                  (= :volume (:dim token))
+                  (= value (-> token :value :value))
+                  (= unit  (-> token :value :unit))
+                  (= normalized (-> token :value :normalized)))))
+
+
+(defn integer
+  "Return a func (picsou pattern) checking that dim=number and integer=true,
+  optional range (inclusive), and additional preds"
+  [& [min max & predicates]]
+  (fn [token]
+    (and (= :number (:dim token))
+         (:integer token)
+         (or (nil? min) (<= min (:value token)))
+         (or (nil? max) (<= (:value token) max))
+         (every? #(% token) predicates))))
 
 (defn corpus
   "Parse corpus" ;; TODO should be able to load several files, like rules

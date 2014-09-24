@@ -1,19 +1,21 @@
 (ns picsou.core
-  (:use [picsou.helpers]
-        [clojure.tools.logging :exclude [trace]]
+  (:use [clojure.tools.logging :exclude [trace]]
         [plumbing.core])
   (:require [clojure.string :as strings]
             [picsou.engine :as engine]
-            [picsou.time :as time]
+            [picsou.time.obj :as time]
             [picsou.learn :as learn]
             [picsou.util :as util]
             [clojure.java.io :as io]
-            [picsou.corpus :as corpus]))
+            [picsou.corpus :as corpus]
+            [midje.repl]))
+
+(defn dev [] (midje.repl/autotest))
 
 (def rules-map (atom {}))
 (def corpus-map (atom {}))
 (def classifiers-map (atom {}))
-(def default-context {:reference-time (time/local-date-time [2013 2 12 4 30])})
+(def default-context {:reference-time (time/t -2 2013 2 12 4 30)})
 
 (defn- get-classifier
   [id]
@@ -51,19 +53,38 @@
         ;(printf "Comparing %d (%f) and %d (%f) \n" (:index a) pa (:index b) pb)
         (compare pa pb))))))
 
-(defn- parse
+(defn- select-winners
+  "Winner= token that is not 'smaller' (in the sense of the provided partial
+  order) than another winner, and that resolves to a value"
+  ([compare-fn resolve-fn candidates]
+    (select-winners compare-fn resolve-fn candidates []))
+  ([compare-fn resolve-fn candidates already-selected]
+    (if (seq candidates)
+      (let [[maxima others] (util/split-by-partial-max 
+                              compare-fn
+                              candidates
+                              (concat already-selected candidates))
+            new-winners (->> maxima
+                             (mapcat resolve-fn)
+                             (filter :value))] ; remove unresolved
+        (if (seq maxima)
+          (recur compare-fn resolve-fn others (concat already-selected new-winners))
+          already-selected))
+      already-selected)))
+
+(defn parse
   "Parse a sentence. Returns the stash and a curated list of winners.
    Targets is a coll of {:dim dim :label label} : only winners of these dims are
    kept, and they receive a :label key = the label provided.
    If no targets specified, all winners are returned."
-  [s context module & [targets starting-stash]]
+  [s context module & [targets]]
   {:pre [s context module]}
   (let [classifiers (get-classifier module)
         _ (when-not (map? classifiers)
             (warnf "[picsou] classifiers is not a map s=%s module=%s targets=%s"
                    s module (util/spprint targets)))
         rules (get-rules module)
-        stash (engine/pass-all s rules starting-stash)
+        stash (engine/pass-all s rules)
         ; add an index to tokens in the stash
         stash (map #(if (map? %1) (assoc %1 :index %2) %1)
                    stash
@@ -73,16 +94,14 @@
         winners (->> stash
                      (filter :pos)
                      ; just keep the dims we want, and add the label key
-                     (?>> dim-label map #(when-let [label (get dim-label (:dim %))]
-                                          (assoc % :label label)))
+                     (?>> dim-label (map #(when-let [label (get dim-label (:dim %))]
+                                            (assoc % :label label))))
                      (remove nil?)
-                     ; resolve tokens value (one token can have 0 to n resolutions)
-                     (mapcat #(engine/resolve-token % context module))
-                     ; remove non-resolved token
-                     (remove :not-resolved)
-                     ; remove tokens who are recovered by tokens of same dim,
-                     ; or share same interval (and same dim) but stronger probability
-                     (util/keep-partial-max #(compare-tokens %1 %2 classifiers dim-label))
+                     
+                     (select-winners
+                       #(compare-tokens %1 %2 classifiers dim-label)
+                       #(engine/resolve-token % context module))
+                     
                      ; add a confidence key
                      ; low confidence for numbers covered by datetime
                      (engine/estimate-confidence context module)
@@ -101,7 +120,7 @@
       (let [pos (:pos tok)
             end (:end tok)]
         (if pos
-          (printf "%s %s%s%s %2d | %-9s | %-25s | P = %04.4f | %s\n"
+          (printf "%s %s%s%s %2d | %-9s | %-25s | P = %04.4f | %.20s\n"
                   (if (some #{(:index tok)} winners-indices) "W" " ")
                   (apply str (repeat pos \space))
                   (apply str (repeat (- end pos) \-))
@@ -166,19 +185,21 @@
       (util/merge-according-to {:tests concat :context merge} (config-key current) new-corpus))))
 
 (defn run-corpus
-  "Run the corpus given in parameter for the given module"
+  "Run the corpus given in parameter for the given module.
+  Returns a list of vectors [0|1 text error-msg]"
   [{context :context, tests :tests} module]
   (for [test tests
         text (:text test)]
     (try
       (let [{:keys [stash winners]} (parse text context module)
             winner-count (count winners)
-            check (first (:checks test))] ; only one test is supported
-        (if (some #(check % context) winners)
-          [0 (str "OK  " (str "\"" text "\""))]
-          [1 (str "FAIL" (str "\"" text "\"") " none of the " winner-count " winners did pass the test")]))
+            check (first (:checks test)) ; only one test is supported now
+            check-results (map (partial check context) winners)] ; return nil if OK, [expected actual] if not OK
+        (if (some #(or (nil? %) (false? %)) check-results)
+          [0 text nil]
+          [1 text [(first (first check-results)) (map second check-results)]]))
       (catch Exception e
-        [1 (str "FAIL caught" (.getMessage e))]))))
+        [1 text (.getMessage e)]))))
 
 ;; default context is the same as the corpus context
 (defn play
@@ -196,18 +217,17 @@
      (printf "%d tokens in stash\n" (count stash))
 
      ;; 2. print winners
-     (print "Winners: ")
+     (print "Winners: \n")
      (doseq [winner winners]
        (case (:dim winner)
-         :time (println "Time" (:value winner))
+         :time (println "Time" (:value winner) (:form winner))
          :duration (println "Duration" (select-keys winner [:grain :fuzzy :units :val]))
          :number (println "Number" "integer?" (:integer winner) (:value winner) (:body winner))
          :pnl (println "Potential named location: " (:pnl winner) " Within n :" (:n winner))
-         :unit (println "Unit :" (:cat winner) " => " (:val winner))
-         :quantity (println "Quantity: " (:value winner) (:unit winner) (:product winner))
-         (println "Other: " (:dim winner) (:val winner)))
+         :unit (println "Unit :" (:cat winner) " => " (:value winner))
+         (println "Other: " (:dim winner) (dissoc winner :dim :rule :route :text :pos :end :index :body :start)))
        (when (:latent winner) (println "Latent token"))
-       (print-tokens winner module-id))
+       #_(print-tokens winner module-id))
 
      ;; 3. ask for details
      (println)
@@ -220,20 +240,24 @@
 (defn run
   "Runs the corpus and prints the results to the terminal."
   ([]
-   (let [results (mapv run (keys @corpus-map))]
-     (println "Results :")
-     (doseq [[module-id ex-count failed] results]
-       (printf "%s: %d examples, %d failed.\n" module-id ex-count failed))
-     (println "Global Failed count: " (reduce + (map last results)))))
+   (run (keys @corpus-map)))
   ([module-id]
-    (let [output (run-corpus (module-id @corpus-map) module-id)
-          ex-count (count output)
-          failed (->> output (map first) (reduce +))]
-      (doseq [line output]
-        (when (= 1 (first line))
-        	(println (second line))))
-      (printf "%d examples, %d failed.\n" ex-count failed)
-      [module-id ex-count failed])))
+   (loop [[mod & more] (if (seq? module-id) module-id [module-id])
+          line 0
+          acc []]
+     (if mod
+       (let [output (run-corpus (mod @corpus-map) mod)
+             failed (remove (comp (partial = 0) first) output)]
+         (doseq [[[error-count text error-msg] i] (map vector failed (iterate inc line))]
+           (printf "%d FAIL \"%s\"\n    Expected %s\n" i text (first error-msg))
+           (doseq [got (second error-msg)]
+             (printf "    Got      %s\n" got)))
+         (printf "%s: %d examples, %d failed.\n" mod (count output) (count failed))
+         (recur more (+ line (count failed)) (concat acc (map (fn [[_ t _]] [mod t]) failed))))
+       (defn c [n] 
+         (let [[mod text] (nth acc n)]
+           (printf "(play %s \"%s\")\n" mod text)
+           (play mod text)))))))
 
 (defn load!
   "Load/Reload rules and classifiers from the config in parameter.
@@ -268,14 +292,15 @@
          (:reference-time context)
          (vector? targets)]}
   (try
-    (infof "Extracting from '%s' with targets %s and stash %s" sentence targets (first leven-stash))
+    (infof "Extracting from '%s' with targets %s" sentence targets)
     (letfn [(extract'
               [module targets] ; targets specify all the dims we should extract
               (let [module (keyword module)]
                 (when-not (module @rules-map)
-                  (throw (ex-info "Unknown picsou config" {:module module})))
-                (->> (parse sentence context module targets leven-stash)
+                  (throw (ex-info "Unknown picsou module" {:module module})))
+                (->> (parse sentence context module targets)
                      :winners
+                     (map #(assoc % :value (engine/export-value %)))
                      (map #(select-keys % [:label :body :value :start :end :latent])))))]
       (->> targets
            (group-by :module) ; we want to run each config only once

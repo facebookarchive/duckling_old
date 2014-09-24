@@ -5,20 +5,13 @@
   2. rules are (recursively) matched based on theirs pattern vectors.
   3. tokens containing final info are produced using their production rules"
   (:require [clojure.set :as sets]
-            [picsou.time :as time]
-            [picsou.time.helpers]
-            [picsou.util :as util]
-            [clj-time.coerce :as coerce]))
+            [picsou.time.prod]
+            [picsou.time.api :as time]
+            [picsou.util :as util]))
 
 ;;
 ;; Lookup and basic matching functions, used by patterns in rules
 ;;
-(defn hash-match
-  "Matching hashmap over hashmap. Keys can be functions.
-  WARNING THIS IS NOT RECURSIVE FOR THE MOMENT"
-  [pattern input]
-  (every? (fn [[key val]] (= val (key input)))
-    pattern))
 
 (defn- re-pos
   "Finds regex matches in s, with their position and groups.
@@ -78,7 +71,7 @@
 
     (map? pattern)
     (fn [stash position]
-      (lookup-token #(hash-match pattern %) stash))
+      (lookup-token #(util/hash-match pattern %) stash))
 
     (fn? pattern)
     (fn [stash position]
@@ -91,7 +84,7 @@
   "Builds a new rule"
   [name pattern production]
   (if (not (string? name)) (throw (Exception. "Can't accept rule without name.")))
-  (let [picsou-helper-ns (the-ns 'picsou.time.helpers)
+  (let [picsou-helper-ns (the-ns 'picsou.time.prod) ; could split time.patterns and time.prod helpers
         pattern (binding [*ns* picsou-helper-ns] (eval pattern))
         pattern-vec (if (vector? pattern) pattern [pattern])]
     {:name name
@@ -134,13 +127,15 @@
   (let [pos (:pos (first route))
         end (:end (last route))]
     (try
-      (merge (apply (:production rule) route)
-        {:text (subs sentence pos end), :pos pos, :end end, :rule rule, :route route})
+      (when-let [product (apply (:production rule) route)]
+        (merge product
+               {:text (subs sentence pos end), :pos pos, :end end, :rule rule, :route route}))
       (catch Exception e
-        (throw (ex-info (format "Exception picsou@produce span='%s' rule='%s' sentence='%s'"
+        (throw (ex-info (format "Exception picsou@produce span='%s' rule='%s' sentence='%s' ex='%s' stack=%s"
                                     (subs sentence pos end)
                                     (:name rule)
-                                    sentence)
+                                    sentence
+                                    e (.printStackTrace e))
                         {:exception e}))))))
 
 (defn- never-produced?
@@ -182,9 +177,9 @@
     (apply concat
       (for [rule rules]
         (try
-          (->> (match (:pattern rule) stash)
-            (filter #(never-produced? stash rule %))
-            (map (fn [route] (produce rule route sentence))))
+          (->> (match (:pattern rule) stash) ; get the routes that match this rule
+               (filter #(never-produced? stash rule %)) ; remove what we already have
+               (map (fn [route] (produce rule route sentence)))) ; produce
           (catch Exception e
             (throw (Exception. (str "Exception matching rule: "
                                  (:name rule) " " e)))))))))
@@ -192,8 +187,8 @@
 (defn pass-all
   "Make as many passes as necessary until no new tokens are produced
   (there is a limit to avoid infinite loops though)"
-  [sentence rules & [starting-stash]]
-  (loop [stash (apply vector {:text sentence} starting-stash)
+  [sentence rules]
+  (loop [stash [{:text sentence}]
          prev-stash-size 0
          ; safeguard: number of max iterations (loops DO occur :))
          remaining-iter 10]
@@ -215,12 +210,16 @@
 (defn resolve-token
   "Resolve a token based on its dimension, predicate, and the context.
   Returns a coll of tokens, since they can have multiple resolutions, or none.
-  Unresolved tokens are returned as is."
+  Unresolved tokens are returned as is, without a :value key."
   [token context module]
-  (let [values (time/resolve token context)]
-    (if-not (empty? values)
-      (map #(assoc token :value %) values)
-      [(assoc token :not-resolved true)]))) ; return token if not resolved with flag
+  ; TODO ns should be dynamic based on dim ; or better use a protocol
+  (time/resolve token context))
+
+(defn export-value
+  "Transforms a token value for API output. Returns the modified value."
+  [token]
+  ; TODO dynamic ns based on dim
+  (time/export-value token))
 
 (defn estimate-confidence
   "Returns the tokens with :confidence a rough confidence estimation for each.

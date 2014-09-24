@@ -4,57 +4,54 @@
   "seconde (unit-of-duration)"
   #"(?i)seg(undo)?s?"
   {:dim :unit-of-duration
-   :grain seconds
-   :in-width (seconds 1)} ; width of interval when "in 10 secs"
+   :grain :second}
 
   "minute (unit-of-duration)"
   #"(?i)min(uto)?s?"
   {:dim :unit-of-duration
-   :grain minutes
-   :in-width (minutes 1)}
+   :grain :minute}
 
   "hour (unit-of-duration)"
   #"(?i)h(ora)?s?"
   {:dim :unit-of-duration
-   :grain hours
-   :in-width (hours 1)}
+   :grain :hour}
 
   "day (unit-of-duration)"
   #"(?i)d(í|i)as?"
   {:dim :unit-of-duration
-   :grain days
-   :in-width (days 1)}
+   :grain :day}
 
   "week (unit-of-duration)"
   #"(?i)semanas?"
   {:dim :unit-of-duration
-   :grain weeks
-   :in-width (weeks 1)}
+   :grain :week}
 
   "month (unit-of-duration)"
   #"(?i)mes(es)?"
   {:dim :unit-of-duration
-   :grain months
-   :in-width (months 1)}
+   :grain :month}
   
   "year (unit-of-duration)"
   #"(?i)a(n|ñ)os?"
   {:dim :unit-of-duration
-   :grain years
-   :in-width (years 1)}
+   :grain :year}
   
   "<integer> <unit-of-duration>"
-  [(integer) (dim :unit-of-duration)]
+  [(integer 0) (dim :unit-of-duration)] ;prevent negative duration...
   {:dim :duration
-   :val ((:grain %2) (:val %1))
-   :in-width (:in-width %2)} ; used by "in <duration>"
+   :value (duration (:grain %2) (:value %1))}
 
-  "in <duration>"
+  ; "uno <unit-of-duration>" not sure we need that one
+  ; [#"(?i)une?" (dim :unit-of-duration)]
+  ; {:dim :duration
+  ;  :value (duration (:grain %2) 1)}
+
+  "en <duration>"
   [#"(?i)en" (dim :duration)]
-  (in-duration (:val %2) (:in-width %2))
+  (in-duration (:value %2))
 
-  "ago <duration>"
+  "hace <duration>"
   [#"hace" (dim :duration)]
-  (in-duration (:val %2) (:in-width %2) -)
+  (duration-ago (:value %2))
 
 )

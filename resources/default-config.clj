@@ -1,44 +1,46 @@
-{:fr$core {:corpus ["fr.time"
+{
+  :fr$core {:corpus ["fr.time"
                     "fr.numbers"
                     "fr.temperature"
+                    "fr.measure"
                     "fr.finance"
-                    "en.communication"]
-           :rules ["fr.time"
-                   "fr.numbers"
-                   "fr.cycles"
-                   "fr.duration"
-                   "fr.temperature"
-                   "en.finance"                             ; sic
-                   "en.communication"]}                     ; sic
+                    "en.communication"
+                    ]
+            :rules ["fr.time"
+                    "fr.numbers"
+                    "fr.cycles"
+                    "fr.duration"
+                    "fr.temperature"
+                    "fr.measure"
+                    "en.finance"                             ; sic
+                    "en.communication"
+                    ]}                     
  :en$core {:corpus ["en.time"
                     "en.numbers"
                     "en.temperature"
+                    "en.measure"
                     "en.finance"
-                    "en.communication"
-                    "en.quantity"]
-           :rules ["en.time"
-                   "en.numbers"
-                   "en.cycles"
-                   "en.duration"
-                   "en.temperature"
-                   "en.finance"
-                   "en.communication"
-                   "en.quantity"]}
- :es$core {:corpus ["es.time"
-                    "es.numbers"
-                    "es.temperature"
-                    "es.finance"
                     "en.communication"]
-           :rules ["es.time"
-                   "es.numbers"
-                   "es.cycles"
-                   "es.duration"
-                   "es.temperature"
-                   "en.finance"
-                   "en.communication"]}
- :cn$core {:corpus ["cn.numbers"
-                    "cn.time"]
-           :rules ["cn.numbers"
-                   "cn.time"
-                   "cn.cycles"
-                   "cn.duration"]}}
+           :rules  ["en.time"
+                    "en.numbers"
+                    "en.cycles"
+                    "en.duration"
+                    "en.temperature"
+                    "en.measure"
+                    "en.finance"
+                    "en.communication"]}
+:es$core {:corpus ["es.time"
+ ;                    "es.numbers"
+ ;                    "es.temperature"
+ ;                    "es.finance"
+ ;                    "en.communication"
+                  ]
+            :rules ["es.time"
+                    "es.numbers"
+                    "es.cycles"
+                    "es.duration"
+ ;                   "es.temperature"
+ ;                   "en.finance"
+ ;                   "en.communication"
+                    ]}
+ }

@@ -1,5 +1,6 @@
 (ns picsou.learn
-  (:use clojure.tools.logging)
+  (:use [clojure.tools.logging]
+        [clojure.pprint :only [pprint]])
   (:require
     [picsou.time :as time]
     [picsou.engine :as engine]
@@ -12,10 +13,13 @@
 (defn extract-route-features
   "Extracts names of previous routes used to produce this route token.
    This is the feature extractor we use."
+   ; FIXME the grain feature should be moved to the time module
   [token]
-  (->> (list (reduce str (map #(get-in % [:rule :name]) (:route token))))
-       (keep identity)
-       vec))
+  (let [rules (reduce str (map #(get-in % [:rule :name]) (:route token)))
+        time-tokens (filter #(= :time (:dim %)) (:route token))
+        grains (when (< 0 (count time-tokens))
+                 (reduce str (map #(-> % :pred meta :grain) time-tokens)))]
+    (filter identity [rules grains])))
 
 (defn simple-feature-extractor
   "A very simple one to show if it works. Not used for now.
@@ -38,13 +42,15 @@
   [{<rule-name> [features, output]}]
   Output is true if the rule was contributing successfully, false otherwise"
   [s context check rules feature-extractor dataset]
-  (debugf "learning %s" s)
+  (printf "learning %s %s\n" s check)
   (let [fc-tokens (->> (engine/pass-all s rules) 
-                       (filter #(and (:pos %) (= (count s) (- (:end %) (:pos %))))) ; fully-covering tokens
-                       (map #(assoc % :check (check % context))))
-        fc-tokens-ok (filter :check fc-tokens)
-        fc-tokens-ko (remove :check fc-tokens)
+                       (filter #(and (:pos %) (= (count s) (- (:end %) (:pos %)))))
+                       (mapcat #(engine/resolve-token % context nil)) ; fully-covering tokens
+                       (map #(assoc % :check (check context %))))
+        fc-tokens-ok (remove :check fc-tokens)
+        fc-tokens-ko (filter :check fc-tokens)
         found     (not (empty? fc-tokens-ok))
+        _ (when-not found (prn "not found" s))
         tokens-ok (apply sets/union
                          (for [tok fc-tokens-ok]
                            ;; all subtokens of OK fully covering tokens which have a :rule
@@ -62,6 +68,10 @@
              (update-in ds [(-> tok :rule :name)]
                         #(conj % [(feature-extractor tok) false])))
         final-dataset (reduce f2 dataset-updated-with-positives tokens-ko)]
+    #_(when (= s "de 9h30 jusqu'à 11h jeudi")
+      (prn (count fc-tokens-ok) (count fc-tokens-ko))
+      (doseq [t tokens-ok]
+        (prn (-> t :rule :name) (extract-route-features t))))
     final-dataset))
 
 (defn corpus->dataset
