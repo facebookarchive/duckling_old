@@ -1,3 +1,8 @@
+a {
+	cursor: pointer;
+	color: blue;
+}
+
 .token {
 	border: 1px solid green;
 	padding: 10px;
