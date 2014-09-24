@@ -50,7 +50,16 @@
   "decimal number"
   #"(\d*\.\d+)"
   {:dim :number
+<<<<<<< Updated upstream
    :val (Double/parseDouble (first (:groups %1)))}
+=======
+   :value (Double/parseDouble (first (:groups %1)))}
+
+  "number dot number"
+  [(dim :number #(not (:number-prefixed %))) #"(?i)dot|point" (dim :number #(not (:number-suffixed %)))]
+  {:dim :number
+   :value (+ (* 0.1 (:value %3)) (:value %1))}
+>>>>>>> Stashed changes
 
   "decimal with thousands separator"
   #"(\d+(,\d\d\d)+\.\d+)"

@@ -292,7 +292,11 @@
   "at|around <time-of-day>" ; at four
   [#"(?i)at|around" {:form :time-of-day}]
   (dissoc %2 :latent)
+<<<<<<< Updated upstream
   
+=======
+
+>>>>>>> Stashed changes
   "<time-of-day> oclock"
   [{:form :time-of-day} #"(?i)o.?clock"]
   (dissoc %1 :latent)
@@ -385,7 +389,51 @@
   
   "<time> timezone"
   [(dim :time) (dim :timezone)]
+<<<<<<< Updated upstream
   (assoc %1 :timezone (:value %2))
+=======
+  (set-timezone %1 (:value %2))
+
+  ; Precision
+  ; only with time of day , may need to open to time token
+  ; "<time> approximately" ; 7ish
+  ; [(dim :time #(not (:precision %))) #"(?i)(-?ish|approximately)" ]
+  ; (-> %1
+  ;   (merge {:precision "approximate"}))
+
+  ; "<time> sharp" ; 7pm sharp
+  ; [(dim :time #(not (:precision %))) #"(?i)(sharp|exactly)" ]
+  ; (-> %1
+  ;   (merge {:precision "exact"}))
+  
+  "<time-of-day> approximately" ; 7ish
+  [{:form :time-of-day} #"(?i)(-?ish|approximately)"]
+  (-> %1
+    (dissoc :latent)
+    (merge {:precision "approximate"}))
+
+  "<time-of-day> sharp" ; sharp
+  [{:form :time-of-day} #"(?i)(sharp|exactly)"]
+  (-> %1
+    (dissoc :latent)
+    (merge {:precision "exact"}))
+
+  "about <time-of-day>" ; about
+  [#"(?i)(about|around|approximately)" {:form :time-of-day}]
+  (-> %2
+    (dissoc :latent)
+    (merge {:precision "approximate"}))
+
+  "exactly <time-of-day>" ; sharp
+  [#"(?i)exactly" {:form :time-of-day} ]
+  (-> %2
+    (dissoc :latent)
+    (merge {:precision "exact"}))
+  
+
+
+  ; Intervals
+>>>>>>> Stashed changes
 
   ;; Intervals
   "<month> dd-dd (interval)"
