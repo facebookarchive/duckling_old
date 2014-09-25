@@ -1,7 +1,7 @@
 (
 	; Context map
 	{}
-r
+
 	; Distance
 
 	"3 kilómetros"
@@ -9,34 +9,36 @@ r
 	"3 km"
 	"3km"
 	"3k"
+	(distance 3 "kilometre" {:value 3000 :unit "metre"})
+
 	"3,0 km"
-	(distance 3000 "meters")
+	(distance 3.0 "kilometre" {:value 3000.0 :unit "metre"})
 
 	"8 miles"
-	(distance 8 "miles")
+	(distance 8 "mile" {:value 12872 :unit "metre"})
 
 	"9m"
 	"9 metros"
-	(distance 9 "meters")
+	(distance 9 "metre")
 
 	"2cm"
 	"2 centímetros"
-	(distance 2 "centimeters")
+	(distance 2 "centimetre" {:value 0.02 :unit "metre"})
 
 	; Volume
 	"250 mililitros"
 	"250ml"
 	"250 ml"
-	(volume  0.250 "litre")
+	(volume  250 "millilitre" {:value 0.25 :unit "litre"})
 
 	"2 litros"
 	(volume 2 "litre")
 
 	"3 galón"
-	(volume 11.355 "litre")
+	(volume 3 "gallon" {:value 11.355 :unit "litre"})
 
 	"3 hectolitros"
-	(volume 300 "litre")
+	(volume 300 "litre" {:value 30 :unit "litre"})
 
 	"medio litro"
 	(volume 0.5 "litre")
