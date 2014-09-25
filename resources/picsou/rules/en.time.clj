@@ -306,13 +306,10 @@
   (integer 0 23)
   (assoc (hour (:value %1) true) :latent true)
   
-  "at|around <time-of-day>" ; at four
-  [#"(?i)at|@|around" {:form :time-of-day}]
+  "at <time-of-day>" ; at four
+  [#"(?i)at|@" {:form :time-of-day}]
   (dissoc %2 :latent)
 
-  "<time-of-day>ish" ; 7ish
-  [{:form :time-of-day} #"(?i)-?ish" ]
-  (dissoc %1 :latent)
 
   "<time-of-day> oclock"
   [{:form :time-of-day} #"(?i)o.?clock"]
