@@ -43,11 +43,13 @@
         context {:reference-time {:start ref-time :grain :second}}
         {:keys [winners stash]} (pic/parse phrase context module
                                            [{:dim :time :label :time}
-                                            {:dim :duration :label :period}])]
+                                            {:dim :duration :label :period}])
+        trimmed (doall (map trim winners))]
     (prn ref-time)
-    (prn "Got" (trim (first winners)))
+    (prn "Got1" (map :dim winners))
+    (prn "Got" (count trimmed))
     
-    {:body (map trim winners)}))
+    {:body trimmed}))
 
 (defroutes routes
   (GET "/parse/:module/:reftime/:reftz/:phrase" [] parse-controller)
