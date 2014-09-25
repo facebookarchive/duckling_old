@@ -24,32 +24,34 @@
   "week (unit-of-duration)"
   #"(?i)settiman[ae]"
   {:dim :unit-of-duration
-   :grain weeks
-   :in-width (weeks 1)}
+   :grain :week}
 
   "month (unit-of-duration)"
   #"(?i)mes[ei]"
   {:dim :unit-of-duration
-   :grain months
-   :in-width (months 1)}
+   :grain :month}
   
   "year (unit-of-duration)"
   #"(?i)ann[oi]"
   {:dim :unit-of-duration
-   :grain years
-   :in-width (years 1)}
+   :grain :year}
   
   "<integer> <unit-of-duration>"
-  [(integer) (dim :unit-of-duration)]
+  [(integer 0) (dim :unit-of-duration)] ;prevent negative duration...
   {:dim :duration
-   :val ((:grain %2) (:val %1))
-   :in-width (:in-width %2)} ; used by "in <duration>"
+   :value (duration (:grain %2) (:value %1))}
+
+  "une <unit-of-duration>"
+  [#"(?i)una?" (dim :unit-of-duration)]
+  {:dim :duration
+   :value (duration (:grain %2) 1)}
+
 
   "in/after <duration>"
-  [#"(?i)in|dopo" (dim :duration)]
-  (in-duration (:val %2) (:in-width %2))
+  [#"(?i)fra|in|dopo" (dim :duration)]
+  (in-duration (:value %2))
 
   "<duration> ago"
   [(dim :duration) #"(?i)fa"]
-  (in-duration (:val %1) (:in-width %1) -)
+  (duration-ago (:value %2))
 )

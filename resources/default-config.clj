@@ -45,4 +45,14 @@
                     "en.finance"
                     "en.communication"
                     ]}
+:it$core {:corpus [
+                    "it.time"
+                    "it.numbers"
+                   ]
+            :rules [
+                     "it.time"
+                     "it.numbers"
+                     "it.cycles"
+                     "it.duration"
+                    ]}
  }
