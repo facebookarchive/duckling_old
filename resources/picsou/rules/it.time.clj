@@ -14,234 +14,223 @@
 
   "named-day"
   #"(?i)luned[ìi]|lun?|lun\."
-  (assoc (day-of-week 1) :not-immediate true :form :named-day)
+  (day-of-week 1)
 
   "named-day"
   #"(?i)marted[iì]|ma|mar\."
-  (assoc (day-of-week 2) :not-immediate true :form :named-day)
+  (day-of-week 2)
 
   "named-day"
   #"(?i)mercoled[iì]|mer|mer?\."
-  (assoc (day-of-week 3) :not-immediate true :form :named-day)
+  (day-of-week 3)
 
   "named-day"
   #"(?i)gioved[iì]|gio|gio\."
-  (assoc (day-of-week 4) :not-immediate true :form :named-day)
+  (day-of-week 4)
 
   "named-day"
   #"(?i)venerd[iì]|ven|ven\."
-  (assoc (day-of-week 5) :not-immediate true :form :named-day)
+  (day-of-week 5)
 
   "named-day"
   #"(?i)sabato|sab\.?"
-  (assoc (day-of-week 6) :not-immediate true :form :named-day)
+  (day-of-week 6)
 
   "named-day"
   #"(?i)domenica|dom\.?"
-  (assoc (day-of-week 7) :not-immediate true :form :named-day)
+  (day-of-week 7)
 
   "named-month"
   #"(?i)gennaio|gene?\.?"
-  (assoc (month-of-year 1) :form :named-month)
+  (month 1)
 
   "named-month"
   #"(?i)febbraio|feb\.?"
-  (assoc (month-of-year 2) :form :named-month)
+  (month 2)
 
   "named-month"
   #"(?i)marzo|mar\.?"
-  (assoc (month-of-year 3) :form :named-month)
+  (month 3)
 
   "named-month"
   #"(?i)aprile|apr\.?"
-  (assoc (month-of-year 4) :form :named-month)
+  (month 4)
 
   "named-month"
   #"(?i)maggio|mag\.?"
-  (assoc (month-of-year 5) :form :named-month)
+  (month 5)
 
   "named-month"
   #"(?i)giugno|giu\.?"
-  (assoc (month-of-year 6) :form :named-month)
+  (month 6)
 
   "named-month"
   #"(?i)luglio|lug\.?"
-  (assoc (month-of-year 7) :form :named-month)
+  (month 7)
 
   "named-month"
   #"(?i)agosto|ago\.?"
-  (assoc (month-of-year 8) :form :named-month)
+  (month 8)
 
   "named-month"
   #"(?i)settembre|sett?\.?"
-  (assoc (month-of-year 9) :form :named-month)
+  (month 9)
 
   "named-month"
   #"(?i)ottobre|ott\.?"
-  (assoc (month-of-year 10) :form :named-month)
+  (month 10)
 
   "named-month"
   #"(?i)novembre|nov\.?"
-  (assoc (month-of-year 11) :form :named-month)
+  (month 11)
 
   "named-month"
   #"(?i)dicembre|dic\.?"
-  (assoc (month-of-year 12) :form :named-month)
+  (month 12)
+
+  ; Holiday TODO: check online holidays
+  ; or define dynamtc rule (last thursday of october..)
+  
 
   "right now"
   #"(subito|immediatamente|proprio adesso|in questo momento)"
-  (this-cycle seconds 0)
+  (cycle-nth :second 0)
   
   "now"
   #"(?i)(ora|al momento|attualmented|adesso|di oggi)"
-  (this-cycle days 0)
+  (cycle-nth :day 0)
 
   "tomorrow"
   #"(?i)domani"
-  (this-cycle days 1)
+  (cycle-nth :day 1)
 
   "yesterday"
   #"(?i)ieri"
-  (this-cycle days -1)
+  (cycle-nth :day -1)
 
   "the day after tomorrow"
   #"(?i)(il giorno )?dopo\s?domani"
-  (this-cycle days 2)
+  (cycle-nth :day 2)
 
   "the day before yesterday"
   #"(?i)altro\s?ieri"
-  (this-cycle days -2)
-
-  "week-end"
-  #"(?i)week[ -]?end"
-  (assoc (between-days-of-weeks-hours 5 18 1 0) :form :named-day)
-  
-  "this <day-of-week>" ; assumed to be in the future
-  [#"(?i)quest[oaie]" {:form :named-day}]
-  (this-pred %2 1)
-
-  "next <named-month|named-day>" ; 
-  [(dim :time) #"(?i)que vienen?"]
-  (this-pred %1 1)
-
-  "past <named-month|named-day> "
-  [#"(?i)(ultim|scors)[oaie]" (dim :time)]
-  (this-pred %2 -1)
-
-  "<named-month|named-day> past"
-  [(dim :time) #"(?i)(ultim|scors)[oaie]"]
-  (this-pred %1 -1)
+  (cycle-nth :day -2)
 
   ;;
+  ;; This, Next, Last
   
-  "day of month (numeric)"
-  [(integer 1 31)]
-  (assoc (day-of-month (:val %1)) :latent true :form :day-of-month)
+  ;; assumed to be strictly in the future: 
+  ;; "this Monday" => next week if today in Monday
   
+  "this <day-of-week>" ; assumed to be in the future
+  [#"(?i)quest[oaie]" {:form :day-of-week}]
+  (pred-nth-not-immediate %2 0)
+
+  ;; for other preds, it can be immediate:
+  ;; "this month" => now is part of it
+  ; See also: cycles in en.cycles.clj
+  "this <time>"
+  [#"(?i)quest[oaie]" (dim :time)]
+  (pred-nth %2 0)
+
+  "next <time>"
+  [#"(?i)prossim[ao]" (dim :time)]
+  (pred-nth %2 1)
+
+  "next <time>"
+  [(dim :time) #"(?i)prossim[ao]"]
+  (pred-nth %1 1)
+
+  "<time> last"
+  [(dim :time) #"(?i)(ultim|scors)[oaie]"]
+  (pred-nth %1 -1)
+
+  "last <time> "
+  [#"(?i)(ultim|scors)[oaie]" (dim :time)]
+  (pred-nth %2 -1)
+
+
+  ; Years
+  ; Between 1000 and 2100 we assume it's a year
+  ; Outside of this, it's safer to consider it's latent
+  
+  "year (1000-2100 not latent)"
+  (integer 1000 2100)
+  (year (:value %1))
+
+  "year (latent)"
+  (integer -10000 999)
+  (assoc (year (:value %1)) :latent true)
+
+  "year (latent)"
+  (integer 2101 10000)
+  (assoc (year (:value %1)) :latent true)
+
+  ; Day of month appears in the following context:
+  ; - the nth
+  ; - March nth
+  ; - nth of March
+  ; - mm/dd (and other numerical formats like yyyy-mm-dd etc.)
+  ; In general we are flexible and accept both ordinals (3rd) and numbers (3)
+
   "day of month (1st)"
-  [#"(?i)primo|1o"] ; |1º if possible later
-  (assoc (day-of-month 1) :latent true :form :day-of-month)
+  [#"(?i)(prim[oa]|1o|1º)( di)?"];
+  (day-of-month 1)
 
   "the <day-of-month>" ; this one is not latent
-  [#"(?i)il" {:form :day-of-month}]
-  (dissoc %2 :latent)
-
-  "month (numeric)"
-  (integer 1 12)
-  (assoc (month-of-year (:val %1)) :latent true)
-
-  "year (four digit)"
-  (integer 1000 9999)
-  (year (:val %1))
+  [#"(?i)il" (integer 1 31)]
+  (assoc (day-of-month (:value %2)) :latent true)
   
-  "<day-of-month> <named-month>" ;  il dodici luglio 2010 (this rule removes latency)
-  [{:form :day-of-month} {:form :named-month}]
-  (intersect %1 %2)
+  "<day-of-month> <named-month>" ;  dodici luglio 2010 (this rule removes latency)
+  [(integer 1 31) {:form :month}]
+  (intersect %2 (day-of-month (:value %1)))
 
-  "morning"
-  #"(?i)mattina"
-  (assoc (between-hours 4 12) :form :part-of-day :latent true)
-
-  "afternoon"
-  #"(?i)pomeriggio"
-  (assoc (between-hours 12 19) :form :part-of-day :latent true)
-
-  "evening"
-  #"(?i)sera"
-  (assoc (between-hours 18 0) :form :part-of-day :latent true)
-
-  "in the <part-of-day>" ;; removes latent
-  [#"(?i)di" {:form :part-of-day}]
-  (dissoc %2 :latent)
-  
-  "this <part-of-day>"
-  [#"(?i)est(e|a)" {:form :part-of-day}]
-  (intersect (this-cycle days 0) %2) ;; removes :latent
-  
-  "<dim time> <part-of-day>" ; since "morning" "evening" etc. are latent, general time+time is blocked
-  [(dim :time) {:form :part-of-day}]
-  (intersect %1 %2)
+  "il <day-of-month> de <named-month>" ; il dodici luglio 2010 
+  [#"(?i)il" (integer 1 31) {:form :month}]
+  (intersect %3 (day-of-month (:value %2)))
 
   ;; hours and minutes (absolute time)
-
-  "<integer> hours (time-of-day)"
-  [(integer 0 23) #"(?i)h\.?(ora)?s?"]
-  (assoc (hour (:val %1) true)
-    :form :time-of-day
-    :for-relative-minutes true
-    :val (:val %1))
+  "<integer> (latent time-of-day)"
+  (integer 0 23)
+  (assoc (hour (:value %1) true) :latent true)
   
-  ;"at <time-of-day>" ; absorption
-  ;[#"(?i)al?( las?)?" {:form :time-of-day}]
-  ;%2
-
-  "a las <integer>(time-of-day)" ; alle due
-  [#"(?i)all[e']" (integer 0 23)]
-  (assoc (hour (:val %2) true)
-    :form :time-of-day
-    :for-relative-minutes true
-    :val (:val %2))
-
-  "a las <hour-min>(time-of-day)" ; a las 12:00 horas
-  [#"(?i)(al?( las?)?|las?)" {:form :time-of-day} #"horas"]
-  %2
-
-  "hh(:|.|h)mm (time-of-day)"
-  #"(?i)((?:[01]?\d)|(?:2[0-3]))[:h\.]([0-5]\d)"
-  (hour-min (read-string (first (:groups %1)))
-            true
-            (read-string (second (:groups %1))))
-  
-  "hhmm (military time-of-day)"
-  #"(?i)((?:[01]?\d)|(?:2[0-3]))([0-5]\d)"
-  (-> (hour-min (read-string (first (:groups %1)))
-                true
-                (read-string (second (:groups %1))))
-      (assoc :latent true))
-  
-  "<time-of-day> am|pm"
-  [{:form :time-of-day} #"(?i)([ap])\.?m?\.?"]
-  (-> (intersect %1 (apply between-hours
-                       (if (= "a" (-> %2 :groups first .toLowerCase))
-                         [0 12]
-                         [12 0])))
-      (assoc :form :time-of-day))
-    
   "noon"
   #"(?i)mezz?ogiorno"
-  (-> (hour 12 false)
-      (assoc :form :time-of-day
-             :for-relative-minutes true :val 12))
+  (hour 12 false)
 
   "midnight"
   #"(?i)mez?zanott?e"
-  (-> (hour 0 false)
-      (assoc :form :time-of-day
-             :for-relative-minutes true :val 0))
+  (hour 0 false)
 
+  "<time-of-day> ora"
+  [#(:full-hour %) #"(?i)or[ea]"]
+  (dissoc %1 :latent) 
+  
+  "at <time-of-day>" ; alle due
+  [#"(?i)all[e']" {:form :time-of-day}]
+  (dissoc %2 :latent)
+
+
+  "hh(:|.|h)mm (time-of-day)"
+  #"(?i)((?:[01]?\d)|(?:2[0-3]))[:h]([0-5]\d)"
+  (hour-minute (Integer/parseInt (first (:groups %1)))
+               (Integer/parseInt (second (:groups %1)))
+               true)
+  
+  "hhmm (military time-of-day)"
+  #"(?i)((?:[01]?\d)|(?:2[0-3]))([0-5]\d)"
+  (-> (hour-minute (Integer/parseInt (first (:groups %1)))
+                (Integer/parseInt (second (:groups %1)))
+                false) ; not a 12-hour clock
+      (assoc :latent true))
+  
   "quarter (relative minutes)"
   #"(?i)quarto"
   {:relative-minutes 15}
+
+  "trois quarts (relative minutes)"
+  #"(?i)(3|tre) quarti?"
+  {:relative-minutes 45}
 
   "half (relative minutes)"
   #"mezzo"
@@ -249,34 +238,30 @@
 
   "number (as relative minutes)"
   (integer 1 59)
-  {:relative-minutes (:val %1)}
+  {:relative-minutes (:value %1)}
   
   "<integer> minutes (as relative minutes)"
   [(integer 1 59) #"(?i)min\.?(uto)?s?"]
   {:relative-minutes (:val %1)}
 
   "<hour-of-day> <integer> (as relative minutes)"
-  [{:for-relative-minutes true} #(:relative-minutes %)]
-  (hour-relativemin 
-    (:val %1) 
-    (:ambiguous-am-pm %1)
-    (:relative-minutes %2))
+  [(dim :time :full-hour) #(:relative-minutes %)] ;before  [{:for-relative-minutes true} #(:relative-minutes %)]
+  (hour-relativemin (:full-hour %1) (:relative-minutes %2) (:twelve-hour-clock? %1))
 
   "<hour-of-day> minus <integer> (as relative minutes)"
-  [{:for-relative-minutes true} #"meno" #(:relative-minutes %)]
-  (hour-relativemin 
-    (:val %1)
-    (:ambiguous-am-pm %1)
-    (- (:relative-minutes %3)))
+  [(dim :time :full-hour) #"meno( un)?" #(:relative-minutes %)]
+  (hour-relativemin (:full-hour %1) (- (:relative-minutes %3)) (:twelve-hour-clock? %1))
+  
+  "relative minutes to <integer> (as hour-of-day)"
+  [#(:relative-minutes %) #"(?i)a" (dim :time :full-hour)]
+  (hour-relativemin (:full-hour %3) (- (:relative-minutes %1)) true)
   
   "<hour-of-day> and <relative minutes>"
-  [{:for-relative-minutes true} #"e" #(:relative-minutes %)]
-  (hour-relativemin 
-    (:val %1)
-    (:ambiguous-am-pm %1)
-    (:relative-minutes %3))
+  [(dim :time :full-hour) #"e( un)?" #(:relative-minutes %)]
+  (hour-relativemin (:full-hour %1) (:relative-minutes %3) (:twelve-hour-clock? %1))
 
-  ;; formatted
+
+  ;; Formatted dates and times
 
   "dd[/-]mm[/-]yyyy"
   #"([012]?\d|30|31)[/-](0?\d|10|11|12)[/-](\d{2,4})"
@@ -290,6 +275,52 @@
   #"([012]?\d|30|31)[/-](0?\d|10|11|12)"
   (parse-dmy (first (:groups %1)) (second (:groups %1)) nil true)
   
+  ; Part of day (morning, evening...). They are intervals.
+  "morning"
+  #"(?i)mattin[aoe]"
+  (assoc (interval (hour 4 false) (hour 12 false) false) :form :part-of-day :latent true)
+
+  "afternoon"
+  #"(?i)pomeriggio?"
+  (assoc (interval (hour 12 false) (hour 19 false) false) :form :part-of-day :latent true)
+  
+  "evening"
+  #"(?i)ser[ae]"
+  (assoc (interval (hour 18 false) (hour 0 false) false) :form :part-of-day :latent true)
+  
+  "del|di <part-of-day>" ;; removes latent
+  [#"(?i)del|di|al" {:form :part-of-day}]
+  (dissoc %2 :latent)
+
+  "this <part-of-day>"
+  [#"(?i)questo|sta" {:form :part-of-day}]
+  (assoc (intersect (cycle-nth :day 0) %2) :form :part-of-day) ;; removes :latent
+
+  "<dim time> <part-of-day>" ; since "morning" "evening" etc. are latent, general time+time is blocked
+  [(dim :time) {:form :part-of-day}]
+  (intersect %1 %2)
+ 
+   "<part-of-day> of <dim time>" ; since "morning" "evening" etc. are latent, general time+time is blocked
+  [{:form :part-of-day} #"(?i)di" (dim :time)]
+  (intersect %1 %3)
+
+  ;specific rule to address "3 in the morning","3h du matin" and extend morning span from 0 to 12
+ 
+  ; Other intervals: week-end, seasons
+  "week-end"
+  #"(?i)week[ -]?end"
+  (interval (intersect (day-of-week 5) (hour 18 false))
+            (intersect (day-of-week 1) (hour 0 false))
+            false)
+
+  ; Absorptions
+  
+  ; a specific version of "il", above, removes :latent for integer as day of month
+  ; this one is more general but does not remove latency
+  "il <time>"
+  [#"(?i)il" (dim :time #(not (:latent %)))]
+  %2
+
   ;; Time zones
   
   "timezone"
@@ -300,5 +331,7 @@
   "<time> timezone"
   [(dim :time) (dim :timezone)]
   (assoc %1 :timezone (:value %2))
+
+  ; Intervals
 
 )

@@ -265,7 +265,7 @@
   (datetime 2013 2 15 12 :hour 12 :day-of-week 4)
 
 
-;; Involving periods   ; look for grain-after-shift
+  ;; Involving periods   ; look for grain-after-shift
   "dans une seconde"
   (datetime 2013 2 12 4 30 1)
   

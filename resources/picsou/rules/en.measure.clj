@@ -1,5 +1,15 @@
 (
 	;; Distance
+	;; NEED TO PUSH THE NORMALIZATION IN THE HELPER + CREATE Function to combine distance
+
+ 	; "two distance tokens in a row"
+ 	; [(dim :distance #(not (:latent %))) (dim :distance #(not (:latent %)))] ; sequence of two tokens with a distance dimension
+ 	; (combine-distance %1 %2)
+  	
+  ; 	; same thing, with "and" in between like "3 feets and 2 inches"
+ 	; "two distance tokens separated by and"
+ 	; [(dim :distance #(not (:latent %))) #"(?i)and" (dim :distance #(not (:latent %)))] ; sequence of two tokens with a time fn
+ 	; (combine-distance %1 %3)
 
 	; latent distance
 	"number as distance"
@@ -14,6 +24,30 @@
 	    (dissoc  :latent)
 	   	(merge {:unit "kilometre"
 	    		:normalized {:value (* 1000 (-> %1 :value))
+	    					 :unit "metre"}}))
+
+	"<latent dist> feet"
+	[(dim :distance) #"(?i)(′|f(oo|ee)?ts?)"]
+	(-> %1
+	    (dissoc  :latent)
+	   	(merge {:unit "foot"
+	    		:normalized {:value (* 0.3048 (-> %1 :value))
+	    					 :unit "metre"}}))
+
+	"<latent dist> inch"
+	[(dim :distance) #"(?i)(′′|inch(es)?)"]
+	(-> %1
+	    (dissoc  :latent)
+	   	(merge {:unit "inch"
+	    		:normalized {:value (* 0.0254 (-> %1 :value))
+	    					 :unit "metre"}}))
+
+	"<latent dist> yard"
+	[(dim :distance) #"(?i)y(ar)?ds?"]
+	(-> %1
+	    (dissoc  :latent)
+	   	(merge {:unit "yard"
+	    		:normalized {:value (* 0.9144 (-> %1 :value))
 	    					 :unit "metre"}}))
 
 	"<dist> meters"
