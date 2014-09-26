@@ -154,7 +154,7 @@
             true)
 
   "Father's Day";third Sunday of June
-  #"(?i)father'?s?'? ( day)?"
+  #"(?i)father'?s?'?( day)?"
   (intersect (day-of-week 7) (month 6) (cycle-nth-after :week 2 (month-day 6 1)))
 
   "Mother's Day";second Sunday in May.

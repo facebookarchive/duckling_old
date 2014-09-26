@@ -71,7 +71,7 @@
   "domenica 10 febbraio"
   (datetime 2013 2 10 :day-of-week 7 :day 13 :month 2) ; with current look-forward default...
   
-  "til 1 marzo"
+  "il 1 marzo"
   "prima di marzo"
   (datetime 2013 3 1 :day 1 :month 3)
 
@@ -129,7 +129,7 @@
   (datetime 2014)
 
   "ultima domenica"
-  "domenica della scorsa settimana"
+  ;"domenica della scorsa settimana"
   (datetime 2013 2 10 :day-of-week 7)
 
   ;; Hours
@@ -145,23 +145,25 @@
   "alle tre e un quarto"
   "3:15 di pomeriggio"
   "15:15"
-  "at 15 15"
   (datetime 2013 2 12 15 15 :hour 15 :minute 15)
 
   "alle tre e venti"
   "3:20 di pomeriggio"
   (datetime 2013 2 12 15 20 :hour 3 :minute 20)
 
-  ; "alle tre e mezzo"
+  ; "alle tre week-end mezzo"
   ; "3:30 di pomeriggio"
 
   "15:30"
   (datetime 2013 2 12 15 30 :hour 15 :minute 30)
 
   "a mezzogiorno meno un quarto"
-  "Un quarto a mezzogiorno"
-  "11:45 di pomeriggio"
+  "quarto a mezzogiorno"
+  "11:45 del mattino"
   (datetime 2013 2 12 11 45 :hour 11 :minute 45)
+
+  "alle 3 del mattino"
+  (datetime 2013 2 13 3 :hour 3 :minute 45)
   
   "alle 19:30 il venerdì 20 settembre"
   (datetime 2013 9 20 19 30 :hour 19 :minute 30 :day-of-week 5 :day 20 :month 9)

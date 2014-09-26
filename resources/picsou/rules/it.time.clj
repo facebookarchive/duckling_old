@@ -13,23 +13,23 @@
   ;;
 
   "named-day"
-  #"(?i)luned[ìi]|lun?|lun\."
+  #"(?i)luned[ìi]|lun?\."
   (day-of-week 1)
 
   "named-day"
-  #"(?i)marted[iì]|ma|mar\."
+  #"(?i)marted[iì]|mar?\.?"
   (day-of-week 2)
 
   "named-day"
-  #"(?i)mercoled[iì]|mer|mer?\."
+  #"(?i)mercoled[iì]|mer?\.?"
   (day-of-week 3)
 
   "named-day"
-  #"(?i)gioved[iì]|gio|gio\."
+  #"(?i)gioved[iì]|gio\.?"
   (day-of-week 4)
 
   "named-day"
-  #"(?i)venerd[iì]|ven|ven\."
+  #"(?i)venerd[iì]|ven\.?"
   (day-of-week 5)
 
   "named-day"
@@ -113,7 +113,7 @@
   (cycle-nth :day 2)
 
   "the day before yesterday"
-  #"(?i)altro\s?ieri"
+  #"(?i)(l')?altro\s?ieri"
   (cycle-nth :day -2)
 
   ;;
@@ -138,7 +138,7 @@
   (pred-nth %2 1)
 
   "next <time>"
-  [(dim :time) #"(?i)prossim[ao]"]
+  [(dim :time) #"(?i)dopo|prossim[ao]"]
   (pred-nth %1 1)
 
   "<time> last"
@@ -207,7 +207,7 @@
   (dissoc %1 :latent) 
   
   "at <time-of-day>" ; alle due
-  [#"(?i)all[e']" {:form :time-of-day}]
+  [#"(?i)all[e']|le|a" {:form :time-of-day}]
   (dissoc %2 :latent)
 
 
@@ -305,7 +305,10 @@
   (intersect %1 %3)
 
   ;specific rule to address "3 in the morning","3h du matin" and extend morning span from 0 to 12
- 
+  "<dim time> del mattino" 
+  [{:form :time-of-day} #"del mattino"]
+  (intersect %1 (assoc (interval (hour 0 false) (hour 12 false) false) :form :part-of-day :latent true))
+
   ; Other intervals: week-end, seasons
   "week-end"
   #"(?i)week[ -]?end"
