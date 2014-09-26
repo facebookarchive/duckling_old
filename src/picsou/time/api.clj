@@ -44,6 +44,9 @@
       :temperature (merge {:type "value" :value value}
                           (select-keys token [:unit]))
      
+      :distance (merge {:type "value" :value value}
+                          (select-keys token [:unit]))
+
       :quantity (select-keys token [:value :unit :product])
 	    
 	    value))) ; keep value as is for other dims
