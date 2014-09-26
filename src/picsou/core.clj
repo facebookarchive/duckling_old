@@ -6,6 +6,7 @@
             [picsou.time.obj :as time]
             [picsou.learn :as learn]
             [picsou.util :as util]
+            [picsou.time.api :as api]
             [clojure.java.io :as io]
             [picsou.corpus :as corpus]
             [midje.repl]))
@@ -212,26 +213,19 @@
    (let [targets (when targets (map (fn [dim] {:dim dim :label dim}) targets))
          {stash :stash
           winners :winners} (parse s context module-id targets)]
+     
      ;; 1. print stash
      (print-stash stash (get-classifier module-id) winners)
-     (printf "%d tokens in stash\n" (count stash))
 
      ;; 2. print winners
-     (print "Winners: \n")
+     (printf "\n%d winners:\n" (count winners))
      (doseq [winner winners]
-       (case (:dim winner)
-         :time (println "Time" (:value winner) (:form winner) (:precision winner))
-         :duration (println "Duration" (select-keys winner [:value :grain]))
-         :number (println "Number" "integer?" (:integer winner) (:value winner) (:body winner))
-         :pnl (println "Potential named location: " (:pnl winner) " Within n :" (:n winner))
-         :unit (println "Unit :" (:cat winner) " => " (:value winner))
-         (println "Other: " (:dim winner) (dissoc winner :dim :rule :route :text :pos :end :index :body :start)))
-       (when (:latent winner) (println "Latent token"))
-       #_(print-tokens winner module-id))
+       (printf "%-25s %s\n" (str (name (:dim winner))
+                                 (if (:latent winner) " (latent)" ""))
+                            (api/export-value winner)))
 
      ;; 3. ask for details
-     (println)
-     (println (format "For further info: (details idx) where 1 <= idx <= %d" (dec (count stash))))
+     (printf "For further info: (details idx) where 1 <= idx <= %d\n" (dec (count stash)))
      (def details (fn [n]
                     (print-tokens (nth stash n) (get-classifier module-id))))
      (def token (fn [n]
