@@ -220,9 +220,11 @@
      ;; 2. print winners
      (printf "\n%d winners:\n" (count winners))
      (doseq [winner winners]
-       (printf "%-25s %s\n" (str (name (:dim winner))
-                                 (if (:latent winner) " (latent)" ""))
-                            (api/export-value winner)))
+       (printf "%-25s %s %s\n" (str (name (:dim winner))
+                                     (if (:latent winner) " (latent)" ""))
+                               (api/export-value winner)
+                               (dissoc winner :value :route :rule :pos :text :end :index
+                                               :dim :start :latent :body :pred :timezone)))
 
      ;; 3. ask for details
      (printf "For further info: (details idx) where 1 <= idx <= %d\n" (dec (count stash)))

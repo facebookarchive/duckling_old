@@ -1,5 +1,6 @@
 (ns picsou.time.api
-  (:require [picsou.time.pred :as pred])
+  (:require [picsou.time.pred :as pred]
+            [picsou.time.obj :as t])
   (:refer-clojure :exclude [resolve]))
 
 (declare date->str)
@@ -30,10 +31,15 @@
 	               :value (date->str (:start value))
 	               :grain (:grain value)})
      
-      :duration (let [[[unit val] & more] (seq value)
+      :duration ; if there is only one field, we can set :value and :unit
+                ; otherwise just keep the fields
+                (let [[[unit val] & more] (seq value)
                       add-fields (when-not more {:value val
                                                  :unit unit})]
-                  (merge value add-fields))
+                  (merge value
+                         add-fields
+                         {:normalized {:value (t/period->duration value)
+                                       :unit "second"}}))
      
       :quantity (select-keys token [:value :unit :product])
 	    

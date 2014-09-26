@@ -200,7 +200,6 @@
   "Returns the number of days in the month of tt"
   (time/day (time/last-day-of-the-month (:start tt))))
 
-; only for debug purpose!
 (defn now []
   {:start (time/now) :grain :second})
 
@@ -245,6 +244,14 @@
   "Turn a period into its opposite sign"
   [period]
   (into {} (map (fn [[k v]] [k (- v)]) period)))
+
+(defn period->duration ; TODO use context to get an exact duration
+  "Convert a period into an amount of seconds. This is approximate, since for
+  instance 1 month's duration in seconds depends on which month"
+  [period]
+  (let [anchor (now)
+        after (plus-period anchor period)]
+    (time/in-seconds (time/interval (:start anchor) (:start after)))))
    
 
 

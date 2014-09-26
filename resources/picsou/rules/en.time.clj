@@ -489,17 +489,11 @@
   [(dim :time) (dim :timezone)]
   (set-timezone %1 (:value %2))
 
+  
   ; Precision
-  ; only with time of day , may need to open to time token
-  ; "<time> approximately" ; 7ish
-  ; [(dim :time #(not (:precision %))) #"(?i)(-?ish|approximately)" ]
-  ; (-> %1
-  ;   (merge {:precision "approximate"}))
-
-  ; "<time> sharp" ; 7pm sharp
-  ; [(dim :time #(not (:precision %))) #"(?i)(sharp|exactly)" ]
-  ; (-> %1
-  ;   (merge {:precision "exact"}))
+  ; FIXME
+  ; - should be applied to all dims not just time-of-day
+  ;-  shouldn't remove latency, except maybe -ish
   
   "<time-of-day> approximately" ; 7ish
   [{:form :time-of-day} #"(?i)(-?ish|approximately)"]
@@ -524,7 +518,6 @@
   (-> %2
     (dissoc :latent)
     (merge {:precision "exact"}))
-  
 
 
   ; Intervals
