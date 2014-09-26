@@ -40,6 +40,9 @@
                          add-fields
                          {:normalized {:value (t/period->duration value)
                                        :unit "second"}}))
+                
+      :temperature (merge {:type "value" :value value}
+                          (select-keys token [:unit]))
      
       :quantity (select-keys token [:value :unit :product])
 	    

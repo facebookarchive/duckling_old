@@ -10,18 +10,18 @@
 	"thirty seven celcius"
 	"37 degrees Celsius"
 	"thirty seven celsius"
-	(temperature 37 "C")
+	(temperature 37 "celcius")
 
 	"70°F"
 	"70 ° Fahrenheit"
 	"70 degrees F"
 	"seventy Fahrenheit"
-	(temperature 70 "F")
+	(temperature 70 "fahrenheit")
 	             
 	"45°"
 	"45 degrees"
 	"45 deg."
-	(temperature 45)
+	(temperature 45 "degree")
 
 )
 
