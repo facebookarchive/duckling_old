@@ -281,6 +281,13 @@
                                      rules
                                      learn/extract-route-features)))))
 
+(defn- generate-context
+  [base-context]
+  (-> base-context
+      (?> (instance? org.joda.time.DateTime (:reference-time base-context))
+          (assoc :reference-time {:start (:reference-time base-context)
+                                  :grain :second}))))
+
 (defn extract
   "Public API. Leven-stash is ignored for the moment.
    targets is a coll of maps {:module :dim :label} for instance:
@@ -295,10 +302,11 @@
     (infof "Extracting from '%s' with targets %s" sentence targets)
     (letfn [(extract'
               [module targets] ; targets specify all the dims we should extract
-              (let [module (keyword module)]
+              (let [module (keyword module)
+                    pic-context (generate-context context)]
                 (when-not (module @rules-map)
                   (throw (ex-info "Unknown picsou module" {:module module})))
-                (->> (parse sentence context module targets)
+                (->> (parse sentence pic-context module targets)
                      :winners
                      (map #(assoc % :value (engine/export-value %)))
                      (map #(select-keys % [:label :body :value :start :end :latent])))))]
@@ -312,6 +320,5 @@
                  :context context
                  :leven-stash leven-stash
                  :targets targets}]
-        (errorf "picsou error err=%s" (pr-str err))
-        (.printStackTrace e)
+        (errorf e "picsou error err=%s" (pr-str err))
         []))))
