@@ -47,7 +47,7 @@
      
       :quantity (select-keys token [:value :unit :product])
 	    
-	    value))) ; keep value as is for other dims
+	    {:value value}))) ; nest value for other dims
 
 (defn date->str
   "Coerce date to string for API output"
