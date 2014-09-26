@@ -103,7 +103,7 @@
 
 
   ; Holiday TODO: check online holidays
-  ; or define dynamtic rule (last thursday of october..)
+  ; or define dynamic rule (last thursday of october..)
   
   "christmas"
   #"(?i)(xmas|christmas)( day)?"

@@ -83,12 +83,13 @@
 
 (defn money
   "Create a amount-of-money condition"
-  [val & [unit precision]]
-  (fn [_ {:keys [dim value] :as token}] (not (and
+  [value' & [unit' precision']]
+  (fn [_ {:keys [dim value unit precision] :as token}] 
+    (not (and
                   (= :amount-of-money dim)
-                  (= val (-> value :amount))
-                  (= unit (-> value :unit))
-                  (= precision (-> value :precision))))))
+                  (= value' value)
+                  (= unit' unit)
+                  (= precision' precision)))))
 
 (defn place
   "Create a place checker"

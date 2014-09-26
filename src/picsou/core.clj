@@ -221,7 +221,7 @@
      (doseq [winner winners]
        (case (:dim winner)
          :time (println "Time" (:value winner) (:form winner) (:precision winner))
-         :duration (println "Duration" (select-keys winner [:grain :fuzzy :units :val]))
+         :duration (println "Duration" (select-keys winner [:value :grain]))
          :number (println "Number" "integer?" (:integer winner) (:value winner) (:body winner))
          :pnl (println "Potential named location: " (:pnl winner) " Within n :" (:n winner))
          :unit (println "Unit :" (:cat winner) " => " (:value winner))
