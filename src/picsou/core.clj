@@ -285,18 +285,23 @@
                                   :grain :second}))))
 
 (defn extract
-  "Public API. Leven-stash is ignored for the moment.
+  "Public API.
    targets is a coll of maps {:module :dim :label} for instance:
    {:module fr$core, :dim duration, :label wit$duration} to get duration results
    Returns a single coll of tokens with :body :value :start :end :label (=wisp) :latent"
-  [sentence context leven-stash targets]
-  {:pre [(string? sentence)
-         (map? context)
-         (:reference-time context)
-         (vector? targets)]}
-  (try
-    (infof "Extracting from '%s' with targets %s" sentence targets)
-    (letfn [(extract'
+  ([sentence module dims]
+   (extract sentence 
+            default-context 
+            [] 
+            (vec (map (fn [dim] {:module module :dim dim :label dim}) dims))))
+  ([sentence context leven-stash targets]
+   {:pre [(string? sentence)
+          (map? context)
+          (:reference-time context)
+          (seq targets)]}
+   (try
+     (infof "Extracting from '%s' with targets %s" sentence targets)
+     (letfn [(extract'
               [module targets] ; targets specify all the dims we should extract
               (let [module (keyword module)
                     pic-context (generate-context context)]
@@ -310,11 +315,11 @@
            (group-by :module) ; we want to run each config only once
            (mapcat (fn [[module targets]] (extract' module targets)))
            vec))
-    (catch Exception e
-      (let [err {:e e
-                 :sentence sentence
-                 :context context
-                 :leven-stash leven-stash
-                 :targets targets}]
-        (errorf e "picsou error err=%s" (pr-str err))
-        []))))
+     (catch Exception e
+       (let [err {:e e
+                  :sentence sentence
+                  :context context
+                  :leven-stash leven-stash
+                  :targets targets}]
+         (errorf e "picsou error err=%s" (pr-str err))
+         [])))))

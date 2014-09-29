@@ -1,28 +1,62 @@
 ![build status](https://circleci.com/gh/wit-ai/picsou.png?circle-token=402928d80776c89e28c621d690201d1ff3b994e2)
 
-# What is Picsou
+# Introduction
 
-Picsou parses text into structured data:
+Picsou is a Clojure library that parses text into structured data:
 
-    “in two hours” => {:dim :time 
-                       :value {:from 2014-06-09T13:24:06.634-07:00
-                               :to 2014-06-09T14:24:06.634-07:00}}
+    “in two hours” => {:value "2014-06-09T13:24:06.634-07:00"
+                       :grain :hour}
 
-Picsou is agnostic: it makes no assumption on the kind of extracted data. 
-It takes a string as input and produces hashes (more precisely, Clojure maps) as output. 
-Everything else is defined in configuration. Picsou was first written to handle temporal expressions, 
-but it can be used for other purposes.
+Picsou is shipped with modules that parse temporal expressions in English, Spanish, French and Chinese (experimental). It recognizes dates and times described in many ways:
+- today at 5pm
+- 2014-10-01
+- the last Tuesday of October 2012
+- twenty five minutes ago
+- the day before labor day 2020
+- June 10-11 (interval)
 
-Picsou is probabilistic. Often a given input string may produce dozens of potential results. 
-Picsou assigns a probability on each result. 
-It decides which results are more probable by using the corpus given in the configuration.
+Picsou is:
 
-If you know NLP, Picsou is “almost” a PCFG. But formally it’s not, 
-because Picsou tries to be much more flexible and easier to configure than a formal PCFG.
+- Agnostic: it makes no assumption on the kind of data you want to extract, or the language. You can train it with a combination of examples and rules for any task that takes a string as input and produces a map as output.
+- Probabilistic: in the real world, a given input string may produce dozens of potential results. Picsou assigns a probability on each result. It decides which results are more probable by using the corpus of examples given in the configuration. Owing to that (and unlike, say, regular expressions or formal grammars), rules can afford to be extremely loose. It makes them much easier to write, and much more robust to user input in the wild.
+- Extensible: we tried our best to make Picsou easy to extend. It leverages the power of Clojure's "code is data" philosophy.
+
+If you know NLP, Picsou is “almost” a Probabilistic Context Free Grammar. But formally it’s not. It tries to be much more flexible and easier to configure than a formal PCFG.
+
+These are good alternatives if you only have to deal with English, and your text input is somewhat less noisy:
+
+- Stanford NLP's [SUTime](http://nlp.stanford.edu/software/sutime.shtml) (in Java), is a deterministric rule-based system that supports English. Written by Angel Chang.
+- [Natty](http://natty.joestelmach.com/) (in Java) is based on ANTLR and supports English. It's written by Joel Stelmach.
+
+**This is an alpha release. We have been using it internally in production at [Wit.ai](https://wit.ai) for more than a year, but the API and organizational structure are subject to change. Comments and suggestions are much appreciated.**
 
 # Getting started
 
-Launch a REPL from the project directory (you need to have Leiningen installed):
+Leiningen dependency (Clojars): `[wit/picsou "0.1.1"]`
+
+```Clojure
+(ns myproject.core
+  (:require [picsou.core :as p]))
+
+(p/load!) ;; Load default configuration
+
+(p/extract "wake me up the last Monday of January 2015 at 6am"
+           :en$core ;; core configuration for English ; see also :fr$core, :es$core, :cn$core
+           [:time]) ;; We are interested in :time expressions only ; see also :duration, :temperature, etc.
+
+;; => [{:label :time
+        :start 15
+        :end 49
+        :value {:type "value", :value "2015-01-26T06:00:00.000-02:00", :grain :hour}
+        :body "last Monday of January 2015 at 6am"}]
+
+# Extending Picsou
+
+You can add or modify the shipped modules to better understand date and times, but also create new modules that parse just any kind of data you want.
+
+## Walkthrough
+
+Launch a REPL from the project directory:
 
 ```
 → lein repl
@@ -101,20 +135,20 @@ picsou.core=> (play :en$core "in two hours")
 ```
 
 
-# Workflow
+## Workflow
 
 When we extend Picsou's coverage, we follow a typical TDD workflow:
 
 1. Load Picsou
-2. Add tests in the corpus
+2. Add tests to the corpus
 3. Run the corpus: the new tests don’t pass
 4. Add or modify rules until the corpus tests pass
 
 The following sections detail these steps.
 
-# Loading
+## Loading
 
-## Configuration file
+### Configuration file
 
 The default configuration file `resources/default-config.clj` defines three modules (`fr$core`, `en$core` and `es$core`):
 
@@ -157,7 +191,7 @@ The default configuration file `resources/default-config.clj` defines three modu
                    "en.communication"]}}
 ```
 
-## Modules
+### Modules
 
 Each module has a name (`en$core`), with which it is referred to when you want to use it at runtime, or reload it.
 
@@ -168,7 +202,7 @@ tokens created by rules in module B.
 There’s typically one module per language, but nothing prevents you to use several modules for a given language, 
 as long as these modules don't need to interact with each other.
 
-## Loading modules
+### Loading modules
 
 To load Picsou with all the modules defined in the default configuration file `resources/default-config.clj`:
 
@@ -187,7 +221,7 @@ Alternatively, to load Picsou without using a configuration file, you can define
 INFO: Loading module  :en$location
 ```
 
-# Corpus
+## Corpus
 
 Corpus files are located in `resources/corpus`. You can either edit existing files or create new files. 
 If you create new files, don’t forget to load them by referencing them in your configuration file or `load!` 
@@ -270,7 +304,7 @@ OK  "one"
 Make sure the tests don’t pass anymore (if they do, either you’re very lucky and the existing rules actually 
 cover your new tests, or you did not reload the corpus -- usually it’s the latter!). Now you’re ready to write rules.
 
-# Rules
+## Rules
 
 Rules files are located in `resources/rules`. You can either edit existing files or create new files. 
 If you create new files, don’t forget to load them by referencing them in the configuration file or `load!` command. 
@@ -307,9 +341,9 @@ in two hours
 [...]
 ```
 
-## Patterns
+### Patterns
 
-### Base patterns
+#### Base patterns
 
 There are two types of base patterns:
 - regular expressions that try to match the input text
@@ -326,7 +360,7 @@ It must return true when the token matches. For example:
 **Protip:** These patterns are very close, but should not be confused with Corpus test patterns. 
 We might merge them later.
 
-### Helpers
+#### Helpers
 
 Like for corpus test functions, you’ll find yourself using the same patterns again and again.
  We use helpers that produce pattern functions. For instance
@@ -343,7 +377,7 @@ You should reuse existing helpers or define your own as much as possible, as it 
 because if will match any number even “twenty”, “minus six”, “2M”, etc. 
 You actually leverage other Picsou rules that are just responsible to recognize numbers.
 
-### Slots
+#### Slots
 
 Let’s say you want to parse something like “10 degrees”, “twenty degrees”, and “30°”. 
 The right approach is to look for a token of `:dim :number`, immediately followed by a word like “degrees” or “°”. 
@@ -354,7 +388,7 @@ In this case, we say the pattern has two *slots*. It is written like this:
  #”degrees?|°”]  ; second slot is the string "degree", "degrees" or "°"" in the input string
 ```
 
-## Production
+### Production
 
 Once a rule’s pattern matches, Picsou creates a token and adds it to the stash.
 
@@ -382,7 +416,7 @@ It becomes a function, which is called with the matching tokens as arguments.
 **Warning:** If the pattern has S slots, you MUST use `%S` (even if you don't need it) if you need any %i. 
 That will set the right arity to the production function.
 
-### Special case of regex patterns
+#### Special case of regex patterns
 
 If the base pattern is a regex and you need to use the groups matched by the regex in the production, you use the `:groups` key:
 
