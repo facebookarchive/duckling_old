@@ -1,19 +1,19 @@
 (
   ;; generic
   
-  "two time tokens in a row"
+  "intersect"
   [(dim :time #(not (:latent %))) (dim :time #(not (:latent %)))] ; sequence of two tokens with a time dimension
   (intersect %1 %2)
 
   ; same thing, with "of" in between like "Sunday of last week"
-  "two time tokens separated by \"of\", \"from\", \"'s\""
+  "intersect by \"of\", \"from\", \"'s\""
   [(dim :time #(not (:latent %))) #"(?i)of|from|'s" (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
 
   ; mostly for January 12, 2005
   ; this is a separate rule, because commas separate very specific tokens
   ; so we want this rule's classifier to learn this
-  "two time tokens separated by \",\""
+  "intersect by \",\""
   [(dim :time #(not (:latent %))) #"," (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
   
@@ -192,14 +192,6 @@
   "yesterday"
   #"(?i)yesterday"
   (cycle-nth :day -1)
-
-  "day after tomorrow"
-  #"(?i)(the )?day after tomm?or?row"
-  (cycle-nth :day 2)
-
-  "day before yesterday"
-  #"(?i)(the )?day before yesterday"
-  (cycle-nth :day -2)
     
   ;;
   ;; This, Next, Last
@@ -241,7 +233,7 @@
   ; Between 1000 and 2100 we assume it's a year
   ; Outside of this, it's safer to consider it's latent
   
-  "year (1000-2100 not latent)"
+  "year"
   (integer 1000 2100)
   (year (:value %1))
 
@@ -302,7 +294,7 @@
 
   ; ; ;; Hours and minutes (absolute time)
   
-  "<integer> (latent time-of-day)"
+  "time-of-day (latent)"
   (integer 0 23)
   (assoc (hour (:value %1) true) :latent true)
   
@@ -311,24 +303,24 @@
   (dissoc %2 :latent)
 
 
-  "<time-of-day> oclock"
+  "<time-of-day> o'clock"
   [{:form :time-of-day} #"(?i)o.?clock"]
   (dissoc %1 :latent)
 
-  "hh:mm (time-of-day)"
+  "hh:mm"
   #"(?i)((?:[01]?\d)|(?:2[0-3]))[:.]([0-5]\d)"
   (hour-minute (Integer/parseInt (first (:groups %1)))
                (Integer/parseInt (second (:groups %1)))
                true)
   
-  "hhmm (military time-of-day)"
+  "hhmm (military)"
   #"(?i)((?:[01]?\d)|(?:2[0-3]))([0-5]\d)"
   (-> (hour-minute (Integer/parseInt (first (:groups %1)))
                    (Integer/parseInt (second (:groups %1)))
                    false) ; not a 12-hour clock)
       (assoc :latent true))
   
-  "hhmm (military time-of-day) am|pm" ; hh only from 00 to 12
+  "hhmm (military) am|pm" ; hh only from 00 to 12
   [#"(?i)((?:1[012]|0?\d))([0-5]\d)" #"(?i)([ap])\.?m?\.?"]
   ; (-> (hour-minute (Integer/parseInt (first (:groups %1)))
   ;                  (Integer/parseInt (second (:groups %1)))
@@ -439,16 +431,11 @@
                     (interval (hour 17 false) (hour 21 false) false)) 
          :form :part-of-day) ; no :latent
     
-  "<dim time> <part-of-day>" ; since "morning" "evening" etc. are latent, general time+time is blocked
+  "<time> <part-of-day>" ; since "morning" "evening" etc. are latent, general time+time is blocked
   [(dim :time) {:form :part-of-day}]
   (intersect %2 %1)
 
-  ; not sure we need the following rule:
-  ; "<time-of-day> <part-of-day>" ; since "morning" "evening" etc. are latent, general time+time is blocked
-  ; [{:form :time-of-day} {:form :part-of-day}]
-  ; (assoc (intersect %1 %2) :type :value)
-
-  "<part-of-day> of <dim time>" ; since "morning" "evening" etc. are latent, general time+time is blocked
+  "<part-of-day> of <time>" ; since "morning" "evening" etc. are latent, general time+time is blocked
   [{:form :part-of-day} #"(?i)of" (dim :time)]
   (intersect %1 %3)
 

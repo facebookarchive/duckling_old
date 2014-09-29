@@ -1,6 +1,6 @@
 (
 
-  "two time tokens in a row"
+  "intersect"
   [(dim :time #(not (:latent %))) (dim :time #(not (:latent %)))] ; sequence of two tokens with a time dimension
   (intersect %1 %2)
   

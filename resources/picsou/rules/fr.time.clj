@@ -1,12 +1,12 @@
 (
   ;; generic
   
-  "two time tokens in a row"
+  "intersect"
   [(dim :time #(not (:latent %))) (dim :time #(not (:latent %)))] ; sequence of two tokens with a time dimension
   (intersect %1 %2)
 
   ; same thing, with "de" in between like "mardi de la semaine dernière"
-  "two time tokens separated by 'de' or ','"
+  "intersect by 'de' or ','"
   [(dim :time #(not (:latent %))) #"(?i)de|," (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
   
@@ -156,7 +156,7 @@
   ; Between 1000 and 2100 we assume it's a year
   ; Outside of this, it's safer to consider it's latent
   
-  "year (1000-2100 not latent)"
+  "year"
   (integer 1000 2100)
   (year (:value %1))
 
@@ -193,7 +193,7 @@
 
 
   ;; hours and minutes (absolute time)
-  "<integer> (latent time-of-day)"
+  "time-of-day (latent)"
   (integer 0 23)
   (assoc (hour (:value %1) true) :latent true)
   
