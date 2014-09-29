@@ -98,7 +98,7 @@
   "上週日"
   "上星期天"
   "上禮拜天"
-  (datetime 2013 2 10)
+  (datetime 2013 2 10 :day-of-week 7)
 
   "周日, 二月十号"
   "星期天, 二月十号"
@@ -106,7 +106,7 @@
   "週日, 二月十號"
   "星期天, 二月十號"
   "禮拜天, 二月十號"
-  (datetime 2019 2 10) ; with current look-forward default...
+  (datetime 2013 2 10 :day-of-week 7 :day 10 :month 2) 
 
   "上周二"
   "上礼拜二"
@@ -159,9 +159,7 @@
   (datetime-interval [2013 2 15 4] [2013 2 15 12])
 
   "下周二" ; when today is Tuesday, "mardi prochain" is a week from now
-  "这礼拜二"
   "下週二"
-  "這禮拜二"
   (datetime 2013 2 19)
 
   "这周三" ; when today is Tuesday, "mercredi prochain" is tomorrow
@@ -186,7 +184,7 @@
   "这礼拜二"
   "這週二"
   "這禮拜二"
-  (datetime 2013 2 19)
+  (datetime 2013 2 12)
 
   "这周"
   "这一周"
@@ -264,7 +262,7 @@
   "上二小時"
   "前兩小時"
   "前二小時"
-  (datetime-interval [2013 2 12 3] [2013 2 12 4])
+  (datetime-interval [2013 2 12 2] [2013 2 12 4])
 
   "下三小时"
   "后三小时"
@@ -323,8 +321,8 @@
   
 
   "三点"
-  "3pm"
   "三點"
+  "3pm"
   (datetime 2013 2 12 15)
 
   "下午三点十五"

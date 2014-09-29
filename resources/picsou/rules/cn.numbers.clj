@@ -44,6 +44,10 @@
             (clojure.string/replace #"," "")
             Long/parseLong)}
   
+  "<number>个" ; any number followed by this is a number
+  [(dim :number) #"个"]
+  %1
+
   ;;
   ;; Decimals
   ;;
@@ -89,6 +93,11 @@
   ;;
   ;; Ordinal numbers
   ;;
+
+  "ordinal (digits)" 
+  [#"第" (dim :number)]
+  {:dim :ordinal
+   :value (:value %2)} 
 
   ;; Already covered by rules above
 

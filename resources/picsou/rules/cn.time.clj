@@ -4,6 +4,13 @@
   [(dim :time #(not (:latent %))) (dim :time #(not (:latent %)))] ; sequence of two tokens with a time dimension
   (intersect %1 %2)
   
+  ; mostly for January 12, 2005
+  ; this is a separate rule, because commas separate very specific tokens
+  ; so we want this rule's classifier to learn this
+  "intersect by \",\""
+  [(dim :time #(not (:latent %))) #"," (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
+  (intersect %1 %3)
+
   ;;;;;;;;;;;;;;;;;;;
   ;; Named things
   "named-day"
@@ -149,35 +156,36 @@
   ;; assumed to be strictly in the future: 
   ;; "this Monday" => next week if today in Monday
   "this|next <day-of-week>"
-  [#"(?i)this|next" {:form :day-of-week}]
+  [#"(?i)今|明|下[个|個]?" {:form :day-of-week}]
   (pred-nth-not-immediate %2 0)
 
   ;; for other preds, it can be immediate:
   ;; "this month" => now is part of it
   ; See also: cycles in en.cycles.clj
   "this <time>"
-  [#"(?i)今" (dim :time)]
+  [#"(?i)今|这|這" (dim :time)]
   (pred-nth %2 0)
 
   "next <time>"
-  [#"(?i)明" (dim :time)]
+  [#"(?i)明|下[个|個]?" (dim :time)] ;下[个|個]?
   (pred-nth %2 1)
 
   "last <time>"
   [#"(?i)去" (dim :time)]
   (pred-nth %2 -1)
 
-  ; "last year"
-  ; #"去年"
-  ; (cycle-nth :year -1)
+  ;specific for year in chinese
+  "last year"
+  #"去年"
+  (cycle-nth :year -1)
 
-  ; "this year"
-  ; #"今年"
-  ; (cycle-nth :year 0)
+  "this year"
+  #"今年"
+  (cycle-nth :year 0)
 
-  ; "next year"
-  ; #"明年"
-  ; (cycle-nth :year 1)
+  "next year"
+  #"明年"
+  (cycle-nth :year 1)
 
   "this <day-of-week>" ; assumed to be in the future
   [#"这|這" {:form :named-day}]
@@ -188,9 +196,9 @@
   (pred-nth %2 -1)
 
 
-  "next tuesday, next july"
-  [#"下" (dim :time)]
-  (pred-nth %2 1)
+  ; "next tuesday, next july"
+  ; [#"下" (dim :time)]
+  ; (pred-nth %2 1)
 
 
   ;; part of day (morning, evening...)
@@ -261,6 +269,10 @@
 
   "in|during the <part-of-day>" ;; removes latent
   [{:form :part-of-day} #"点|點"]
+  (dissoc %1 :latent)
+
+  "<time-of-day> o'clock"
+  [{:form :time-of-day} #"點|点"]
   (dissoc %1 :latent)
 
   "hh:mm (time-of-day)"
