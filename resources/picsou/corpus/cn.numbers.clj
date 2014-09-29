@@ -80,12 +80,12 @@
   (number -1200000)
 
   "第七"
-  (number 7)
+  (ordinal 7)
 
   "第十一"
-  (number 11)
+  (ordinal 11)
 
   "第九十一"
-  (number 91)
+  (ordinal 91)
 
 )

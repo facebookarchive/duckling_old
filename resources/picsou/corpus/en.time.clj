@@ -150,29 +150,29 @@
   "last sunday"
   "sunday from last week"
   "last week's sunday"
-  (datetime 2013 2 10)
+  (datetime 2013 2 10 :day-of-week 7)
 
   "last tuesday"
-  (datetime 2013 2 5)
+  (datetime 2013 2 5 :day-of-week 2)
 
   "next tuesday" ; when today is Tuesday, "mardi prochain" is a week from now
-  (datetime 2013 2 19)
+  (datetime 2013 2 19 :day-of-week 2)
 
   "next wednesday" ; when today is Tuesday, "mercredi prochain" is tomorrow
-  (datetime 2013 2 13)
+  (datetime 2013 2 13 :day-of-week 3)
 
   "wednesday of next week"
   "wednesday next week"
-  (datetime 2013 2 20)
+  (datetime 2013 2 20 :day-of-week 3)
 
   "monday of this week"
-  (datetime 2013 2 11)
+  (datetime 2013 2 11 :day-of-week 1)
 
   "tuesday of this week"
-  (datetime 2013 2 12)
+  (datetime 2013 2 12 :day-of-week 2)
 
   "wednesday of this week"
-  (datetime 2013 2 13)
+  (datetime 2013 2 13 :day-of-week 3)
 
   "the day after tomorrow"
   (datetime 2013 2 14)
@@ -181,10 +181,10 @@
   (datetime 2013 2 10)
   
   "last Monday of March"
-  (datetime 2013 3 25)
+  (datetime 2013 3 25 :day-of-week 1)
   
   "last Sunday of March 2014"
-  (datetime 2014 3 30)
+  (datetime 2014 3 30 :day-of-week 7)
 
   ;; Hours
   
@@ -407,11 +407,6 @@
   "15 of february in the morning"
   "morning of the 15th of february"
   (datetime-interval [2013 2 15 4] [2013 2 15 12])
-
-  "8 tonight"
-  "eight tonight"
-  "8 this evening"
-  (datetime 2013 2 12 20)
 
   
   ; Intervals involving cycles

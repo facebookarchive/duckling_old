@@ -8,10 +8,7 @@
             [picsou.util :as util]
             [picsou.time.api :as api]
             [clojure.java.io :as io]
-            [picsou.corpus :as corpus]
-            [midje.repl]))
-
-(defn dev [] (midje.repl/autotest))
+            [picsou.corpus :as corpus]))
 
 (def rules-map (atom {}))
 (def corpus-map (atom {}))
@@ -50,7 +47,7 @@
     (if (not= 0 cmp-interval)
       cmp-interval ; one interval recovers the other
       (let [pa (learn/route-prob a classifiers) ; same interval
-            pb (learn/route-prob b classifiers)] 
+            pb (learn/route-prob b classifiers)]
         ;(printf "Comparing %d (%f) and %d (%f) \n" (:index a) pa (:index b) pb)
         (compare pa pb))))))
 
@@ -61,7 +58,7 @@
     (select-winners compare-fn resolve-fn candidates []))
   ([compare-fn resolve-fn candidates already-selected]
     (if (seq candidates)
-      (let [[maxima others] (util/split-by-partial-max 
+      (let [[maxima others] (util/split-by-partial-max
                               compare-fn
                               candidates
                               (concat already-selected candidates))
@@ -98,11 +95,11 @@
                      (?>> dim-label (map #(when-let [label (get dim-label (:dim %))]
                                             (assoc % :label label))))
                      (remove nil?)
-                     
+
                      (select-winners
                        #(compare-tokens %1 %2 classifiers dim-label)
                        #(engine/resolve-token % context module))
-                     
+
                      ; add a confidence key
                      ; low confidence for numbers covered by datetime
                      (engine/estimate-confidence context module)
@@ -213,7 +210,7 @@
    (let [targets (when targets (map (fn [dim] {:dim dim :label dim}) targets))
          {stash :stash
           winners :winners} (parse s context module-id targets)]
-     
+
      ;; 1. print stash
      (print-stash stash (get-classifier module-id) winners)
 
@@ -250,7 +247,7 @@
              (printf "    Got      %s\n" got)))
          (printf "%s: %d examples, %d failed.\n" mod (count output) (count failed))
          (recur more (+ line (count failed)) (concat acc (map (fn [[_ t _]] [mod t]) failed))))
-       (defn c [n] 
+       (defn c [n]
          (let [[mod text] (nth acc n)]
            (printf "(play %s \"%s\")\n" mod text)
            (play mod text)))))))
