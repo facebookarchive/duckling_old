@@ -78,7 +78,15 @@
   [#"(?i)next" (integer 1 9999) (dim :cycle)]
   (cycle-n-not-immediate (:grain %3) (:value %2))
   
-  ; quarters are a little bit different, you can say "3rd quarter" alone
+  "<ordinal> <cycle> of <time>"
+  [(dim :ordinal) (dim :cycle) #"(?i)of|in|from" (dim :time)]
+  (cycle-nth-after-not-immediate (:grain %2) (dec (:value %1)) %4)
+  
+  "the <ordinal> <cycle> of <time>"
+  [#"(?i)the" (dim :ordinal) (dim :cycle) #"(?i)of|in|from" (dim :time)]
+  (cycle-nth-after-not-immediate (:grain %3) (dec (:value %2)) %5)
+
+    ; quarters are a little bit different, you can say "3rd quarter" alone
   
   "<ordinal> quarter"
   [(dim :ordinal) (dim :cycle #(= :quarter (:grain %)))]

@@ -8,20 +8,21 @@ Picsou is a Clojure library that parses text into structured data:
                        :grain :hour}
 
 Picsou is shipped with modules that parse temporal expressions in English, Spanish, French and Chinese (experimental). It recognizes dates and times described in many ways:
-- today at 5pm
-- 2014-10-01
-- the last Tuesday of October 2012
-- twenty five minutes ago
-- the day before labor day 2020
-- June 10-11 (interval)
+
+- *today at 5pm*
+- *2014-10-01*
+- *the last Tuesday of October 2012*
+- *twenty five minutes ago*
+- *the day before labor day 2020*
+- *June 10-11* (interval)
 
 Picsou is:
 
-- Agnostic: it makes no assumption on the kind of data you want to extract, or the language. You can train it with a combination of examples and rules for any task that takes a string as input and produces a map as output.
-- Probabilistic: in the real world, a given input string may produce dozens of potential results. Picsou assigns a probability on each result. It decides which results are more probable by using the corpus of examples given in the configuration. Owing to that (and unlike, say, regular expressions or formal grammars), rules can afford to be extremely loose. It makes them much easier to write, and much more robust to user input in the wild.
-- Extensible: we tried our best to make Picsou easy to extend. It leverages the power of Clojure's "code is data" philosophy.
+- **Agnostic**: it makes no assumption on the kind of data you want to extract, or the language. You can train it with a combination of examples and rules for any task that takes a string as input and produces a map as output.
+- **Probabilistic**: in the real world, a given input string may produce dozens of potential results. Picsou assigns a probability on each result. It decides which results are more probable by using the corpus of examples given in the configuration. Owing to that (and unlike, say, regular expressions or formal grammars), rules can afford to be extremely loose. It makes them much easier to write, and much more robust to user input in the wild.
+- **Extensible**: we tried our best to make Picsou easy to extend. It leverages the power of Clojure's "code is data" philosophy.
 
-If you know NLP, Picsou is “almost” a Probabilistic Context Free Grammar. But formally it’s not. It tries to be much more flexible and easier to configure than a formal PCFG.
+If you know NLP, Picsou is “almost” a [Probabilistic Context Free Grammar](http://en.wikipedia.org/wiki/Stochastic_context-free_grammar. But not exactly! It tries to be more flexible and easier to configure than a formal PCFG. It also tries to learn better from examples.
 
 These are good alternatives if you only have to deal with English, and your text input is somewhat less noisy:
 
@@ -33,6 +34,8 @@ These are good alternatives if you only have to deal with English, and your text
 # Getting started
 
 Leiningen dependency (Clojars): `[wit/picsou "0.1.1"]`
+
+To use Picsou in your project, you just need two functions: `load!` to load the default configuration, and `extract` to parse a string.
 
 ```Clojure
 (ns myproject.core
@@ -49,10 +52,11 @@ Leiningen dependency (Clojars): `[wit/picsou "0.1.1"]`
         :end 49
         :value {:type "value", :value "2015-01-26T06:00:00.000-02:00", :grain :hour}
         :body "last Monday of January 2015 at 6am"}]
+```
 
 # Extending Picsou
 
-You can add or modify the shipped modules to better understand date and times, but also create new modules that parse just any kind of data you want.
+You can add or modify the shipped modules to improve the parsing of date and times, but also create new modules that parse just any kind of data you want.
 
 ## Walkthrough
 

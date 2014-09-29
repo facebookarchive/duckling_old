@@ -98,6 +98,9 @@
 (defn cycle-nth-after [grain n {:keys [pred] :as token}]
   (ti (p/take-the-nth-after (p/cycle grain) pred n)))
 
+(defn cycle-nth-after-not-immediate [grain n {:keys [pred] :as token}]
+  (ti (p/take-the-nth-after (p/cycle grain) pred n {:not-immediate true})))
+
 (defn cycle-n [grain n]
   (ti (p/take-n (p/cycle grain) n)))
 
