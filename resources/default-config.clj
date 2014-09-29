@@ -55,4 +55,14 @@
                      "it.cycles"
                      "it.duration"
                     ]}
+:cn$core {:corpus [
+                    "cn.time"
+                    "cn.numbers"
+                   ]
+            :rules [
+                      "cn.time"
+                     "cn.numbers"
+                     "cn.cycles"
+                     "cn.duration"
+                    ]}
  }
