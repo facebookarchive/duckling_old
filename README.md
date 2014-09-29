@@ -1,3 +1,4 @@
+{: .circle-cont}
 ![build status](https://circleci.com/gh/wit-ai/picsou.png?circle-token=402928d80776c89e28c621d690201d1ff3b994e2)
 
 # Introduction
@@ -22,7 +23,7 @@ Picsou is:
 - **Probabilistic**: in the real world, a given input string may produce dozens of potential results. Picsou assigns a probability on each result. It decides which results are more probable by using the corpus of examples given in the configuration. Owing to that (and unlike, say, regular expressions or formal grammars), rules can afford to be extremely loose. It makes them much easier to write, and much more robust to user input in the wild.
 - **Extensible**: we tried our best to make Picsou easy to extend. It leverages the power of Clojure's "code is data" philosophy.
 
-If you know NLP, Picsou is “almost” a [Probabilistic Context Free Grammar](http://en.wikipedia.org/wiki/Stochastic_context-free_grammar. But not exactly! It tries to be more flexible and easier to configure than a formal PCFG. It also tries to learn better from examples.
+If you know NLP, Picsou is “almost” a [Probabilistic Context Free Grammar](http://en.wikipedia.org/wiki/Stochastic_context-free_grammar). But not exactly! It tries to be more flexible and easier to configure than a formal PCFG. It also tries to learn better from examples.
 
 These are good alternatives if you only have to deal with English, and your text input is somewhat less noisy:
 
@@ -37,7 +38,7 @@ Leiningen dependency (Clojars): `[wit/picsou "0.1.1"]`
 
 To use Picsou in your project, you just need two functions: `load!` to load the default configuration, and `extract` to parse a string.
 
-```Clojure
+```clojure
 (ns myproject.core
   (:require [picsou.core :as p]))
 
@@ -62,7 +63,7 @@ You can add or modify the shipped modules to improve the parsing of date and tim
 
 Launch a REPL from the project directory:
 
-```
+```bash
 → lein repl
 nREPL server started on port 59436
 REPL-y 0.1.9
@@ -82,7 +83,7 @@ picsou.core=>
 
 Load Picsou with the default configuration file:
 
-```
+```clojure
 picsou.core=> (load!)
 INFO: Loading module  :fr$core
 INFO: Loading module  :en$core
@@ -156,7 +157,7 @@ The following sections detail these steps.
 
 The default configuration file `resources/default-config.clj` defines three modules (`fr$core`, `en$core` and `es$core`):
 
-```Clojure
+```clojure
 {:fr$core {:corpus ["fr.time"
                     "fr.numbers"
                     "fr.temperature"
@@ -167,8 +168,8 @@ The default configuration file `resources/default-config.clj` defines three modu
                    "fr.cycles"
                    "fr.duration"
                    "fr.temperature"
-                   "en.finance"                      
-                   "en.communication"]}                    
+                   "en.finance"
+                   "en.communication"]}
  :en$core {:corpus ["en.time"
                     "en.numbers"
                     "en.temperature"
@@ -201,9 +202,9 @@ Each module has a name (`en$core`), with which it is referred to when you want t
 
 Each module refers to a set of corpus files and rules files (more on this in the following sections).
 
-Each module is run by Picsou in a separate “sandbox”, so for example, rules in module A cannot expect to match 
+Each module is run by Picsou in a separate “sandbox”, so for example, rules in module A cannot expect to match
 tokens created by rules in module B.
-There’s typically one module per language, but nothing prevents you to use several modules for a given language, 
+There’s typically one module per language, but nothing prevents you to use several modules for a given language,
 as long as these modules don't need to interact with each other.
 
 ### Loading modules
@@ -220,20 +221,20 @@ nil
 
 Alternatively, to load Picsou without using a configuration file, you can define modules directly in the `load!` function arguments:
 
-```
+```clojure
 (load! {:en$location {:corpus ["en.location"] :rules ["en.location"]}})
 INFO: Loading module  :en$location
 ```
 
 ## Corpus
 
-Corpus files are located in `resources/corpus`. You can either edit existing files or create new files. 
-If you create new files, don’t forget to load them by referencing them in your configuration file or `load!` 
+Corpus files are located in `resources/corpus`. You can either edit existing files or create new files.
+If you create new files, don’t forget to load them by referencing them in your configuration file or `load!`
 command (see above). **Once you’ve modified corpus files, you must reload to take the changes into account.**
 
 Here is an example corpus file with two test groups:
 
-```Clojure
+```clojure
 (
   {} ; Context map
 
@@ -248,27 +249,27 @@ Here is an example corpus file with two test groups:
 )
 ```
 
-Each test group is described by one or more strings and a function. 
-To run the group Picsou will take each string one by one, analyze it, a call the function on the output. 
+Each test group is described by one or more strings and a function.
+To run the group Picsou will take each string one by one, analyze it, a call the function on the output.
 The test passes if the function returns true (or a truthy value).
 
 For instance, to test that “0”, “naught” and "zero" will all produce the output `{:dim :number :value 0}`, we can use:
 
-```Clojure
+```clojure
 “0”
 “naught”
 “zero”
 (fn [token context] (and (= :number (:dim token)) (= 0 (:value token))))
 ```
 
-For now, the context is just used for date and times, in order to solve relative dates like “tomorrow”. 
-You can provide a context map at the beginning of your corpus file, and this map will be provided to the test function. 
+For now, the context is just used for date and times, in order to solve relative dates like “tomorrow”.
+You can provide a context map at the beginning of your corpus file, and this map will be provided to the test function.
 In most cases, you shouldn’t need to use context.
 
-In practice, we use helpers to generate easy to read test functions. 
+In practice, we use helpers to generate easy to read test functions.
 In the previous example, we use a helper `number` defined in `src/picsou/corpus.clj`:
 
-```Clojure
+```clojure
 (defn number
   "check if the token is a number equal to value.
   If value is integer, it also checks :integer true"
@@ -281,8 +282,8 @@ In the previous example, we use a helper `number` defined in `src/picsou/corpus.
 
 So that the test becomes just `(number 0)`, which is easy to read and reusable.
 
-Picsou will frequently generate several possible results for a given input. 
-In this case, each result is tested by the test function. 
+Picsou will frequently generate several possible results for a given input.
+In this case, each result is tested by the test function.
 If the function returns true for at least one result, then the test passes.
 
 Once you’ve added your tests, reload your module (see above) and run the corpus:
@@ -305,25 +306,25 @@ OK  "one"
 [:en$core 265 1]
 ```
 
-Make sure the tests don’t pass anymore (if they do, either you’re very lucky and the existing rules actually 
+Make sure the tests don’t pass anymore (if they do, either you’re very lucky and the existing rules actually
 cover your new tests, or you did not reload the corpus -- usually it’s the latter!). Now you’re ready to write rules.
 
 ## Rules
 
-Rules files are located in `resources/rules`. You can either edit existing files or create new files. 
-If you create new files, don’t forget to load them by referencing them in the configuration file or `load!` command. 
+Rules files are located in `resources/rules`. You can either edit existing files or create new files.
+If you create new files, don’t forget to load them by referencing them in the configuration file or `load!` command.
 **Once you’ve modified rules files, you must reload to take the changes into account.**
 
 Here is an example file with just one rule:
 
-```Clojure
+```clojure
 ("zero"                                ; _label_ of the rule, useful for debugging
  #”0|zero|naught”                      ; _pattern_, here it’s a simple regex
  {:dim number :integer true :val 0})   ; _production_ token, it can be any map
 ```
 
-When the pattern is matched, the production token is produced. Picsou adds this new token to its collection of tokens, 
-which is called the “stash”. Then other rules can try to match this token and produce other tokens that are added 
+When the pattern is matched, the production token is produced. Picsou adds this new token to its collection of tokens,
+which is called the “stash”. Then other rules can try to match this token and produce other tokens that are added
 to the stash, and so on. All rules are tried again and again until no more token is produced.
 
 Here is an illustration of this process, with a stash containing 11 tokens:
@@ -353,15 +354,15 @@ There are two types of base patterns:
 - regular expressions that try to match the input text
 - functions that try to match tokens in the stash
 
-Any function accepting one token as argument (a Clojure map) can work as a pattern. 
+Any function accepting one token as argument (a Clojure map) can work as a pattern.
 It must return true when the token matches. For example:
 
-```Clojure
+```clojure
 ; this pattern will match a token with :dim :number whose :val is 0
 (fn [token] (and (= :number (:dim token)) (= 0 (:val token))))
 ```
 
-**Protip:** These patterns are very close, but should not be confused with Corpus test patterns. 
+**Protip:** These patterns are very close, but should not be confused with Corpus test patterns.
 We might merge them later.
 
 #### Helpers
@@ -369,7 +370,7 @@ We might merge them later.
 Like for corpus test functions, you’ll find yourself using the same patterns again and again.
  We use helpers that produce pattern functions. For instance
 
-```Clojure
+```clojure
 (number 3) ; => (fn [token] (and (= :number (:dim token)) (= 3 (:val token))))
 
 (dim :number) ; => (fn [token] (= :number (:dim token)))
@@ -377,17 +378,17 @@ Like for corpus test functions, you’ll find yourself using the same patterns a
 
 You should reuse existing helpers or define your own as much as possible, as it makes the rules much easier to read.
 
-**Protip:** Using (dim :number) is better than a regex like #”\d+”, 
-because if will match any number even “twenty”, “minus six”, “2M”, etc. 
+**Protip:** Using (dim :number) is better than a regex like #”\d+”,
+because if will match any number even “twenty”, “minus six”, “2M”, etc.
 You actually leverage other Picsou rules that are just responsible to recognize numbers.
 
 #### Slots
 
-Let’s say you want to parse something like “10 degrees”, “twenty degrees”, and “30°”. 
-The right approach is to look for a token of `:dim :number`, immediately followed by a word like “degrees” or “°”. 
+Let’s say you want to parse something like “10 degrees”, “twenty degrees”, and “30°”.
+The right approach is to look for a token of `:dim :number`, immediately followed by a word like “degrees” or “°”.
 In this case, we say the pattern has two *slots*. It is written like this:
 
-```Clojure
+```clojure
 [(dim :number)   ; first slot is a token with :dim :number
  #”degrees?|°”]  ; second slot is the string "degree", "degrees" or "°"" in the input string
 ```
@@ -398,36 +399,36 @@ Once a rule’s pattern matches, Picsou creates a token and adds it to the stash
 
 In its simplest form, the production is just the token to produce:
 
-```Clojure
-{:dim :number 
+```clojure
+{:dim :number
  :integer true
  :val 0}
 ```
 
-But what if the product token is a function of a token matched by the pattern? 
+But what if the product token is a function of a token matched by the pattern?
 You can use %1, %2, ... %S to represent the tokens matched in the S slots:
 
-```Clojure
+```clojure
 “<n> degrees"                ; label
 [(dim :number) #”degrees?”]  ; pattern (2 slots)
 {:dim :temperature           ; production
  :degrees (:val %1)}
 ```
 
-**Protip:** Internally, the production form is expanded with `#(...)`. 
+**Protip:** Internally, the production form is expanded with `#(...)`.
 It becomes a function, which is called with the matching tokens as arguments.
 
-**Warning:** If the pattern has S slots, you MUST use `%S` (even if you don't need it) if you need any %i. 
+**Warning:** If the pattern has S slots, you MUST use `%S` (even if you don't need it) if you need any %i.
 That will set the right arity to the production function.
 
 #### Special case of regex patterns
 
 If the base pattern is a regex and you need to use the groups matched by the regex in the production, you use the `:groups` key:
 
-```Clojure
+```clojure
 “international phone number”
 #”\+(\d+) (\d+)” ; regex capturing two groups
-{:dim :phone-number 
+{:dim :phone-number
  :country-code (-> %1 :groups first)
  :number (-> %1 :groups second)}
 ```
