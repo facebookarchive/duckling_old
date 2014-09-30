@@ -1,5 +1,5 @@
 {: .circle-cont}
-![build status](https://circleci.com/gh/wit-ai/Duckling.png?circle-token=402928d80776c89e28c621d690201d1ff3b994e2)
+![build status](https://circleci.com/gh/wit-ai/duckling.png?circle-token=402928d80776c89e28c621d690201d1ff3b994e2)
 
 # Introduction
 
@@ -231,9 +231,9 @@ The default configuration file `resources/default-config.clj` defines three modu
                     "fr.duration"
                     "fr.temperature"
                     "fr.measure"
-                    "en.finance"                             
+                    "en.finance"
                     "en.communication"
-                    ]}                     
+                    ]}
  :en$core {:corpus ["en.time"
                     "en.numbers"
                     "en.temperature"
@@ -345,7 +345,7 @@ In the previous example, we use a helper `number` defined in `src/Duckling/corpu
   "check if the token is a number equal to value.
   If value is integer, it also checks :integer true"
   [value]
-  (fn [_ token] (when-not 
+  (fn [_ token] (when-not
                   (and
                     (= :number (:dim token))
                     (or (not (integer? value)) (:integer token))
