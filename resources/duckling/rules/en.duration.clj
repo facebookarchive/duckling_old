@@ -62,7 +62,7 @@
   (in-duration (:value %2))
 
   "<duration> from now"
-  [(dim :duration) #"(?i)from now"]
+  [(dim :duration) #"(?i)from (today|now)"]
   (in-duration (:value %1))
 
   "<duration> ago"

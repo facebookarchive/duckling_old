@@ -303,6 +303,9 @@
   "a day from now"
   (datetime 2013 2 13 4)
 
+  "3 years from today"
+  (datetime 2016 2)
+
   "in 7 days"
   (datetime 2013 2 19 4)
 
