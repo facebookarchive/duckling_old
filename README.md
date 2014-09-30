@@ -66,7 +66,9 @@ To use Picsou in your project, you just need two functions: `load!` to load the 
 
 The core module (ie :en$core, :fr$core, :es$core, :cn$core...) will allow you to capture the following examples.
 
-| time | "today"<br>"Monday, Feb 18"<br>"the 1st of march"<br>"last week"<br>"a quarter to noon"<br>"11:45am"<br>"three months ago"<br>"next 3 weeks"<br>"thanksgiving"<br>"Mother's Day"<br>"from 9:30 - 11:00 on Thursday<br>"the day before labor day 2015" |
+| :dim | examples |
+|-----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| time | "today"<br>"Monday, Feb 18"<br>"the 1st of march"<br>"last week"<br>"a quarter to noon"<br>"11:45am"<br>"three months ago"<br>"next 3 weeks"<br>"thanksgiving"<br>"Mother's Day"<br>"from 9:30 - 11:00 on Thursday<br>"the day before labor day 2020" |
 | temperature | "70°F"<br>"72° Fahrenheit"<br>"thirty two celsius"<br>"65 degrees" |
 | number | "eighteen"<br>"0.77"<br>"100K"<br>"33" |
 | ordinal | "4th"<br>"first"<br>"seventh" |
