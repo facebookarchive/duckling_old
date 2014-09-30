@@ -64,6 +64,21 @@ To use Picsou in your project, you just need two functions: `load!` to load the 
         :body "last Monday of January 2015 at 6am"}]
 ```
 
+The core module (ie :en$core, :fr$core, :es$core, :cn$core...) will allow you to capture the following examples.
+
+| time | "today"<br>"Monday, Feb 18"<br>"the 1st of march"<br>"last week"<br>"a quarter to noon"<br>"11:45am"<br>"three months ago"<br>"next 3 weeks"<br>"thanksgiving"<br>"Mother's Day"<br>"from 9:30 - 11:00 on Thursday<br>"the day before labor day 2015" |
+| temperature | "70°F"<br>"72° Fahrenheit"<br>"thirty two celsius"<br>"65 degrees" |
+| number | "eighteen"<br>"0.77"<br>"100K"<br>"33" |
+| ordinal | "4th"<br>"first"<br>"seventh" |
+| distance | "8miles"<br>"3 feet"<br>"2 inches"<br>"3''"<br>"4km"<br>"12cm" |
+| volume | "250ml"<br>"2liters"<br>"1 gallon" |
+| amount-of-money | "ten dollars"<br>"4 bucks"<br>"$20" |
+| duration | "2 hours"<br>"4 days"<>"3 minutes" |
+| email | "help@wit.ai" |
+| url | "http://wit.ai"<br>"www.foo.com:8080/path"<br>"https://myserver?foo=bar"<br>"cnn.com/info"<br>"foo.com/path/path?ext=%23&foo=bla"<br>"localhost" |
+| phone-number | "415-123-3444"<br>"+33 4 76095663"<br>"(650)-283-4757 ext 897" |
+
+
 # Extending Picsou
 
 You can add or modify the shipped modules to improve the parsing of date and times, but also create new modules that parse just any kind of data you want.

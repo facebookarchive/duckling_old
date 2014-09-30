@@ -163,8 +163,8 @@
   (datetime 2013 2 12 11 45 :hour 11 :minute 45)
 
   "alle 3 del mattino"
-  (datetime 2013 2 13 3 :hour 3 :minute 45)
-  
+  (datetime 2013 2 13 3 :hour 3)
+    
   "alle 19:30 il venerdì 20 settembre"
   (datetime 2013 9 20 19 30 :hour 19 :minute 30 :day-of-week 5 :day 20 :month 9)
 
