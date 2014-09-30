@@ -360,8 +360,6 @@
   Behavior depends on the ref-time in context, and token fields like
   :not-immediate."
   [{:keys [dim pred not-immediate timezone] :as token} {:keys [reference-time] :as context}]
-  {:pre [reference-time]}
-  ;(prn "Resolving" (:text token)) (print-token token)
   (try
     (case dim
       :time
@@ -370,7 +368,8 @@
         
         ; we use ref-time twice
         ; as the first arg of pred, it's just as a lookup starting point
-        (let [ctx (assoc context :max (t/plus reference-time :year 2000)
+        (let [reference-time (or reference-time (t/now))
+              ctx (assoc context :max (t/plus reference-time :year 2000)
                                  :min (t/minus reference-time :year 2000))
               [[first-ahead second-ahead] [first-behind]] (pred reference-time ctx)
               ahead (if (and not-immediate (t/intersect first-ahead reference-time))

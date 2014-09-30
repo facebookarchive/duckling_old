@@ -114,6 +114,11 @@
                                      :body (:text %)})))]
     {:stash stash :winners winners}))
 
+
+;--------------------------------------------------------------------------
+; REPL utilities
+;--------------------------------------------------------------------------
+
 (defn- print-stash
   "Print stash to STDOUT"
   [stash classifiers winners]
@@ -169,41 +174,6 @@
           (inc depth)
           (if (pos? depth) new-prefix ""))))))
 
-(defn- merge-rules
-  [current config-key new-file]
-  (let [new-file (io/resource (str "duckling/rules/" new-file ".clj"))
-        new-rules (engine/rules (read-string (slurp new-file)))]
-    (assoc
-        current
-      config-key
-      (concat (config-key current) new-rules))))
-
-(defn- merge-corpus
-  [current config-key new-file]
-  (let [new-file (io/resource (str "duckling/corpus/" new-file ".clj"))
-        new-corpus (corpus/read-corpus new-file)]
-    (assoc
-        current
-      config-key
-      (util/merge-according-to {:tests concat :context merge} (config-key current) new-corpus))))
-
-(defn run-corpus
-  "Run the corpus given in parameter for the given module.
-  Returns a list of vectors [0|1 text error-msg]"
-  [{context :context, tests :tests} module]
-  (for [test tests
-        text (:text test)]
-    (try
-      (let [{:keys [stash winners]} (analyze text context module nil)
-            winner-count (count winners)
-            check (first (:checks test)) ; only one test is supported now
-            check-results (map (partial check context) winners)] ; return nil if OK, [expected actual] if not OK
-        (if (some #(or (nil? %) (false? %)) check-results)
-          [0 text nil]
-          [1 text [(first (first check-results)) (map second check-results)]]))
-      (catch Exception e
-        [1 text (.getMessage e)]))))
-
 (defn play
   "Show processing details for one sentence. Defines a 'details' function."
   ([module-id s]
@@ -234,27 +204,28 @@
      (def token (fn [n]
                   (nth stash n))))))
 
-(defn run
-  "Runs the corpus and prints the results to the terminal."
-  ([]
-   (run (keys @corpus-map)))
-  ([module-id]
-   (loop [[mod & more] (if (seq? module-id) module-id [module-id])
-          line 0
-          acc []]
-     (if mod
-       (let [output (run-corpus (mod @corpus-map) mod)
-             failed (remove (comp (partial = 0) first) output)]
-         (doseq [[[error-count text error-msg] i] (map vector failed (iterate inc line))]
-           (printf "%d FAIL \"%s\"\n    Expected %s\n" i text (first error-msg))
-           (doseq [got (second error-msg)]
-             (printf "    Got      %s\n" got)))
-         (printf "%s: %d examples, %d failed.\n" mod (count output) (count failed))
-         (recur more (+ line (count failed)) (concat acc (map (fn [[_ t _]] [mod t]) failed))))
-       (defn c [n]
-         (let [[mod text] (nth acc n)]
-           (printf "(play %s \"%s\")\n" mod text)
-           (play mod text)))))))
+
+;--------------------------------------------------------------------------
+; Configuration loading
+;--------------------------------------------------------------------------
+
+(defn- merge-rules
+  [current config-key new-file]
+  (let [new-file (io/resource (str "duckling/rules/" new-file ".clj"))
+        new-rules (engine/rules (read-string (slurp new-file)))]
+    (assoc
+        current
+      config-key
+      (concat (config-key current) new-rules))))
+
+(defn- merge-corpus
+  [current config-key new-file]
+  (let [new-file (io/resource (str "duckling/corpus/" new-file ".clj"))
+        new-corpus (corpus/read-corpus new-file)]
+    (assoc
+        current
+      config-key
+      (util/merge-according-to {:tests concat :context merge} (config-key current) new-corpus))))
 
 (defn load!
   "Load/Reload rules and classifiers from the config in parameter.
@@ -278,6 +249,56 @@
                                      rules
                                      learn/extract-route-features)))))
 
+
+;--------------------------------------------------------------------------
+; Corpus running
+;--------------------------------------------------------------------------
+
+(defn run-corpus
+  "Run the corpus given in parameter for the given module.
+  Returns a list of vectors [0|1 text error-msg]"
+  [{context :context, tests :tests} module]
+  (for [test tests
+        text (:text test)]
+    (try
+      (let [{:keys [stash winners]} (analyze text context module nil)
+            winner-count (count winners)
+            check (first (:checks test)) ; only one test is supported now
+            check-results (map (partial check context) winners)] ; return nil if OK, [expected actual] if not OK
+        (if (some #(or (nil? %) (false? %)) check-results)
+          [0 text nil]
+          [1 text [(first (first check-results)) (map second check-results)]]))
+      (catch Exception e
+        [1 text (.getMessage e)]))))
+
+
+(defn run
+  "Runs the corpus and prints the results to the terminal."
+  ([]
+   (run (keys @corpus-map)))
+  ([module-id]
+   (loop [[mod & more] (if (seq? module-id) module-id [module-id])
+          line 0
+          acc []]
+     (if mod
+       (let [output (run-corpus (mod @corpus-map) mod)
+             failed (remove (comp (partial = 0) first) output)]
+         (doseq [[[error-count text error-msg] i] (map vector failed (iterate inc line))]
+           (printf "%d FAIL \"%s\"\n    Expected %s\n" i text (first error-msg))
+           (doseq [got (second error-msg)]
+             (printf "    Got      %s\n" got)))
+         (printf "%s: %d examples, %d failed.\n" mod (count output) (count failed))
+         (recur more (+ line (count failed)) (concat acc (map (fn [[_ t _]] [mod t]) failed))))
+       (defn c [n]
+         (let [[mod text] (nth acc n)]
+           (printf "(play %s \"%s\")\n" mod text)
+           (play mod text)))))))
+
+
+;--------------------------------------------------------------------------
+; Public API
+;--------------------------------------------------------------------------
+
 (defn parse
   "Public API. Parses text using given module. If dims are provided as a list of
   keywords referencing token dimensions, only these dimensions are extracted.
@@ -293,8 +314,9 @@
         (map #(assoc % :value (engine/export-value % {})))
         (map #(select-keys % [:dim :body :value :start :end :latent])))))
 
+
 ;--------------------------------------------------------------------------
-; The stuff below is specific to Wit.ai and will be moved out of Picsou
+; The stuff below is specific to Wit.ai and will be moved out of Duckling
 ;--------------------------------------------------------------------------
 
 (defn- generate-context
