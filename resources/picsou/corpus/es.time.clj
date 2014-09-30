@@ -218,7 +218,7 @@
   "las doce menos cuarto"
   "11:45"
   "las once y cuarenta y cinco"
-  "hoy a 11:45"
+  ; "hoy a 11:45"
   "hoy a las doce menos cuarto"
   "hoy a las once y cuarenta y cinco"
   (datetime 2013 2 12 11 45 :hour 11 :minute 45)

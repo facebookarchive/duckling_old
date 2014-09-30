@@ -17,8 +17,6 @@
       (->> (map string/lower-case))
       frequencies))
 
-(prn (map #(vector (count-words (first %)) (second %)) text-dataset))
-
 (def text-classifier
   (train-classifier
     (map #(vector (count-words (first %)) (second %)) text-dataset)))

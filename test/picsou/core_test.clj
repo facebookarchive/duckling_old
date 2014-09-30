@@ -50,7 +50,7 @@
                      :grain :month}
              :body "january 2014"
              :label "T"}]
-           (extract "january 2014" default-context nil [{:module "en$core"
-                                                         :dim "time"
-                                                         :label "T"}])))))
+           (extract "january 2014" (default-context :corpus) nil [{:module "en$core"
+                                                                :dim "time"
+                                                                :label "T"}])))))
 

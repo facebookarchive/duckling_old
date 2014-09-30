@@ -217,9 +217,9 @@
 
 (defn export-value
   "Transforms a token value for API output. Returns the modified value."
-  [token]
+  [token opts]
   ; TODO dynamic ns based on dim
-  (time/export-value token))
+  (time/export-value token opts))
 
 (defn estimate-confidence
   "Returns the tokens with :confidence a rough confidence estimation for each.

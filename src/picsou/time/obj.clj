@@ -1,5 +1,6 @@
 (ns picsou.time.obj
-  (:require [clj-time.core :as time])
+  (:require [clj-time.core :as time]
+            [clj-time.local :as local])
   (:import [org.joda.time DateTimeFieldType DateTime]))
 
 ; This ns constructs and operates time objects. It's a wall between Picsou and
@@ -23,7 +24,8 @@
              [:day     (DateTimeFieldType/dayOfMonth) 1]
              [:hour    (DateTimeFieldType/hourOfDay) 0]
              [:minute  (DateTimeFieldType/minuteOfHour) 0]
-             [:second  (DateTimeFieldType/secondOfMinute) 0]])
+             [:second  (DateTimeFieldType/secondOfMinute) 0]
+             [:milliseconds (DateTimeFieldType/millisOfSecond) 0]])
 
 ; for grain ordering
 (def grain-order (into {} (map vector
@@ -201,7 +203,7 @@
   (time/day (time/last-day-of-the-month (:start tt))))
 
 (defn now []
-  {:start (time/now) :grain :second})
+  {:start (local/local-now) :grain :second})
 
 
 ;;;;;;;;;;;;;;;;;;;;;;

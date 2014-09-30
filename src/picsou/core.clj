@@ -13,7 +13,13 @@
 (def rules-map (atom {}))
 (def corpus-map (atom {}))
 (def classifiers-map (atom {}))
-(def default-context {:reference-time (time/t -2 2013 2 12 4 30)})
+
+(defn default-context
+  "Build a default context for testing. opt can be either :corpus or :now"
+  [opt]
+  {:reference-time (case opt
+                     :corpus (time/t -2 2013 2 12 4 30)
+                     :now (time/now))})
 
 (defn- get-classifier
   [id]
@@ -70,24 +76,23 @@
           already-selected))
       already-selected)))
 
-(defn parse
-  "Parse a sentence. Returns the stash and a curated list of winners.
+(defn analyze
+  "Parse a sentence, returns the stash and a curated list of winners.
    Targets is a coll of {:dim dim :label label} : only winners of these dims are
    kept, and they receive a :label key = the label provided.
    If no targets specified, all winners are returned."
-  [s context module & [targets]]
+  [s context module targets]
   {:pre [s context module]}
   (let [classifiers (get-classifier module)
         _ (when-not (map? classifiers)
-            (warnf "[picsou] classifiers is not a map s=%s module=%s targets=%s"
-                   s module (util/spprint targets)))
+            (errorf "[picsou] Module %s is not loaded. Did you (load!) ?" module))
         rules (get-rules module)
         stash (engine/pass-all s rules)
         ; add an index to tokens in the stash
         stash (map #(if (map? %1) (assoc %1 :index %2) %1)
                    stash
                    (iterate inc 0))
-        dim-label (when targets (into {} (for [{:keys [dim label]} targets]
+        dim-label (when (seq targets) (into {} (for [{:keys [dim label]} targets]
                                            [(keyword dim) label])))
         winners (->> stash
                      (filter :pos)
@@ -189,7 +194,7 @@
   (for [test tests
         text (:text test)]
     (try
-      (let [{:keys [stash winners]} (parse text context module)
+      (let [{:keys [stash winners]} (analyze text context module nil)
             winner-count (count winners)
             check (first (:checks test)) ; only one test is supported now
             check-results (map (partial check context) winners)] ; return nil if OK, [expected actual] if not OK
@@ -199,17 +204,16 @@
       (catch Exception e
         [1 text (.getMessage e)]))))
 
-;; default context is the same as the corpus context
 (defn play
   "Show processing details for one sentence. Defines a 'details' function."
   ([module-id s]
    (play module-id s nil))
   ([module-id s targets]
-   (play module-id s targets default-context))
+   (play module-id s targets (default-context :corpus)))
   ([module-id s targets context]
    (let [targets (when targets (map (fn [dim] {:dim dim :label dim}) targets))
          {stash :stash
-          winners :winners} (parse s context module-id targets)]
+          winners :winners} (analyze s context module-id targets)]
 
      ;; 1. print stash
      (print-stash stash (get-classifier module-id) winners)
@@ -219,7 +223,7 @@
      (doseq [winner winners]
        (printf "%-25s %s %s\n" (str (name (:dim winner))
                                      (if (:latent winner) " (latent)" ""))
-                               (api/export-value winner)
+                               (engine/export-value winner {:date-fn str})
                                (dissoc winner :value :route :rule :pos :text :end :index
                                                :dim :start :latent :body :pred :timezone)))
 
@@ -263,7 +267,7 @@
    (reset! corpus-map {})
    (reset! classifiers-map {})
    (doseq [[config-key {corpus-files :corpus rules-files :rules}] config]
-     (info "Loading module " config-key)
+     (printf "Loading module %s\n" config-key)
      (doseq [corpus-file corpus-files]
        (swap! corpus-map merge-corpus config-key corpus-file))
      (doseq [rules-file rules-files]
@@ -274,7 +278,27 @@
                                      rules
                                      learn/extract-route-features)))))
 
+(defn parse
+  "Public API. Parses text using given module. If dims are provided as a list of
+  keywords referencing token dimensions, only these dimensions are extracted.
+  Context is a map with a :reference-time key. If not provided, the system
+  current date and time is used."
+  ([module text]
+   (parse module text []))
+  ([module text dims]
+   (parse module text dims (default-context :now)))
+  ([module text dims context]
+   (->> (analyze text context module (map (fn [dim] {:dim dim :label dim}) dims))
+        :winners
+        (map #(assoc % :value (engine/export-value % {})))
+        (map #(select-keys % [:dim :body :value :start :end :latent])))))
+
+;--------------------------------------------------------------------------
+; The stuff below is specific to Wit.ai and will be moved out of Picsou
+;--------------------------------------------------------------------------
+
 (defn- generate-context
+  "Wit.ai internal. Will move to Wit."
   [base-context]
   (-> base-context
       (?> (instance? org.joda.time.DateTime (:reference-time base-context))
@@ -282,41 +306,36 @@
                                   :grain :second}))))
 
 (defn extract
-  "Public API.
+  "API used by Wit.ai (will me moved to Wit)
    targets is a coll of maps {:module :dim :label} for instance:
    {:module fr$core, :dim duration, :label wit$duration} to get duration results
    Returns a single coll of tokens with :body :value :start :end :label (=wisp) :latent"
-  ([sentence module dims]
-   (extract sentence 
-            default-context 
-            [] 
-            (vec (map (fn [dim] {:module module :dim dim :label dim}) dims))))
-  ([sentence context leven-stash targets]
-   {:pre [(string? sentence)
-          (map? context)
-          (:reference-time context)
-          (seq targets)]}
-   (try
-     (infof "Extracting from '%s' with targets %s" sentence targets)
-     (letfn [(extract'
+  [sentence context leven-stash targets]
+  {:pre [(string? sentence)
+         (map? context)
+         (:reference-time context)
+         (seq targets)]}
+  (try
+    (infof "Extracting from '%s' with targets %s" sentence targets)
+    (letfn [(extract'
               [module targets] ; targets specify all the dims we should extract
               (let [module (keyword module)
                     pic-context (generate-context context)]
                 (when-not (module @rules-map)
                   (throw (ex-info "Unknown picsou module" {:module module})))
-                (->> (parse sentence pic-context module targets)
+                (->> (analyze sentence pic-context module targets)
                      :winners
-                     (map #(assoc % :value (engine/export-value %)))
+                     (map #(assoc % :value (engine/export-value % {:date-fn str})))
                      (map #(select-keys % [:label :body :value :start :end :latent])))))]
       (->> targets
            (group-by :module) ; we want to run each config only once
            (mapcat (fn [[module targets]] (extract' module targets)))
            vec))
-     (catch Exception e
-       (let [err {:e e
-                  :sentence sentence
-                  :context context
-                  :leven-stash leven-stash
-                  :targets targets}]
+    (catch Exception e
+      (let [err {:e e
+                 :sentence sentence
+                 :context context
+                 :leven-stash leven-stash
+                 :targets targets}]
          (errorf e "picsou error err=%s" (pr-str err))
-         [])))))
+         []))))
