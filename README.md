@@ -94,9 +94,9 @@ Load Picsou with the default configuration file:
 
 ```clojure
 picsou.core=> (load!)
-INFO: Loading module  :fr$core
-INFO: Loading module  :en$core
-INFO: Loading module  :es$core
+Loading module :fr$core
+Loading module :en$core
+Loading module :es$core
 nil
 ```
 
@@ -104,48 +104,38 @@ Run the corpus and check that all the tests pass:
 
 ```
 picsou.core=> (run)
-OK  "ahora"
-OK  "ya"
-OK  "ahorita"
-OK  "hoy"
-OK  "en este momento"
-OK  "ayer"
-OK  "anteayer"
-OK  "antier"
-OK  "mañana"
-OK  "pasado mañana"
-OK  "lunes"
-OK  "lu"
-OK  "lun."
-OK  "este lunes"
-OK  "martes"
-[...]
-282 examples, 0 failed.
-Results :
-:es$core: 269 examples, 0 failed.
-:en$core: 264 examples, 0 failed.
-:fr$core: 282 examples, 0 failed.
-Global Failed count:  0
-nil
+:es$core: 294 examples, 0 failed.
+:en$core: 355 examples, 0 failed.
+:fr$core: 326 examples, 0 failed.
+#'picsou.core/c
 ```
 
 See the detailed parsing of a given string like "in two hours":
 
 ```
 picsou.core=> (play :en$core "in two hours")
-------------  11 | time      | in/after <duration>       | P = -3.2070 |  + <integer> <unit-of-duration>
-   ---        10 | distance  | number as distance        | P = -2.2455 | integer (0..19)
-   ---         9 | temperature | number as temp            | P = -2.2501 | integer (0..19)
-   ---------   8 | duration  | <integer> <unit-of-duration> | P = -2.7215 | integer (0..19) + hour (unit-of-duration)
-   ---         7 | null      | number (as relative minutes) | P = -1.7314 | integer (0..19)
-   ---         6 | time      | <integer> (latent time-of-day) | P = -1.3509 | integer (0..19)
-   ---         5 | time      | month (numeric)           | P = -1.0430 | integer (0..19)
-   ---         4 | time      | day of month (numeric)    | P = -1.5284 | integer (0..19)
-       -----   3 | unit-of-duration | hour (unit-of-duration)   | P = 0.0000 |
-       -----   2 | cycle     | hour (cycle)              | P = 0.0000 |
-   ---         1 | number    | integer (0..19)           | P = -0.1957 |
-12 tokens in stash
-[...]
+W ------------  11 | time      | in/after <duration>       | P = -3.4187 |  + <integer> <unit-o
+W    ---        10 | volume    | number as volume          | P = -2.1172 | integer (0..19)
+W    ---         9 | distance  | number as distance        | P = -2.2680 | integer (0..19)
+W    ---         8 | temperature | number as temp            | P = -2.2409 | integer (0..19)
+W    ---------   7 | duration  | <integer> <unit-of-duration> | P = -2.9592 | integer (0..19) + ho
+     ---         6 | null      | number (as relative minutes) | P = -1.6507 | integer (0..19)
+     ---         5 | time      | time-of-day (latent)      | P = -1.6351 | integer (0..19)
+     ---         4 | time      | year (latent)             | P = -1.0804 | integer (0..19)
+         -----   3 | unit-of-duration | hour (unit-of-duration)   | P = 0.0000 |
+         -----   2 | cycle     | hour (cycle)              | P = 0.0000 |
+W    ---         1 | number    | integer (0..19)           | P = -0.1866 |
+  in two hours
+
+6 winners:
+number                    {:type "value", :value 2} {:integer true}
+duration                  {:normalized {:value 7200, :unit "second"}, :unit :hour, :value 2, :hour 2} {}
+temperature (latent)      {:type "value", :value 2} {}
+distance (latent)         {:type "value", :value 2} {}
+volume (latent)           {:type "value", :value 2} {}
+time                      {:type "value", :value "2013-02-12T06:30:00.000-02:00", :grain :minute} {}
+For further info: (details idx) where 1 <= idx <= 11
+#'picsou.core/token
 ```
 
 
@@ -167,42 +157,54 @@ The following sections detail these steps.
 The default configuration file `resources/default-config.clj` defines three modules (`fr$core`, `en$core` and `es$core`):
 
 ```clojure
-{:fr$core {:corpus ["fr.time"
+{
+  :fr$core {:corpus ["fr.time"
                     "fr.numbers"
                     "fr.temperature"
+                    "fr.measure"
                     "fr.finance"
-                    "en.communication"]
-           :rules ["fr.time"
-                   "fr.numbers"
-                   "fr.cycles"
-                   "fr.duration"
-                   "fr.temperature"
-                   "en.finance"
-                   "en.communication"]}
+                    "en.communication"
+                    ]
+            :rules ["fr.time"
+                    "fr.numbers"
+                    "fr.cycles"
+                    "fr.duration"
+                    "fr.temperature"
+                    "fr.measure"
+                    "en.finance"                             
+                    "en.communication"
+                    ]}                     
  :en$core {:corpus ["en.time"
                     "en.numbers"
                     "en.temperature"
+                    "en.measure"
                     "en.finance"
                     "en.communication"]
-           :rules ["en.time"
-                   "en.numbers"
-                   "en.cycles"
-                   "en.duration"
-                   "en.temperature"
-                   "en.finance"
-                   "en.communication"]}
- :es$core {:corpus ["es.time"
-                    "es.numbers"
-                    "es.temperature"
-                    "es.finance"
-                    "en.communication"]
-           :rules ["es.time"
+           :rules  ["en.time"
+                    "en.numbers"
+                    "en.cycles"
+                    "en.duration"
+                    "en.temperature"
+                    "en.measure"
+                    "en.finance"
+                    "en.communication"]}
+:es$core {:corpus ["es.time"
                    "es.numbers"
-                   "es.cycles"
-                   "es.duration"
                    "es.temperature"
-                   "en.finance"
-                   "en.communication"]}}
+                   "es.measure"
+                   "es.finance"
+                   "en.communication"
+                  ]
+            :rules ["es.time"
+                    "es.numbers"
+                    "es.cycles"
+                    "es.duration"
+                    "es.temperature"
+                    "es.measure"
+                    "en.finance"
+                    "en.communication"
+                    ]}
+}
 ```
 
 ### Modules
@@ -222,17 +224,17 @@ To load Picsou with all the modules defined in the default configuration file `r
 
 ```
 picsou.core=> (load!)
-INFO: Loading module  :fr$core
-INFO: Loading module  :en$core
-INFO: Loading module  :es$core
+Loading module :fr$core
+Loading module :en$core
+Loading module :es$core
 nil
 ```
 
 Alternatively, to load Picsou without using a configuration file, you can define modules directly in the `load!` function arguments:
 
 ```clojure
-(load! {:en$location {:corpus ["en.location"] :rules ["en.location"]}})
-INFO: Loading module  :en$location
+(load! {:en$numbers {:corpus ["en.numbers"] :rules ["en.numbers"]}})
+Loading module  :en$numbers
 ```
 
 ## Corpus
@@ -283,10 +285,12 @@ In the previous example, we use a helper `number` defined in `src/picsou/corpus.
   "check if the token is a number equal to value.
   If value is integer, it also checks :integer true"
   [value]
-  (fn [token _] (and
-                  (= :number (:dim token))
-                  (or (not (integer? value)) (:integer token))
-                  (= (:val token) value))))
+  (fn [_ token] (when-not 
+                  (and
+                    (= :number (:dim token))
+                    (or (not (integer? value)) (:integer token))
+                    (= (:value token) value))
+                  [value (:value token)])))
 ```
 
 So that the test becomes just `(number 0)`, which is easy to read and reusable.
@@ -299,20 +303,10 @@ Once you’ve added your tests, reload your module (see above) and run the corpu
 
 ```
 picsou.core=> (run :en$core)
-OK  "now"
-OK  "right now"
-OK  "just now"
-[...]
-OK  "0"
-OK  "naught"
-OK  "nought"
-OK  "zero"
-FAIL"boule a zero" none of the 0 winners did pass the test
-OK  "1"
-OK  "one"
-[...]
-265 examples, 1 failed.
-[:en$core 265 1]
+O0 FAIL "nil"
+    Expected null
+:en$core: 356 examples, 1 failed.
+#'picsou.core/c
 ```
 
 Make sure the tests don’t pass anymore (if they do, either you’re very lucky and the existing rules actually
@@ -329,7 +323,7 @@ Here is an example file with just one rule:
 ```clojure
 ("zero"                                ; _label_ of the rule, useful for debugging
  #”0|zero|naught”                      ; _pattern_, here it’s a simple regex
- {:dim number :integer true :val 0})   ; _production_ token, it can be any map
+ {:dim number :integer true :value 0})   ; _production_ token, it can be any map
 ```
 
 When the pattern is matched, the production token is produced. Picsou adds this new token to its collection of tokens,
@@ -340,18 +334,19 @@ Here is an illustration of this process, with a stash containing 11 tokens:
 
 ```
 picsou.core=> (play :en$core "in two hours")
-------------  11 | time      | in/after <duration>       | P = -3.2070 |  + <integer> <unit-of-duration>
-   ---        10 | distance  | number as distance        | P = -2.2455 | integer (0..19)
-   ---         9 | temperature | number as temp            | P = -2.2501 | integer (0..19)
-   ---------   8 | duration  | <integer> <unit-of-duration> | P = -2.7215 | integer (0..19) + hour (unit-of-duration)
-   ---         7 | null      | number (as relative minutes) | P = -1.7314 | integer (0..19)
-   ---         6 | time      | <integer> (latent time-of-day) | P = -1.3509 | integer (0..19)
-   ---         5 | time      | month (numeric)           | P = -1.0430 | integer (0..19)
-   ---         4 | time      | day of month (numeric)    | P = -1.5284 | integer (0..19)
-       -----   3 | unit-of-duration | hour (unit-of-duration)   | P = 0.0000 |
-       -----   2 | cycle     | hour (cycle)              | P = 0.0000 |
-   ---         1 | number    | integer (0..19)           | P = -0.1957 |
-in two hours
+W ------------  11 | time      | in/after <duration>       | P = -3.4187 |  + <integer> <unit-o
+W    ---        10 | volume    | number as volume          | P = -2.1172 | integer (0..19)
+W    ---         9 | distance  | number as distance        | P = -2.2680 | integer (0..19)
+W    ---         8 | temperature | number as temp            | P = -2.2409 | integer (0..19)
+W    ---------   7 | duration  | <integer> <unit-of-duration> | P = -2.9592 | integer (0..19) + ho
+     ---         6 | null      | number (as relative minutes) | P = -1.6507 | integer (0..19)
+     ---         5 | time      | time-of-day (latent)      | P = -1.6351 | integer (0..19)
+     ---         4 | time      | year (latent)             | P = -1.0804 | integer (0..19)
+         -----   3 | unit-of-duration | hour (unit-of-duration)   | P = 0.0000 |
+         -----   2 | cycle     | hour (cycle)              | P = 0.0000 |
+W    ---         1 | number    | integer (0..19)           | P = -0.1866 |
+  in two hours
+
 [...]
 ```
 
@@ -368,7 +363,7 @@ It must return true when the token matches. For example:
 
 ```clojure
 ; this pattern will match a token with :dim :number whose :val is 0
-(fn [token] (and (= :number (:dim token)) (= 0 (:val token))))
+(fn [token] (and (= :number (:dim token)) (= 0 (:value token))))
 ```
 
 **Protip:** These patterns are very close, but should not be confused with Corpus test patterns.
@@ -380,7 +375,7 @@ Like for corpus test functions, you’ll find yourself using the same patterns a
  We use helpers that produce pattern functions. For instance
 
 ```clojure
-(number 3) ; => (fn [token] (and (= :number (:dim token)) (= 3 (:val token))))
+(number 3) ; => (fn [token] (and (= :number (:dim token)) (= 3 (:value token))))
 
 (dim :number) ; => (fn [token] (= :number (:dim token)))
 ```
@@ -399,7 +394,7 @@ In this case, we say the pattern has two *slots*. It is written like this:
 
 ```clojure
 [(dim :number)   ; first slot is a token with :dim :number
- #”degrees?|°”]  ; second slot is the string "degree", "degrees" or "°"" in the input string
+ #"degrees?|°"]  ; second slot is the string "degree", "degrees" or "°"" in the input string
 ```
 
 ### Production
@@ -411,7 +406,7 @@ In its simplest form, the production is just the token to produce:
 ```clojure
 {:dim :number
  :integer true
- :val 0}
+ :value 0}
 ```
 
 But what if the product token is a function of a token matched by the pattern?
@@ -421,7 +416,7 @@ You can use %1, %2, ... %S to represent the tokens matched in the S slots:
 “<n> degrees"                ; label
 [(dim :number) #”degrees?”]  ; pattern (2 slots)
 {:dim :temperature           ; production
- :degrees (:val %1)}
+ :degrees (:value %1)}
 ```
 
 **Protip:** Internally, the production form is expanded with `#(...)`.
@@ -448,38 +443,44 @@ When a corpus test doesn’t pass and you don’t understand why, you can have a
 
 ```
 picsou.core=> (play :en$core "45 degrees")
-----------   5 | temperature | <latent temp> degrees     | P = -1.9167 | number as temp +
---           4 | distance  | number as distance        | P = -1.5638 | integer (numeric)
---           3 | temperature | number as temp            | P = -1.9167 | integer (numeric)
---           2 | null      | number (as relative minutes) | P = -1.1749 | integer (numeric)
---           1 | number    | integer (numeric)         | P = -0.1501 |
-45 degrees
-6 tokens in stash
+W ----------   7 | temperature | <latent temp> degrees     | P = -1.9331 | number as temp +
+W --           6 | volume    | number as volume          | P = -1.8094 | integer (numeric)
+W --           5 | distance  | number as distance        | P = -1.6120 | integer (numeric)
+  --           4 | temperature | number as temp            | P = -1.9331 | integer (numeric)
+  --           3 | null      | number (as relative minutes) | P = -0.9374 | integer (numeric)
+W --           2 | time      | year (latent)             | P = -1.0603 | integer (numeric)
+W --           1 | number    | integer (numeric)         | P = -0.1665 |
+  45 degrees
+
+5 winners:
+[...]
 ```
 
 Each line represents a token in the stash. The input string is at the bottom.
 
 Columns:
 
-1. The `--` represent the span in the text input
-2. Token index (starting at 1, since the input string itself is token 0)
-3. :dim
-4. Label of the rule that produced the token (that’s why labeling your rules clearly is important)
-5. Probability (the higher the most probable -- and it's actually the log of the probabily, hence the negative value)
-6. Labels of the rules that produced the tokens in the slots below
+1. `W` indicates a winner token
+2. The `--` represent the span in the text input
+3. Token index (starting at 1, since the input string itself is token 0)
+4. :dim
+5. Label of the rule that produced the token (that’s why labeling your rules clearly is important)
+6. Probability (the higher the most probable -- and it's actually the log of the probabily, hence the negative value)
+7. Labels of the rules that produced the tokens in the slots below
 
 If you need more information about a specific token, call the `details` function with the token index:
 
 ```
-picsou.core=> (details 5)
-<latent temp> degrees (-1.916684190532246)
-|-- number as temp (-1.916684190532246)
-|   `-- integer (numeric) (-0.15006069457573323)
+picsou.core=> (details 7)
+<latent temp> degrees (-1.9331200116060705)
+|-- number as temp (-1.9331200116060705)
+|   `-- integer (numeric) (-0.16649651564955764)
 |       `-- text: 45 (0)
 `-- text: degrees (0)
+nil
 ```
 
-If you really need to examine token 5 in depth, you can get the full map with `(token 5)`.
+If you really need to examine token 7 in depth, you can get the full map with `(token 7)`.
 
 # Contributing
 

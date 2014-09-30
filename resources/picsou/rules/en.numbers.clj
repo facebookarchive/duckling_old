@@ -4,11 +4,11 @@
  ;;
  
   "integer (0..19)"
-  #"(?i)(naught|nought|zero|one|two|three|fourteen|four|five|sixteen|six|seventeen|seven|eighteen|eight|nineteen|nine|ten|eleven|twelve|thirteen|fifteen)"
+  #"(?i)(naught|nought|nil|zero|one|two|three|fourteen|four|five|sixteen|six|seventeen|seven|eighteen|eight|nineteen|nine|ten|eleven|twelve|thirteen|fifteen)"
   ; fourteen must be before four, or it won't work because the regex will stop at four
   {:dim :number
    :integer true
-   :value (get {"naught" 0 "nought" 0 "zero" 0 "one" 1 "two" 2 "three" 3 "four" 4 "five" 5
+   :value (get {"naught" 0 "nought" 0 "nil" 0 "zero" 0 "one" 1 "two" 2 "three" 3 "four" 4 "five" 5
               "six" 6 "seven" 7 "eight" 8 "nine" 9 "ten" 10 "eleven" 11
               "twelve" 12 "thirteen" 13 "fourteen" 14 "fifteen" 15 "sixteen" 16
               "seventeen" 17 "eighteen" 18 "nineteen" 19}
