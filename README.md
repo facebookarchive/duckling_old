@@ -6,7 +6,7 @@
 Picsou is a Clojure library that parses text into structured data:
 
     “in two hours” => {:value "2014-06-09T13:24:06.634-07:00"
-                       :grain :hour}
+                       :grain :minute}
 
 Picsou is shipped with modules that parse temporal expressions in English, Spanish, French and Chinese (experimental). It recognizes dates and times described in many ways:
 
