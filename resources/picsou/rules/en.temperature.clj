@@ -16,7 +16,7 @@
     "<temp> Celcius"
     [(dim :temperature) #"(?i)c(el[cs]?(ius)?)?\.?"]
     (-> %1 (dissoc :latent)
-           (merge {:unit "celcius"}))
+           (merge {:unit "celsius"}))
 
     "<temp> Fahrenheit"
     [(dim :temperature) #"(?i)f(ah?rh?eh?n(h?eit)?)?\.?"]

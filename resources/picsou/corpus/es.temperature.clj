@@ -3,8 +3,8 @@
 	{}
 
 	"37°C"
-	"37 ° celcius"
-	"37 grados Celcius"
+	"37 ° celsius"
+	"37 grados Celsius"
 	"37 grados C"
 	"treinta y siete celsius"
 	"37 centígrados"

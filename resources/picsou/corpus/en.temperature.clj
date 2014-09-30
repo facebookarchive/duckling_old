@@ -5,12 +5,12 @@
 	; Temperature
 
 	"37°C"
-	"37 ° celcius"
-	"37 degrees Celcius"
-	"thirty seven celcius"
+	"37 ° celsius"
 	"37 degrees Celsius"
 	"thirty seven celsius"
-	(temperature 37 "celcius")
+	"37 degrees Celsius"
+	"thirty seven celsius"
+	(temperature 37 "celsius")
 
 	"70°F"
 	"70 ° Fahrenheit"

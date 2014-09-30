@@ -3,10 +3,10 @@
 	{}
 
 	"37°C"
-	"37 ° celcius"
-	"37 degres Celcius"
+	"37 ° celsius"
+	"37 degres Celsius"
 	"37 degré C"
-	"trente sept celcius"
+	"trente sept celsius"
 	"37 degré C"
 	"trente sept celsius"
 	(temperature 37 "celsius")

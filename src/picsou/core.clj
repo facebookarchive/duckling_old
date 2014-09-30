@@ -314,7 +314,7 @@
   {:pre [(string? sentence)
          (map? context)
          (:reference-time context)
-         (seq targets)]}
+         (vector? targets)]}
   (try
     (infof "Extracting from '%s' with targets %s" sentence targets)
     (letfn [(extract'
