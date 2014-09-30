@@ -1,14 +1,14 @@
 {: .circle-cont}
-![build status](https://circleci.com/gh/wit-ai/picsou.png?circle-token=402928d80776c89e28c621d690201d1ff3b994e2)
+![build status](https://circleci.com/gh/wit-ai/Duckling.png?circle-token=402928d80776c89e28c621d690201d1ff3b994e2)
 
 # Introduction
 
-Picsou is a Clojure library that parses text into structured data:
+Duckling is a Clojure library that parses text into structured data:
 
     “in two hours” => {:value "2014-06-09T13:24:06.634-07:00"
                        :grain :minute}
 
-Picsou is shipped with modules that parse temporal expressions in English, Spanish, French and Chinese (experimental). It recognizes dates and times described in many ways:
+Duckling is shipped with modules that parse temporal expressions in English, Spanish, French and Chinese (experimental). It recognizes dates and times described in many ways:
 
 - *today at 5pm*
 - *2014-10-01*
@@ -17,13 +17,13 @@ Picsou is shipped with modules that parse temporal expressions in English, Spani
 - *the day before labor day 2020*
 - *June 10-11* (interval)
 
-Picsou is:
+Duckling is:
 
 - **Agnostic**: it makes no assumption on the kind of data you want to extract, or the language. You can train it with a combination of examples and rules for any task that takes a string as input and produces a map as output.
-- **Probabilistic**: in the real world, a given input string may produce dozens of potential results. Picsou assigns a probability on each result. It decides which results are more probable by using the corpus of examples given in the configuration. Owing to that (and unlike, say, regular expressions or formal grammars), rules can afford to be extremely loose. It makes them much easier to write, and much more robust to user input in the wild.
-- **Extensible**: we tried our best to make Picsou easy to extend. It leverages the power of Clojure's "code is data" philosophy.
+- **Probabilistic**: in the real world, a given input string may produce dozens of potential results. Duckling assigns a probability on each result. It decides which results are more probable by using the corpus of examples given in the configuration. Owing to that (and unlike, say, regular expressions or formal grammars), rules can afford to be extremely loose. It makes them much easier to write, and much more robust to user input in the wild.
+- **Extensible**: we tried our best to make Duckling easy to extend. It leverages the power of Clojure's "code is data" philosophy.
 
-If you know NLP, Picsou is “almost” a [Probabilistic Context Free Grammar](http://en.wikipedia.org/wiki/Stochastic_context-free_grammar). But not exactly! It tries to be more flexible and easier to configure than a formal PCFG. It also tries to learn better from examples.
+If you know NLP, Duckling is “almost” a [Probabilistic Context Free Grammar](http://en.wikipedia.org/wiki/Stochastic_context-free_grammar). But not exactly! It tries to be more flexible and easier to configure than a formal PCFG. It also tries to learn better from examples.
 
 These are good alternatives if you only have to deal with English, and your text input is somewhat less noisy:
 
@@ -43,13 +43,13 @@ Known limitations of the temporal module include:
 
 # Getting started
 
-Leiningen dependency (Clojars): `[wit/picsou "0.1.1"]`
+Leiningen dependency (Clojars): `[wit/Duckling "0.1.1"]`
 
-To use Picsou in your project, you just need two functions: `load!` to load the default configuration, and `extract` to parse a string.
+To use Duckling in your project, you just need two functions: `load!` to load the default configuration, and `extract` to parse a string.
 
 ```clojure
 (ns myproject.core
-  (:require [picsou.core :as p]))
+  (:require [Duckling.core :as p]))
 
 (p/load!) ;; Load default configuration
 
@@ -81,7 +81,50 @@ The core module (ie :en$core, :fr$core, :es$core, :cn$core...) will allow you to
 | phone-number | "415-123-3444"<br>"+33 4 76095663"<br>"(650)-283-4757 ext 897" |
 
 
-# Extending Picsou
+# Date and Time implementation
+
+In most systems dealing with temporal expressions, dates and times are represented with fields (year, month, etc.). Unfortunately, it's very hard to represent the natural ambiguity of these expressions in this way.
+
+Early on, we played with the idea to represent temporal expressions with predicates in the time dimension. For instance, "Tuesday" would be:
+
+```Clojure
+(defn tuesday [t] (= 2 (joda/day-of-week t))) ; where joda/day-of-week returns
+                                              ; an integer between 1 and 7
+```
+
+You can see that this function returns true if `t` is a Tuesday, false otherwise. It's easy to define similar functions for year, month, hour, etc.
+
+Actually we would "build" day-of-weeks and day-of-months predicates like this:
+
+```Clojure
+(defn day-of-week [n]
+  (fn [t] (= n (joda/day-of-week t))))
+
+(defn day-of-month [n]
+  (fn [t] (= n (joda/day-of-month t))))
+```
+
+The beauty comes with second-order functions. For instance, juxtaposing two time expressions means (in most cases) "intersecting" these predicates. So you can do:
+
+```Clojure
+(defn intersect [pred1 pred2]
+  (fn [t] (and (pred1 t) (pred2 t))))
+
+(def tuesday-the-10th (intersect (day-of-week 2) (day-of-month 10)))
+```
+
+And then, things like "the third Tuesday of January" can be done with higher-order functions would look like:
+
+```Clojure
+(defn take-the-nth [pred nth]
+  (fn [t]
+      ; "selects" the nth interval where pred is true
+    )); and check if t is within
+```
+
+If you look at the code, you'll see that our implementation is a little bit different: we used lazy sequences instead of predicates for performance reasons. But the core idea is the same: we compose predicates/lazy seqs with higher-order functions.
+
+# Extending Duckling
 
 You can add or modify the shipped modules to improve the parsing of date and times, but also create new modules that parse just any kind of data you want.
 
@@ -104,13 +147,13 @@ Commands: (user/help)
 Examples from clojuredocs.org: [clojuredocs or cdoc]
           (user/clojuredocs name-here)
           (user/clojuredocs "ns-here" "name-here")
-picsou.core=>
+Duckling.core=>
 ```
 
-Load Picsou with the default configuration file:
+Load Duckling with the default configuration file:
 
 ```clojure
-picsou.core=> (load!)
+Duckling.core=> (load!)
 Loading module :fr$core
 Loading module :en$core
 Loading module :es$core
@@ -120,17 +163,17 @@ nil
 Run the corpus and check that all the tests pass:
 
 ```
-picsou.core=> (run)
+Duckling.core=> (run)
 :es$core: 294 examples, 0 failed.
 :en$core: 355 examples, 0 failed.
 :fr$core: 326 examples, 0 failed.
-#'picsou.core/c
+#'Duckling.core/c
 ```
 
 See the detailed parsing of a given string like "in two hours":
 
 ```
-picsou.core=> (play :en$core "in two hours")
+Duckling.core=> (play :en$core "in two hours")
 W ------------  11 | time      | in/after <duration>       | P = -3.4187 |  + <integer> <unit-o
 W    ---        10 | volume    | number as volume          | P = -2.1172 | integer (0..19)
 W    ---         9 | distance  | number as distance        | P = -2.2680 | integer (0..19)
@@ -152,15 +195,15 @@ distance (latent)         {:type "value", :value 2} {}
 volume (latent)           {:type "value", :value 2} {}
 time                      {:type "value", :value "2013-02-12T06:30:00.000-02:00", :grain :minute} {}
 For further info: (details idx) where 1 <= idx <= 11
-#'picsou.core/token
+#'Duckling.core/token
 ```
 
 
 ## Workflow
 
-When we extend Picsou's coverage, we follow a typical TDD workflow:
+When we extend Duckling's coverage, we follow a typical TDD workflow:
 
-1. Load Picsou
+1. Load Duckling
 2. Add tests to the corpus
 3. Run the corpus: the new tests don’t pass
 4. Add or modify rules until the corpus tests pass
@@ -230,24 +273,24 @@ Each module has a name (`en$core`), with which it is referred to when you want t
 
 Each module refers to a set of corpus files and rules files (more on this in the following sections).
 
-Each module is run by Picsou in a separate “sandbox”, so for example, rules in module A cannot expect to match
+Each module is run by Duckling in a separate “sandbox”, so for example, rules in module A cannot expect to match
 tokens created by rules in module B.
 There’s typically one module per language, but nothing prevents you to use several modules for a given language,
 as long as these modules don't need to interact with each other.
 
 ### Loading modules
 
-To load Picsou with all the modules defined in the default configuration file `resources/default-config.clj`:
+To load Duckling with all the modules defined in the default configuration file `resources/default-config.clj`:
 
 ```
-picsou.core=> (load!)
+Duckling.core=> (load!)
 Loading module :fr$core
 Loading module :en$core
 Loading module :es$core
 nil
 ```
 
-Alternatively, to load Picsou without using a configuration file, you can define modules directly in the `load!` function arguments:
+Alternatively, to load Duckling without using a configuration file, you can define modules directly in the `load!` function arguments:
 
 ```clojure
 (load! {:en$numbers {:corpus ["en.numbers"] :rules ["en.numbers"]}})
@@ -278,7 +321,7 @@ Here is an example corpus file with two test groups:
 ```
 
 Each test group is described by one or more strings and a function.
-To run the group Picsou will take each string one by one, analyze it, a call the function on the output.
+To run the group Duckling will take each string one by one, analyze it, a call the function on the output.
 The test passes if the function returns true (or a truthy value).
 
 For instance, to test that “0”, “naught” and "zero" will all produce the output `{:dim :number :value 0}`, we can use:
@@ -295,7 +338,7 @@ You can provide a context map at the beginning of your corpus file, and this map
 In most cases, you shouldn’t need to use context.
 
 In practice, we use helpers to generate easy to read test functions.
-In the previous example, we use a helper `number` defined in `src/picsou/corpus.clj`:
+In the previous example, we use a helper `number` defined in `src/Duckling/corpus.clj`:
 
 ```clojure
 (defn number
@@ -312,18 +355,18 @@ In the previous example, we use a helper `number` defined in `src/picsou/corpus.
 
 So that the test becomes just `(number 0)`, which is easy to read and reusable.
 
-Picsou will frequently generate several possible results for a given input.
+Duckling will frequently generate several possible results for a given input.
 In this case, each result is tested by the test function.
 If the function returns true for at least one result, then the test passes.
 
 Once you’ve added your tests, reload your module (see above) and run the corpus:
 
 ```
-picsou.core=> (run :en$core)
+Duckling.core=> (run :en$core)
 O0 FAIL "nil"
     Expected null
 :en$core: 356 examples, 1 failed.
-#'picsou.core/c
+#'Duckling.core/c
 ```
 
 Make sure the tests don’t pass anymore (if they do, either you’re very lucky and the existing rules actually
@@ -343,14 +386,14 @@ Here is an example file with just one rule:
  {:dim number :integer true :value 0})   ; _production_ token, it can be any map
 ```
 
-When the pattern is matched, the production token is produced. Picsou adds this new token to its collection of tokens,
+When the pattern is matched, the production token is produced. Duckling adds this new token to its collection of tokens,
 which is called the “stash”. Then other rules can try to match this token and produce other tokens that are added
 to the stash, and so on. All rules are tried again and again until no more token is produced.
 
 Here is an illustration of this process, with a stash containing 11 tokens:
 
 ```
-picsou.core=> (play :en$core "in two hours")
+Duckling.core=> (play :en$core "in two hours")
 W ------------  11 | time      | in/after <duration>       | P = -3.4187 |  + <integer> <unit-o
 W    ---        10 | volume    | number as volume          | P = -2.1172 | integer (0..19)
 W    ---         9 | distance  | number as distance        | P = -2.2680 | integer (0..19)
@@ -401,7 +444,7 @@ You should reuse existing helpers or define your own as much as possible, as it 
 
 **Protip:** Using (dim :number) is better than a regex like #”\d+”,
 because if will match any number even “twenty”, “minus six”, “2M”, etc.
-You actually leverage other Picsou rules that are just responsible to recognize numbers.
+You actually leverage other Duckling rules that are just responsible to recognize numbers.
 
 #### Slots
 
@@ -416,7 +459,7 @@ In this case, we say the pattern has two *slots*. It is written like this:
 
 ### Production
 
-Once a rule’s pattern matches, Picsou creates a token and adds it to the stash.
+Once a rule’s pattern matches, Duckling creates a token and adds it to the stash.
 
 In its simplest form, the production is just the token to produce:
 
@@ -459,7 +502,7 @@ If the base pattern is a regex and you need to use the groups matched by the reg
 When a corpus test doesn’t pass and you don’t understand why, you can have a closer look at what happens with `play`:
 
 ```
-picsou.core=> (play :en$core "45 degrees")
+Duckling.core=> (play :en$core "45 degrees")
 W ----------   7 | temperature | <latent temp> degrees     | P = -1.9331 | number as temp +
 W --           6 | volume    | number as volume          | P = -1.8094 | integer (numeric)
 W --           5 | distance  | number as distance        | P = -1.6120 | integer (numeric)
@@ -488,7 +531,7 @@ Columns:
 If you need more information about a specific token, call the `details` function with the token index:
 
 ```
-picsou.core=> (details 7)
+Duckling.core=> (details 7)
 <latent temp> degrees (-1.9331200116060705)
 |-- number as temp (-1.9331200116060705)
 |   `-- integer (numeric) (-0.16649651564955764)
@@ -506,7 +549,7 @@ There are many ways you can help the project:
 - Use the widget in this page, and leaving some feedback when the result is not good.
 - One step further: If you notice something that does not work, you can add it in the corpus and submit a pull request.
 - One step further (we'll send you a T-Shirt): Add it in the corpus AND add/modify the rules to make it pass.
-- One step further (we'll invite you for a beer, at least!): Extend Picsou to new domains and/or new languages.
+- One step further (we'll invite you for a beer, at least!): Extend Duckling to new domains and/or new languages.
 
 # FAQ
 
