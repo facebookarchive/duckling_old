@@ -1,9 +1,9 @@
-(defproject wit/picsou (str "0.1." (or (System/getenv "CIRCLE_BUILD_NUM") 0))
+(defproject wit/duckling "0.2.0"
   :description "Date & Number parser"
-  :main picsou.core
+  :main duckling.core
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :url "https://github.com/wit-ai/picsou"
+  :url "https://github.com/wit-ai/duckling"
   :plugins [[s3-wagon-private "1.1.2"]
             [lein-midje "3.1.3"]]
   :dependencies [[org.clojure/clojure "1.6.0"]
@@ -15,6 +15,6 @@
   :profiles {:dev {:dependencies [[org.clojure/tools.trace "0.7.6"]
                                   [midje "1.6.3"]
                                   [cheshire "5.3.1"]]}
-             :uberjar {:aot [picsou.core]}}
+             :uberjar {:aot [duckling.core]}}
   :test-selectors {:default (complement :benchmark)
                    :benchmark :benchmark})

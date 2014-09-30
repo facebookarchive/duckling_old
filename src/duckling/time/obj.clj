@@ -1,4 +1,4 @@
-(ns picsou.time.obj
+(ns duckling.time.obj
   (:require [clj-time.core :as time]
             [clj-time.local :as local])
   (:import [org.joda.time DateTimeFieldType DateTime]))

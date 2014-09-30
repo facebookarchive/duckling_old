@@ -1,8 +1,8 @@
-(ns picsou.corpus
+(ns duckling.corpus
   (:use     [clojure.tools.logging]
             [plumbing.core :except [millis]]) 
-  (:require [picsou.time.obj :as time]
-            [picsou.util :as util]))
+  (:require [duckling.time.obj :as time]
+            [duckling.util :as util]))
 
 ; Checker functions return *nil* when OK, or [expected actual] when not OK
 
@@ -127,7 +127,7 @@
 
 
 (defn integer
-  "Return a func (picsou pattern) checking that dim=number and integer=true,
+  "Return a func (duckling pattern) checking that dim=number and integer=true,
   optional range (inclusive), and additional preds"
   [& [min max & predicates]]
   (fn [token]

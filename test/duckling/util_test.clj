@@ -1,6 +1,6 @@
-(ns picsou.util-test
+(ns duckling.util-test
   (:use [clojure.test]
-        [picsou.util]))
+        [duckling.util]))
 
 
 (deftest mergings

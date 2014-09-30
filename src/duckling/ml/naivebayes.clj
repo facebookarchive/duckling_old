@@ -1,4 +1,4 @@
-(ns picsou.ml.naivebayes
+(ns duckling.ml.naivebayes
   (:use [clojure.test])
   (:require [clojure.string :as strings]))
 

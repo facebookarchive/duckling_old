@@ -1,12 +1,12 @@
-(ns picsou.time.pred
+(ns duckling.time.pred
   (:use [clojure.tools.logging]
         [plumbing.core])
-  (:require [picsou.time.obj :as t])
+  (:require [duckling.time.obj :as t])
   (:refer-clojure :exclude [cycle resolve]))
 
 ;; Contains the time semantics.
 ;; Knows nothing  about tokens, morphology, syntax, forms.
-;; These functions are normally called by production helpers (picsou.time.prod)
+;; These functions are normally called by production helpers (duckling.time.prod)
 
 (defmacro fn& [grain args & forms]
   (let [[t ctx] args]

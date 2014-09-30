@@ -1,9 +1,9 @@
-(ns picsou.helpers
+(ns duckling.helpers
   "This namespace contains the common helpers used in rules"
   (:require
     [clj-time.core :as t]
-    [picsou.time :as time]
-    [picsou.util :as util])
+    [duckling.time :as time]
+    [duckling.util :as util])
   (:refer-clojure :exclude [resolve]))
 
 (defmacro fn& [dim & args-body]
@@ -24,7 +24,7 @@
          (every? #(% token) predicates))))
 
 (defn integer
-  "Return a func (picsou pattern) checking that dim=number and integer=true,
+  "Return a func (duckling pattern) checking that dim=number and integer=true,
   optional range (inclusive), and additional preds"
   [& [min max & predicates]]
   (fn [token]

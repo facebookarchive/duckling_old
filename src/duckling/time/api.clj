@@ -1,6 +1,6 @@
-(ns picsou.time.api
-  (:require [picsou.time.pred :as pred]
-            [picsou.time.obj :as t]
+(ns duckling.time.api
+  (:require [duckling.time.pred :as pred]
+            [duckling.time.obj :as t]
             [clj-time.coerce :as c])
   (:refer-clojure :exclude [resolve]))
 

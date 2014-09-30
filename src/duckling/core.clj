@@ -1,14 +1,14 @@
-(ns picsou.core
+(ns duckling.core
   (:use [clojure.tools.logging :exclude [trace]]
         [plumbing.core])
   (:require [clojure.string :as strings]
-            [picsou.engine :as engine]
-            [picsou.time.obj :as time]
-            [picsou.learn :as learn]
-            [picsou.util :as util]
-            [picsou.time.api :as api]
+            [duckling.engine :as engine]
+            [duckling.time.obj :as time]
+            [duckling.learn :as learn]
+            [duckling.util :as util]
+            [duckling.time.api :as api]
             [clojure.java.io :as io]
-            [picsou.corpus :as corpus]))
+            [duckling.corpus :as corpus]))
 
 (def rules-map (atom {}))
 (def corpus-map (atom {}))
@@ -85,7 +85,7 @@
   {:pre [s context module]}
   (let [classifiers (get-classifier module)
         _ (when-not (map? classifiers)
-            (errorf "[picsou] Module %s is not loaded. Did you (load!) ?" module))
+            (errorf "[duckling] Module %s is not loaded. Did you (load!) ?" module))
         rules (get-rules module)
         stash (engine/pass-all s rules)
         ; add an index to tokens in the stash
@@ -171,7 +171,7 @@
 
 (defn- merge-rules
   [current config-key new-file]
-  (let [new-file (io/resource (str "picsou/rules/" new-file ".clj"))
+  (let [new-file (io/resource (str "duckling/rules/" new-file ".clj"))
         new-rules (engine/rules (read-string (slurp new-file)))]
     (assoc
         current
@@ -180,7 +180,7 @@
 
 (defn- merge-corpus
   [current config-key new-file]
-  (let [new-file (io/resource (str "picsou/corpus/" new-file ".clj"))
+  (let [new-file (io/resource (str "duckling/corpus/" new-file ".clj"))
         new-corpus (corpus/read-corpus new-file)]
     (assoc
         current
@@ -322,7 +322,7 @@
               (let [module (keyword module)
                     pic-context (generate-context context)]
                 (when-not (module @rules-map)
-                  (throw (ex-info "Unknown picsou module" {:module module})))
+                  (throw (ex-info "Unknown duckling module" {:module module})))
                 (->> (analyze sentence pic-context module targets)
                      :winners
                      (map #(assoc % :value (engine/export-value % {:date-fn str})))
@@ -337,5 +337,5 @@
                  :context context
                  :leven-stash leven-stash
                  :targets targets}]
-         (errorf e "picsou error err=%s" (pr-str err))
+         (errorf e "duckling error err=%s" (pr-str err))
          []))))

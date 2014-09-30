@@ -1,7 +1,7 @@
-(ns picsou.core-test
-  (:use [picsou.core]
+(ns duckling.core-test
+  (:use [duckling.core]
         [clojure.test])
-  (:require [picsou.time :as time]
+  (:require [duckling.time :as time]
             [clojure.java.io :as io]))
 
 (def tokens (map (fn [x] {:pred x}) (range 10)))
@@ -20,7 +20,7 @@
   (if (= 8 (:pred a))
     [a]
     [(assoc a :value "ok")]))
-(def select-winners' @#'picsou.core/select-winners)
+(def select-winners' @#'duckling.core/select-winners)
 
 ; the actual test now
 

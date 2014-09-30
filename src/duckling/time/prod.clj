@@ -1,7 +1,7 @@
-(ns picsou.time.prod
+(ns duckling.time.prod
   (:use [clojure.tools.logging])
-  (:require [picsou.time.pred :as p]
-            [picsou.time.obj :as t])
+  (:require [duckling.time.pred :as p]
+            [duckling.time.obj :as t])
   (:import [java.text NumberFormat]
            [java.util Locale]))
 
@@ -147,7 +147,7 @@
   [token timezone-id]
   (assoc token :timezone timezone-id))
 
-; to parse decimal number in picsou FR
+; to parse decimal number in duckling FR
 ; FIXME shouldn't be a full Locale, we should be more flexible to accept . and ,
 
 (defn parse-number-fr
@@ -167,7 +167,7 @@
          (every? #(% token) predicates))))
 
 (defn integer
-  "Return a func (picsou pattern) checking that dim=number and integer=true,
+  "Return a func (duckling pattern) checking that dim=number and integer=true,
   optional range (inclusive), and additional preds"
   [& [min max & predicates]]
   (fn [token]

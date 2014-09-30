@@ -1,7 +1,7 @@
 .DS_Store
 .lein-repl-history
 .nrepl-port
-picsou.iml
+duckling.iml
 pom.xml
 target
 .idea

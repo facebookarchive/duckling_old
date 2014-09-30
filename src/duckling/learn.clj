@@ -1,12 +1,12 @@
-(ns picsou.learn
+(ns duckling.learn
   (:use [clojure.tools.logging]
         [clojure.pprint :only [pprint]])
   (:require
-    [picsou.time :as time]
-    [picsou.engine :as engine]
+    [duckling.time :as time]
+    [duckling.engine :as engine]
     [clj-time.core :as t]
-    [picsou.ml.naivebayes :as naive]
-    [picsou.util :as util]
+    [duckling.ml.naivebayes :as naive]
+    [duckling.util :as util]
     [clojure.set :as sets])
   (:use [clojure.tools.logging]))
 
@@ -75,7 +75,7 @@
     final-dataset))
 
 (defn corpus->dataset
-  "Takes a corpus and a feature extractor and builds a dataset (phase 1.a. on picsou.md)."
+  "Takes a corpus and a feature extractor and builds a dataset (phase 1.a. on duckling.md)."
   [{context :context, tests :tests, :as corpus} rules feature-extractor]
   (let [sentences-and-check
         (for [test tests

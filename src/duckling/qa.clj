@@ -1,5 +1,5 @@
-(ns picsou.qa
-  (:require [picsou.core :as p]
+(ns duckling.qa
+  (:require [duckling.core :as p]
             [clojure.string :as strings]
             [cheshire.core :as j]))
 

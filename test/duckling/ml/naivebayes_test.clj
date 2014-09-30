@@ -1,7 +1,7 @@
-(ns picsou.ml.naivebayes-test
+(ns duckling.ml.naivebayes-test
   (:use [clojure.test]
         [plumbing.core]
-        [picsou.ml.naivebayes])
+        [duckling.ml.naivebayes])
   (:require [clojure.string :as string]))
 
 (def text-dataset [["chinese beijing chinese" "c"]

@@ -1,6 +1,6 @@
-(ns picsou.time.pred-test
+(ns duckling.time.pred-test
   (:use [clojure.test]
-        [picsou.time.pred])
+        [duckling.time.pred])
   (:refer-clojure :exclude [cycle resolve]))
 
 (def evening (intervals (hour 18 false) (hour 0 false) false))

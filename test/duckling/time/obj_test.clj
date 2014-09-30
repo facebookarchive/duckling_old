@@ -1,5 +1,5 @@
-(ns picsou.time.obj-test
-  (:use [picsou.time.obj] 
+(ns duckling.time.obj-test
+  (:use [duckling.time.obj] 
         [clojure.test]))
 
 (def today (t 0 2014 8 30 5 30 18))

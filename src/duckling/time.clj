@@ -1,8 +1,8 @@
-(ns picsou.time
+(ns duckling.time
   (:use [clojure.tools.logging]
         [plumbing.core])
   (:require
-    [picsou.util :as util]
+    [duckling.util :as util]
     [clj-time.core :as t]
     [clj-time.local :as tl])
   (:refer-clojure :exclude [resolve]))
@@ -21,7 +21,7 @@
 ;            (pred (if (:backward ctx) start end) ctx) ; run again because we don't want immediate
 ;            interval))
 ;        (catch Throwable e
-;          (warnf "picsou resolve-time' error: %s" (.getMessage e))))) ; OK
+;          (warnf "duckling resolve-time' error: %s" (.getMessage e))))) ; OK
 
 ; (defn resolve-time
 ;   "Returns a collection of date intervals.

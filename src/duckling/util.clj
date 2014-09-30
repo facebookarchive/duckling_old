@@ -1,4 +1,4 @@
-(ns picsou.util
+(ns duckling.util
   (:use [clojure.tools.logging :exclude [trace]])
   (:require [clojure.string  :as string]
             [clojure.set     :as sets]

@@ -1,13 +1,13 @@
-(ns picsou.engine
+(ns duckling.engine
   "This component parses a phrase and extracts information based on rules.
   The two main phases are matching and production.
   1. rules are transformed into objets via rules macro
   2. rules are (recursively) matched based on theirs pattern vectors.
   3. tokens containing final info are produced using their production rules"
   (:require [clojure.set :as sets]
-            [picsou.time.prod]
-            [picsou.time.api :as time]
-            [picsou.util :as util]))
+            [duckling.time.prod]
+            [duckling.time.api :as time]
+            [duckling.util :as util]))
 
 ;;
 ;; Lookup and basic matching functions, used by patterns in rules
@@ -84,12 +84,12 @@
   "Builds a new rule"
   [name pattern production]
   (if (not (string? name)) (throw (Exception. "Can't accept rule without name.")))
-  (let [picsou-helper-ns (the-ns 'picsou.time.prod) ; could split time.patterns and time.prod helpers
-        pattern (binding [*ns* picsou-helper-ns] (eval pattern))
+  (let [duckling-helper-ns (the-ns 'duckling.time.prod) ; could split time.patterns and time.prod helpers
+        pattern (binding [*ns* duckling-helper-ns] (eval pattern))
         pattern-vec (if (vector? pattern) pattern [pattern])]
     {:name name
      :pattern (map pattern-fn pattern-vec)
-     :production (binding [*ns* picsou-helper-ns]
+     :production (binding [*ns* duckling-helper-ns]
                    (eval `(fn ~(vec (map #(symbol (str "%" %))
                                         (range 1 (inc (count pattern-vec)))))
                                         ~production)))}))
@@ -131,7 +131,7 @@
         (merge product
                {:text (subs sentence pos end), :pos pos, :end end, :rule rule, :route route}))
       (catch Exception e
-        (throw (ex-info (format "Exception picsou@produce span='%s' rule='%s' sentence='%s' ex='%s' stack=%s"
+        (throw (ex-info (format "Exception duckling@produce span='%s' rule='%s' sentence='%s' ex='%s' stack=%s"
                                     (subs sentence pos end)
                                     (:name rule)
                                     sentence
