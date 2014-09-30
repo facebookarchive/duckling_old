@@ -32,6 +32,15 @@ These are good alternatives if you only have to deal with English, and your text
 
 **This is an alpha release. We have been using it internally in production at [Wit.ai](https://wit.ai) for more than a year, but the API and organizational structure are subject to change. Comments and suggestions are much appreciated.**
 
+# Limitations
+
+Known limitations of the temporal module include:
+
+- Intervals (like *June 12-13*) are still experimental. Simple ones work well, but not the most sophisticated. We're working on it.
+- Timezones are parsed, but they don't impact the time value (will be fixed shortly).
+- The support for Chinese and Italian is not well tested yet.
+- Only contiguous times are supported: periodic things like *every Tuesday* or *Monday and Tuesday from 6am to noon* are not supported yet (but we plan to support these, and it should be just a question of adding the rights rules)
+
 # Getting started
 
 Leiningen dependency (Clojars): `[wit/picsou "0.1.1"]`
@@ -471,6 +480,15 @@ picsou.core=> (details 5)
 ```
 
 If you really need to examine token 5 in depth, you can get the full map with `(token 5)`.
+
+# Contributing
+
+There are many ways you can help the project:
+
+- Use the widget in this page, and leaving some feedback when the result is not good.
+- One step further: If you notice something that does not work, you can add it in the corpus and submit a pull request.
+- One step further (we'll send you a T-Shirt): Add it in the corpus AND add/modify the rules to make it pass.
+- One step further (we'll invite you for a beer, at least!): Extend Picsou to new domains and/or new languages.
 
 # FAQ
 
