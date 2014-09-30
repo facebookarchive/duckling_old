@@ -84,7 +84,7 @@
   
   "the <ordinal> <cycle> of <time>"
   [#"(?i)the" (dim :ordinal) (dim :cycle) #"(?i)of|in|from" (dim :time)]
-  (cycle-nth-after-not-immediate (:grain %3) (dec (:value %2)) %5)
+  (cycle-nth-after (:grain %3) (dec (:value %2)) %5)
 
     ; quarters are a little bit different, you can say "3rd quarter" alone
   

@@ -198,6 +198,9 @@
   (let [t2-end (end t2)]
     (time/before? (:start t1) t2-end)))
 
+(defn before? [t1 t2]
+  (time/before? (:start t1) (:start t2)))
+
 (defn days-in-month [tt]
   "Returns the number of days in the month of tt"
   (time/day (time/last-day-of-the-month (:start tt))))

@@ -229,6 +229,10 @@
   [#"(?i)last" {:form :day-of-week} #"(?i)of" (dim :time)]
   (pred-last-of %2 %4)
   
+  "last <cycle> of <time>"
+  [#"(?i)last" (dim :cycle) #"(?i)of" (dim :time)]
+  (cycle-last-of %2 %4)  
+  
   ; Years
   ; Between 1000 and 2100 we assume it's a year
   ; Outside of this, it's safer to consider it's latent

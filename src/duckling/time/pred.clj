@@ -254,7 +254,7 @@
   (let [f (fn& (-> cyclic-pred meta :grain) [t ctx]
                (if (<= 0 n)
                  (let [[head & more :as seq] (first (cyclic-pred t ctx))
-                       seq (if (and (:not-immediate opts) head (t/intersect head t))
+                       seq (if (and (:not-immediate opts) head (t/before? head t))
                               more
                               seq)]
                    (first (drop n seq)))

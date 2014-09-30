@@ -185,6 +185,18 @@
   
   "last Sunday of March 2014"
   (datetime 2014 3 30 :day-of-week 7)
+  
+  "third day of october"
+  (datetime 2013 10 3)
+  
+  "first week of october 2014"
+  (datetime 2014 10 6 :grain :week)
+  
+  "last day of october 2015"
+  (datetime 2015 10 31)
+  
+  "last week of september 2014"
+  (datetime 2014 9 22 :grain :week)
 
   ;; Hours
   

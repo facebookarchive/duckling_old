@@ -110,6 +110,9 @@
 (defn pred-last-of [cyclic base]
   (ti (p/take-the-last-of (:pred cyclic) (:pred base))))
 
+(defn cycle-last-of [cycle base]
+  (ti (p/take-the-last-of (p/cycle (:grain cycle)) (:pred base))))
+
 (defn pred-nth [{:keys [pred] :as token} n]
   (ti (p/take-the-nth pred n) {:timezone (:timezone token)}))
 
