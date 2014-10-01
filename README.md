@@ -13,7 +13,7 @@ Duckling is a Clojure library that parses text into structured data:
   <p>You can try it out at <a href="http://duckling-lib.org">http://duckling-lib.org</a></p>
 </div>
 
-Duckling is shipped with modules that parse temporal expressions in English, Spanish, French, Italian and Chinese (experimental). It recognizes dates and times described in many ways:
+Duckling is shipped with modules that parse temporal expressions in English, Spanish, French, Italian and Chinese (experimental, thanks to Zhe Wang). It recognizes dates and times described in many ways:
 
 - *today at 5pm*
 - *2014-10-01*
