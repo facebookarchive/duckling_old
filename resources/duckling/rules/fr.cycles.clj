@@ -71,4 +71,13 @@
   "n <cycle> suivants"
   [(integer 2 9999) (dim :cycle) #"(?i)suivante?s?" ]
   (cycle-n-not-immediate (:grain %2) (:value %1))
+
+  "<ordinal> <cycle> de <time>"
+  [(dim :ordinal) (dim :cycle) #"(?i)d['e]|en" (dim :time)]
+  (cycle-nth-after-not-immediate (:grain %2) (dec (:value %1)) %4)
+  
+  "le <ordinal> <cycle> de <time>"
+  [#"(?i)le" (dim :ordinal) (dim :cycle) #"(?i)d['e]|en" (dim :time)]
+  (cycle-nth-after (:grain %3) (dec (:value %2)) %5)
+
 )

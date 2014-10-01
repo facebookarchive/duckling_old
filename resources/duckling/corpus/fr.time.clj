@@ -186,6 +186,18 @@
   "dimanche de la semaine dernière"
   (datetime 2013 2 10 :day-of-week 7)
 
+  "3eme jour d'octobre"
+  (datetime 2013 10 3)
+  
+  "premiere semaine d'octobre 2014"
+  (datetime 2014 10 6 :grain :week)
+  
+  "dernier jour d'octobre 2015"
+  (datetime 2015 10 31)
+  
+  "dernière semaine de septembre 2014"
+  (datetime 2014 9 22 :grain :week)
+
   ;; Hours
 
   "à quinze heures"
