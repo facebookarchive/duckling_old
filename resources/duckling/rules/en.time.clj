@@ -211,7 +211,7 @@
 
   "next <time>"
   [#"(?i)next" (dim :time)]
-  (pred-nth %2 1)
+  (pred-nth-not-immediate %2 0)
 
   "last <time>"
   [#"(?i)last" (dim :time)]
@@ -219,7 +219,7 @@
 
   "<time> after next"
   [(dim :time) #"(?i)after next"]
-  (pred-nth %1 1)
+  (pred-nth-not-immediate %1 1)
 
    "<time> before last"
   [(dim :time) #"(?i)before last"]
