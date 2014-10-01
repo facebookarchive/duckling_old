@@ -197,6 +197,26 @@
   
   "last week of september 2014"
   (datetime 2014 9 22 :grain :week)
+  
+  
+  ;; nth of
+  "first tuesday of october"
+  (datetime 2013 10 1)
+  
+  "third tuesday of september 2014"
+  (datetime 2014 9 16)
+  
+  "first wednesday of october 2014"
+  (datetime 2014 10 1)
+  
+  "second wednesday of october 2014"
+  (datetime 2014 10 8)
+  
+  ;; nth after
+  
+  "third tuesday after christmas 2014"
+  (datetime 2015 1 13)
+    
 
   ;; Hours
   
@@ -345,6 +365,9 @@
 
   "two years ago"
   (datetime 2011 2)
+  
+  "one year after christmas"
+  (datetime 2013 12) ; resolves as after last Xmas...
   
 
   ; Seasons

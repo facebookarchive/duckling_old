@@ -22,6 +22,8 @@ Duckling is shipped with modules that parse temporal expressions in English, Spa
 - *the day before labor day 2020*
 - *June 10-11* (interval)
 
+You can have a quick look at the training corpus used for English [here](https://github.com/wit-ai/duckling/blob/master/resources/duckling/corpus/en.time.clj).
+
 Duckling is:
 
 - **Agnostic**: it makes no assumption on the kind of data you want to extract, or the language. You can train it with a combination of examples and rules for any task that takes a string as input and produces a map as output.
@@ -39,8 +41,14 @@ These are good alternatives if you only have to deal with English, and your text
 
 # Limitations
 
+Conventions for the temporal module:
+
+- Duckling often finds several possible results. For the demo above, we only display the closest **upcoming** time, if any, or the closest **past** time otherwise. It can result in surprising outcomes, like "one year after Christmas" will be actually analyzed as "one year after **last** Christmas", i.e. Christmas this year. But if you say "one year after this Christmas" you'll get the result you expect.
+- In "10 days from now", Duckling rounds the result to the hour. In general, when shifting a time a duration, the result is rounded to the grain just below the duration's grain (hour is the "grain" below day).
+
 Known limitations of the temporal module include:
 
+- Only simple durations (like "two days") are supported. Composite durations ("two days and three hours", or even "two and half days") are not supported yet.
 - Intervals (like *June 12-13*) are still experimental. Simple ones work well, but not the most sophisticated. We're working on it.
 - Timezones are parsed, but they don't impact the time value (will be fixed shortly).
 - The support for Chinese and Italian is not well tested yet.

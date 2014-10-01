@@ -231,9 +231,18 @@
   
   "last <cycle> of <time>"
   [#"(?i)last" (dim :cycle) #"(?i)of" (dim :time)]
-  (cycle-last-of %2 %4)  
+  (cycle-last-of %2 %4)
   
-  ; Years
+  ; Ordinals
+  "nth <time> of <time>"
+  [(dim :ordinal) (dim :time) #"(?i)of" (dim :time)]
+  (pred-nth (intersect %4 %2) (dec (:value %1)))
+  
+  "nth <time> after <time>"
+  [(dim :ordinal) (dim :time) #"(?i)after" (dim :time)]
+  (pred-nth-after %2 %4 (dec (:value %1)))
+
+    ; Years
   ; Between 1000 and 2100 we assume it's a year
   ; Outside of this, it's safer to consider it's latent
   
