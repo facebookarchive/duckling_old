@@ -141,7 +141,7 @@
   (pred-nth %1 1)
 
   "<named-month|named-day> dernier|passé"
-  [(dim :time) #"(?i)dernier|pass[ée]e?"]
+  [(dim :time) #"(?i)derni[eéè]re?|pass[ée]e?"]
   (pred-nth %1 -1)
 
   "<named-day> en huit" ; would need assumption to handle 1 or 2 weeks depending on the day-of-week
@@ -151,6 +151,15 @@
   "<named-day> en quinze" ; would need assumption to handle 2 or 3 weeks depending on the day-of-week
   [{:form :day-of-week} #"(?i)en (quinze|15)"]
   (pred-nth %1 2)
+
+  "dernier <day-of-week> de <time>"
+  [#"(?i)derni[eéè]re?" {:form :day-of-week} #"(?i)d['e]" (dim :time)]
+  (pred-last-of %2 %4)
+  
+  "dernier <cycle> de <time>"
+  [#"(?i)derni[eéè]re?" (dim :cycle) #"(?i)d['e]" (dim :time)]
+  (cycle-last-of %2 %4)  
+  
 
   ; Years
   ; Between 1000 and 2100 we assume it's a year
