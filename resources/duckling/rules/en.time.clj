@@ -219,7 +219,7 @@
 
   "<time> after next"
   [(dim :time) #"(?i)after next"]
-  (pred-nth %1 2)
+  (pred-nth %1 1)
 
    "<time> before last"
   [(dim :time) #"(?i)before last"]
