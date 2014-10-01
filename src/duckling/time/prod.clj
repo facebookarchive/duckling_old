@@ -119,6 +119,10 @@
 (defn pred-nth-not-immediate [{:keys [pred] :as token} n]
   (ti (p/take-the-nth pred n {:not-immediate true}) {:timezone (:timezone token)}))
 
+(defn pred-nth-after [cyclic base n]
+  (ti (p/take-the-nth-after (:pred cyclic) (:pred base) n {:not-immediate true})
+      {:timezone (:timezone base)}))
+
 (defn parse-dmy
   "Build date from day, month, year as strings of numerics.
    Please provide at least one non-nil argument"
@@ -144,6 +148,16 @@
   [duration]
   (ti (p/shift-duration (p/take-the-nth (p/cycle :second) 0) 
                         (t/negative-period duration))))
+
+(defn duration-after
+  "Shifts the pred to pred+duration and changes the grain, typically to
+  the one just below the duration grain. See pred.clj for conversion."
+  [duration {:keys [pred] :as token}]
+  (ti (p/shift-duration pred duration)))
+
+(defn duration-before
+  [duration {:keys [pred] :as token}]
+  (ti (p/shift-duration pred (t/negative-period duration))))
 
 (defn set-timezone
   "Sets the provided timezone. Must be a java.util.TimeZone compatible ID."
