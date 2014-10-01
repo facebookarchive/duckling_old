@@ -21,6 +21,8 @@ Duckling is shipped with modules that parse temporal expressions in English, Spa
 - *twenty five minutes ago*
 - *the day before labor day 2020*
 - *June 10-11* (interval)
+- third monday after christmas 1980
+
 
 You can have a quick look at the training corpus used for English [here](https://github.com/wit-ai/duckling/blob/master/resources/duckling/corpus/en.time.clj).
 
@@ -56,13 +58,13 @@ Known limitations of the temporal module include:
 
 # Getting started
 
-Leiningen dependency (Clojars): `[wit/Duckling "0.1.1"]`
+Leiningen dependency (Clojars): `[wit/duckling "0.2.0"]`
 
 To use Duckling in your project, you just need two functions: `load!` to load the default configuration, and `extract` to parse a string.
 
 ```clojure
 (ns myproject.core
-  (:require [Duckling.core :as p]))
+  (:require [duckling.core :as p]))
 
 (p/load!) ;; Load default configuration
 
@@ -160,13 +162,13 @@ Commands: (user/help)
 Examples from clojuredocs.org: [clojuredocs or cdoc]
           (user/clojuredocs name-here)
           (user/clojuredocs "ns-here" "name-here")
-Duckling.core=>
+duckling.core=>
 ```
 
 Load Duckling with the default configuration file:
 
 ```clojure
-Duckling.core=> (load!)
+duckling.core=> (load!)
 Loading module :fr$core
 Loading module :en$core
 Loading module :es$core
@@ -176,17 +178,17 @@ nil
 Run the corpus and check that all the tests pass:
 
 ```
-Duckling.core=> (run)
+duckling.core=> (run)
 :es$core: 294 examples, 0 failed.
 :en$core: 355 examples, 0 failed.
 :fr$core: 326 examples, 0 failed.
-#'Duckling.core/c
+#'duckling.core/c
 ```
 
 See the detailed parsing of a given string like "in two hours":
 
 ```
-Duckling.core=> (play :en$core "in two hours")
+duckling.core=> (play :en$core "in two hours")
 W ------------  11 | time      | in/after <duration>       | P = -3.4187 |  + <integer> <unit-o
 W    ---        10 | volume    | number as volume          | P = -2.1172 | integer (0..19)
 W    ---         9 | distance  | number as distance        | P = -2.2680 | integer (0..19)
@@ -208,7 +210,7 @@ distance (latent)         {:type "value", :value 2} {}
 volume (latent)           {:type "value", :value 2} {}
 time                      {:type "value", :value "2013-02-12T06:30:00.000-02:00", :grain :minute} {}
 For further info: (details idx) where 1 <= idx <= 11
-#'Duckling.core/token
+#'duckling.core/token
 ```
 
 
@@ -296,7 +298,7 @@ as long as these modules don't need to interact with each other.
 To load Duckling with all the modules defined in the default configuration file `resources/default-config.clj`:
 
 ```
-Duckling.core=> (load!)
+duckling.core=> (load!)
 Loading module :fr$core
 Loading module :en$core
 Loading module :es$core
@@ -351,7 +353,7 @@ You can provide a context map at the beginning of your corpus file, and this map
 In most cases, you shouldn’t need to use context.
 
 In practice, we use helpers to generate easy to read test functions.
-In the previous example, we use a helper `number` defined in `src/Duckling/corpus.clj`:
+In the previous example, we use a helper `number` defined in `src/duckling/corpus.clj`:
 
 ```clojure
 (defn number
@@ -375,11 +377,11 @@ If the function returns true for at least one result, then the test passes.
 Once you’ve added your tests, reload your module (see above) and run the corpus:
 
 ```
-Duckling.core=> (run :en$core)
+duckling.core=> (run :en$core)
 O0 FAIL "nil"
     Expected null
 :en$core: 356 examples, 1 failed.
-#'Duckling.core/c
+#'duckling.core/c
 ```
 
 Make sure the tests don’t pass anymore (if they do, either you’re very lucky and the existing rules actually
@@ -406,7 +408,7 @@ to the stash, and so on. All rules are tried again and again until no more token
 Here is an illustration of this process, with a stash containing 11 tokens:
 
 ```
-Duckling.core=> (play :en$core "in two hours")
+duckling.core=> (play :en$core "in two hours")
 W ------------  11 | time      | in/after <duration>       | P = -3.4187 |  + <integer> <unit-o
 W    ---        10 | volume    | number as volume          | P = -2.1172 | integer (0..19)
 W    ---         9 | distance  | number as distance        | P = -2.2680 | integer (0..19)
@@ -515,7 +517,7 @@ If the base pattern is a regex and you need to use the groups matched by the reg
 When a corpus test doesn’t pass and you don’t understand why, you can have a closer look at what happens with `play`:
 
 ```
-Duckling.core=> (play :en$core "45 degrees")
+duckling.core=> (play :en$core "45 degrees")
 W ----------   7 | temperature | <latent temp> degrees     | P = -1.9331 | number as temp +
 W --           6 | volume    | number as volume          | P = -1.8094 | integer (numeric)
 W --           5 | distance  | number as distance        | P = -1.6120 | integer (numeric)
@@ -544,7 +546,7 @@ Columns:
 If you need more information about a specific token, call the `details` function with the token index:
 
 ```
-Duckling.core=> (details 7)
+duckling.core=> (details 7)
 <latent temp> degrees (-1.9331200116060705)
 |-- number as temp (-1.9331200116060705)
 |   `-- integer (numeric) (-0.16649651564955764)

@@ -238,9 +238,17 @@
   [(dim :ordinal) (dim :time) #"(?i)of" (dim :time)]
   (pred-nth (intersect %4 %2) (dec (:value %1)))
   
+  "nth <time> of <time>"
+  [#"(?i)the" (dim :ordinal) (dim :time) #"(?i)of" (dim :time)]
+  (pred-nth (intersect %5 %3) (dec (:value %2)))
+  
   "nth <time> after <time>"
   [(dim :ordinal) (dim :time) #"(?i)after" (dim :time)]
   (pred-nth-after %2 %4 (dec (:value %1)))
+
+  "nth <time> after <time>"
+  [#"(?i)the" (dim :ordinal) (dim :time) #"(?i)after" (dim :time)]
+  (pred-nth-after %3 %5 (dec (:value %2)))
 
     ; Years
   ; Between 1000 and 2100 we assume it's a year
