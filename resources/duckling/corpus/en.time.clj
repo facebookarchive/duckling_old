@@ -163,7 +163,11 @@
 
   "wednesday of next week"
   "wednesday next week"
+  "wednesday after next"
   (datetime 2013 2 20 :day-of-week 3)
+
+  "friday after next"
+  (datetime 2013 2 22 :day-of-week 5)
 
   "monday of this week"
   (datetime 2013 2 11 :day-of-week 1)
