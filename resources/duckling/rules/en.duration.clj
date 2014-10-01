@@ -46,11 +46,15 @@
   {:dim :duration
    :value (duration (:grain %2) (:value %1))}
     
-  ; "number.number hours" ; in 1. 5 hour
-  ; [#"(\d*)\.\s?(\d+)" #"(?i)hours?"] ;duration can't be negative...#"(?i)hours?"
-  ; {:dim :duration
-  ;  :val (minutes (+ (/ (* 6 (Long/parseLong (second (:groups %1)))) (java.lang.Math/pow 10 (- (count (second (:groups %1))) 1))) (* 60 (Long/parseLong (first (:groups %1))))))
-  ;  :in-width (minutes 1)} ; used by "in <duration>"
+  "number.number hours" ; in 1. 5 hour but also 1.75
+  [#"(\d*)\.\s?(\d+)" #"(?i)hours?"] ;duration can't be negative...
+  {:dim :duration
+   :value (duration :minute (int (+ (quot (* 6 (Long/parseLong (second (:groups %1)))) (java.lang.Math/pow 10 (- (count (second (:groups %1))) 1))) (* 60 (Long/parseLong (first (:groups %1)))))))}
+
+  "<integer> and an half hours"
+  [(integer 0) #"(?i)and (an? )?half hours?"] ;duration can't be negative...
+  {:dim :duration
+   :value (duration :minute (+ 30 (* 60 (:value %1))))}
 
   "a <unit-of-duration>"
   [#"(?i)an?" (dim :unit-of-duration)]

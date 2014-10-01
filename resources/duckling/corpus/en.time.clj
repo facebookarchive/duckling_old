@@ -297,6 +297,10 @@
   "in half an hour"
   (datetime 2013 2 12 5 00 0)
 
+  "in 2.5 hours"
+  "in 2 and an half hours"
+  (datetime 2013 2 12 7 00 0)
+
   "in one hour"
   (datetime 2013 2 12 5 30)
   
