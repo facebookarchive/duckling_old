@@ -6,12 +6,14 @@
 
 Duckling is a Clojure library that parses text into structured data:
 
-    “in two hours” => {:value "2014-06-09T13:24:06.634-07:00"
-                       :grain :minute}
+    “the first Tuesday of October” => {:value "2014-10-07T00:00:00.000-07:00"
+                                       :grain :day}
 
 <div class="doc-website-link">
   <p>You can try it out at <a href="http://duckling-lib.org">http://duckling-lib.org</a></p>
 </div>
+
+See our [blog post announcement](https://wit.ai/blog/2014/10/01/open-source-parser-duckling) for more context.
 
 Duckling is shipped with modules that parse temporal expressions in English, Spanish, French, Italian and Chinese (experimental, thanks to Zhe Wang). It recognizes dates and times described in many ways:
 
