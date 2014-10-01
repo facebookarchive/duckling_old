@@ -40,6 +40,8 @@ These are good alternatives if you only have to deal with English, and your text
 
 - Stanford NLP's [SUTime](http://nlp.stanford.edu/software/sutime.shtml) (in Java), is a deterministric rule-based system that supports English. Written by Angel Chang.
 - [Natty](http://natty.joestelmach.com/) (in Java) is based on ANTLR and supports English. It's written by Joel Stelmach.
+- [Parsedatetime](https://pypi.python.org/pypi/parsedatetime/) in Python.
+- [Chronic](https://github.com/mojombo/chronic) in Ruby (English only).
 
 **This is an alpha release. We have been using it internally in production at [Wit.ai](https://wit.ai) for more than a year, but the API and organizational structure are subject to change. Comments and suggestions are much appreciated.**
 

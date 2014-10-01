@@ -98,6 +98,15 @@
   "next tuesday" ; when today is Tuesday, "mardi prochain" is a week from now
   (datetime 2013 2 19 :day-of-week 2)
 
+  "friday after next"
+  (datetime 2013 2 22 :day-of-week 2)
+
+  "next March"
+  (datetime 2013 3)
+
+  "March after next"
+  (datetime 2014 3)
+
   "Sunday, Feb 10"
   (datetime 2013 2 10 :day-of-week 7 :day 10 :month 2) 
   
