@@ -261,7 +261,7 @@
 
   "at 15 past 3pm"
   "a quarter past 3pm"
-  "3:15 in the afternoon"
+  "3:15 in the afternon"
   "15:15"
   "3:15pm"
   "3:15PM"
@@ -364,6 +364,10 @@
 
   "7 days ago"
   (datetime 2013 2 5 4)
+
+  "14 days ago"
+  "a fortnight ago"
+  (datetime 2013 1 29 4)
   
   "a week ago"
   "one week ago"
