@@ -64,7 +64,7 @@ Known limitations of the temporal module include:
 
 Leiningen dependency (Clojars): `[wit/duckling "0.2.0"]`
 
-To use Duckling in your project, you just need two functions: `load!` to load the default configuration, and `extract` to parse a string.
+To use Duckling in your project, you just need two functions: `load!` to load the default configuration, and `parse` to parse a string.
 
 ```clojure
 (ns myproject.core
@@ -72,9 +72,9 @@ To use Duckling in your project, you just need two functions: `load!` to load th
 
 (p/load!) ;; Load default configuration
 
-(p/extract "wake me up the last Monday of January 2015 at 6am"
-           :en$core ;; core configuration for English ; see also :fr$core, :es$core, :cn$core
-           [:time]) ;; We are interested in :time expressions only ; see also :duration, :temperature, etc.
+(p/parse :en$core ;; core configuration for English ; see also :fr$core, :es$core, :cn$core
+         "wake me up the last Monday of January 2015 at 6am"
+         [:time]) ;; We are interested in :time expressions only ; see also :duration, :temperature, etc.
 
 ;; => [{:label :time
         :start 15
