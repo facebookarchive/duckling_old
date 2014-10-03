@@ -211,7 +211,7 @@
 
   "next <time>"
   [#"(?i)next" (dim :time)]
-  (pred-nth %2 1)
+  (pred-nth-not-immediate %2 0)
 
   "last <time>"
   [#"(?i)last" (dim :time)]
@@ -219,7 +219,7 @@
 
   "<time> after next"
   [(dim :time) #"(?i)after next"]
-  (pred-nth %1 2)
+  (pred-nth-not-immediate %1 1)
 
    "<time> before last"
   [(dim :time) #"(?i)before last"]
@@ -425,7 +425,7 @@
   (assoc (interval (hour 4 false) (hour 12 false) false) :form :part-of-day :latent true)
 
   "afternoon"
-  [#"(?i)after ?noon"]
+  [#"(?i)after ?noo?n"]
   (assoc (interval (hour 12 false) (hour 19 false) false) :form :part-of-day :latent true)
 
   "evening|night"

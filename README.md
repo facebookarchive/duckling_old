@@ -6,12 +6,14 @@
 
 Duckling is a Clojure library that parses text into structured data:
 
-    “in two hours” => {:value "2014-06-09T13:24:06.634-07:00"
-                       :grain :minute}
+    “the first Tuesday of October” => {:value "2014-10-07T00:00:00.000-07:00"
+                                       :grain :day}
 
 <div class="doc-website-link">
   <p>You can try it out at <a href="http://duckling-lib.org">http://duckling-lib.org</a></p>
 </div>
+
+See our [blog post announcement](https://wit.ai/blog/2014/10/01/open-source-parser-duckling) for more context.
 
 Duckling is shipped with modules that parse temporal expressions in English, Spanish, French, Italian and Chinese (experimental, thanks to Zhe Wang). It recognizes dates and times described in many ways:
 
@@ -38,6 +40,8 @@ These are good alternatives if you only have to deal with English, and your text
 
 - Stanford NLP's [SUTime](http://nlp.stanford.edu/software/sutime.shtml) (in Java), is a deterministric rule-based system that supports English. Written by Angel Chang.
 - [Natty](http://natty.joestelmach.com/) (in Java) is based on ANTLR and supports English. It's written by Joel Stelmach.
+- [Parsedatetime](https://pypi.python.org/pypi/parsedatetime/) in Python.
+- [Chronic](https://github.com/mojombo/chronic) in Ruby (English only).
 
 **This is an alpha release. We have been using it internally in production at [Wit.ai](https://wit.ai) for more than a year, but the API and organizational structure are subject to change. Comments and suggestions are much appreciated.**
 
@@ -60,7 +64,7 @@ Known limitations of the temporal module include:
 
 Leiningen dependency (Clojars): `[wit/duckling "0.2.0"]`
 
-To use Duckling in your project, you just need two functions: `load!` to load the default configuration, and `extract` to parse a string.
+To use Duckling in your project, you just need two functions: `load!` to load the default configuration, and `parse` to parse a string.
 
 ```clojure
 (ns myproject.core
@@ -68,9 +72,9 @@ To use Duckling in your project, you just need two functions: `load!` to load th
 
 (p/load!) ;; Load default configuration
 
-(p/extract "wake me up the last Monday of January 2015 at 6am"
-           :en$core ;; core configuration for English ; see also :fr$core, :es$core, :cn$core
-           [:time]) ;; We are interested in :time expressions only ; see also :duration, :temperature, etc.
+(p/parse :en$core ;; core configuration for English ; see also :fr$core, :es$core, :cn$core
+         "wake me up the last Monday of January 2015 at 6am"
+         [:time]) ;; We are interested in :time expressions only ; see also :duration, :temperature, etc.
 
 ;; => [{:label :time
         :start 15

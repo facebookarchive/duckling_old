@@ -98,6 +98,15 @@
   "next tuesday" ; when today is Tuesday, "mardi prochain" is a week from now
   (datetime 2013 2 19 :day-of-week 2)
 
+  "friday after next"
+  (datetime 2013 2 22 :day-of-week 2)
+
+  "next March"
+  (datetime 2013 3)
+
+  "March after next"
+  (datetime 2014 3)
+
   "Sunday, Feb 10"
   (datetime 2013 2 10 :day-of-week 7 :day 10 :month 2) 
   
@@ -163,7 +172,11 @@
 
   "wednesday of next week"
   "wednesday next week"
+  "wednesday after next"
   (datetime 2013 2 20 :day-of-week 3)
+
+  "friday after next"
+  (datetime 2013 2 22 :day-of-week 5)
 
   "monday of this week"
   (datetime 2013 2 11 :day-of-week 1)
@@ -248,7 +261,7 @@
 
   "at 15 past 3pm"
   "a quarter past 3pm"
-  "3:15 in the afternoon"
+  "3:15 in the afternon"
   "15:15"
   "3:15pm"
   "3:15PM"
@@ -351,6 +364,10 @@
 
   "7 days ago"
   (datetime 2013 2 5 4)
+
+  "14 days ago"
+  "a fortnight ago"
+  (datetime 2013 1 29 4)
   
   "a week ago"
   "one week ago"

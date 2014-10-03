@@ -41,6 +41,11 @@
   {:dim :duration
    :value (duration :minute 30)}
 
+  "fortnight" ;14 days
+  #"(?i)(a|one)? fortnight"
+  {:dim :duration
+   :value (duration :day 14)}
+
   "<integer> <unit-of-duration>"
   [(integer 0) (dim :unit-of-duration)]; duration can't be negative...
   {:dim :duration
