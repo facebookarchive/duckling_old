@@ -62,7 +62,7 @@ Known limitations of the temporal module include:
 
 # Getting started
 
-Leiningen dependency (Clojars): `[wit/duckling "0.2.0"]`
+Leiningen dependency (Clojars): `[wit/duckling "0.2.2"]`
 
 To use Duckling in your project, you just need two functions: `load!` to load the default configuration, and `parse` to parse a string.
 
