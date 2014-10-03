@@ -328,7 +328,7 @@
                                   :grain :second}))))
 
 (defn extract
-  "API used by Wit.ai (will me moved to Wit)
+  "API used by Wit.ai (will be moved to Wit)
    targets is a coll of maps {:module :dim :label} for instance:
    {:module fr$core, :dim duration, :label wit$duration} to get duration results
    Returns a single coll of tokens with :body :value :start :end :label (=wisp) :latent"
