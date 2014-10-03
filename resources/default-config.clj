@@ -58,11 +58,13 @@
 :cn$core {:corpus [
                     "cn.time"
                     "cn.numbers"
+                    "cn.temperature"
                    ]
             :rules [
-                      "cn.time"
+                     "cn.time"
                      "cn.numbers"
                      "cn.cycles"
                      "cn.duration"
+                     "cn.temperature"
                     ]}
  }
