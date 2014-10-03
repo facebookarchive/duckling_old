@@ -563,6 +563,8 @@ If you really need to examine token 7 in depth, you can get the full map with `(
 
 # Contributing
 
+**Please use the `develop` branch for your pull requests.**
+
 There are many ways you can help the project:
 
 - Use the widget in this page, and leaving some feedback when the result is not good.
