@@ -101,7 +101,6 @@
   #"(?i)december|dec\.?"
   (month 12)
 
-
   ; Holiday TODO: check online holidays
   ; or define dynamic rule (last thursday of october..)
   
@@ -116,7 +115,7 @@
   "new year's eve"
   #"(?i)new year'?s? eve"
   (month-day 12 31)
-
+  
   "new year's day"
   #"(?i)new year'?s?( day)?"
   (month-day 1 1)
@@ -137,7 +136,7 @@
   #"(?i)memorial day week(\s|-)?end"
   (interval (intersect (cycle-nth-after :day -3 (pred-last-of (day-of-week 1) (month 5))) (hour 18 false))
             (intersect (pred-last-of (day-of-week 2) (month 5)) (hour 0 false)) ;need to use Tuesday to include monday
-            true)
+            false)
 
   "independence day"
   #"(?i)independence day"
@@ -192,7 +191,15 @@
   "yesterday"
   #"(?i)yesterday"
   (cycle-nth :day -1)
-    
+
+  "EOM|End of month"
+  #"(?i)(the )?(EOM|end of (the )?month)" ; TO BE IMPROVED
+  (cycle-nth :month 1)
+
+  "EOY|End of year"
+  #"(?i)(the )?(EOY|end of (the )?year)"
+  (cycle-nth :year 1)
+
   ;;
   ;; This, Next, Last
   
@@ -201,7 +208,7 @@
   "this|next <day-of-week>"
   [#"(?i)this|next" {:form :day-of-week}]
   (pred-nth-not-immediate %2 0)
-
+  
   ;; for other preds, it can be immediate:
   ;; "this month" => now is part of it
   ; See also: cycles in en.cycles.clj
@@ -370,8 +377,8 @@
   #"(?i)noon"
   (hour 12 false)
 
-  "midnight"
-  #"(?i)midni(ght|te)"
+  "midnight|EOD|end of day"
+  #"(?i)midni(ght|te)|(the )?(EOD|end of (the )?day)"
   (hour 0 false)
 
   "quarter (relative minutes)"
@@ -406,7 +413,7 @@
   ; Formatted dates and times
 
   "mm/dd/yyyy"
-  #"(0?\d|10|11|12)/([012]?\d|30|31)/(\d{2,4})"
+  #"(0?\d|10|11|12)[/-]([012]?\d|30|31)[-/](\d{2,4})"
   (parse-dmy (second (:groups %1)) (first (:groups %1)) (nth (:groups %1) 2) true)
 
   "yyyy-mm-dd"
@@ -572,6 +579,14 @@
   "within <duration>"
   [#"(?i)within" (dim :duration)]
   (interval (cycle-nth :second 0) (in-duration (:value %2)) false)
+
+  "by <time>"; if time is interval, take the start of the interval (by tonight = by 6pm)
+  [#"(?i)by" (dim :time)]
+  (interval (cycle-nth :second 0) %2 false)
+
+  "by the end of <time>"; in this case take the end of the time (by the end of next week = by the end of next sunday)
+  [#"(?i)by (the )?end of" (dim :time)]
+  (interval (cycle-nth :second 0) %2 true)
 
     ; ;; In this special case, the upper limit is exclusive
   ; "<hour-of-day> - <hour-of-day> (interval)"

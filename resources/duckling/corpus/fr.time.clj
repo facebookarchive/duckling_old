@@ -442,9 +442,11 @@
 
   "de 9h30 jusqu'à 11h jeudi"
   "de 9 heures 30 à 11h jeudi"
-  "9h30 - 11h00 Jeudi"
   "entre 9h30 et 11h jeudi"
-  (datetime-interval [2013 2 14 9 30] [2013 2 14 11 00])
+  (datetime-interval [2013 2 14 9 30] [2013 2 14 12])
+
+  "9h30 - 11h00 Jeudi"
+  (datetime-interval [2013 2 14 9 30] [2013 2 14 11 1])
 
   ;TO BE ADDRESSED
   ;"à partir de 9h30 jeudi"
@@ -462,18 +464,18 @@
   (datetime-interval [2013 2 12 4 30 0] [2013 2 26])
 
   "de 5 à 7"
-  (datetime-interval [2013 2 12 5] [2013 2 12 7])
+  (datetime-interval [2013 2 12 5] [2013 2 12 8])
 
   "jeudi de 9h à 11h"
-  (datetime-interval [2013 2 14 9] [2013 2 14 11])
+  (datetime-interval [2013 2 14 9] [2013 2 14 12])
   
   "entre midi et 2"
-  (datetime-interval [2013 2 12 12] [2013 2 12 14])
+  (datetime-interval [2013 2 12 12] [2013 2 12 15])
 
   "11h30-1h30"
   "de 11h30 à 1h30"
   "de 11h30 jusqu'à 1h30"
-  (datetime-interval [2013 2 12 11 30] [2013 2 12 13 30])
+  (datetime-interval [2013 2 12 11 30] [2013 2 12 13 31])
   
   "13h30 samedi 21 septembre"
    (datetime 2013 9 21 13 30)

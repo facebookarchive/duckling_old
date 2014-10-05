@@ -85,9 +85,13 @@
 
   "Aug 8"
   (datetime 2013 8 8 :day 8 :month 8)
+
+  "October 2014"
+  (datetime 2014 10 :year 2014 :month 10)
   
   "10/31/1974"
   "10/31/74"
+  "10-31-74"
   (datetime 1974 10 31 :day 31 :month 10 :year 1974)
   
   "14april 2015"
@@ -424,7 +428,7 @@
   (datetime 2013 6 16)
 
   "memorial day week-end"
-  (datetime-interval [2013 5 24 18] [2013 5 28 00])
+  (datetime-interval [2013 5 24 18] [2013 5 28 0])
 
   "independence day"
   "4th of July"
@@ -543,17 +547,17 @@
   (datetime-interval [2013 8 8] [2013 8 13])
   
   "9:30 - 11:00"
-  (datetime-interval [2013 2 12 9 30] [2013 2 12 11 0])
+  (datetime-interval [2013 2 12 9 30] [2013 2 12 11 1])
 
   "from 9:30 - 11:00 on Thursday"
   "between 9:30 and 11:00 on thursday"
   "9:30 - 11:00 on Thursday"
   "later than 9:30 but before 11:00 on Thursday"
   "Thursday from 9:30 to 11:00"
-  (datetime-interval [2013 2 14 9 30] [2013 2 14 11 00])
+  (datetime-interval [2013 2 14 9 30] [2013 2 14 11 1])
 
-  "Thursday from 9a to 11a"
-  (datetime-interval [2013 2 14 9] [2013 2 14 11])
+  "Thursday from 9a to 11a" 
+  (datetime-interval [2013 2 14 9] [2013 2 14 12])
   
   "11:30-1:30" ; go train this rule!
   "11:30-1:30"
@@ -562,7 +566,7 @@
   "11:30-1:30"
   "11:30-1:30"
   "11:30-1:30"
-  (datetime-interval [2013 2 12 11 30] [2013 2 12 13 30])
+  (datetime-interval [2013 2 12 11 30] [2013 2 12 13 31])
 
   "1:30 PM on Sat, Sep 21"
   (datetime 2013 9 21 13 30)
@@ -572,6 +576,18 @@
 
   "until 2:00pm"
   (datetime-interval [2013 2 12 4 30 0] [2013 2 12 14])
+
+  "by 2:00pm"
+  (datetime-interval [2013 2 12 4 30 0] [2013 2 12 14])
+
+  "by EOD"
+  (datetime-interval [2013 2 12 4 30 0] [2013 2 13 0])
+
+  "by EOM"
+  (datetime-interval [2013 2 12 4 30 0] [2013 3 1 0])
+
+  "by the end of next month"
+  (datetime-interval [2013 2 12 4 30 0] [2013 4 1 0])
   ; Timezones
   
   "4pm CET"
