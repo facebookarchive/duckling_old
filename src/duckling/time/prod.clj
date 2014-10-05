@@ -149,6 +149,13 @@
   (ti (p/shift-duration (p/take-the-nth (p/cycle :second) 0) 
                         (t/negative-period duration))))
 
+(defn duration-hence
+  "See in-duration"
+  [duration]
+  (ti (p/shift-duration (p/take-the-nth (p/cycle :second) 0) 
+                        duration)))
+
+
 (defn duration-after
   "Shifts the pred to pred+duration and changes the grain, typically to
   the one just below the duration grain. See pred.clj for conversion."
