@@ -387,6 +387,27 @@
   "two years ago"
   (datetime 2011 2)
   
+  "7 days hence"
+  (datetime 2013 2 19 4)
+
+  "14 days hence"
+  "a fortnight hence"
+  (datetime 2013 2 26 4)
+  
+  "a week hence"
+  "one week hence"
+  "1 week hence"
+  (datetime 2013 2 19)
+
+  "three weeks hence"
+  (datetime 2013 3 5)
+  
+  "three months hence"
+  (datetime 2013 5 12)
+
+  "two years hence"
+  (datetime 2015 2)
+  
   "one year after christmas"
   (datetime 2013 12) ; resolves as after last Xmas...
   

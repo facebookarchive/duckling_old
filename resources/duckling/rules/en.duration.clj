@@ -78,6 +78,10 @@
   [(dim :duration) #"(?i)ago"]
   (duration-ago (:value %1))
   
+  "<duration> hence"
+  [(dim :duration) #"(?i)hence"]
+  (in-duration (:value %1))
+  
   "<duration> after <time>"
   [(dim :duration) #"(?i)after" (dim :time)]
   (duration-after (:value %1) %3)
