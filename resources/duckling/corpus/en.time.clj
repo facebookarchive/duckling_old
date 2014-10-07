@@ -332,11 +332,11 @@
   (datetime 2013 2 12 5 30 0)
   
   "in half an hour"
-  (datetime 2013 2 12 5 00 0)
+  (datetime 2013 2 12 5 0 0)
 
   "in 2.5 hours"
   "in 2 and an half hours"
-  (datetime 2013 2 12 7 00 0)
+  (datetime 2013 2 12 7 0 0)
 
   "in one hour"
   (datetime 2013 2 12 5 30)
@@ -365,6 +365,9 @@
   "in 1 week"
   "in a week"
   (datetime 2013 2 19)
+
+  "in about half an hour"
+  (datetime 2013 2 12 5 0 0 :precision "approximate")
 
   "7 days ago"
   (datetime 2013 2 5 4)
