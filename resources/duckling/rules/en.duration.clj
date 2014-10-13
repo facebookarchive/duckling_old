@@ -89,4 +89,15 @@
   "<duration> before <time>"
   [(dim :duration) #"(?i)before" (dim :time)]
   (duration-before (:value %1) %3)
+
+  "about <duration>" ; about
+  [#"(?i)(about|around|approximately)" (dim :duration)]
+  (-> %2
+    (merge {:precision "approximate"}))
+
+  "exactly <duration>" ; sharp
+  [#"(?i)exactly" (dim :duration)]
+  (-> %2
+    (merge {:precision "exact"}))
+
 )
