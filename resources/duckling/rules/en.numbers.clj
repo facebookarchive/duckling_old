@@ -1,4 +1,12 @@
 (
+ ;; generic
+   "intersect"
+  [(dim :number) (dim :number)] ; sequence of two tokens with a number dimension
+  {:dim :number
+   :integer true
+   :value (+ (:value %1) (:value %2))} ; to do: be moved in the helper add test the power of ten of %1 > power of ten of %2
+
+
  ;;
  ;; Integers
  ;;
@@ -51,6 +59,23 @@
             (clojure.string/replace #"," "")
             Long/parseLong)}
   
+  ;; big numbers
+  "integer (100..1000000)"
+  #"(?i)(hundred|thousand|mill?ion|bill?ion|trill?ion)s?"
+  {:dim :number
+   :integer true
+   :value (get {"hundred" 100 "hundreds" 100 "thousand" 1000 "thousands" 1000
+                "million" 1000000 "millions" 1000000 "milions" 1000000 "milion" 1000000 
+                "billion" 1000000000 "billions" 1000000000 "bilions" 1000000000 "bilion" 1000000000
+                "trillion" 1000000000000 "trillions" 1000000000000 "trilions" 1000000000000 "trilion" 1000000000000}
+             (-> %1 :groups first .toLowerCase))}
+
+  "number hundred|thousand|million" ; 5 hundred, thousand...
+  [(integer 1 99) (integer 100 1000000000 #(#{100 1000 1000000} (:value %)))]
+  {:dim :number
+   :integer true
+   :value (* (:value %1) (:value %2))}
+
   ;;
   ;; Decimals
   ;;

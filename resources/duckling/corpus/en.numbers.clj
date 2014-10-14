@@ -71,6 +71,25 @@
   "-.0012G"
   (number -1200000)
 
+  "5 thousand"
+  "five thousand"
+  (number 5000)
+
+  "20 hundred thousand"
+  (number 2000000)
+
+  "two hundred thousand"
+  (number 200000)
+
+  ; "twenty-one thousand eleven"
+  ; (number 21011)
+
+  ; "seven hundred twenty-one thousand twelve"
+  ; (number 721012)
+
+  ; "thirty-one million two hundred fifty-six thousand seven hundred twenty-one"
+  ; (number 31256721)
+
   "4th"
   "fourth"
   (ordinal 4)
