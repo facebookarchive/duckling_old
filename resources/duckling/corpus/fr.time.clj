@@ -378,7 +378,7 @@
   
   "3 heures du matin"
   "3h du mat"
-  (datetime 2013 2 12 3)
+  (datetime 2013 2 13 3)
 
  ; Intervals involving cycles
   

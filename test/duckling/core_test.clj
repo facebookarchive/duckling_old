@@ -1,8 +1,7 @@
 (ns duckling.core-test
   (:use [duckling.core]
         [clojure.test])
-  (:require [duckling.time :as time]
-            [clojure.java.io :as io]))
+  (:require [clojure.java.io :as io]))
 
 (def tokens (map (fn [x] {:pred x}) (range 10)))
 

@@ -241,7 +241,7 @@
   "at 3 AM"
   "3 oclock am"
   "at three am"
-  (datetime 2013 2 12 3)
+  (datetime 2013 2 13 3)
   
   "3:18am"
   "3:18a"

@@ -2,7 +2,6 @@
   (:use [clojure.tools.logging]
         [clojure.pprint :only [pprint]])
   (:require
-    [duckling.time :as time]
     [duckling.engine :as engine]
     [clj-time.core :as t]
     [duckling.ml.naivebayes :as naive]

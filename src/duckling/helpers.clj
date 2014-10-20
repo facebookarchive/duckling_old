@@ -2,7 +2,6 @@
   "This namespace contains the common helpers used in rules"
   (:require
     [clj-time.core :as t]
-    [duckling.time :as time]
     [duckling.util :as util])
   (:refer-clojure :exclude [resolve]))
 

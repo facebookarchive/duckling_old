@@ -12,7 +12,7 @@
   be possible.
   If the token cannot be resolved, :value must be removed."
   [token context]
-  (pred/resolve token context))
+  (take 1 (pred/resolve token context)))
 
 (defn export-value
   "Given a token, returns its value for the outside world.
