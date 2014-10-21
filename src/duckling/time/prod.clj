@@ -179,6 +179,8 @@
   [token timezone-id]
   (assoc token :timezone timezone-id))
 
+; numbers helpers
+
 ; to parse decimal number in duckling FR
 ; FIXME shouldn't be a full Locale, we should be more flexible to accept . and ,
 
@@ -187,6 +189,22 @@
   [s]
   (.doubleValue (.parse (NumberFormat/getInstance Locale/FRANCE) s)))
 
+(defn- rounditude
+  "Returns how many zeros a given number ends with 9 => 0, 40 => 1, 300 => 2"
+  [n acc]
+  (cond
+    (= 0 n) acc       
+    (not (= 0 (mod n 10))) acc
+    :else                  (rounditude (/ n 10) (inc acc))))
+
+(defn compose-numbers
+  "'add' numbers for '(two thousands) (three hundreds)'"
+  [n1 n2]
+  (if (> (Math/pow 10 (:grain n1)) (:value n2))
+    {:dim :number
+     :integer true
+     :value (+ (:value n1) (:value n2))}
+    {:invalid true})) ; TODO return nil and manage "abortion" in engine
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; Patterns (may be moved to their own ns)

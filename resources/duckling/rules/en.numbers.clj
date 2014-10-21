@@ -1,18 +1,19 @@
 (
- ;; generic
-   "intersect"
-  [(dim :number) (dim :number)] ; sequence of two tokens with a number dimension
-  {:dim :number
-   :integer true
-   :value (+ (:value %1) (:value %2))} ; to do: be moved in the helper add test the power of ten of %1 > power of ten of %2
 
+  "intersect"
+  [(dim :number :grain #(> (:grain %) 1)) (dim :number)] ; grain 1 are taken care of by specific rule
+  (compose-numbers %1 %2) 
 
- ;;
+  "intersect (with and)"
+  [(dim :number :grain #(> (:grain %) 1)) #"(?i)and" (dim :number)] ; grain 1 are taken care of by specific rule
+  (compose-numbers %1 %3) 
+
+   ;;
  ;; Integers
  ;;
  
   "integer (0..19)"
-  #"(?i)(naught|nought|nil|zero|one|two|three|fourteen|four|five|sixteen|six|seventeen|seven|eighteen|eight|nineteen|nine|ten|eleven|twelve|thirteen|fifteen)"
+  #"(?i)(naught|nought|nil|zero|one|two|three|fourteen|four|five|sixteen|six|seventeen|seven|eighteen|eight|nineteen|nine|eleven|twelve|thirteen|fifteen)"
   ; fourteen must be before four, or it won't work because the regex will stop at four
   {:dim :number
    :integer true
@@ -22,6 +23,22 @@
               "seventeen" 17 "eighteen" 18 "nineteen" 19}
               (-> %1 :groups first .toLowerCase))}
   
+  "ten"
+  #"(?i)ten"
+  {:dim :number :integer true :value 10 :grain 1}
+  
+  "hundred"
+  #"(?i)hundreds?"
+  {:dim :number :integer true :value 100 :grain 2}
+
+  "thousand"
+  #"(?i)thousands?"
+  {:dim :number :integer true :value 1000 :grain 3}
+
+  "million"
+  #"(?i)millions?"
+  {:dim :number :integer true :value 1000000 :grain 6}
+
   "couple"
   #"(a )?couple( of)?"
   {:dim :number :integer true :value 2}
@@ -36,7 +53,8 @@
    :integer true
    :value (get {"twenty" 20 "thirty" 30 "fourty" 40 "forty" 40 "fifty" 50 "sixty" 60
               "seventy" 70 "eighty" 80 "ninety" 90}
-             (-> %1 :groups first .toLowerCase))}
+             (-> %1 :groups first .toLowerCase))
+   :grain 1}
 
   "integer 21..99"
   [(integer 10 90 #(#{20 30 40 50 60 70 80 90} (:value %))) (integer 1 9)]
@@ -59,22 +77,28 @@
             (clojure.string/replace #"," "")
             Long/parseLong)}
   
-  ;; big numbers
-  "integer (100..1000000)"
-  #"(?i)(hundred|thousand|mill?ion|bill?ion|trill?ion)s?"
+  ; composition
+  
+  "number hundreds"
+  [(integer 1 99) (integer 100 100)]
   {:dim :number
    :integer true
-   :value (get {"hundred" 100 "hundreds" 100 "thousand" 1000 "thousands" 1000
-                "million" 1000000 "millions" 1000000 "milions" 1000000 "milion" 1000000 
-                "billion" 1000000000 "billions" 1000000000 "bilions" 1000000000 "bilion" 1000000000
-                "trillion" 1000000000000 "trillions" 1000000000000 "trilions" 1000000000000 "trilion" 1000000000000}
-             (-> %1 :groups first .toLowerCase))}
+   :value (* (:value %1) (:value %2))
+   :grain (:grain %2)}
 
-  "number hundred|thousand|million" ; 5 hundred, thousand...
-  [(integer 1 99) (integer 100 1000000000 #(#{100 1000 1000000} (:value %)))]
+  "number thousands"
+  [(integer 1 999) (integer 1000 1000)]
   {:dim :number
    :integer true
-   :value (* (:value %1) (:value %2))}
+   :value (* (:value %1) (:value %2))
+   :grain (:grain %2)}
+
+  "number millions"
+  [(integer 1 99) (integer 1000000 1000000)]
+  {:dim :number
+   :integer true
+   :value (* (:value %1) (:value %2))
+   :grain (:grain %2)}
 
   ;;
   ;; Decimals
