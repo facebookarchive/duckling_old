@@ -3,6 +3,7 @@
 .nrepl-port
 duckling.iml
 pom.xml
+pom.xml.asc
 target
 .idea
 resources/export.json
