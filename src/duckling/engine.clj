@@ -192,11 +192,12 @@
          prev-stash-size 0
          ; safeguard: number of max iterations (loops DO occur :))
          remaining-iter 10]
-    (if (> (count stash) prev-stash-size)
-      (if (> remaining-iter 0)
-        (recur (pass-once stash rules sentence) (count stash) (dec remaining-iter))
-        (throw (Exception. (str "@pass-all reached maximum iterations for sentence '" sentence "'"))))
-      stash)))
+    (let [stash-size (count stash)]
+      (if (and (< stash-size 500) (> stash-size prev-stash-size))
+        (if (> remaining-iter 0)
+          (recur (pass-once stash rules sentence) (count stash) (dec remaining-iter))
+          (throw (Exception. (str "@pass-all reached maximum iterations for sentence '" sentence "'"))))
+        stash))))
 
 (defn maxlen-judge
   "Choose the winning token in the stash."

@@ -33,6 +33,15 @@
   (if (= 0 (reduce #(+ %1 (first %2)) 0 run-corpus-output)) ;; no fail
     :ok (->> run-corpus-output (filter #(not= 0 (first %))) (map second) (reduce #(str %1 "\n" %2)))))
 
+(defmacro with-timeout [millis res & body]
+  `(let [future# (future ~@body)]
+     (try
+       (.get future# ~millis java.util.concurrent.TimeUnit/MILLISECONDS)
+       (catch java.util.concurrent.TimeoutException x#
+         (do
+           (future-cancel future#)
+           ~res)))))
+
 (deftest datetime-corpus-runs-without-failure
   (load!)
   (testing "fr"
@@ -50,6 +59,14 @@
              :body "january 2014"
              :label "T"}]
            (extract "january 2014" (default-context :corpus) nil [{:module "en$core"
-                                                                :dim "time"
-                                                                :label "T"}])))))
+                                                                   :dim "time"
+                                                                   :label "T"}]))))
+  (testing "Very big one"
+    (is (< 1
+           (count
+             (with-timeout 10000 "TIMEOUT!!"
+                           (extract "Oct. 12 from 2 to 5 p.m. Monday-Friday, Sept. 7-March 1, 8 a.m.-noon, 1-5 p.m."
+                                    (default-context :corpus) nil [{:module "en$core"
+                                                                    :dim "time"
+                                                                    :label "T"}])))))))
 
