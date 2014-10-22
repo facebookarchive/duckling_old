@@ -1,4 +1,4 @@
-(defproject wit/duckling "0.2.3"
+(defproject wit/duckling "0.2.4"
   :description "Date & Number parser"
   :main duckling.core
   :license {:name "Eclipse Public License"
@@ -21,7 +21,6 @@
                    :benchmark :benchmark}
   :scm {:name "git"
         :url "https://github.com/wit-ai/duckling"}
-  :signing {:gpg-key "188794F3"}
   :pom-addition [:developers [:developer
                                [:name "Wit.ai"]
                                [:url "https://wit.ai"]
