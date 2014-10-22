@@ -4,6 +4,7 @@
   1. rules are transformed into objets via rules macro
   2. rules are (recursively) matched based on theirs pattern vectors.
   3. tokens containing final info are produced using their production rules"
+  (:use [clojure.tools.logging])
   (:require [clojure.set :as sets]
             [duckling.time.prod]
             [duckling.time.api :as time]
@@ -192,12 +193,18 @@
          prev-stash-size 0
          ; safeguard: number of max iterations (loops DO occur :))
          remaining-iter 10]
-    (let [stash-size (count stash)]
-      (if (and (< stash-size 500) (> stash-size prev-stash-size))
-        (if (> remaining-iter 0)
-          (recur (pass-once stash rules sentence) (count stash) (dec remaining-iter))
-          (throw (Exception. (str "@pass-all reached maximum iterations for sentence '" sentence "'"))))
-        stash))))
+    (let [stash-size (count stash)
+          max-iter-reached? (< remaining-iter 0)
+          max-stash-reached? (> stash-size 600)
+          finished? (<= stash-size prev-stash-size)]
+      (if (or max-iter-reached? max-stash-reached? finished?)
+        (do
+          (when max-iter-reached?
+            (warnf (format "@pass-all reached maximum iterations for sentence '%s'" sentence)))
+          (when max-stash-reached?
+            (warnf (format "@pass-all reached maximum stash size for sentence '%s'" sentence)))
+          stash)
+        (recur (pass-once stash rules sentence) (count stash) (dec remaining-iter))))))
 
 (defn maxlen-judge
   "Choose the winning token in the stash."
