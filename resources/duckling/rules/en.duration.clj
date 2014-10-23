@@ -51,8 +51,10 @@
   {:dim :duration
    :value (duration (:grain %2) (:value %1))}
     
-  "number.number hours" ; in 1. 5 hour but also 1.75
-  [#"(\d*)\.\s?(\d+)" #"(?i)hours?"] ;duration can't be negative...
+  ; TODO handle cases where ASR outputs "1. 5 hours"
+  ; but allowing a space creates many false positive
+  "number.number hours" ; in 1.5 hour but also 1.75
+  [#"(\d+)\.(\d+)" #"(?i)hours?"] ;duration can't be negative...
   {:dim :duration
    :value (duration :minute (int (+ (quot (* 6 (Long/parseLong (second (:groups %1)))) (java.lang.Math/pow 10 (- (count (second (:groups %1))) 1))) (* 60 (Long/parseLong (first (:groups %1)))))))}
 
