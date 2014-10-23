@@ -19,6 +19,8 @@
 (money 10000 "$")
 
 "USD1.23"
+; "1 dollar and 23 cents"
+; "one dollar 23 cents"
 (money 1.23 "USD")
 
 "20€"
