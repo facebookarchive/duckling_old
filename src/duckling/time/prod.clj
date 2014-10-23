@@ -71,9 +71,10 @@
 (defn year [y]
   (ti (p/year y)))
 
+;; add mo for rules that depend on the month for instance "the ides of March"
 (defn month [mo]
   {:pre [(<= 1 mo 12)]}
-  (ti (p/month mo) {:form :month}))
+  (ti (p/month mo) {:form :month :month mo}))
 
 (defn day-of-month [day]
   {:pre [(<= 1 day 31)]}

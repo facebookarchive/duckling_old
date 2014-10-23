@@ -60,6 +60,9 @@
   "march 3"
   (datetime 2013 3 3 :day 3 :month 3)
 
+  "the ides of march"
+  (datetime 2013 3 15 :month 3)
+
   "march 3 2015"
   "march 3rd 2015"
   "march third 2015"

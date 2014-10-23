@@ -320,7 +320,11 @@
   [(dim :ordinal #(<= 1 (:value %) 31)) {:form :month} #"(\d{2,4})"]
   (intersect %2 (day-of-month (:value %1)) (year (Integer/parseInt(first (:groups %3)))))
 
-  ; ; ;; Hours and minutes (absolute time)
+  "the ides of <named-month>" ; the ides of march 13th for most months, but on the 15th for March, May, July, and October
+  [#"(?i)the ides? of" {:form :month}]
+  (intersect %2 (day-of-month (if (#{3 5 7 10} (:month %2)) 15 13)))
+  
+  ;; Hours and minutes (absolute time)
   
   "time-of-day (latent)"
   (integer 0 23)
