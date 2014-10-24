@@ -1,5 +1,23 @@
 (
 
+"intersect (X cents)" ;
+[(dim :amount-of-money) (dim :amount-of-money #(= (:unit %) "cent"))]
+(compose-money %1 %2) 
+
+"intersect (and X cents)" ;
+[(dim :amount-of-money) #"(?i)and" (dim :amount-of-money #(= (:unit %) "cent"))]
+(compose-money %1 %3) 
+
+"intersect" ;
+[(dim :amount-of-money) (dim :number)]
+(compose-money %1 %2) 
+
+"intersect (and number)" ;
+[(dim :amount-of-money) #"(?i)and" (dim :number)]
+(compose-money %1 %3) 
+
+; #(not (:number-prefixed %)
+
 "$"
 #"\$|dollars?"
 {:dim :unit
@@ -29,6 +47,11 @@
 #"(?i)pta?s?"
 {:dim :unit
  :unit "PTS"}
+
+"cent"
+#"(?i)cents?|penn(y|ies)|c|¢" ; to do:localize the corpus and rules per language
+{:dim :unit
+ :unit "cent"}
 
 "unnamed currency"
 #"(?i)(buck|balle|pouloute)s?"

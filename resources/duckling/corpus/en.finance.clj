@@ -13,15 +13,22 @@
 ;"less than fifteen dollars"
 ;(money 15 "$" "<")
 
+"ten cents"
+(money 10 "cent")
+
 "$10,000"
 "10K$"
 "$10k"
 (money 10000 "$")
 
 "USD1.23"
-; "1 dollar and 23 cents"
-; "one dollar 23 cents"
 (money 1.23 "USD")
+
+"2 dollar and 23 cents"
+"two dollar 23 cents"
+"2 dollar 23"
+"two dollar and 23"
+(money 2.23 "$")
 
 "20€"
 "20 euros"

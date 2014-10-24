@@ -207,6 +207,18 @@
      :value (+ (:value n1) (:value n2))}
     {:invalid true})) ; TODO return nil and manage "abortion" in engine
 
+; finance helpers
+(defn compose-money
+  "'add' money for '(4 dollars) (43 cents)'"
+  [m1 m2]
+  (let [amount (+ (:value m1) (/ (:value m2) 100.0))]
+    {:dim :amount-of-money
+     :value amount
+     :unit (:unit m1)
+     :fields {(:unit m1) (:value amount)}
+   })
+  )
+
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; Patterns (may be moved to their own ns)
 
