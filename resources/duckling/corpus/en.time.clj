@@ -527,6 +527,7 @@
 
   "last 2 days"
   "last two days"
+  "past 2 days"
   (datetime-interval [2013 2 10] [2013 2 12])
 
   "next 3 days"
@@ -538,6 +539,7 @@
 
   "last 2 weeks"
   "last two weeks"
+  "past 2 weeks"
   (datetime-interval [2013 1 28 :grain :week] [2013 2 11 :grain :week])
 
   "next 3 weeks"
