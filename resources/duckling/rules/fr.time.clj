@@ -201,10 +201,17 @@
   (intersect %1 (day-of-month (:value %2)))
 
 
-  ;; hours and minutes (absolute time)
+  ; Hours and minutes (absolute time)
+  ;
+  ; Assumptions:
+  ; - 0 is midnight
+  ; - 1..11 is ambiguous am or pm
+  ; - 12 is noon (whereas in English it is ambiguous)
+  ; - 13..23 is pm
+  
   "time-of-day (latent)"
   (integer 0 23)
-  (assoc (hour (:value %1) true) :latent true)
+  (assoc (hour (:value %1) (< (:value %1) 12)) :latent true)
   
   "midi"
   #"(?i)midi"
@@ -224,9 +231,10 @@
 
   "hh(:|h)mm (time-of-day)"
   #"(?i)((?:[01]?\d)|(?:2[0-3]))[:h]([0-5]\d)"
-  (hour-minute (Integer/parseInt (first (:groups %1)))
-               (Integer/parseInt (second (:groups %1)))
-               true)
+  (let [h (Integer/parseInt (first (:groups %1)))]
+    (hour-minute h
+                 (Integer/parseInt (second (:groups %1)))
+                 (< h 12)))
   
   "hhmm (military time-of-day)"
   #"(?i)((?:[01]?\d)|(?:2[0-3]))([0-5]\d)"
