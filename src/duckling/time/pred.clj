@@ -118,7 +118,7 @@
              (next (iterate #(t/minus % :day 7) anchor))])))
 
 (defn hour [h twelve-hour-clock?]
-  (fn& :hour [t _] (let [step (if (and twelve-hour-clock? (<= h 11))
+  (fn& :hour [t _] (let [step (if (and twelve-hour-clock? (<= h 12))
                           12
                           24)
                    diff (mod (- h (t/hour t)) step)
