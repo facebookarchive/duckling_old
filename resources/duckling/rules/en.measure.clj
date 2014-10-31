@@ -124,43 +124,48 @@
 	    		:normalized {:value (* 3.785 (-> %1 :value))
 	    					 :unit "litre"}}))
 	;; Quantity
+ 
+    ; qantity token inherits metadata from product
   
 	; three teaspoons
 	"<number> <units>"
 	[(dim :number) (dim :leven-unit)]
 	{:dim :quantity
-	:value (:value %1)
-	:unit (:value %2)
-	:form :no-product}
+	 :value (:value %1)
+	 :unit (:value %2)
+	 :form :no-product}
 
 	; a pound
 	"a <unit>"
 	[#"(?i)an?" (dim :leven-unit)]
 	{:dim :quantity
-	:value 1
-	:unit (:value %2)
-	:form :no-product}
+	 :value 1
+	 :unit (:value %2)
+	 :form :no-product}
 
 	; 3 pounds of flour
 	"<quantity> of product"
 	[(dim :quantity #(= :no-product (:form %))) #"(?i)of" (dim :leven-product)]
 	(-> %1 
 	  (assoc :product (:value %3))
+      (assoc :meta    (:meta %3))
 	  (dissoc :form))
 
 	; 2 apples
 	"<number> product"
 	[(dim :number) (dim :leven-product)]
 	{:dim :quantity
-	:value (:value %1)
-	:product (:value %2)}
+	 :value (:value %1)
+	 :product (:value %2)
+     :meta (:meta %2)}
 
 	; an apple
 	"a <product>"
 	[#"(?i)an?" (dim :leven-product)]
 	{:dim :quantity
-	:value 1
-	:product (:value %2)}
+	 :value 1
+	 :product (:value %2)
+     :meta (:meta %2)}
 
 	; Stubs for corpus
 	"pounds"
@@ -169,7 +174,7 @@
 
 	"meat"
 	#"meat"
-	{:dim :leven-product :value "meat"}
+	{:dim :leven-product :value "meat" :meta "sku=18"}
 
 	"cup"
 	#"cups?"
