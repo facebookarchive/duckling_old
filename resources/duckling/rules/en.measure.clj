@@ -164,6 +164,13 @@
 	 :value 1
 	 :product (:value %2)}
 
+	 ; apple 
+	"<product>"
+	[(dim :leven-product)]
+	{:dim :quantity
+	 :value 1
+	 :product (:value %1)}
+
 	; Stubs for corpus
 	"pounds"
 	#"pounds?"
