@@ -81,13 +81,13 @@
    Targets is a coll of {:dim dim :label label} : only winners of these dims are
    kept, and they receive a :label key = the label provided.
    If no targets specified, all winners are returned."
-  [s context module targets]
+  [s context module targets base-stash]
   {:pre [s context module]}
   (let [classifiers (get-classifier module)
         _ (when-not (map? classifiers)
             (errorf "[duckling] Module %s is not loaded. Did you (load!) ?" module))
         rules (get-rules module)
-        stash (engine/pass-all s rules)
+        stash (engine/pass-all s rules base-stash)
         ; add an index to tokens in the stash
         stash (map #(if (map? %1) (assoc %1 :index %2) %1)
                    stash
@@ -183,7 +183,7 @@
   ([module-id s targets context]
    (let [targets (when targets (map (fn [dim] {:dim dim :label dim}) targets))
          {stash :stash
-          winners :winners} (analyze s context module-id targets)]
+          winners :winners} (analyze s context module-id targets nil)]
 
      ;; 1. print stash
      (print-stash stash (get-classifier module-id) winners)
@@ -261,7 +261,7 @@
   (for [test tests
         text (:text test)]
     (try
-      (let [{:keys [stash winners]} (analyze text context module nil)
+      (let [{:keys [stash winners]} (analyze text context module nil nil)
             winner-count (count winners)
             check (first (:checks test)) ; only one test is supported now
             check-results (map (partial check context) winners)] ; return nil if OK, [expected actual] if not OK
@@ -309,7 +309,7 @@
   ([module text dims]
    (parse module text dims (default-context :now)))
   ([module text dims context]
-   (->> (analyze text context module (map (fn [dim] {:dim dim :label dim}) dims))
+   (->> (analyze text context module (map (fn [dim] {:dim dim :label dim}) dims) nil)
         :winners
         (map #(assoc % :value (engine/export-value % {})))
         (map #(select-keys % [:dim :body :value :start :end :latent])))))
@@ -345,7 +345,7 @@
                     pic-context (generate-context context)]
                 (when-not (module @rules-map)
                   (throw (ex-info "Unknown duckling module" {:module module})))
-                (->> (analyze sentence pic-context module targets)
+                (->> (analyze sentence pic-context module targets leven-stash)
                      :winners
                      (map #(assoc % :value (engine/export-value % {:date-fn str})))
                      (map #(select-keys % [:label :body :value :start :end :latent])))))]

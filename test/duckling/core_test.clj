@@ -61,6 +61,20 @@
            (extract "january 2014" (default-context :corpus) nil [{:module "en$core"
                                                                    :dim "time"
                                                                    :label "T"}]))))
+  (testing "Public API (extract) with leven-stash"
+    (is (= [{:end 9
+             :start 0
+             :value {:value 2
+                     :unit "brasse"}
+             :body "2 brasses"
+             :label "T"}]
+           (extract "2 brasses" (default-context :corpus) [{:dim :leven-unit
+                                                            :value "brasse"
+                                                            :pos 2
+                                                            :end 9}] 
+                                                          [{:module "en$core"
+                                                            :dim "quantity"
+                                                            :label "T"}]))))
   (testing "Very big one"
     (is (< 1
            (count

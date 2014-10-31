@@ -42,7 +42,7 @@
   Output is true if the rule was contributing successfully, false otherwise"
   [s context check rules feature-extractor dataset]
   (debugf "learning %s %s\n" s check)
-  (let [fc-tokens (->> (engine/pass-all s rules) 
+  (let [fc-tokens (->> (engine/pass-all s rules nil)
                        (filter #(and (:pos %) (= (count s) (- (:end %) (:pos %)))))
                        (mapcat #(engine/resolve-token % context nil)) ; fully-covering tokens
                        (map #(assoc % :check (check context %))))
