@@ -148,7 +148,6 @@
 	[(dim :quantity #(= :no-product (:form %))) #"(?i)of" (dim :leven-product)]
 	(-> %1 
 	  (assoc :product (:value %3))
-      (assoc :meta    (:meta %3))
 	  (dissoc :form))
 
 	; 2 apples
@@ -156,16 +155,14 @@
 	[(dim :number) (dim :leven-product)]
 	{:dim :quantity
 	 :value (:value %1)
-	 :product (:value %2)
-     :meta (:meta %2)}
+	 :product (:value %2)}
 
 	; an apple
 	"a <product>"
 	[#"(?i)an?" (dim :leven-product)]
 	{:dim :quantity
 	 :value 1
-	 :product (:value %2)
-     :meta (:meta %2)}
+	 :product (:value %2)}
 
 	; Stubs for corpus
 	"pounds"
@@ -174,7 +171,7 @@
 
 	"meat"
 	#"meat"
-	{:dim :leven-product :value "meat" :meta "sku=18"}
+	{:dim :leven-product :value "meat"}
 
 	"cup"
 	#"cups?"
