@@ -1,4 +1,4 @@
-(defproject wit/duckling "0.2.4"
+(defproject wit/duckling "0.2.5"
   :description "Date & Number parser"
   :main duckling.core
   :license {:name "Eclipse Public License"
