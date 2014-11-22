@@ -51,6 +51,11 @@
   {:dim :duration
    :value (duration (:grain %2) (:value %1))}
     
+  "<integer> more <unit-of-duration>"
+  [(integer 0) #"(?i)more|less" (dim :unit-of-duration)]; would need to add fields at some point
+  {:dim :duration
+   :value (duration (:grain %3) (:value %1))}
+
   ; TODO handle cases where ASR outputs "1. 5 hours"
   ; but allowing a space creates many false positive
   "number.number hours" ; in 1.5 hour but also 1.75
