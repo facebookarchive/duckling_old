@@ -328,6 +328,7 @@
   (datetime 2013 2 12 4 31 0)
   
   "in 2 minutes"
+  "in 2 more minutes"
   "2 minutes from now"
   (datetime 2013 2 12 4 32 0)
   
