@@ -102,7 +102,7 @@
   ;;
 
   "ordinals (primo..10)"
-  #"(?i)(prim|second|terz|quart|quint|sest|settim|ottav|non|decim)(o|a|i|e)"
+  #"(?i)((prim|second|terz|quart|quint|sest|settim|ottav|non|decim)(o|a|i|e))"
   {:dim :ordinal
    :value (get {"primo" 1 "secondo" 2 "terzo" 3 "quarto" 4 "quinto" 5 "sesto" 6 "settimo" 7 "ottavo" 8 "nono" 9 "decimo" 10 "prima" 1 "seconda" 2 "terza" 3 "quarta" 4 "quinta" 5 "sesta" 6 "settima" 7 "ottava" 8 "nona" 9 "decima" 10 "primi" 1 "secondi" 2 "terzi" 3 "quarti" 4 "quinti" 5 "sesti" 6 "settimi" 7 "ottavi" 8 "noni" 9 "decimi" 10 "prime" 1 "seconde" 2 "terze" 3 "quarte" 4 "quinte" 5 "seste" 6 "settime" 7 "ottave" 8 "none" 9 "decime" 10}
               (-> %1 :groups first .toLowerCase))}
