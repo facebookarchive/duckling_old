@@ -236,11 +236,11 @@
   "mañana a 11"
   (datetime 2013 2 13 11 :hour 11)
 
-  "viernes a las doce"
-  (datetime 2013 2 15 12 :hour 12 :day-of-week 5)
+  ;"viernes a las doce"
+  ;(datetime 2013 2 15 12 :hour 12 :day-of-week 5)
   
-  "viernes a las 12:00 horas"
-  (datetime 2013 2 15 12 0 :hour 12 :day-of-week 5 :minute 0)
+  ;"viernes a las 12:00 horas"
+  ;(datetime 2013 2 15 12 0 :hour 12 :day-of-week 5 :minute 0)
 
   "viernes, el 12 de septiembre de 2014"
   (datetime 2014 9 12 :day-of-week 5 :day 12 :month 9 :year 2014)
