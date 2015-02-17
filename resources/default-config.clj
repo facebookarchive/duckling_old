@@ -67,4 +67,10 @@
                      "cn.duration"
                      "cn.temperature"
                     ]}
+:ru$core {:corpus [
+                    "ru.numbers"
+                   ]
+            :rules [
+                     "ru.numbers"
+                    ]}
  }
