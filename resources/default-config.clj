@@ -45,6 +45,12 @@
                     "en.finance"
                     "en.communication"
                     ]}
+:et$core {:corpus [
+                    "et.numbers"
+                    ]
+           :rules  [
+                    "et.numbers"
+                    ]}
 :it$core {:corpus [
                     "it.time"
                     "it.numbers"
