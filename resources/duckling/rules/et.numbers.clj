@@ -1,4 +1,9 @@
 (
+
+  "intersect"
+  [(dim :number :grain #(> (:grain %) 1)) (dim :number)] ; grain 1 are taken care of by specific rule
+  (compose-numbers %1 %2) 
+ 
  ;;
  ;; Integers
  ;;
@@ -14,28 +19,28 @@
               "seitseteist" 17 "kaheksateist" 18 "üheksateist" 19}
               (-> %1 :groups first .toLowerCase))}
   
-  "kümme"
-  #"(?i)ten"
+  "ten"
+  #"(?i)kümme"
   {:dim :number :integer true :value 10 :grain 1}
   
-  "sada"
-  #"(?i)hundreds?"
+  "hundred"
+  #"(?i)sada"
   {:dim :number :integer true :value 100 :grain 2}
 
-  "tuhat"
-  #"(?i)thousands?"
+  "thousand"
+  #"(?i)tuhat"
   {:dim :number :integer true :value 1000 :grain 3}
 
-  "miljon"
-  #"(?i)millions?"
+  "million"
+  #"(?i)miljon"
   {:dim :number :integer true :value 1000000 :grain 6}
 
-  "paar"
-  #"(a )?couple( of)?"
+  "a couple of"
+  #"paar"
   {:dim :number :integer true :value 2}
   
-  "mõni" ; TODO set assumption
-  #"(a )?few"
+  "(a )?few" ; TODO set assumption
+  #"mõni"
   {:dim :number :integer true :precision :approximate :value 3}
 
   "integer (20..90)"
@@ -53,6 +58,15 @@
    :integer true
    :value (+ (:value %1) (:value %2))}
 
+  "integer (200..900)"
+  #"(?i)(kakssada|kolmsada|nelisada|viissada|kuussada|seitsesada|kaheksasada|üheksasada)"
+  {:dim :number
+   :integer true
+   :value (get {"kakssada" 200 "kolmsada" 300 "nelisada" 400 "viissada" 500 "kuussada" 600
+              "seitsesada" 700 "kaheksasada" 800 "üheksasada" 900}
+             (-> %1 :groups first .toLowerCase))
+   :grain 1}
+
   "integer (numeric)"
   #"(\d{1,18})"
   {:dim :number
@@ -66,6 +80,15 @@
    :value (-> (:groups %1)
             first
             (clojure.string/replace #"," "")
+            Long/parseLong)}
+
+  "integer with thousands separator space"
+  #"(\d{1,3}(\s\d\d\d){1,5})"
+  {:dim :number
+   :integer true
+   :value (-> (:groups %1)
+            first
+            (clojure.string/replace #"\s" "")
             Long/parseLong)}
   
   ; composition
@@ -116,7 +139,7 @@
 
   ;; negative number
   "numbers prefix with -, negative or minus"
-  [#"(?i)-|minus\s?|negative\s?" (dim :number #(not (:number-prefixed %)))]
+  [#"(?i)-|miinus|negatiivne" (dim :number #(not (:number-prefixed %)))]
   (let [multiplier -1
         value      (* (:value %2) multiplier)
         int?       (zero? (mod value 1)) ; often true, but we could have 1.1111K
@@ -155,7 +178,7 @@
               (-> %1 :groups first .toLowerCase))}
 
   "ordinal (digits)"
-  #"0*(\d+) ?(st|nd|rd|th)"
+  #"0*(\d+)\."
   {:dim :ordinal
    :value (read-string (first (:groups %1)))}  ; read-string not the safest
 

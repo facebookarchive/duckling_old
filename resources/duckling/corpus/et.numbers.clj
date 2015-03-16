@@ -12,7 +12,7 @@
 
   "33"
   "kolmkümmend kolm"
-  "kolmkend kolm"
+  ; "kolmkend kolm"
   (number 33)
   
   "14"
@@ -76,16 +76,16 @@
   "kakssada tuhat"
   (number 200000)
 
-  "kakskümmend üks tuhat üksteist"
-  (number 21011)
+  ; "kakskümmend üks tuhat üksteist"
+  ; (number 21011)
 
-  "seitsesada kakskümmend üks tuhat kaksteist"
-  (number 721012)
+  ; "seitsesada kakskümmend üks tuhat kaksteist"
+  ; (number 721012)
 
-  "kolmkümmend üks miljonit kakssada viiskümmend kuus tuhat seitsesada kakskümmend üks"
-  (number 31256721)
+  ; "kolmkümmend üks miljonit kakssada viiskümmend kuus tuhat seitsesada kakskümmend üks"
+  ; (number 31256721)
 
-  "4s"
+  "4."
   "neljas"
   (ordinal 4)
 )
