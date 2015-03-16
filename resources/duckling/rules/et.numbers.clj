@@ -4,6 +4,7 @@
   [(dim :number :grain #(> (:grain %) 1)) (dim :number)] ; grain 1 are taken care of by specific rule
   (compose-numbers %1 %2) 
  
+
  ;;
  ;; Integers
  ;;
@@ -32,7 +33,7 @@
   {:dim :number :integer true :value 1000 :grain 3}
 
   "million"
-  #"(?i)miljon"
+  #"(?i)miljoni?t?"
   {:dim :number :integer true :value 1000000 :grain 6}
 
   "a couple of"
@@ -65,7 +66,7 @@
    :value (get {"kakssada" 200 "kolmsada" 300 "nelisada" 400 "viissada" 500 "kuussada" 600
               "seitsesada" 700 "kaheksasada" 800 "üheksasada" 900}
              (-> %1 :groups first .toLowerCase))
-   :grain 1}
+   :grain 2}
 
   "integer (numeric)"
   #"(\d{1,18})"
