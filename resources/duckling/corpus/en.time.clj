@@ -9,7 +9,7 @@
   "right now"
   "just now"
   (datetime 2013 2 12 4 30 00)
-  
+
   "today"
   "at this time"
   (datetime 2013 2 12)
@@ -19,7 +19,7 @@
 
   "tomorrow"
   (datetime 2013 2 13)
-  
+
   "monday"
   "mon."
   "this monday"
@@ -51,12 +51,12 @@
   "sun"
   "sun."
   (datetime 2013 2 17)
-  
+
   "the 1st of march"
   "first of march"
   "march first"
   (datetime 2013 3 1 :day 1 :month 3)
-  
+
   "march 3"
   (datetime 2013 3 3 :day 3 :month 3)
 
@@ -91,12 +91,12 @@
 
   "October 2014"
   (datetime 2014 10 :year 2014 :month 10)
-  
+
   "10/31/1974"
   "10/31/74"
   "10-31-74"
   (datetime 1974 10 31 :day 31 :month 10 :year 1974)
-  
+
   "14april 2015"
   "April 14, 2015"
   "14th April 15"
@@ -115,8 +115,8 @@
   (datetime 2014 3)
 
   "Sunday, Feb 10"
-  (datetime 2013 2 10 :day-of-week 7 :day 10 :month 2) 
-  
+  (datetime 2013 2 10 :day-of-week 7 :day 10 :month 2)
+
   "Wed, Feb13"
   (datetime 2013 2 13 :day-of-week 3 :day 13 :month 2)
 
@@ -125,44 +125,44 @@
   (datetime 2013 2 18 :day-of-week 1 :day 18 :month 2)
 
 ;   ;; Cycles
-  
+
   "this week"
   "coming week"
   (datetime 2013 2 11 :grain :week)
 
   "last week"
   (datetime 2013 2 4 :grain :week)
-  
+
   "next week"
   (datetime 2013 2 18 :grain :week)
-  
+
   "last month"
   (datetime 2013 1)
 
   "next month"
   (datetime 2013 3)
-  
+
   "this quarter"
   (datetime 2013 1 1 :grain :quarter)
-  
+
   "next quarter"
   (datetime 2013 4 1 :grain :quarter)
-  
+
   "third quarter"
   (datetime 2013 7 1 :grain :quarter)
-  
+
   "4th quarter 2018"
   (datetime 2018 10 1 :grain :quarter)
-  
+
   "last year"
   (datetime 2012)
-  
+
   "this year"
   (datetime 2013)
-  
+
   "next year"
   (datetime 2014)
-    
+
   "last sunday"
   "sunday from last week"
   "last week's sunday"
@@ -196,60 +196,60 @@
 
   "the day after tomorrow"
   (datetime 2013 2 14)
-  
+
   "the day before yesterday"
   (datetime 2013 2 10)
-  
+
   "last Monday of March"
   (datetime 2013 3 25 :day-of-week 1)
-  
+
   "last Sunday of March 2014"
   (datetime 2014 3 30 :day-of-week 7)
-  
+
   "third day of october"
   (datetime 2013 10 3)
-  
+
   "first week of october 2014"
   (datetime 2014 10 6 :grain :week)
-  
+
   "last day of october 2015"
   (datetime 2015 10 31)
-  
+
   "last week of september 2014"
   (datetime 2014 9 22 :grain :week)
-  
-  
+
+
   ;; nth of
   "first tuesday of october"
   (datetime 2013 10 1)
-  
+
   "third tuesday of september 2014"
   (datetime 2014 9 16)
-  
+
   "first wednesday of october 2014"
   (datetime 2014 10 1)
-  
+
   "second wednesday of october 2014"
   (datetime 2014 10 8)
-  
+
   ;; nth after
-  
+
   "third tuesday after christmas 2014"
   (datetime 2015 1 13)
-    
+
 
   ;; Hours
-  
+
   "at 3am"
   "at 3 AM"
   "3 oclock am"
   "at three am"
   (datetime 2013 2 13 3)
-  
+
   "3:18am"
   "3:18a"
   (datetime 2013 2 12 3 18)
-  
+
   "at 3pm"
   "@ 3pm"
   "3PM"
@@ -290,7 +290,7 @@
   "330 p.m."
   "3:30 p m"
   (datetime 2013 2 12 15 30 :hour 3 :minute 30 :meridiem :pm)
-  
+
   "3:30"
   "half three"
   (datetime 2013 2 12 15 30 :hour 3 :minute 30)
@@ -299,42 +299,42 @@
   "11:45am"
   "15 to noon" ; Ambiguous with interval
   (datetime 2013 2 12 11 45 :hour 11 :minute 45)
-    
+
   "8 tonight"
   "eight tonight"
   "8 this evening"
   (datetime 2013 2 12 20)
- 
+
   ;; Mixing date and time
-    
+
   "at 7:30 PM on Fri, Sep 20"
   (datetime 2013 9 20 19 30 :hour 7 :minute 30 :meridiem :pm)
-  
+
   "at 9am on Saturday"
   (datetime 2013 2 16 9 :day-of-week 6 :hour 9 :meridiem :am)
 
   "Fri, Jul 18, 2014 07:00 PM"
   (datetime 2014 7 18 19 0 :day-of-week 5 :hour 7 :meridiem :pm)
 
-  
-; ;; Involving periods  
-  
+
+; ;; Involving periods
+
   "in a sec"
   "one second from now"
   (datetime 2013 2 12 4 30 1)
-  
+
   "in a minute"
   "in one minute"
   (datetime 2013 2 12 4 31 0)
-  
+
   "in 2 minutes"
   "in 2 more minutes"
   "2 minutes from now"
   (datetime 2013 2 12 4 32 0)
-  
+
   "in 60 minutes"
   (datetime 2013 2 12 5 30 0)
-  
+
   "in half an hour"
   (datetime 2013 2 12 5 0 0)
 
@@ -344,7 +344,7 @@
 
   "in one hour"
   (datetime 2013 2 12 5 30)
-  
+
   "in a couple hours"
   "in a couple of hours"
   (datetime 2013 2 12 6 30)
@@ -355,7 +355,7 @@
 
   "in 24 hours"
   (datetime 2013 2 13 4 30)
-  
+
   "in a day"
   "a day from now"
   (datetime 2013 2 13 4)
@@ -379,7 +379,7 @@
   "14 days ago"
   "a fortnight ago"
   (datetime 2013 1 29 4)
-  
+
   "a week ago"
   "one week ago"
   "1 week ago"
@@ -387,20 +387,20 @@
 
   "three weeks ago"
   (datetime 2013 1 22)
-  
+
   "three months ago"
   (datetime 2012 11 12)
 
   "two years ago"
   (datetime 2011 2)
-  
+
   "7 days hence"
   (datetime 2013 2 19 4)
 
   "14 days hence"
   "a fortnight hence"
   (datetime 2013 2 26 4)
-  
+
   "a week hence"
   "one week hence"
   "1 week hence"
@@ -408,16 +408,16 @@
 
   "three weeks hence"
   (datetime 2013 3 5)
-  
+
   "three months hence"
   (datetime 2013 5 12)
 
   "two years hence"
   (datetime 2015 2)
-  
+
   "one year after christmas"
   (datetime 2013 12) ; resolves as after last Xmas...
-  
+
 
   ; Seasons
 
@@ -451,7 +451,7 @@
 
   "Mother's Day"
   (datetime 2013 5 12)
-  
+
   "Father's Day"
   (datetime 2013 6 16)
 
@@ -472,9 +472,9 @@
   "thanksgiving day"
   "thanksgiving"
   (datetime 2013 11 28)
-  
+
   ; Part of day (morning, afternoon...)
-  
+
   "this evening"
   "today evening"
   "tonight"
@@ -484,10 +484,10 @@
   ;"Wednesday evening"
   "tomorrow night"
   (datetime-interval [2013 2 13 18] [2013 2 14 00])
-  
+
   "yesterday evening"
   (datetime-interval [2013 2 11 18] [2013 2 12 00])
-    
+
   "this week-end"
   (datetime-interval [2013 2 15 18] [2013 2 18 00])
 
@@ -499,9 +499,9 @@
   "morning of the 15th of february"
   (datetime-interval [2013 2 15 4] [2013 2 15 12])
 
-  
+
   ; Intervals involving cycles
-  
+
   "last 2 seconds"
   "last two seconds"
   (datetime-interval [2013 2 12 4 29 58] [2013 2 12 4 30 00])
@@ -534,7 +534,7 @@
   "next 3 days"
   "next three days"
   (datetime-interval [2013 2 13] [2013 2 16])
-    
+
   "next few days"
   (datetime-interval [2013 2 13] [2013 2 16])
 
@@ -558,12 +558,12 @@
   "last 2 years"
   "last two years"
   (datetime-interval [2011] [2013])
-  
+
   "next 3 years"
   "next three years"
   (datetime-interval [2014] [2017])
 
-  
+
   ; Explicit intervals
 
   "July 13-15"
@@ -575,7 +575,7 @@
 
   "Aug 8 - Aug 12"
   (datetime-interval [2013 8 8] [2013 8 13])
-  
+
   "9:30 - 11:00"
   (datetime-interval [2013 2 12 9 30] [2013 2 12 11 1])
 
@@ -586,9 +586,9 @@
   "Thursday from 9:30 to 11:00"
   (datetime-interval [2013 2 14 9 30] [2013 2 14 11 1])
 
-  "Thursday from 9a to 11a" 
+  "Thursday from 9a to 11a"
   (datetime-interval [2013 2 14 9] [2013 2 14 12])
-  
+
   "11:30-1:30" ; go train this rule!
   "11:30-1:30"
   "11:30-1:30"
@@ -600,7 +600,7 @@
 
   "1:30 PM on Sat, Sep 21"
   (datetime 2013 9 21 13 30)
-  
+
   "within 2 weeks"
   (datetime-interval [2013 2 12 4 30 0] [2013 2 26])
 
@@ -619,10 +619,55 @@
   "by the end of next month"
   (datetime-interval [2013 2 12 4 30 0] [2013 4 1 0])
   ; Timezones
-  
+
   "4pm CET"
   (datetime 2013 2 12 16 :hour 4 :meridiem :pm :timezone "CET")
 
   "Thursday 8:00 GMT"
-  (datetime 2013 2 14 8 00 :timezone "GMT")  
+  (datetime 2013 2 14 8 00 :timezone "GMT")
+
+  ;; Bookface tests
+  "today at 2pm"
+  "at 2pm"
+  (datetime 2013 2 12 14)
+
+  "4/25 at 4:00pm"
+  (datetime 2013 4 25 16 0)
+
+  "3pm tomorrow"
+  (datetime 2013 2 13 15)
+
+  "before 11 am"
+  (datetime-interval [2013 2 12 4 30] [2013 2 12 11])
+
+  "tomorrow before 11 am"
+  (datetime-interval [2013 2 13 0] [2013 2 14 0])
+
+  "in the afternoon"
+  (datetime-interval [2013 2 12 12] [2013 2 12 19])
+
+  "at 1:30pm"
+  "1:30pm"
+  (datetime 2013 2 12 13 30)
+
+  "in 15 minutes"
+  (datetime 2013 2 12 4 45 0)
+
+  "Tuesday at 1" ;; AM / PM prob
+  (datetime 2013 2 12 13)
+
+  "tomorrow at 3:00" ;; AM / PM prob
+  (datetime 2013 2 12 15)
+
+  "after lunch"
+  (datetime-interval [2013 2 12 13] [2013 2 12 17])
+
+  "10:30"
+  (datetime 2013 2 12 10 30)
+
+  "morning" ;; how should we deal with fb mornings?
+  (datetime-interval [2013 2 12 4] [2013 2 12 12])
+
+  "next monday"
+  (datetime 2013 2 18 :day-of-week 1)
 )

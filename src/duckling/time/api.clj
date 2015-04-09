@@ -17,20 +17,27 @@
 (defn export-value
   "Given a token, returns its value for the outside world.
   Datetimes are modified by date-fn."
-  [{:keys [dim value] :as token} {:keys [date-fn] :as opts}]
+  [{:keys [dim value direction] :as token} {:keys [date-fn] :as opts}]
   (let [date-fn (or date-fn str)]
     (when value
   	  (case dim
-  	    :time   (if (:end value)
-  	              {:type "interval"
-  	               :from {:value (date-fn (:start value))
-  	                      :grain (:grain value)}
-  	               :to   {:value (date-fn (:end value))
-  	                      :grain (:grain value)}}
-  	              {:type "value"
-  	               :value (date-fn (:start value))
-  	               :grain (:grain value)})
-       
+        :time   (cond
+                  (contains? #{"before" "after"} direction)
+                    (case direction
+                      "before" {:type "interval"
+                                :to (date-fn (:start value))}
+                      "after"  {:type "interval"
+                                :from (date-fn (:start value))})
+                  (:end value)
+                    {:type "interval"
+                     :from {:value (date-fn (:start value))
+                            :grain (:grain value)}
+                     :to   {:value (date-fn (:end value))
+                            :grain (:grain value)}}
+                  :else
+                    {:type "value"
+                     :value (date-fn (:start value))
+                     :grain (:grain value)})
         :duration ; if there is only one field, we can set :value and :unit
                   ; otherwise just keep the fields
                   (let [[[unit val] & more] (seq value)
@@ -40,11 +47,11 @@
                            add-fields
                            {:normalized {:value (t/period->duration value)
                                          :unit "second"}}))
-                  
-        (:temperature :distance :amount-of-money :number :volume)  
+
+        (:temperature :distance :amount-of-money :number :volume)
                   (merge {:type "value" :value value}
                          (select-keys token [:unit]))
-       
+
         :quantity (select-keys token [:value :unit :product])
-  	    
+
   	    {:value value})))) ; nest value for other dims
