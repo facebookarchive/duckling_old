@@ -195,7 +195,7 @@
                                      (if (:latent winner) " (latent)" ""))
                                (engine/export-value winner {:date-fn str})
                                (dissoc winner :value :route :rule :pos :text :end :index
-                                               :dim :start :latent :body :pred :timezone)))
+                                               :dim :start :latent :body :pred :timezone :values)))
 
      ;; 3. ask for details
      (printf "For further info: (details idx) where 1 <= idx <= %d\n" (dec (count stash)))

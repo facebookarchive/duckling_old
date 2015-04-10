@@ -371,7 +371,7 @@
         (let [reference-time (or reference-time (t/now))
               ctx (assoc context :max (t/plus reference-time :year 2000)
                                  :min (t/minus reference-time :year 2000))
-              [[first-ahead second-ahead] [first-behind]] (pred reference-time ctx)
+              [[first-ahead second-ahead :as all-ahead] [first-behind]] (pred reference-time ctx)
               ahead (if (and not-immediate (t/intersect first-ahead reference-time))
                       second-ahead
                       first-ahead)]
@@ -379,7 +379,10 @@
                (remove nil?)
                ; FIXME use timezone in resolution instead of just adding the field
                (?>> timezone (map #(assoc % :timezone timezone)))
-               (map #(assoc token :value %)))))
+               (map #(assoc token :value %))
+               ; TEMP also assoc a 'values' key with the 3 future hypotheses
+               ; this key will be used in api/export-value
+               (map #(assoc % :values (take 3 all-ahead))))))
       
       [token]) ; default for other dims
     (catch Throwable e

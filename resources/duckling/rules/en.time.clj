@@ -609,4 +609,9 @@
   ; [#"(?i)from" {:form :time-of-day} #"-|to|th?ru|through|until" #(and (= :time-of-day (:form %))
   ; 									              (not (:latent %)))]
   ; (interval %2 %4 :exclusive)
+  
+  ; "time => time2 (experiment)"
+  ; (dim :time)
+  ; (assoc %1 :dim :time2)
+  
 )

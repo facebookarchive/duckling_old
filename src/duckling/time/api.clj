@@ -14,30 +14,38 @@
   [token context]
   (take 1 (pred/resolve token context)))
 
+(defn export-time-value
+  [{:keys [start end grain] :as value} direction date-fn]
+  (cond
+    (contains? #{"before" "after"} direction)
+      (case direction
+        "before" {:type "interval"
+                  :to (date-fn start)}
+        "after"  {:type "interval"
+                  :from (date-fn start)})
+    end
+      {:type "interval"
+       :from {:value (date-fn start)
+              :grain grain}
+       :to   {:value (date-fn end)
+              :grain grain}}
+    :else
+      {:type "value"
+       :value (date-fn start)
+       :grain grain}))
+
 (defn export-value
   "Given a token, returns its value for the outside world.
   Datetimes are modified by date-fn."
-  [{:keys [dim value direction] :as token} {:keys [date-fn] :as opts}]
+  ; TEMP 'values' hold several hypotheses
+  [{:keys [dim value direction values] :as token} {:keys [date-fn] :as opts}]
   (let [date-fn (or date-fn str)]
     (when value
   	  (case dim
-        :time   (cond
-                  (contains? #{"before" "after"} direction)
-                    (case direction
-                      "before" {:type "interval"
-                                :to (date-fn (:start value))}
-                      "after"  {:type "interval"
-                                :from (date-fn (:start value))})
-                  (:end value)
-                    {:type "interval"
-                     :from {:value (date-fn (:start value))
-                            :grain (:grain value)}
-                     :to   {:value (date-fn (:end value))
-                            :grain (:grain value)}}
-                  :else
-                    {:type "value"
-                     :value (date-fn (:start value))
-                     :grain (:grain value)})
+        :time     (assoc
+                    (export-time-value value direction date-fn)
+                    :values
+                    (map #(export-time-value % direction date-fn) values))
         :duration ; if there is only one field, we can set :value and :unit
                   ; otherwise just keep the fields
                   (let [[[unit val] & more] (seq value)
