@@ -24,7 +24,8 @@
         (when-not
           (and
             (= :time (:dim token))
-            #_(util/hash-match (select-keys token-fields [:timezone]) (:value token))
+            (util/hash-match (select-keys token-fields [:direction :precision])
+                             token)
             (= (-> token :value) date))
           [date (:value token)]))))
 

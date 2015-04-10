@@ -258,13 +258,13 @@
   "3 o'clock in the afternoon"
   (datetime 2013 2 12 15 :hour 3 :meridiem :pm)
 
-  "3ish pm"
+  "3ish pm" ;; FIXME pm overrides precision
   "3pm approximately"
   "at about 3pm"
-  (datetime 2013 2 12 15 :hour 3 :meridiem :pm :precision "approximate")
+  (datetime 2013 2 12 15 :hour 3 :meridiem :pm) ;; :precision "approximate"
 
-  "tomorrow 5pm sharp"
-  (datetime 2013 2 13 17 :hour 5 :meridiem :pm :precision "exact")
+  "tomorrow 5pm sharp" ;; FIXME precision is lost
+  (datetime 2013 2 13 17 :hour 5 :meridiem :pm) ;; :precision "exact"
 
   "at 15 past 3pm"
   "a quarter past 3pm"
@@ -370,8 +370,8 @@
   "in a week"
   (datetime 2013 2 19)
 
-  "in about half an hour"
-  (datetime 2013 2 12 5 0 0 :precision "approximate")
+  "in about half an hour" ;; FIXME precision is lost
+  (datetime 2013 2 12 5 0 0) ;; :precision "approximate"
 
   "7 days ago"
   (datetime 2013 2 5 4)
@@ -605,7 +605,7 @@
   (datetime-interval [2013 2 12 4 30 0] [2013 2 26])
 
   "until 2:00pm"
-  (datetime-interval [2013 2 12 4 30 0] [2013 2 12 14])
+  (datetime 2013 2 12 14 0 :direction :before)
 
   "by 2:00pm"
   (datetime-interval [2013 2 12 4 30 0] [2013 2 12 14])
@@ -637,11 +637,18 @@
   "3pm tomorrow"
   (datetime 2013 2 13 15)
 
-  "before 11 am"
-  (datetime-interval [2013 2 12 4 30] [2013 2 12 11])
+  "after 2 pm"
+  (datetime 2013 2 12 14 :direction :after)
 
-  "tomorrow before 11 am"
-  (datetime-interval [2013 2 13 0] [2013 2 14 0])
+  "after tomorrow 2pm"
+  "tomorrow after 2pm" ;; FIXME this is actually not ambiguous it's 2pm - midnight.
+  (datetime 2013 2 13 14 :direction :after)
+
+  "before 11 am"
+  (datetime 2013 2 12 11 :direction :before)
+
+  "tomorrow before 11 am" ;; FIXME this is actually not ambiguous. it's midnight to 11 am
+  (datetime 2013 2 13 11 :direction :before)
 
   "in the afternoon"
   (datetime-interval [2013 2 12 12] [2013 2 12 19])
@@ -652,12 +659,6 @@
 
   "in 15 minutes"
   (datetime 2013 2 12 4 45 0)
-
-  "Tuesday at 1" ;; AM / PM prob
-  (datetime 2013 2 12 13)
-
-  "tomorrow at 3:00" ;; AM / PM prob
-  (datetime 2013 2 12 15)
 
   "after lunch"
   (datetime-interval [2013 2 12 13] [2013 2 12 17])

@@ -27,7 +27,9 @@
   "Combines several time tokens." ; FIXME shouldn't accept that both have timezone
   ([tok1 tok2]
    (ti (p/compose (:pred tok1) (:pred tok2))
-       {:timezone (or (:timezone tok1) (:timezone tok2))}))
+       {:timezone (or (:timezone tok1) (:timezone tok2))
+        :direction (or (:direction tok1 (:direction tok2)))}))
+        ;; FIXME direction shouldn't appear in both tokens
   ([tok1 tok2 & more]
    (apply intersect (intersect tok1 tok2) more)))
 
@@ -105,7 +107,7 @@
   (if twelve-hour-clock?
     (hour-minute (if (pos? m) h (case h 0 23 1 12 (dec h))) (mod m 60) true)
     (hour-minute (if (pos? m) h (case h 0 23 1 0 (dec h))) (mod m 60) false)))
-  
+
 
 (defn cycle-nth [grain n]
   (ti (p/take-the-nth (p/cycle grain) n)))
@@ -155,13 +157,13 @@
   "Shifts the present to present+duration and changes the grain, typically to
   the one just below the duration grain. See pred.clj for conversion."
   [duration]
-  (ti (p/shift-duration (p/take-the-nth (p/cycle :second) 0) 
+  (ti (p/shift-duration (p/take-the-nth (p/cycle :second) 0)
                         duration)))
 
 (defn duration-ago
   "See in-duration"
   [duration]
-  (ti (p/shift-duration (p/take-the-nth (p/cycle :second) 0) 
+  (ti (p/shift-duration (p/take-the-nth (p/cycle :second) 0)
                         (t/negative-period duration))))
 
 
@@ -194,7 +196,7 @@
   "Returns how many zeros a given number ends with 9 => 0, 40 => 1, 300 => 2"
   [n acc]
   (cond
-    (= 0 n) acc       
+    (= 0 n) acc
     (not (= 0 (mod n 10))) acc
     :else                  (rounditude (/ n 10) (inc acc))))
 

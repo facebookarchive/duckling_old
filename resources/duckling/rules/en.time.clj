@@ -582,10 +582,6 @@
   [#"(?i)between" {:form :time-of-day} #"and" {:form :time-of-day}]
   (interval %2 %4 true)
 
-  "until <time-of-day>"
-  [#"(?i)before|until|up to" (dim :time)]
-  (merge %2 {:direction "before"})
-
   ; Specific for within duration... Would need to be reworked
   "within <duration>"
   [#"(?i)within" (dim :duration)]
@@ -599,7 +595,17 @@
   [#"(?i)by (the )?end of" (dim :time)]
   (interval (cycle-nth :second 0) %2 true)
 
-    ; ;; In this special case, the upper limit is exclusive
+  ; One-sided Intervals
+
+  "until <time-of-day>"
+  [#"(?i)before|until|up to" (dim :time)]
+  (merge %2 {:direction :before})
+
+  "after <time-of-day>"
+  [#"(?i)after" (dim :time)]
+  (merge %2 {:direction :after})
+
+  ; ;; In this special case, the upper limit is exclusive
   ; "<hour-of-day> - <hour-of-day> (interval)"
   ; [{:form :time-of-day} #"-|to|th?ru|through|until" #(and (= :time-of-day (:form %))
   ; 									  (not (:latent %)))]
@@ -609,9 +615,9 @@
   ; [#"(?i)from" {:form :time-of-day} #"-|to|th?ru|through|until" #(and (= :time-of-day (:form %))
   ; 									              (not (:latent %)))]
   ; (interval %2 %4 :exclusive)
-  
+
   ; "time => time2 (experiment)"
   ; (dim :time)
   ; (assoc %1 :dim :time2)
-  
+
 )

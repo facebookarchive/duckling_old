@@ -17,12 +17,14 @@
 (defn export-time-value
   [{:keys [start end grain] :as value} direction date-fn]
   (cond
-    (contains? #{"before" "after"} direction)
+    (#{:before :after} direction)
       (case direction
-        "before" {:type "interval"
-                  :to (date-fn start)}
-        "after"  {:type "interval"
-                  :from (date-fn start)})
+        :before {:type "interval"
+                 :to   {:value (date-fn start)
+                        :grain grain}}
+        :after  {:type "interval"
+                 :from {:value (date-fn start)
+                        :grain grain}})
     end
       {:type "interval"
        :from {:value (date-fn start)
