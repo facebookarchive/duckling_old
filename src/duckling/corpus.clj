@@ -1,6 +1,6 @@
 (ns duckling.corpus
   (:use     [clojure.tools.logging]
-            [plumbing.core :except [millis]]) 
+            [plumbing.core :except [millis]])
   (:require [duckling.time.obj :as time]
             [duckling.util :as util]))
 
@@ -45,7 +45,7 @@
   "check if the token is a number equal to value.
   If value is integer, it also checks :integer true"
   [value]
-  (fn [_ token] (when-not 
+  (fn [_ token] (when-not
                   (and
                     (= :number (:dim token))
                     (or (not (integer? value)) (:integer token))
@@ -54,7 +54,7 @@
 
 (defn ordinal
   [value]
-  (fn [_ token] (when-not 
+  (fn [_ token] (when-not
                   (and
                     (= :ordinal (:dim token))
                     (= (:value token) value))
@@ -63,7 +63,7 @@
 (defn temperature
   "Create a temp condition"
   [value' & [unit' precision']]
-  (fn [_ {:keys [dim value unit precision] :as token}] 
+  (fn [_ {:keys [dim value unit precision] :as token}]
     (not (and
                   (= :temperature dim)
                   (= value' value)
@@ -73,7 +73,7 @@
 (defn distance
   "Create a distance condition"
   [value' & [unit' normalized' precision']]
-  (fn [_ {:keys [dim value unit normalized precision] :as token}] 
+  (fn [_ {:keys [dim value unit normalized precision] :as token}]
     (not (and
                   (= :distance dim)
                   (= value' value)
@@ -84,7 +84,7 @@
 (defn money
   "Create a amount-of-money condition"
   [value' & [unit' precision']]
-  (fn [_ {:keys [dim value unit precision] :as token}] 
+  (fn [_ {:keys [dim value unit precision] :as token}]
     (not (and
                   (= :amount-of-money dim)
                   (= value' value)
