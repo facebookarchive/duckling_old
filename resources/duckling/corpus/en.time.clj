@@ -343,6 +343,7 @@
   (datetime 2013 2 12 7 0 0)
 
   "in one hour"
+  "in 1h"
   (datetime 2013 2 12 5 30)
 
   "in a couple hours"
@@ -484,6 +485,10 @@
   ;"Wednesday evening"
   "tomorrow night"
   (datetime-interval [2013 2 13 18] [2013 2 14 00])
+
+  "tomorrow lunch"
+  "tomorrow at lunch"
+  (datetime-interval [2013 2 13 12] [2013 2 13 14])
 
   "yesterday evening"
   (datetime-interval [2013 2 11 18] [2013 2 12 00])

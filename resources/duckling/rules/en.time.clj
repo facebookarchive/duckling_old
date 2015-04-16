@@ -443,6 +443,10 @@
   [#"(?i)evening|night"]
   (assoc (interval (hour 18 false) (hour 0 false) false) :form :part-of-day :latent true)
 
+  "lunch"
+  [#"(?i)(at )?lunch"]
+  (assoc (interval (hour 12 false) (hour 14 false) false) :form :part-of-day :latent true)
+
   "in|during the <part-of-day>" ;; removes latent
   [#"(?i)(in|during)( the)?" {:form :part-of-day}]
   (dissoc %2 :latent)
