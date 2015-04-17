@@ -79,4 +79,13 @@
             :rules [
                      "ru.numbers"
                     ]}
+:ja$core {:corpus [
+                    "ja.numbers"
+                    "ja.temperature"
+                   ]
+            :rules [
+                     "ja.numbers"
+                     "ja.temperature"
+                    ]}
  }
+
