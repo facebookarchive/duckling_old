@@ -87,6 +87,7 @@
                      "ja.numbers"
                      "ja.temperature"
                      "ja.duration"
+                     "ja.cycles"
                     ]}
  }
 
