@@ -86,6 +86,7 @@
             :rules [
                      "ja.numbers"
                      "ja.temperature"
+                     "ja.duration"
                     ]}
  }
 
