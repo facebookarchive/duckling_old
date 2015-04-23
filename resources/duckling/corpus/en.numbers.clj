@@ -6,6 +6,7 @@
   "naught"
   "nought"
   "zero"
+  "no"
   "nil"
   (number 0)
 

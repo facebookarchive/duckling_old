@@ -13,11 +13,11 @@
  ;;
  
   "integer (0..19)"
-  #"(?i)(naught|nought|nil|zero|one|two|three|fourteen|four|five|sixteen|six|seventeen|seven|eighteen|eight|nineteen|nine|eleven|twelve|thirteen|fifteen)"
+  #"(?i)(none|zlich|naught|nought|nil|zero|one|two|three|fourteen|four|five|sixteen|six|seventeen|seven|eighteen|eight|nineteen|nine|eleven|twelve|thirteen|fifteen|no)"
   ; fourteen must be before four, or it won't work because the regex will stop at four
   {:dim :number
    :integer true
-   :value (get {"naught" 0 "nought" 0 "nil" 0 "zero" 0 "one" 1 "two" 2 "three" 3 "four" 4 "five" 5
+   :value (get {"no" 0 "none" 0 "zlich" 0 "naught" 0 "nought" 0 "nil" 0 "zero" 0 "one" 1 "two" 2 "three" 3 "four" 4 "five" 5
               "six" 6 "seven" 7 "eight" 8 "nine" 9 "ten" 10 "eleven" 11
               "twelve" 12 "thirteen" 13 "fourteen" 14 "fifteen" 15 "sixteen" 16
               "seventeen" 17 "eighteen" 18 "nineteen" 19}
@@ -27,6 +27,10 @@
   #"(?i)ten"
   {:dim :number :integer true :value 10 :grain 1}
   
+  "dozen"
+  #"(?i)dozen"
+  {:dim :number :integer true :value 12 :grain 1 :grouping true} ;;restrict composition and prevent "2 12"
+
   "hundred"
   #"(?i)hundreds?"
   {:dim :number :integer true :value 100 :grain 2}
@@ -78,7 +82,14 @@
             Long/parseLong)}
   
   ; composition
-  
+  "number dozen"
+  [(integer 1 10) (dim :number #(:grouping %))]
+  {:dim :number
+   :integer true
+   :value (* (:value %1) (:value %2))
+   :grain (:grain %2)}
+
+
   "number hundreds"
   [(integer 1 99) (integer 100 100)]
   {:dim :number
