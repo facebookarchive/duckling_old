@@ -136,8 +136,16 @@
   [#"(?i)ce" (dim :time)]
   (pred-nth %2 0)
 
-  "<named-month|named-day> prochain|suivant"
-  [(dim :time) #"(?i)prochain|suivant"]
+  "<day-of-week> prochain" ; assumed to be in the future "dimanche prochain"
+  [{:form :day-of-week} #"(?i)prochain"]
+  (pred-nth-not-immediate %1 0)
+
+  "<named-month> prochain"
+  [(dim :time) #"(?i)prochain"]
+  (pred-nth %1 1)
+
+  "<named-month|named-day> suivant"
+  [(dim :time) #"(?i)suivant"]
   (pred-nth %1 1)
 
   "<named-month|named-day> dernier|passé"
