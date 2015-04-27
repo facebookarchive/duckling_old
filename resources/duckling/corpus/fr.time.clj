@@ -114,10 +114,19 @@
   "31/10/74" ; smart two-digit year resolution
   (datetime 1974 10 31 :day 31 :month 10 :year 1974)
 
+  "lundi prochain" ; when today is Tuesday, "lundi prochain" is a week from now
+  "lundi la semaine prochaine"
+  "lundi de la semaine prochaine"
+  (datetime 2013 2 18 :day-of-week 1)
+
   "mardi prochain" ; when today is Tuesday, "mardi prochain" is a week from now
+  "mardi la semaine prochaine"
+  "mardi de la semaine prochaine"
   (datetime 2013 2 19 :day-of-week 2)
 
-  "mercredi prochain" ; when today is Tuesday, "mercredi prochain" should be tomorrow (will need assumption here)
+  "mercredi prochain" ; when today is Tuesday, "mercredi prochain" should be tomorrow
+  (datetime 2013 2 13 :day-of-week 3)
+
   "mercredi la semaine prochaine"
   "mercredi de la semaine prochaine"
   (datetime 2013 2 20 :day-of-week 3)
