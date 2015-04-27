@@ -55,3 +55,6 @@
 
 ;around $200
 ;between $200 and $300
+;around 200-500 dollars
+;up to 1000
+;~50-100
