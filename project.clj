@@ -5,7 +5,7 @@
   :url "https://github.com/wit-ai/duckling"
   :plugins [[s3-wagon-private "1.1.2"]
             [lein-midje "3.1.3"]]
-  :main ^:skip-aot duckling.core
+  :repl-options {:init-ns duckling.core}
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/tools.nrepl "0.2.3"]
                  [org.clojure/tools.logging "0.2.6"]
