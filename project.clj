@@ -1,6 +1,5 @@
-(defproject wit/duckling "0.3.0"
+(defproject wit/duckling "0.3.1"
   :description "Date & Number parser"
-  :main duckling.core
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :url "https://github.com/wit-ai/duckling"
