@@ -1,10 +1,11 @@
-(defproject wit/duckling "0.3.1"
+(defproject wit/duckling "0.3.2"
   :description "Date & Number parser"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :url "https://github.com/wit-ai/duckling"
   :plugins [[s3-wagon-private "1.1.2"]
             [lein-midje "3.1.3"]]
+  :main ^:skip-aot duckling.core
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/tools.nrepl "0.2.3"]
                  [org.clojure/tools.logging "0.2.6"]
