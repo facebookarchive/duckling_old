@@ -196,10 +196,15 @@
   [#"(?i)premier|prem\.?|1er|1 er"]
   (day-of-month 1)
 
-  "le <day-of-month> (non ordinal)" ; this one is latent
+  "le <day-of-month> (non ordinal)"
   [#"(?i)le" (integer 1 31)]
-  (assoc (day-of-month (:value %2)) :latent true)
-  
+  (day-of-month (:value %2))
+
+  ; "le 16 à 18h" is a datetime. "16 à 18h" is an interval
+  "le <day-of-month> à <datetime>"
+  [#"(?i)le" (integer 1 31) #"(?i)[aà]" (dim :time)]
+  (intersect (day-of-month (:value %2)) %4)
+
   "<day-of-month> <named-month>" ; 12 mars
   [(integer 1 31) {:form :month}]
   (intersect %2 (day-of-month (:value %1)))
@@ -326,9 +331,14 @@
   (intersect %1 %2)
 
   ;specific rule to address "3 in the morning","3h du matin" and extend morning span from 0 to 12
-  "<dim time> du matin" 
-  [{:form :time-of-day} #"du mat(in)?"]
+  "<dim time> du matin"
+  [{:form :time-of-day} #"(?i)((du|dans|de) )?((au|le|la) )?mat(in[ée]?e?)?"]
   (intersect %1 (assoc (interval (hour 0 false) (hour 12 false) false) :form :part-of-day :latent true))
+
+  ;specific rule to extend evening span from 16 to 0
+  "<dim time> du soir"
+  [{:form :time-of-day} #"(?i)((du|dans|de) )?((au|le|la) )?soir[ée]?e?"]
+  (intersect %1 (assoc (interval (hour 16 false) (hour 0 false) false) :form :part-of-day :latent true))
 
    "<part-of-day> du <dim time>"
    [{:form :part-of-day} #"(?i)du" (dim :time)]
