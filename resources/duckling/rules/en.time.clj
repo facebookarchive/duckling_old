@@ -157,11 +157,11 @@
             true)
 
   "Father's Day";third Sunday of June
-  #"(?i)father'?s?'?( day)?"
+  #"(?i)father'?s?'? day"
   (intersect (day-of-week 7) (month 6) (cycle-nth-after :week 2 (month-day 6 1)))
 
   "Mother's Day";second Sunday in May.
-  #"(?i)mother'?s?( day)?"
+  #"(?i)mother'?s? day"
   (intersect (day-of-week 7) (month 5) (cycle-nth-after :week 1 (month-day 5 1)))
 
   "halloween day"
@@ -172,8 +172,8 @@
   #"(?i)thanks?giving( day)?"
   (intersect (day-of-week 4) (month 11) (cycle-nth-after :week 4 (month-day 11 1)))
 
-  "black fridday"; (the fourth Friday of November),
-  #"(?i)black friday"
+  "black friday"; (the fourth Friday of November),
+  #"(?i)black frid?day"
   (intersect (day-of-week 5) (month 11) (cycle-nth-after :week 4 (month-day 11 1)))
 
   "absorption of , after named day"
