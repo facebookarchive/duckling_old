@@ -65,8 +65,22 @@
   "le 2/3"
   (datetime 2013 3 2 :day 2 :month 3)
 
+  "le 2 mars à 5h"
+  "2 mars à 5h"
+  "le 2/3 à 5h"
+  "le 2 mars vers 5h"
+  "2 mars vers 5h"
+  "le 2/3 vers 5h"
+  "le 2 mars à 5h du matin"
+  (datetime 2013 3 2 5 :day 2 :hour 5)
+
   "le 2"
   (datetime 2013 3 2 :day 2)
+
+  "le 2 à 5h"
+  "le 2 vers 5h"
+  "le 2 à 5h du mat"
+  (datetime 2013 3 2 5 :day 2 :hour 5)
 
   "le 3 mars"
   "3 mars"
@@ -77,6 +91,9 @@
   "5 avril"
   (datetime 2013 4 5 :day 5 :month 4)
 
+  ;"le 5 avril à 2h de l'après-midi"
+  ;(datetime 2013 4 5 14 :day 5 :month 4 :hour 14)
+
   "le 3 mars 2015"
   "3 mars 2015"
   "3/3/2015"
@@ -86,14 +103,21 @@
 
   "le 15 février"
   "15 février"
-  (datetime 2013 2 15 :day 15 :month 2) 
-   
+  (datetime 2013 2 15 :day 15 :month 2)
+
   "15/02/2013"
   "15 fev 2013"
   (datetime 2013 2 15 :day 15 :month 2 :year 2013)
 
   "le 16"
   (datetime 2013 2 16 :day 16)
+
+  "le 16 à 18h"
+  "le 16 vers 18h"
+  "le 16 à 6h du soir"
+  "le 16 vers 6h du soir"
+  "le 16 vers 6h dans la soirée"
+  (datetime 2013 2 16 18 :day 16 :hour 18)
 
   "17 février"
   "17/2"
@@ -211,7 +235,7 @@
 
   "à quinze heures"
   "à 15 heures"
-  ;"à 3 heures cet après-midi"
+  "à 3 heures cet après-midi"
   "15h"
   "15H"
   (datetime 2013 2 12 15)
@@ -248,17 +272,17 @@
   "à quinze heures quinze"
   "à quinze heures et quinze minutes"
   "15h passé de 15 minutes"
-  ;"à trois heures et quart cet après-midi" ALEX Conflict with timezone
+  "à trois heures et quart cet après-midi"
   "15:15"
   "15h15"
   (datetime 2013 2 12 15 15 :hour 15 :minute 15)
 
-;  "à trois heures et quart demain après-midi"
-;  (datetime 2013 2 13 15 15 - 16)
+  "à trois heures et quart demain après-midi"
+  (datetime 2013 2 13 15 15 :hour 15 :minute 15)
 
   "à quinze heures trente"
   "à quinze heures passé de trente minutes"
-  ;"à trois heures et demi cet après-midi"
+  "à trois heures et demi cet après-midi"
   "15:30"
   "15h30"
   (datetime 2013 2 12 15 30 :hour 15 :minute 30)
@@ -276,7 +300,7 @@
   "demain à 11H"
   (datetime 2013 2 13 11 :hour 11)
 
- ; "jeudi à 11h"
+  "jeudi à 11h"
   "après-demain à 11 heures"
   "après-demain à 11H"
   (datetime 2013 2 14 11 :hour 11)
@@ -364,7 +388,7 @@
   (datetime-interval [2013 2 12 18] [2013 2 13 00])
 
   "demain soir"
-  ;"mercredi soir"
+  "mercredi soir"
   (datetime-interval [2013 2 13 18] [2013 2 14 00])
   
   "hier soir"
