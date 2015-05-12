@@ -490,7 +490,7 @@
   ; Other intervals: week-end, seasons
 
   "week-end" ; from Friday 6pm to Sunday midnight
-  #"(?i)week(\s|-)?end"
+  #"(?i)(week(\s|-)?end|wkend)"
   (interval (intersect (day-of-week 5) (hour 18 false))
             (intersect (day-of-week 1) (hour 0 false))
             false)
