@@ -86,6 +86,10 @@
   [#"(?i)the" (dim :ordinal) (dim :cycle) #"(?i)of|in|from" (dim :time)]
   (cycle-nth-after-not-immediate (:grain %3) (dec (:value %2)) %5)
 
+  "the <cycle> of <time>"
+  [#"(?i)the" (dim :cycle) #"(?i)of" (dim :time)]
+  (cycle-nth-after-not-immediate (:grain %2) 0 %4)
+
   ; the 2 following rules may need a different helper
   
   "<ordinal> <cycle> after <time>"

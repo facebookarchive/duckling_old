@@ -212,6 +212,10 @@
   "first week of october 2014"
   (datetime 2014 10 6 :grain :week)
 
+  "the week of october 6th"
+  "the week of october 7th"
+  (datetime 2013 10 7 :grain :week)
+
   "last day of october 2015"
   (datetime 2015 10 31)
 
