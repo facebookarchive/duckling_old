@@ -189,7 +189,7 @@
   (cycle-nth :day 0)
 
   "tomorrow"
-  #"(?i)tomm?or?row"
+  #"(?i)(tmrw|tomm?or?row)"
   (cycle-nth :day 1)
 
   "yesterday"
