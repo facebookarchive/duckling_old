@@ -606,11 +606,11 @@
   ; One-sided Intervals
 
   "until <time-of-day>"
-  [#"(?i)(anytime )?(before|until|up to)" (dim :time)]
+  [#"(?i)(anytime |sometimes? )?(before|until|up to)" (dim :time)]
   (merge %2 {:direction :before})
 
   "after <time-of-day>"
-  [#"(?i)(anytime )?after" (dim :time)]
+  [#"(?i)(anytime |sometimes? )?after" (dim :time)]
   (merge %2 {:direction :after})
 
   ; ;; In this special case, the upper limit is exclusive
