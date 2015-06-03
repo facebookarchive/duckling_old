@@ -421,7 +421,7 @@
   (interval %1 %3 true)
 
   "de <time-of-day> - <time-of-day> (interval)"
-  [#"(?i)de" {:form :time-of-day} #"\-|à|au|jusqu'(au|à)" {:form :time-of-day}]
+  [#"(?i)de" {:form :time-of-day} #"\-|à|au|jusqu'(au|a|à)" {:form :time-of-day}]
   (interval %2 %4 true)
 
   "entre <time-of-day> et <time-of-day> (interval)"
@@ -439,11 +439,11 @@
 
   ; One-sided Intervals
   "avant <time-of-day>"
-  [#"(?i)(avant|jusqu'à)" (dim :time)]
+  [#"(?i)(avant|jusqu'(a|à))" (dim :time)]
   (merge %2 {:direction :before})
 
   "après <time-of-day>"
-  [#"(?i)(après|à partir de)" (dim :time)]
+  [#"(?i)(apr(e|è)s|(a|à) partir de)" (dim :time)]
   (merge %2 {:direction :after})
 
 )
