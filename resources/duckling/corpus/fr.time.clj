@@ -481,9 +481,22 @@
   "9h30 - 11h00 Jeudi"
   (datetime-interval [2013 2 14 9 30] [2013 2 14 11 1])
 
-  ;TO BE ADDRESSED
-  ;"à partir de 9h30 jeudi"
-  
+  "à partir de 9h30 jeudi"
+  "jeudi après 9h30"
+  (datetime 2013 2 14 9 30) ; FIXME should be :
+  ;(datetime-interval [2013 2 14 9 30] [2013 2 15])
+
+  "le 20 à partir de 10h"
+  (datetime 2013 2 20 10) ; FIXME should be :
+  ;(datetime-interval [2013 2 20 10] [2013 2 21])
+
+  "vendredi à partir de midi"
+  (datetime 2013 2 15 12) ; FIXME should be :
+  ;(datetime-interval [2013 2 15 12] [2013 2 16])
+
+  "le 20 jusqu'à 18h"
+  (datetime-interval [2013 2 20] [2013 2 20 19])
+
   "14 - 20 sept. 2014"
   (datetime-interval [2014 9 14] [2014 9 21])
   

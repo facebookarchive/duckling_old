@@ -437,4 +437,13 @@
   [#"(?i)d'ici" (dim :duration)]
   (interval (cycle-nth :second 0) (in-duration (:value %2)) false)
 
+  ; One-sided Intervals
+  "avant <time-of-day>"
+  [#"(?i)(avant|jusqu'à)" (dim :time)]
+  (merge %2 {:direction :before})
+
+  "après <time-of-day>"
+  [#"(?i)(après|à partir de)" (dim :time)]
+  (merge %2 {:direction :after})
+
 )
