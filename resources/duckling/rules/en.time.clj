@@ -429,7 +429,7 @@
   (parse-dmy (nth (:groups %1) 2) (second (:groups %1)) (first (:groups %1)) true)
 
   "mm/dd"
-  #"(0?\d|10|11|12)/([012]?\d|30|31)"
+  #"(0?\d|10|11|12)/(30|31|[012]?\d)"
   (parse-dmy (second (:groups %1)) (first (:groups %1)) nil true)
 
 
