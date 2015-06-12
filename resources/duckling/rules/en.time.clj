@@ -129,7 +129,7 @@
   (month-day 2 14)
 
   "MLK Day";third Monday of January
-   #"(?i)(MLK|Martin Luther King) day"
+   #"(?i)(MLK|Martin Luther King,?)( Jr.?| Junior)? day"
   (intersect (day-of-week 1) (month 1) (cycle-nth-after :week 3 (month-day 1 1)))
 
   "memorial day" ;the last Monday of May
