@@ -203,6 +203,10 @@
   [{:form :month} (integer 1 31)]
   (intersect %1 (day-of-month (:value %2)))
 
+  "<day-of-week> <day-of-month>" ; vendredi 13
+  [{:form :day-of-week} (integer 1 31)]
+  (intersect %1 (day-of-month (:value %2)))
+
   ;; hours and minutes (absolute time)
   "time-of-day (latent)"
   (integer 0 23)
