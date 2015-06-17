@@ -73,6 +73,18 @@
   {:dim :duration
    :value (duration (:grain %2) 1)}
 
+  "every <unit-of-duration>"
+  [#"(?i)every" (dim :unit-of-duration)]
+  {:dim :duration
+   :value (duration (:grain %2) 1)
+   :determiner "every"}
+
+  "every <integer> <unit-of-duration>"
+  [#"(?i)every" (integer 0) (dim :unit-of-duration)]
+  {:dim :duration
+   :value (duration (:grain %3) (:value %2))
+   :determiner "every"}
+
   "in/after <duration>"
   [#"(?i)in|after" (dim :duration)]
   (in-duration (:value %2))
