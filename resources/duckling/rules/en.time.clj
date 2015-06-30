@@ -421,11 +421,11 @@
   ; Formatted dates and times
 
   "mm/dd/yyyy"
-  #"(0?\d|10|11|12)[/-]([012]?\d|30|31)[-/](\d{2,4})"
+  #"(0?\d|10|11|12)[/-](30|31|[012]?\d)[-/](\d{2,4})"
   (parse-dmy (second (:groups %1)) (first (:groups %1)) (nth (:groups %1) 2) true)
 
   "yyyy-mm-dd"
-  #"(\d{2,4})-(0?\d|10|11|12)-([012]?\d|30|31)"
+  #"(\d{2,4})-(0?\d|10|11|12)-(30|31|[012]?\d)"
   (parse-dmy (nth (:groups %1) 2) (second (:groups %1)) (first (:groups %1)) true)
 
   "mm/dd"
