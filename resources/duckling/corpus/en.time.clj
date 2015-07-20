@@ -217,6 +217,7 @@
   (datetime 2013 10 7 :grain :week)
 
   "last day of october 2015"
+  "last day in october 2015"
   (datetime 2015 10 31)
 
   "last week of september 2014"
@@ -225,6 +226,7 @@
 
   ;; nth of
   "first tuesday of october"
+  "first tuesday in october"
   (datetime 2013 10 1)
 
   "third tuesday of september 2014"
