@@ -208,7 +208,7 @@
   ;; This, Next, Last
 
   ;; assumed to be strictly in the future:
-  ;; "this Monday" => next week if today in Monday
+  ;; "this Monday" => next week if today is Monday
   "this|next <day-of-week>"
   [#"(?i)this|next" {:form :day-of-week}]
   (pred-nth-not-immediate %2 0)
@@ -241,16 +241,16 @@
   (pred-last-of %2 %4)
 
   "last <cycle> of <time>"
-  [#"(?i)last" (dim :cycle) #"(?i)of" (dim :time)]
+  [#"(?i)last" (dim :cycle) #"(?i)of|in" (dim :time)]
   (cycle-last-of %2 %4)
 
   ; Ordinals
   "nth <time> of <time>"
-  [(dim :ordinal) (dim :time) #"(?i)of" (dim :time)]
+  [(dim :ordinal) (dim :time) #"(?i)of|in" (dim :time)]
   (pred-nth (intersect %4 %2) (dec (:value %1)))
 
   "nth <time> of <time>"
-  [#"(?i)the" (dim :ordinal) (dim :time) #"(?i)of" (dim :time)]
+  [#"(?i)the" (dim :ordinal) (dim :time) #"(?i)of|in" (dim :time)]
   (pred-nth (intersect %5 %3) (dec (:value %2)))
 
   "nth <time> after <time>"
