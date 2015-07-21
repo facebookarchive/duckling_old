@@ -48,9 +48,9 @@
 "Rs20"
 (money 20 "INR")
 
-"20 Rupees 40 Paisa"
-"twenty rupees 40 paisa"
-(money 20.40 "INR")
+"20 Rupees 43"
+"twenty rupees 43"
+(money 20.43 "INR")
 
 "INR33"
 (money 33 "INR")

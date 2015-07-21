@@ -55,7 +55,7 @@
 
 ;Indian Currency
 "INR"
-#"(?i)INR|Rs.?|Rupees?"
+#"(?i)INR|Rs(. )?|(R|r)upees?"
 {:dim :unit
  :unit "INR"}
 
