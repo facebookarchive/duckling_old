@@ -53,6 +53,12 @@
 {:dim :unit
  :unit "cent"}
 
+;Indian Currency
+"INR"
+#"(?i)INR|Rs.?|Rupees?"
+{:dim :unit
+ :unit "INR"}
+
 "unnamed currency"
 #"(?i)(buck|balle|pouloute)s?"
 {:dim :unit}
