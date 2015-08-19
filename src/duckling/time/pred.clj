@@ -31,7 +31,7 @@
 
 ; Limit the space search beam
 
-(def safe-max 100)
+(def safe-max 183) ; 366 (days in a leap year) if we take safe-max forward and backward
 (def safe-max-interval 12)
 
 ;; Debug utlity
