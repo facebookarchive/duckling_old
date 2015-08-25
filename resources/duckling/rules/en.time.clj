@@ -38,7 +38,7 @@
   (day-of-week 2)
 
   "named-day"
-  #"(?i)wednesday|wed\.?"
+  #"(?i)wed?nesday|wed\.?"
   (day-of-week 3)
 
   "named-day"
