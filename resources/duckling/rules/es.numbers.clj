@@ -31,10 +31,10 @@
    :value (+ (:value %1) (:value %3))}
 
   "number (16..19 21..29)"
-  #"(?i)(die(c|s)is(é|e)is|diecisiete|dieciocho|diecinueve|veintiuno|veintidos|veintitr(é|e)s|veinticuatro|veinticinco|veintis(é|e)is|veintisiete|veintiocho|veintinueve)"
+  #"(?i)(die(c|s)is(é|e)is|diecisiete|dieciocho|diecinueve|veintiun(o|a)|veintidos|veintitr(é|e)s|veinticuatro|veinticinco|veintis(é|e)is|veintisiete|veintiocho|veintinueve)"
   {:dim :number
    :integer true
-   :value (get {"dieciseis"16 "diesiseis"  16 "diesiséis"  16 "dieciséis" 16 "diecisiete" 17 "dieciocho" 18 "diecinueve" 19 "veintiuno" 21 "veintidos" 22 "veintitres" 23 "veintitrés" 23 "veinticuatro" 24 "veinticinco" 25
+   :value (get {"dieciseis"16 "diesiseis"  16 "diesiséis"  16 "dieciséis" 16 "diecisiete" 17 "dieciocho" 18 "diecinueve" 19 "veintiuno" 21 "veintiuna" 21 "veintidos" 22 "veintitres" 23 "veintitrés" 23 "veinticuatro" 24 "veinticinco" 25
               "veintiseis" 26 "veintiséis" 26 "veintisiete" 27 "veintiocho" 28 "veintinueve" 29}
               (-> %1 :groups first .toLowerCase))}
 
