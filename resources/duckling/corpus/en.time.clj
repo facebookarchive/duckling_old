@@ -616,6 +616,7 @@
   (datetime-interval [2013 2 12 4 30 0] [2013 2 26])
 
   "until 2:00pm"
+  "through 2:00pm"
   (datetime 2013 2 12 14 0 :direction :before)
 
   "by 2:00pm"

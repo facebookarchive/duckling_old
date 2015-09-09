@@ -196,11 +196,13 @@
   (datetime 2013 2 12 12 30 :hour 12 :minute 30)
 
   "las tres de la manana"
+  "las tres en la manana"
   (datetime 2013 2 13 3 :hour 3)
 
   "a las tres y quince"
   "a las 3 y cuarto"
   "a las tres y cuarto de la tarde"
+  "a las tres y cuarto en la tarde"
   "15:15"
   "15.15"
   (datetime 2013 2 12 15 15 :hour 15 :minute 15)
