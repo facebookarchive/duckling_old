@@ -130,7 +130,7 @@
   (cycle-nth :day 2)
 
   "the day before yesterday"
-  #"(?i)anteayer|antes de anoche|antier"
+  #"(?i)anteayer|antes de (ayer|anoche)|antier"
   (cycle-nth :day -2)
 
   ;;
