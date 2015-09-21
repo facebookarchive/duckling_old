@@ -26,6 +26,10 @@
   "ten"
   #"(?i)ten"
   {:dim :number :integer true :value 10 :grain 1}
+
+  "single"
+  #"(?i)single"
+  {:dim :number :integer true :value 1 :grain 1}
   
   "dozen"
   #"(?i)dozen"

@@ -12,6 +12,7 @@
 
   "1"
   "one"
+  "single"
   (number 1)
 
   "33"
