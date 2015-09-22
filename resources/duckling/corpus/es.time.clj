@@ -213,6 +213,7 @@
   "a las tres y media"
   "a las 3 y treinta"
   "a las tres y media de la tarde"
+  "a las 3 y treinta del mediodía"
   "15:30"
   "15.30"
   (datetime 2013 2 12 15 30 :hour 15 :minute 30)

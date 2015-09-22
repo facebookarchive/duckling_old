@@ -310,6 +310,10 @@
   "afternoon"
   #"(?i)tarde"
   (assoc (interval (hour 12 false) (hour 19 false) false) :form :part-of-day :latent true)
+
+  "del mediodía" ;; 12 y media del mediodía should be parsed to 12:30 pm.
+  #"(?i)del mediod[ií]a"
+  (assoc (interval (hour 12 false) (hour 17 false) false) :form :part-of-day :latent true)
   
   "evening"
   #"(?i)noche"
