@@ -27,7 +27,7 @@
 	    					 :unit "metre"}}))
 
 	"<latent dist> feet"
-	[(dim :distance) #"(?i)(′|f(oo|ee)?ts?)"]
+	[(dim :distance) #"(?i)('|f(oo|ee)?ts?)"]
 	(-> %1
 	    (dissoc  :latent)
 	   	(merge {:unit "foot"
@@ -35,11 +35,20 @@
 	    					 :unit "metre"}}))
 
 	"<latent dist> inch"
-	[(dim :distance) #"(?i)(′′|inch(es)?)"]
+	[(dim :distance) #"(?i)(''|inch(es)?)"]
 	(-> %1
 	    (dissoc  :latent)
 	   	(merge {:unit "inch"
 	    		:normalized {:value (* 0.0254 (-> %1 :value))
+	    					 :unit "metre"}}))
+
+	;;temporary hack
+	"<latent dist> feet and <latent dist> inch "
+	[(dim :distance) #"(?i)('|f(oo|ee)?ts?)( and)?" (dim :distance) #"(?i)(''|inch(es)?)"]
+	(-> %1
+	    (dissoc  :latent)
+	   	(merge {:unit "foot"
+	    		:normalized {:value (+ (* 0.3048 (-> %1 :value)) (* 0.0254 (-> %3 :value)))
 	    					 :unit "metre"}}))
 
 	"<latent dist> yard"
