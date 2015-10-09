@@ -342,15 +342,15 @@
   ; ;; formatted
 
   "mm/dd/yyyy"
-  #"(0?\d|10|11|12)/([012]?\d|30|31)/(\d{2,4})"
+  #"(0?[1-9]|1[0-2])/(3[01]|[12]\d|0?[1-9])/(\d{2,4})"
   (parse-dmy (second (:groups %1)) (first (:groups %1)) (nth (:groups %1) 2) true)
 
   "yyyy-mm-dd"
-  #"(\d{2,4})-(0?\d|10|11|12)-([012]?\d|30|31)"
+  #"(\d{2,4})-(0?[1-9]|1[0-2])-(3[01]|[12]\d|0?[1-9])"
   (parse-dmy (nth (:groups %1) 2) (second (:groups %1)) (first (:groups %1)) true)
   
   "mm/dd"
-  #"(0?\d|10|11|12)/([012]?\d|30|31)"
+  #"(0?[1-9]|1[0-2])/(3[01]|[12]\d|0?[1-9])"
   (parse-dmy (second (:groups %1)) (first (:groups %1)) nil true)
 
   ; Other intervals: week-end, seasons

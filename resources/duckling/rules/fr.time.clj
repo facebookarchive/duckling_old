@@ -292,15 +292,15 @@
   ;; Formatted dates and times
 
   "dd/mm/yyyy"
-  #"([012]?\d|30|31)/(0?\d|10|11|12)/(\d{2,4})"
+  #"(3[01]|[12]\d|0?[1-9])/(0?[1-9]|1[0-2])/(\d{2,4})"
   (parse-dmy (first (:groups %1)) (second (:groups %1)) (nth (:groups %1) 2) true)
 
   "yyyy-mm-dd"
-  #"(\d{2,4})-(0?\d|10|11|12)-([012]?\d|30|31)"
+  #"(\d{2,4})-(0?[1-9]|1[0-2])-(3[01]|[12]\d|0?[1-9])"
   (parse-dmy (nth (:groups %1) 2) (second (:groups %1)) (first (:groups %1)) true)
   
   "dd/mm"
-  #"([012]?\d|30|31)/(0?\d|10|11|12)"
+  #"(3[01]|[12]\d|0?[1-9])/(0?[1-9]|1[0-2])"
   (parse-dmy (first (:groups %1)) (second (:groups %1)) nil true)
   
 
@@ -389,13 +389,13 @@
   ; Intervals
 
   "dd-dd <month>(interval)"
-  [#"([012]?\d|30|31)" #"\-|au|jusqu'au" #"([012]?\d|30|31)" {:form :month}]
+  [#"(3[01]|[12]\d|0?[1-9])" #"\-|au|jusqu'au" #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
   (interval (intersect %4 (day-of-month (Integer/parseInt (-> %1 :groups first))))
             (intersect %4 (day-of-month (Integer/parseInt (-> %3 :groups first))))
             true)
 
   "entre dd et dd <month>(interval)"
-  [#"entre( le)?" #"([012]?\d|30|31)" #"et( le)?" #"([012]?\d|30|31)" {:form :month}]
+  [#"entre( le)?" #"(3[01]|[12]\d|0?[1-9])" #"et( le)?" #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
   (interval (intersect %5 (day-of-month (Integer/parseInt (-> %2 :groups first))))
             (intersect %5 (day-of-month (Integer/parseInt (-> %4 :groups first))))
             true)
