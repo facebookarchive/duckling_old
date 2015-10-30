@@ -97,5 +97,11 @@
                      "ja.duration"
                      "ja.cycles"
                     ]}
+:pt$core {:corpus [
+                    "pt.numbers"
+                   ]
+            :rules [
+                     "pt.numbers"
+                    ]}
  }
 
