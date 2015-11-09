@@ -373,9 +373,9 @@
         (assoc :form :time-of-day)))
 
   "<time-of-day> am|pm"
-  [{:form :time-of-day} #"(?i)([ap])(\s|\.)?m?\.?"]
+  [{:form :time-of-day} #"(?i)(in the )?([ap])(\s|\.)?m?\.?"]
   ;; TODO set_am fn in helpers => add :ampm field
-  (let [[p meridiem] (if (= "a" (-> %2 :groups first .toLowerCase))
+  (let [[p meridiem] (if (= "a" (-> %2 :groups second .toLowerCase))
                        [[(hour 0) (hour 12) false] :am]
                        [[(hour 12) (hour 0) false] :pm])]
     (-> (intersect %1 (apply interval p))

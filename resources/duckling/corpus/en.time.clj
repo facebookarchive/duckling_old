@@ -247,6 +247,7 @@
   ;; Hours
 
   "at 3am"
+  "3 in the AM"
   "at 3 AM"
   "3 oclock am"
   "at three am"
