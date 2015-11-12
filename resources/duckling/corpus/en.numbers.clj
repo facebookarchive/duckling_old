@@ -77,6 +77,9 @@
   "five thousand"
   (number 5000)
 
+  "one twenty two"
+  (number 122)
+
   "two hundred thousand"
   (number 200000)
 

@@ -8,7 +8,7 @@
   [(dim :number :grain #(> (:grain %) 1)) #"(?i)and" (dim :number)] ; grain 1 are taken care of by specific rule
   (compose-numbers %1 %3) 
 
-   ;;
+ ;;
  ;; Integers
  ;;
  
@@ -86,6 +86,14 @@
             Long/parseLong)}
   
   ; composition
+  "special composition for missing hundreds like in one twenty two"
+  [(integer 1 9) (integer 10 99)] ; grain 1 are taken care of by specific rule
+  {:dim :number
+   :integer true
+   :value (+ (* (:value %1) 100) (:value %2))
+   :grain 1}
+
+
   "number dozen"
   [(integer 1 10) (dim :number #(:grouping %))]
   {:dim :number
