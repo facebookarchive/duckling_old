@@ -93,7 +93,11 @@
   "noel"
   #"(?i)(jour de )?no[eë]l"
   (month-day 12 25)
-  
+
+  "soir de noël"
+  #"(?i)soir(ée)? de no[eë]l"
+  (interval (intersect (month-day 12 24) (hour 18)) (intersect (month-day 12 25) (hour 00)) false)
+
   "jour de l'an"
   #"(?i)(jour de l'|nouvel )an"
   (month-day 1 1)
@@ -107,7 +111,7 @@
   (cycle-nth :day 0)
 
   "demain"
-  #"(?i)demain"
+  #"(?i)(demain)|(le lendemain)"
   (cycle-nth :day 1)
 
   "hier"
@@ -240,7 +244,7 @@
   
   "à|vers <time-of-day>" ; absorption
   [#"(?i)[aà]|vers" {:form :time-of-day}]
-  (dissoc %2 :latent) 
+  (dissoc %2 :latent)
 
   "hh(:|h)mm (time-of-day)"
   #"(?i)((?:[01]?\d)|(?:2[0-3]))[:h]([0-5]\d)"
@@ -321,6 +325,10 @@
   "après-midi"
   #"(?i)apr[eéè]s?[ \-]?midi"
   (assoc (interval (hour 12 false) (hour 19 false) false) :form :part-of-day :latent true)
+
+  "(en )fin d'après-midi"
+  #"(?i)(en )?fin d'apr[eéè]s?[ \-]?midi"
+  (assoc (interval (hour 17 false) (hour 19 false) false) :form :part-of-day :latent true)
   
   "soir"
   #"(?i)soir[ée]?e?"
@@ -408,6 +416,12 @@
             (intersect %5 (day-of-month (Integer/parseInt (-> %4 :groups first))))
             true)
 
+  "mi-<month>"
+  [#"(?i)mi[- ]" {:form :month}]
+  (interval (intersect %2 (day-of-month 10))
+            (intersect %2 (day-of-month 19))
+             false)
+
   ; Blocked for :latent time. May need to accept certain latents only, like hours
 
   "<datetime> - <datetime> (interval)"
@@ -453,5 +467,9 @@
   "après <time-of-day>"
   [#"(?i)(apr(e|è)s|(a|à) partir de)" (dim :time)]
   (merge %2 {:direction :after})
+
+  "après le <day-of-month>"
+  [#"(?i)(apr(e|è)s le|(a|à) partir du)" (integer 1 31)]
+  (merge (day-of-month (:value %2)) {:direction :after})
 
 )

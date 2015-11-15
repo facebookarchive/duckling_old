@@ -50,8 +50,16 @@
   [#"(?i)dans" (dim :duration)]
   (in-duration (:value %2))
 
+  "<duration> plus tard"
+  [(dim :duration) #"(?i)plus tard" ]
+  (in-duration (:value %1))
+
   "il y a <duration>"
   [#"(?i)il y a" (dim :duration)]
   (duration-ago (:value %2))
+
+  "<duration> plus tôt"
+  [(dim :duration) #"(?i)plus t[oô]t"]
+  (duration-ago (:value %1))
 
 )
