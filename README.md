@@ -10,7 +10,7 @@ Duckling is a Clojure library that parses text into structured data:
                                        :grain :day}
 
 <div class="doc-website-link">
-  <p>You can try it out at <a href="http://duckling-lib.org">http://duckling-lib.org</a></p>
+  <p>You can try it out at <a href="https://duckling.wit.ai">https://duckling.wit.ai</a></p>
 </div>
 
 See our [blog post announcement](https://wit.ai/blog/2014/10/01/open-source-parser-duckling) for more context.
