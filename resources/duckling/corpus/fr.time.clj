@@ -21,6 +21,9 @@
   "demain"
   (datetime 2013 2 13)
 
+  "le lendemain"
+  (datetime 2013 2 13)
+
   "après-demain"
   (datetime 2013 2 14)
 
@@ -365,6 +368,15 @@
   
   "dans un jour"
   (datetime 2013 2 13 4)
+
+  ;"dans 1 jour à 10h"
+  ;(datetime 2013 2 13 10)
+
+  ;"dans 2 jours au soir"
+  ;(datetime 2013 2 14 10)
+
+  "deux jours plus tard"
+  (datetime 2013 2 14 4)
   
   "dans 7 jours"
   (datetime 2013 2 19 4)
@@ -404,6 +416,8 @@
   "jour de noel"
   (datetime 2013 12 25)
 
+  "le soir de noël"
+  (datetime-interval [2013 12 24 18] [2013 12 25 00])
 
   "jour de l'an"
   "nouvel an"
@@ -427,6 +441,13 @@
 
   "lundi matin"
   (datetime-interval [2013 2 18 4] [2013 2 18 12])
+
+  "lundi après-midi"
+  (datetime-interval [2013 2 18 12] [2013 2 18 19])
+
+  "lundi fin d'après-midi"
+  "lundi en fin d'après-midi"
+  (datetime-interval [2013 2 18 17] [2013 2 18 19])
 
   "le 15 février dans la matinée" 
   "matinée du 15 février"
@@ -509,10 +530,18 @@
   "9h30 - 11h00 Jeudi"
   (datetime-interval [2013 2 14 9 30] [2013 2 14 11 1])
 
+  "à partir du 8"
+  "à partir du 8 mars"
+  (datetime 2013 3 8)
+
   "à partir de 9h30 jeudi"
   "jeudi après 9h30"
   (datetime 2013 2 14 9 30) ; FIXME should be :
   ;(datetime-interval [2013 2 14 9 30] [2013 2 15])
+
+  "après 16h le 1er novembre"
+  (datetime 2013 11 1 16) ; FIXME should be :
+  ;(datetime-interval [2013 11 1 16] [2013 11 1 24])
 
   "le 20 à partir de 10h"
   (datetime 2013 2 20 10) ; FIXME should be :
@@ -556,5 +585,9 @@
   
   "à seize heures PST"
   (datetime 2013 2 12 16 :hour 16 :timezone "PST")
+
+  "mi-décembre"
+  "mi décembre"
+  (datetime-interval [2013 12 10] [2013 12 20])
   
 )
