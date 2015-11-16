@@ -1,7 +1,3 @@
-<div class="circle-cont">
-<img src="https://circleci.com/gh/wit-ai/duckling.png?circle-token=402928d80776c89e28c621d690201d1ff3b994e2" alt="build status" />
-</div>
-
 # Introduction
 
 Duckling is a Clojure library that parses text into structured data:
