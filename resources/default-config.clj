@@ -97,5 +97,15 @@
                      "ja.duration"
                      "ja.cycles"
                     ]}
+:de$core {:corpus [
+                    "de.numbers"
+                    "de.time"
+                   ]
+            :rules [
+                     "de.numbers"
+                     "de.duration"
+                     "de.cycles"
+                     "de.time"
+                    ]}
  }
 
