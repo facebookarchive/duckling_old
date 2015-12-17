@@ -65,11 +65,19 @@
   "the <cycle> after <time>"
   [#"(?i)the" (dim :cycle) #"(?i)after" (dim :time)]
   (cycle-nth-after (:grain %2) 1 %4)
+
+  "<cycle> after <time>"
+  [(dim :cycle) #"(?i)after" (dim :time)]
+  (cycle-nth-after (:grain %1) 1 %3)
   
   "the <cycle> before <time>"
   [#"(?i)the" (dim :cycle) #"(?i)before" (dim :time)]
   (cycle-nth-after (:grain %2) -1 %4)
   
+  "<cycle> before <time>"
+  [(dim :cycle) #"(?i)before" (dim :time)]
+  (cycle-nth-after (:grain %1) -1 %3)
+
   "last n <cycle>"
   [#"(?i)last|past" (integer 1 9999) (dim :cycle)]
   (cycle-n-not-immediate (:grain %3) (- (:value %2)))
