@@ -25,7 +25,7 @@
 
 (deftest select-winners-test
   (is (= '({:value "ok", :pred 9} {:value "ok", :pred 6})
-         (select-winners' compare-fn resolve-fn tokens))))
+         (select-winners' compare-fn (constantly nil) resolve-fn tokens))))
 
 
 ; returns :ok if the corpus runs well, or a string with list of failures otherwise

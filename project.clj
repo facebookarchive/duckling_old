@@ -1,4 +1,4 @@
-(defproject wit/duckling "0.3.16"
+(defproject wit/duckling "0.3.17"
   :description "Date & Number parser"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
@@ -11,8 +11,7 @@
                  [org.clojure/tools.logging "0.2.6"]
                  [clj-time "0.8.0"]
                  [prismatic/plumbing "0.3.3"]]
-  :deploy-repositories [["private" {:url "s3p://wit-ai/releases" :username :env :passphrase :env :sign-releases false}]
-                        ["clojars" {:creds :gpg}]]
+  :deploy-repositories [["clojars" {:creds :gpg}]]
   :profiles {:dev {:dependencies [[org.clojure/tools.trace "0.7.6"]
                                   [midje "1.6.3"]
                                   [cheshire "5.3.1"]]}
