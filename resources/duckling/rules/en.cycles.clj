@@ -76,7 +76,7 @@
   
   "<cycle> before <time>"
   [(dim :cycle) #"(?i)before" (dim :time)]
-  (cycle-nth-after (:grain %1) -1 %3git)
+  (cycle-nth-after (:grain %1) -1 %3)
 
   "last n <cycle>"
   [#"(?i)last|past" (integer 1 9999) (dim :cycle)]

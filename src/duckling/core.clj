@@ -10,9 +10,9 @@
             [clojure.java.io :as io]
             [duckling.corpus :as corpus]))
 
-(def rules-map (atom {}))
-(def corpus-map (atom {}))
-(def classifiers-map (atom {}))
+(defonce rules-map (atom {}))
+(defonce corpus-map (atom {}))
+(defonce classifiers-map (atom {}))
 
 (defn default-context
   "Build a default context for testing. opt can be either :corpus or :now"
@@ -52,29 +52,31 @@
           :else nil)
     (if (not= 0 cmp-interval)
       cmp-interval ; one interval recovers the other
-      (let [pa (learn/route-prob a classifiers) ; same interval
-            pb (learn/route-prob b classifiers)]
-        ;(printf "Comparing %d (%f) and %d (%f) \n" (:index a) pa (:index b) pb)
-        (compare pa pb))))))
+      (compare (:log-prob a) (:log-prob b))))))
+
+(defn- select-winners*
+  [compare-fn resolve-fn already-selected candidates]
+  (if (seq candidates)
+    (let [[maxima others] (util/split-by-partial-max
+                           compare-fn
+                           candidates
+                           (concat already-selected candidates))
+          new-winners (->> maxima
+                           (mapcat resolve-fn)
+                           (filter :value))] ; remove unresolved
+      (if (seq maxima)
+        (recur compare-fn resolve-fn (concat already-selected new-winners) others)
+        already-selected))
+    already-selected))
 
 (defn- select-winners
   "Winner= token that is not 'smaller' (in the sense of the provided partial
   order) than another winner, and that resolves to a value"
-  ([compare-fn resolve-fn candidates]
-    (select-winners compare-fn resolve-fn candidates []))
-  ([compare-fn resolve-fn candidates already-selected]
-    (if (seq candidates)
-      (let [[maxima others] (util/split-by-partial-max
-                              compare-fn
-                              candidates
-                              (concat already-selected candidates))
-            new-winners (->> maxima
-                             (mapcat resolve-fn)
-                             (filter :value))] ; remove unresolved
-        (if (seq maxima)
-          (recur compare-fn resolve-fn others (concat already-selected new-winners))
-          already-selected))
-      already-selected)))
+  [compare-fn log-prob-fn resolve-fn candidates]
+  (->> candidates
+       (map #(assoc % :log-prob (log-prob-fn %)))
+       (select-winners* compare-fn resolve-fn [])
+       (map #(dissoc % :log-prob))))
 
 (defn analyze
   "Parse a sentence, returns the stash and a curated list of winners.
@@ -103,6 +105,7 @@
 
                      (select-winners
                        #(compare-tokens %1 %2 classifiers dim-label)
+                       #(learn/route-prob % classifiers)
                        #(engine/resolve-token % context module))
 
                      ; add a confidence key
