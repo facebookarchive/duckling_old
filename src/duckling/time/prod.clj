@@ -205,7 +205,7 @@
   [n1 n2]
   (if (> (Math/pow 10 (:grain n1)) (:value n2))
     {:dim :number
-     :integer true
+     :integer (and (:integer n1) (:integer n2))
      :value (+ (:value n1) (:value n2))}
     {:invalid true})) ; TODO return nil and manage "abortion" in engine
 
