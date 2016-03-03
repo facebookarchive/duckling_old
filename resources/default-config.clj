@@ -97,11 +97,21 @@
                      "ja.duration"
                      "ja.cycles"
                     ]}
-:pt$core {:corpus [
+:pt$core {:corpus ["pt.time"
                     "pt.numbers"
+                    "pt.temperature"
+                    "pt.measure"
+                    "pt.finance"
+                    "en.communication"
                    ]
-            :rules [
-                     "pt.numbers"
+            :rules ["pt.time"
+                    "pt.numbers"
+                    "pt.cycles"
+                    "pt.duration"
+                    "pt.temperature"
+                    "pt.measure"
+                    "pt.finance"
+                    "en.communication"
                     ]}
  }
 
