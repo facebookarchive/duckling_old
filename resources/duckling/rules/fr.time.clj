@@ -148,8 +148,8 @@
   [(dim :time) #"(?i)prochain"]
   (pred-nth %1 1)
 
-  "<named-month|named-day> suivant"
-  [(dim :time) #"(?i)suivant"]
+  "<named-month|named-day> suivant|d'après"
+  [(dim :time) #"(?i)suivant|d'apr[eéè]s"]
   (pred-nth %1 1)
 
   "<named-month|named-day> dernier|passé"
@@ -321,14 +321,34 @@
   "matin"
   #"(?i)mat(in[ée]?e?)?"
   (assoc (interval (hour 4 false) (hour 12 false) false) :form :part-of-day :latent true)
+  
+  "(en )début de matinée"
+  #"(?i)(en )?d[ée]but de matin[ée]e"
+  (assoc (interval (hour 7 false) (hour 9 false) false) :form :part-of-day :latent true)
+
+  "(en )fin de matinée"
+  #"(?i)(en )?fin de matin[ée]e"
+  (assoc (interval (hour 10 false) (hour 12 false) false) :form :part-of-day :latent true)
 
   "après-midi"
-  #"(?i)apr[eéè]s?[ \-]?midi"
+  #"(?i)(l')?apr[eéè]s?[ \-]?midi"
   (assoc (interval (hour 12 false) (hour 19 false) false) :form :part-of-day :latent true)
+  
+  "(en )début d'après-midi"
+  #"(?i)(en )?d[ée]but d'apr[eéè]s?[ \-]?midi"
+  (assoc (interval (hour 12 false) (hour 14 false) false) :form :part-of-day :latent true)
 
   "(en )fin d'après-midi"
   #"(?i)(en )?fin d'apr[eéè]s?[ \-]?midi"
   (assoc (interval (hour 17 false) (hour 19 false) false) :form :part-of-day :latent true)
+  
+  "(en )début de journée"
+  #"(?i)(en )?d[ée]but de journ[ée]e"
+  (assoc (interval (hour 6 false) (hour 10 false) false) :form :part-of-day :latent true)
+
+  "(en )fin de journée"
+  #"(?i)(en )?fin de journ[ée]e"
+  (assoc (interval (hour 17 false) (hour 21 false) false) :form :part-of-day :latent true)
   
   "soir"
   #"(?i)soir[ée]?e?"
