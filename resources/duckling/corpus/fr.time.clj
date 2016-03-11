@@ -175,15 +175,29 @@
   (datetime 2013 2 18 :day-of-week 1)
 
   "mardi prochain" ; when today is Tuesday, "mardi prochain" is a week from now
+  "mardi suivant"
+  "mardi d'après"
   "mardi la semaine prochaine"
   "mardi de la semaine prochaine"
+  ; FIXME
+  ;"mardi la semaine suivante"
+  ;"mardi de la semaine suivante"
+  ;"mardi la semaine d'après"
+  ;"mardi de la semaine d'après"
   (datetime 2013 2 19 :day-of-week 2)
 
   "mercredi prochain" ; when today is Tuesday, "mercredi prochain" should be tomorrow
   (datetime 2013 2 13 :day-of-week 3)
 
+  "mercredi suivant"
+  "mercredi d'après"
   "mercredi la semaine prochaine"
   "mercredi de la semaine prochaine"
+  ; FIXME
+  ;"mercredi la semaine suivante"
+  ;"mercredi de la semaine suivante"
+  ;"mercredi la semaine d'après"
+  ;"mercredi de la semaine d'après"
   (datetime 2013 2 20 :day-of-week 3)
 
   "lundi en huit" ;
@@ -425,6 +439,28 @@
   (datetime 2014 1 1)
 
   ; Part of day (morning, afternoon...)
+  
+  "cet après-midi"
+  "l'après-midi"
+  (datetime-interval [2013 2 12 12] [2013 2 12 19])
+
+  "en début de matinée"
+  (datetime-interval [2013 2 12 7] [2013 2 12 9])
+
+  "en fin de matinée"
+  (datetime-interval [2013 2 12 10] [2013 2 12 12])
+
+  "en début d'après-midi"
+  (datetime-interval [2013 2 12 12] [2013 2 12 14])
+
+  "en fin d'après-midi"
+  (datetime-interval [2013 2 12 17] [2013 2 12 19])
+
+  "en début de journée"
+  (datetime-interval [2013 2 12 6] [2013 2 12 10])
+
+  "en fin de journée"
+  (datetime-interval [2013 2 12 17] [2013 2 12 21])
 
   "ce soir"
   (datetime-interval [2013 2 12 18] [2013 2 13 00])
