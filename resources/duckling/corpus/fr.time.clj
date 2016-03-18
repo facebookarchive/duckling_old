@@ -560,6 +560,7 @@
 
   "de 9h30 jusqu'à 11h jeudi"
   "de 9 heures 30 à 11h jeudi"
+  "de 9 heures 30 a 11h jeudi"
   "entre 9h30 et 11h jeudi"
   (datetime-interval [2013 2 14 9 30] [2013 2 14 12])
 

@@ -302,6 +302,9 @@
   "half three"
   (datetime 2013 2 12 15 30 :hour 3 :minute 30)
 
+  "15:23:24"
+  (datetime 2013 2 12 15 23 24 :hour 15 :minute 23 :second 24)
+
   "a quarter to noon"
   "11:45am"
   "15 to noon" ; Ambiguous with interval
