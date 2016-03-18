@@ -132,6 +132,12 @@
                [(iterate #(t/plus % :hour 1) anchor)
                 (next (iterate #(t/minus % :hour 1) anchor))])))
 
+(defn sec [s]
+  (fn& :second [t _] (let [diff (mod (- s (t/sec t)) 60)
+                   anchor (t/plus (t/round t :second) :second diff)]
+               [(iterate #(t/plus % :minute 1) anchor)
+                (next (iterate #(t/minus % :minute 1) anchor))])))
+
 (defn cycle
   "A sequence of each year, or month, or week, etc.
   Used for 'this year', 'next month', 'last week'.."

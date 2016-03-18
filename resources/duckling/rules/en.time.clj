@@ -349,6 +349,14 @@
                (Integer/parseInt (second (:groups %1)))
                true)
 
+  "hh:mm:ss"
+  #"(?i)((?:[01]?\d)|(?:2[0-3]))[:.]([0-5]\d)[:.]([0-5]\d)"
+  (hour-minute-second (Integer/parseInt (first (:groups %1)))
+               (Integer/parseInt (second (:groups %1)))
+               (Integer/parseInt (second (next (:groups %1))))
+               true)
+
+
   "hhmm (military)"
   #"(?i)((?:[01]?\d)|(?:2[0-3]))([0-5]\d)"
   (-> (hour-minute (Integer/parseInt (first (:groups %1)))

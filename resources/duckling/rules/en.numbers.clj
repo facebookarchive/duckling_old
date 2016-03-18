@@ -177,13 +177,16 @@
   ;; Ordinal numbers
   ;;
   
-  "ordinals (first..19th)"
-  #"(?i)(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth|thirteenth|fourteenth|fifteenth|sixteenth|seventeenth|eighteenth|nineteenth)"
+  "ordinals (first..31st)"
+  #"(?i)(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth|thirteenth|fourteenth|fifteenth|sixteenth|seventeenth|eighteenth|nineteenth|twentieth|twenty-first|twenty-second|twenty-third|twenty-fourth|twenty-fifth|twenty-sixth|twenty-seventh|twenty-eighth|twenty-ninth|thirtieth|thirty-first)"
   {:dim :ordinal
    :value (get {"first" 1 "second" 2 "third" 3 "fourth" 4 "fifth" 5
               "sixth" 6 "seventh" 7 "eighth" 8 "ninth" 9 "tenth" 10 "eleventh" 11
               "twelfth" 12 "thirteenth" 13 "fourteenth" 14 "fifteenth" 15 "sixteenth" 16
-              "seventeenth" 17 "eighteenth" 18 "nineteenth" 19}
+              "seventeenth" 17 "eighteenth" 18 "nineteenth" 19 "twentieth" 20 "twenty-first" 21
+              "twenty-second" 22 "twenty-third" 23 "twenty-fourth" 24 "twenty-fifth" 25
+              "twenty-sixth" 26 "twenty-seventh" 27 "twenty-eighth" 28 "twenty-ninth" 29
+              "thirtieth" 30 "thirty-first" 31}
               (-> %1 :groups first .toLowerCase))}
 
   "ordinal (digits)"

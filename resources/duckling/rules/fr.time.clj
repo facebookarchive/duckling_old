@@ -445,11 +445,11 @@
   ; Blocked for :latent time. May need to accept certain latents only, like hours
 
   "<datetime> - <datetime> (interval)"
-  [(dim :time #(not (:latent %))) #"\-|au|jusqu'(au|à)" (dim :time #(not (:latent %)))]
+  [(dim :time #(not (:latent %))) #"\-|au|jusqu'(au|[aà])" (dim :time #(not (:latent %)))]
   (interval %1 %3 true)
 
   "de <datetime> - <datetime> (interval)"
-  [#"(?i)de|depuis" (dim :time) #"\-|au|jusqu'(au|à)" (dim :time)]
+  [#"(?i)de|depuis" (dim :time) #"\-|au|jusqu'(au|[aà])" (dim :time)]
   (interval %2 %4 true)
 
   "entre <datetime> et <datetime> (interval)"
@@ -459,11 +459,11 @@
   ; Specific for time-of-day, to help resolve ambiguities
 
   "<time-of-day> - <time-of-day> (interval)"
-  [{:form :time-of-day} #"\-|à|au|jusqu'(au|à)" {:form :time-of-day}]
+  [{:form :time-of-day} #"\-|[aà]|au|jusqu'(au|[aà])" {:form :time-of-day}]
   (interval %1 %3 true)
 
   "de <time-of-day> - <time-of-day> (interval)"
-  [#"(?i)de" {:form :time-of-day} #"\-|à|au|jusqu'(au|a|à)" {:form :time-of-day}]
+  [#"(?i)de" {:form :time-of-day} #"\-|[aà]|au|jusqu'(au|[aà])" {:form :time-of-day}]
   (interval %2 %4 true)
 
   "entre <time-of-day> et <time-of-day> (interval)"
