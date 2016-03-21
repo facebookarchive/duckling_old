@@ -463,7 +463,7 @@
   (interval %1 %3 true)
 
   "de <time-of-day> - <time-of-day> (interval)"
-  [#"(?i)de" {:form :time-of-day} #"\-|[aà]|au|jusqu'(au|[aà])" {:form :time-of-day}]
+  [#"(?i)(midi )?de" {:form :time-of-day} #"\-|[aà]|au|jusqu'(au|[aà])" {:form :time-of-day}] ;hack to fix midi + interval intersection
   (interval %2 %4 true)
 
   "entre <time-of-day> et <time-of-day> (interval)"
