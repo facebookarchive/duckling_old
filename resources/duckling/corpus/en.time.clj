@@ -657,6 +657,9 @@
   "after 2 pm"
   (datetime 2013 2 12 14 :direction :after)
 
+  "after 5 days"
+  (datetime 2013 2 17 4 :direction :after)  
+
   "after tomorrow 2pm"
   "tomorrow after 2pm" ;; FIXME this is actually not ambiguous it's 2pm - midnight.
   (datetime 2013 2 13 14 :direction :after)
