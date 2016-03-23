@@ -7,7 +7,7 @@
 
   ; same thing, with "of" in between like "Sunday of last week"
   "intersect by \"of\", \"from\", \"'s\""
-  [(dim :time #(not (:latent %))) #"(?i)of|from|'s" (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
+  [(dim :time #(not (:latent %))) #"(?i)of|from|for|'s" (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
 
   ; mostly for January 12, 2005

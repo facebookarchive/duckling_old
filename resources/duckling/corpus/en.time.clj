@@ -321,6 +321,7 @@
   (datetime 2013 9 20 19 30 :hour 7 :minute 30 :meridiem :pm)
 
   "at 9am on Saturday"
+  "on Saturday for 9am"
   (datetime 2013 2 16 9 :day-of-week 6 :hour 9 :meridiem :am)
 
   "Fri, Jul 18, 2014 07:00 PM"
