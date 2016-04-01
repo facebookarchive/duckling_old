@@ -450,6 +450,10 @@
   "en fin de matinée"
   (datetime-interval [2013 2 12 10] [2013 2 12 12])
 
+  "dès le matin"
+  "dès la matinée"
+  (datetime-interval [2013 2 12 4] [2013 2 12 12])
+
   "en début d'après-midi"
   (datetime-interval [2013 2 12 12] [2013 2 12 14])
 

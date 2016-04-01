@@ -355,7 +355,7 @@
   (assoc (interval (hour 18 false) (hour 0 false) false) :form :part-of-day :latent true)
   
   "du|dans le <part-of-day>" ;; removes latent
-  [#"(?i)du|dans l[ae']? ?|au|le|la" {:form :part-of-day}]
+  [#"(?i)du|dans l[ae']? ?|au|le|la|dès l?[ae']? ?" {:form :part-of-day}]
   (dissoc %2 :latent)
   
   "ce <part-of-day>"
