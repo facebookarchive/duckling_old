@@ -436,7 +436,19 @@
             (intersect %5 (day-of-month (Integer/parseInt (-> %4 :groups first))))
             true)
 
-  "mi-<month>"
+  "fin <named-month>(interval)"
+  [#"fin( du mois d[e']? ?)?" {:form :month}]
+  (interval (intersect %2 (day-of-month 25))
+         (cycle-last-of  {:dim :cycle :grain :day} %2)
+          true)
+
+  "début <named-month>(interval)"
+  [#"début( du mois d[e'] ?)?" {:form :month}]
+  (interval (intersect %2 (day-of-month 1))
+        (intersect %2 (day-of-month 5))
+        true)
+
+  "<named-month>"
   [#"(?i)mi[- ]" {:form :month}]
   (interval (intersect %2 (day-of-month 10))
             (intersect %2 (day-of-month 19))
