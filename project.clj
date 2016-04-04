@@ -1,4 +1,4 @@
-(defproject wit/duckling "0.3.26"
+(defproject wit/duckling "0.3.27"
   :description "Date & Number parser"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
