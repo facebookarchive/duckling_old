@@ -623,6 +623,14 @@
   "à seize heures PST"
   (datetime 2013 2 12 16 :hour 16 :timezone "PST")
 
+  "fin mars"
+  "fin du mois de mars"
+  (datetime-interval [2013 3 25] [2013 4 1])
+
+  "début avril"
+  "début du mois d'avril"
+  (datetime-interval [2013 4 1] [2013 4 6])
+
   "mi-décembre"
   "mi décembre"
   (datetime-interval [2013 12 10] [2013 12 20])

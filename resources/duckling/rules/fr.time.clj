@@ -436,7 +436,19 @@
             (intersect %5 (day-of-month (Integer/parseInt (-> %4 :groups first))))
             true)
 
-  "mi-<month>"
+  "fin <named-month>(interval)"
+  [#"fin( du mois d[e']? ?)?" {:form :month}]
+  (interval (intersect %2 (day-of-month 25))
+         (cycle-last-of  {:dim :cycle :grain :day} %2)
+          true)
+
+  "début <named-month>(interval)"
+  [#"début( du mois d[e'] ?)?" {:form :month}]
+  (interval (intersect %2 (day-of-month 1))
+        (intersect %2 (day-of-month 5))
+        true)
+
+  "<named-month>"
   [#"(?i)mi[- ]" {:form :month}]
   (interval (intersect %2 (day-of-month 10))
             (intersect %2 (day-of-month 19))
@@ -463,7 +475,7 @@
   (interval %1 %3 true)
 
   "de <time-of-day> - <time-of-day> (interval)"
-  [#"(?i)de" {:form :time-of-day} #"\-|[aà]|au|jusqu'(au|[aà])" {:form :time-of-day}]
+  [#"(?i)(midi )?de" {:form :time-of-day} #"\-|[aà]|au|jusqu'(au|[aà])" {:form :time-of-day}] ;hack to fix midi + interval intersection
   (interval %2 %4 true)
 
   "entre <time-of-day> et <time-of-day> (interval)"

@@ -321,6 +321,7 @@
   (datetime 2013 9 20 19 30 :hour 7 :minute 30 :meridiem :pm)
 
   "at 9am on Saturday"
+  "on Saturday for 9am"
   (datetime 2013 2 16 9 :day-of-week 6 :hour 9 :meridiem :am)
 
   "Fri, Jul 18, 2014 07:00 PM"
@@ -655,6 +656,9 @@
 
   "after 2 pm"
   (datetime 2013 2 12 14 :direction :after)
+
+  "after 5 days"
+  (datetime 2013 2 17 4 :direction :after)  
 
   "after tomorrow 2pm"
   "tomorrow after 2pm" ;; FIXME this is actually not ambiguous it's 2pm - midnight.
