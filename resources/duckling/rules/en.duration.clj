@@ -73,9 +73,13 @@
   {:dim :duration
    :value (duration (:grain %2) 1)}
 
-  "in/after <duration>"
-  [#"(?i)in|after" (dim :duration)]
+  "in <duration>"
+  [#"(?i)in" (dim :duration)]
   (in-duration (:value %2))
+
+  "after <duration>"
+  [#"(?i)after" (dim :duration)]
+  (merge (in-duration (:value %2)) {:direction :after})
 
   "<duration> from now"
   [(dim :duration) #"(?i)from (today|now)"]

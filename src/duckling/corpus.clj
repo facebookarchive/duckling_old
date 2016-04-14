@@ -174,7 +174,7 @@
 (defmacro this-ns "Total hack to get ns of this file at compile time" [] *ns*)
 
 (defn read-corpus
-  "Reade a list of symbol and return a Corpus map {:context {}, :tests []}"
+  "Read a list of symbol and return a Corpus map {:context {}, :tests []}"
   [new-file]
   (let [symbols (read-string (slurp new-file))]
     (corpus (map #(binding [*ns* (this-ns)] (eval %)) symbols))))
