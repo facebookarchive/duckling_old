@@ -314,7 +314,7 @@ Loading module  :en$numbers
 
 ## Corpus
 
-Corpus files are located in `resources/corpus`. You can either edit existing files or create new files.
+Corpus files are located in `resources/duckling/corpus`. You can either edit existing files or create new files.
 If you create new files, don’t forget to load them by referencing them in your configuration file or `load!`
 command (see above). **Once you’ve modified corpus files, you must reload to take the changes into account.**
 
