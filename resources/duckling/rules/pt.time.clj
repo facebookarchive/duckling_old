@@ -1,6 +1,6 @@
 (
   ;; generic
-  
+
   "intersect"
   [(dim :time #(not (:latent %))) (dim :time #(not (:latent %)))] ; sequence of two tokens with a time dimension
   (intersect %1 %2)
@@ -9,7 +9,7 @@
   "intersect by `da` or `de`"
   [(dim :time #(not (:latent %))) #"(?i)d[ae]" (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
-  
+
   ; mostly for segunda, 18 de fevereiro
   ; this is a separate rule, because commas separate very specific tokens
   ; so we want this rule's classifier to learn this
@@ -118,7 +118,7 @@
   "right now"
   #"agora|j[áa]|(nesse|neste) instante"
   (cycle-nth :second 0)
-  
+
   "now"
   #"(?i)(hoje)|(neste|nesse) momento"
   (cycle-nth :day 0)
@@ -159,10 +159,6 @@
   [#"(?i)(d[ao]) pr[óo]xim[ao]s?" (dim :time #(not (:latent %)))]
   (pred-nth-not-immediate %2 0)
 
-  "next <time>"
-  [(dim :time #(not (:latent %))) #"(?i)que vem"]
-  (pred-nth-not-immediate %1 0)
-
   "last <time>"
   [#"(?i)[úu]ltim[ao]s?" (dim :time)]
   (pred-nth %2 -1)
@@ -178,7 +174,7 @@
   ; Years
   ; Between 1000 and 2100 we assume it's a year
   ; Outside of this, it's safer to consider it's latent
-  
+
   "year"
   (integer 1000 2100)
   (year (:value %1))
@@ -201,7 +197,7 @@
   ; - 5 March
   ; - mm/dd (and other numerical formats like yyyy-mm-dd etc.)
   ; We remove the rule with just (integer 1 31) as it was too messy
-  
+
   "day of month (1st)"
   [#"(?i)primeiro|um|1o"] ; |1º if possible later
   (day-of-month 1)
@@ -234,11 +230,11 @@
 
   "<time-of-day> horas"
   [#(:full-hour %) #"(?i)h\.?(ora)?s?"]
-  (dissoc %1 :latent) 
-  
+  (dissoc %1 :latent)
+
   "às <time-of-day>" ;
   [#"(?i)[àa]s?" {:form :time-of-day}]
-  (dissoc %2 :latent) 
+  (dissoc %2 :latent)
 
   "às <hour-min>(time-of-day)" ; as 12:00 horas
   [#"(?i)[àa]s?" {:form :time-of-day} #"(?i)horas?"]
@@ -257,7 +253,7 @@
   (hour-minute (Integer/parseInt (first (:groups %1)))
                (Integer/parseInt (second (:groups %1)))
                true)
-  
+
   "hhmm (military time-of-day)"
   #"(?i)((?:[01]?\d)|(?:2[0-3]))([0-5]\d)"
   (-> (hour-minute (Integer/parseInt (first (:groups %1)))
@@ -289,7 +285,7 @@
   "number (as relative minutes)"
   (integer 1 59)
   {:relative-minutes (:value %1)}
-  
+
   "<integer> minutes (as relative minutes)"
   [(integer 1 59) #"(?i)min\.?(uto)?s?"]
   {:relative-minutes (:value %1)}
@@ -305,7 +301,7 @@
   "<hour-of-day> and <relative minutes>"
   [(dim :time :full-hour) #"(?i)e" #(:relative-minutes %)]
   (hour-relativemin (:full-hour %1) (:relative-minutes %3) (:twelve-hour-clock? %1))
-  
+
   ;; Formatted dates and times
 
   "dd[/-.]mm[/-.]yyyy"
@@ -315,11 +311,11 @@
   "yyyy-mm-dd"
   [#"(\d{2,4})-(0?[1-9]|1[0-2])-(3[01]|[12]\d|0?[1-9])"]
   (parse-dmy (nth (:groups %1) 2) (second (:groups %1)) (first (:groups %1)) true)
-  
+
   "dd[/-]mm"
   [#"(3[01]|[12]\d|0?[1-9])[\/\-](0?[1-9]|1[0-2])"]
   (parse-dmy (first (:groups %1)) (second (:groups %1)) nil true)
-  
+
   ; Part of day (morning, evening...). They are intervals.
 
   "morning"
@@ -329,7 +325,7 @@
   "afternoon"
   #"(?i)tarde"
   (assoc (interval (hour 12 false) (hour 19 false) false) :form :part-of-day :latent true)
-  
+
   "evening"
   #"(?i)noite"
   (assoc (interval (hour 18 false) (hour 0 false) false) :form :part-of-day :latent true)
@@ -337,7 +333,7 @@
   "in the <part-of-day>" ;; removes latent
   [#"(?i)(de|pela)" {:form :part-of-day}]
   (dissoc %2 :latent)
-  
+
   "this <part-of-day>"
   [#"(?i)es[ts]a" {:form :part-of-day}]
   (assoc (intersect (cycle-nth :day 0) %2) :form :part-of-day) ;; removes :latent
@@ -345,31 +341,31 @@
   "<part-of-day> dessa semana"
   [(dim :time #(not (:latent %))) #"(?i)(d?es[ts]a semana)|agora"]
   (assoc (intersect (cycle-nth :day 0) %1) :form :part-of-day) ;; removes :latent
-  
+
 ; ;specific rule to address "3 in the morning","3h du matin" and extend morning span from 0 to 12
-;   "<dim time> du matin" 
+;   "<dim time> du matin"
 ;   [{:form :time-of-day} #"du mat(in)?"]
 ;   (intersect %1 (assoc (interval (hour 0 false) (hour 12 false) false) :form :part-of-day :latent true))
 
   "<time-of-day> <part-of-day>" ; since "morning" "evening" etc. are latent, general time+time is blocked
   [(dim :time) #"(?i)(da|na|pela)" {:form :part-of-day}]
   (intersect %1 %3)
-  
+
   ; specific rule to address the ambiguity of noite/tarde and extend tarde span from 12 to 18
-  "<dim time> da tarde" 
+  "<dim time> da tarde"
   [(dim :time) #"(?i)(da|na|pela) tarde"]
   (intersect %1 (assoc (interval (hour 12 false) (hour 18 false) false) :form :part-of-day :latent true))
 
-  "<dim time> da manha" 
+  "<dim time> da manha"
   [(dim :time) #"(?i)(da|na|pela) manh[ãa]"]
   (intersect %1 (assoc (interval (hour 4 false) (hour 12 false) false) :form :part-of-day :latent true))
 
     ;specific rule to address the ambiguity of noite/tarde and extend tarde span from 12 to 21
-  "<dim time> da madrugada" 
+  "<dim time> da madrugada"
   [(dim :time) #"(?i)(da|na|pela) madruga(da)?"]
   (intersect %1 (assoc (interval (hour 1 false) (hour 4 false) false) :form :part-of-day :latent true))
 
-  "amanhã pela <part-of-day>" 
+  "amanhã pela <part-of-day>"
   [(dim :time) #"(?i)(da|na|pela|a)" {:form :part-of-day}]
   (intersect %1 %3)
 
@@ -380,7 +376,7 @@
   (interval (intersect (day-of-week 5) (hour 18 false))
             (intersect (day-of-week 1) (hour 0 false))
             false)
-  
+
   "season"
   #"(?i)ver[ãa]o" ;could be smarter and take the exact hour into account... also some years the day can change
   (interval (month-day 6 21) (month-day 9 23) false)
@@ -404,12 +400,12 @@
   ; %2
 
   ;; Time zones
-  
+
   "timezone"
   #"(?i)(YEKT|YEKST|YAPT|YAKT|YAKST|WT|WST|WITA|WIT|WIB|WGT|WGST|WFT|WEZ|WET|WESZ|WEST|WAT|WAST|VUT|VLAT|VLAST|VET|UZT|UYT|UYST|UTC|ULAT|TVT|TMT|TLT|TKT|TJT|TFT|TAHT|SST|SRT|SGT|SCT|SBT|SAST|SAMT|RET|PYT|PYST|PWT|PT|PST|PONT|PMST|PMDT|PKT|PHT|PHOT|PGT|PETT|PETST|PET|PDT|OMST|OMSST|NZST|NZDT|NUT|NST|NPT|NOVT|NOVST|NFT|NDT|NCT|MYT|MVT|MUT|MST|MSK|MSD|MMT|MHT|MEZ|MESZ|MDT|MAWT|MART|MAGT|MAGST|LINT|LHST|LHDT|KUYT|KST|KRAT|KRAST|KGT|JST|IST|IRST|IRKT|IRKST|IRDT|IOT|IDT|ICT|HOVT|HNY|HNT|HNR|HNP|HNE|HNC|HNA|HLV|HKT|HAY|HAT|HAST|HAR|HAP|HAE|HADT|HAC|HAA|GYT|GST|GMT|GILT|GFT|GET|GAMT|GALT|FNT|FKT|FKST|FJT|FJST|ET|EST|EGT|EGST|EET|EEST|EDT|ECT|EAT|EAST|EASST|DAVT|ChST|CXT|CVT|CST|COT|CLT|CLST|CKT|CHAST|CHADT|CET|CEST|CDT|CCT|CAT|CAST|BTT|BST|BRT|BRST|BOT|BNT|AZT|AZST|AZOT|AZOST|AWST|AWDT|AST|ART|AQTT|ANAT|ANAST|AMT|AMST|ALMT|AKST|AKDT|AFT|AEST|AEDT|ADT|ACST|ACDT)"
   {:dim :timezone
    :value (-> %1 :groups first .toUpperCase)}
-  
+
   "<time> timezone"
   [(dim :time) (dim :timezone)]
   (assoc %1 :timezone (:value %2))
@@ -427,14 +423,14 @@
   (interval (intersect %6 (day-of-month (Integer/parseInt (-> %2 :groups first))))
             (intersect %6 (day-of-month (Integer/parseInt (-> %4 :groups first))))
             true)
-  
+
   ; Blocked for :latent time. May need to accept certain latents only, like hours
 
   "<datetime> - <datetime> (interval)"
   [(dim :time #(not (:latent %))) #"\-|a" (dim :time #(not (:latent %)))]
   (interval %1 %3 false)
 
-  "de <datetime> - <datetime> (interval)" 
+  "de <datetime> - <datetime> (interval)"
   [#"(?i)de?" (dim :time) #"\-|a" (dim :time)]
   (interval %2 %4 false)
 
