@@ -314,7 +314,7 @@ Loading module  :en$numbers
 
 ## Corpus
 
-Corpus files are located in `resources/corpus`. You can either edit existing files or create new files.
+Corpus files are located in `resources/duckling/corpus`. You can either edit existing files or create new files.
 If you create new files, don’t forget to load them by referencing them in your configuration file or `load!`
 command (see above). **Once you’ve modified corpus files, you must reload to take the changes into account.**
 
@@ -389,7 +389,7 @@ cover your new tests, or you did not reload the corpus -- usually it’s the lat
 
 ## Rules
 
-Rules files are located in `resources/rules`. You can either edit existing files or create new files.
+Rules files are located in `resources/duckling/rules`. You can either edit existing files or create new files.
 If you create new files, don’t forget to load them by referencing them in the configuration file or `load!` command.
 **Once you’ve modified rules files, you must reload to take the changes into account.**
 
