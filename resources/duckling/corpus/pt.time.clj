@@ -157,7 +157,7 @@
   "sexta que vem" ; when today is Tuesday, "mercredi prochain" is tomorrow
   "sexta feira da semana que vem"
   "sexta-feira da próxima semana"
-  (datetime 2013 2 22 :day-of-week 3)
+  (datetime 2013 2 22 :day-of-week 5)
 
   "terça desta semana"
   "terça dessa semana"
