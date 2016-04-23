@@ -145,6 +145,9 @@
 (defn minute [t]
   (time/minute (:start t)))
 
+(defn sec [t]
+  (time/second (:start t)))
+
 (defn ->fields [{:keys [start] :as t}]
   [(time/year start) (time/month start) (time/day start) (time/hour start) (time/minute start) (time/second start)])
 

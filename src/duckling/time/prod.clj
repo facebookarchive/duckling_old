@@ -95,9 +95,19 @@
   {:pre [(<= 0 m 59)]}
   (ti (p/minute m)))
 
+(defn sec [s]
+  {:pre [(<= 0 s 59)]}
+  (ti (p/sec s)))
+
 (defn hour-minute [h m & [twelve-hour-clock?]]
   (assoc (intersect (hour h twelve-hour-clock?)
                     (minute m))
+         :form :time-of-day))
+
+(defn hour-minute-second [h m s & [twelve-hour-clock?]]
+  (assoc (intersect (hour h twelve-hour-clock?)
+                    (minute m)
+                    (sec s))
          :form :time-of-day))
 
 ; twelve-hour clock is 12, 1, 2, 3, ... 11 (no 0)
@@ -205,7 +215,7 @@
   [n1 n2]
   (if (> (Math/pow 10 (:grain n1)) (:value n2))
     {:dim :number
-     :integer true
+     :integer (and (:integer n1) (:integer n2))
      :value (+ (:value n1) (:value n2))}
     {:invalid true})) ; TODO return nil and manage "abortion" in engine
 
