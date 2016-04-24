@@ -1,7 +1,8 @@
 (ns duckling.core-test
   (:use [duckling.core]
         [clojure.test])
-  (:require [clojure.java.io :as io]))
+  (:require [clojure.java.io :as io]
+            [duckling.resource :as res]))
 
 (def tokens (map (fn [x] {:pred x}) (range 10)))
 
@@ -9,9 +10,8 @@
 ; but an odd number and an even number are not comparable
 
 (defn compare-fn [a b]
-  (if (= (mod (:pred a) 2) (mod (:pred b) 2))
-    (compare (:pred a) (:pred b))
-    nil))
+  (when (= (mod (:pred a) 2) (mod (:pred b) 2))
+    (compare (:pred a) (:pred b))))
 
 ; the token with pred 8 is not resolved, all others are
 
@@ -28,10 +28,15 @@
          (select-winners' compare-fn (constantly nil) resolve-fn tokens))))
 
 
-; returns :ok if the corpus runs well, or a string with list of failures otherwise
-(defn diag-corpus [run-corpus-output]
+(defn diag-corpus
+  "Returns :ok if the corpus runs well, or a string with list of failures otherwise."
+  [run-corpus-output]
   (if (= 0 (reduce #(+ %1 (first %2)) 0 run-corpus-output)) ;; no fail
-    :ok (->> run-corpus-output (filter #(not= 0 (first %))) (map second) (reduce #(str %1 "\n" %2)))))
+    :ok
+    (->> run-corpus-output
+         (filter #(not= 0 (first %)))
+         (map second)
+         (reduce #(str %1 "\n" %2)))))
 
 (defmacro with-timeout [millis res & body]
   `(let [future# (future ~@body)]
@@ -44,12 +49,13 @@
 
 (deftest datetime-corpus-runs-without-failure
   (load!)
-  (testing "fr"
-    (is (= (-> (get @corpus-map "fr$core") (run-corpus "fr$core") diag-corpus) :ok)))
-
-  (testing "en"
-    (is (= (-> (get @corpus-map "en$core") (run-corpus "en$core") diag-corpus) :ok)))
-
+  (testing "fr and en"
+    (are [lang] (let [module (format "%s$core" lang)]
+                  (= :ok (-> (get @corpus-map module)
+                             (run-corpus module)
+                             diag-corpus)))
+      "fr"
+      "en"))
   (testing "Public API (extract)"
     (is (= [{:end 12
              :start 0
@@ -89,3 +95,29 @@
                                                                     :dim "time"
                                                                     :label "T"}])))))))
 
+(deftest load!-api-test
+  (let [check (fn [arg exp]
+                (= (set exp) (set (load! arg))))]
+    (testing "load! should load all languages by default"
+      (with-redefs [res/get-files (constantly ["numbers.clj"])
+                    res/get-subdirs (constantly ["en" "cn" "pt"])]
+        (is (check nil [:en$core :cn$core :pt$core]))
+        (is (check {} [:en$core :cn$core :pt$core]))
+        (is (check {:config {} :languages []} [:en$core :cn$core :pt$core]))))
+    (testing "load! should accept a list of languages"
+      (are [arg exp] (check {:languages arg} exp)
+        ["fr"] [:fr$core]
+        ["foo" "bar"] []
+        ["bar" "es" "pt" "ru"] [:es$core :pt$core :ru$core]))
+    (testing "load! should accept a custom config"
+      (is (check {:config {:en$numbers {:corpus ["numbers"] :rules ["numbers"]}}}
+                 [:en$numbers])))
+    (testing "load! should return the list of loaded modules"
+      (are [arg exp] (check arg exp)
+        {:languages ["fr"]} [:fr$core]
+        {:languages ["fr" "foo" "en"]} [:fr$core :en$core]
+        {:config {:en$numbers {:corpus ["numbers"] :rules ["numbers"]}}} [:en$numbers]
+
+        {:config {:en$numbers {:corpus ["numbers"] :rules ["numbers"]}}
+         :languages ["fr" "blah"]}
+        [:fr$core :en$numbers]))))

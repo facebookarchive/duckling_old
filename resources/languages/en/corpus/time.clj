@@ -492,6 +492,9 @@
   "tonight"
   (datetime-interval [2013 2 12 18] [2013 2 13 00])
 
+  "this past weekend"
+  (datetime-interval [2013 2 8 18] [2013 2 11 00])
+
   "tomorrow evening"
   ;"Wednesday evening"
   "tomorrow night"
