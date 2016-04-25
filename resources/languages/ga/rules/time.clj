@@ -30,6 +30,10 @@
   [#"(?i)dé" {:form :day-of-week}]
   %2 ; does NOT dissoc latent
 
+  "an named-day" ; an luan
+  [#"(?i)an" {:form :day-of-week}]
+  %2 ; does NOT dissoc latent
+
 
   ;;;;;;;;;;;;;;;;;;;
   ;; Named things
@@ -137,16 +141,16 @@
   [{:form :day-of-week} #","]
   %1
 
-  "now"
-  #"(?i)(just|right)? ?now|immediately"
+  "anois"
+  #"(?i)anois"
   (cycle-nth :second 0)
 
-  "today"
-  #"(?i)today|(at this time)"
+  "inniu"
+  #"(?i)inniu|(ag an t-?am seo)"
   (cycle-nth :day 0)
 
-  "am"
-  #"(?i)(tmrw?|tomm?or?row)"
+  "amárach"
+  #"(?i)am[áa]rach"
   (cycle-nth :day 1)
 
   "inné"
@@ -156,5 +160,17 @@
   "arú inné"
   #"(?i)ar[úu] inn[ée]"
   (cycle-nth :day -2)
+
+  "<time> seo chugainn"
+  [(dim :time #(not (:latent %))) #"(?i)seo chugainn"]
+  (pred-nth-not-immediate %1 0)
+
+  "<time> seo chaite"
+  [(dim :time) #"(?i)seo chaite"]
+  (pred-nth %1 -1)
+
+  "<time> seo"
+  [(dim :time) #"(?i)seo"]
+  (pred-nth %1 0)
 
 )
