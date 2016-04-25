@@ -7,14 +7,15 @@
                (-> %1 :groups first .toLowerCase))}
 
   ;; Integers
-  "numbers, 1-10"
+  "numbers, 20-90"
   #"(i?)(fiche|tr[íi]ocha|daichead|caoga|seasca|seacht[óo]|ocht[óo]|n[óo]cha)"
   {:dim :number
    :integer true
    :value (get {"fiche" 20 "tríocha" 30 "triocha" 30
                 "daichead" 40 "caoga" 50 "seasca" 60 "seachtó" 70 "seachto" 70
                 "ochtó" 80 "ochto" 80 "nócha" 90 "nocha" 90}
-               (-> %1 :groups first .toLowerCase))}
+               (-> %1 :groups first .toLowerCase))
+   :grain 1}
 
   "numbers, 1-10"
   #"(i?)(aon|dh[áa]|tr[íi]|ceithre|c[úu]ig|seacht|s[ée]|ocht|naoi|deich)"
