@@ -225,7 +225,7 @@
   (pred-nth-not-immediate %2 0)
 
   "last <time>"
-  [#"(?i)last" (dim :time)]
+  [#"(?i)(this past|last)" (dim :time)]
   (pred-nth %2 -1)
 
   "<time> after next"

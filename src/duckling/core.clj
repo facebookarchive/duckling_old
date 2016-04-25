@@ -1,14 +1,16 @@
 (ns duckling.core
   (:use [clojure.tools.logging :exclude [trace]]
         [plumbing.core])
-  (:require [clojure.string :as strings]
+  (:require [clojure.java.io :as io]
+            [clojure.set :as set]
+            [clojure.string :as strings]
+            [duckling.corpus :as corpus]
             [duckling.engine :as engine]
-            [duckling.time.obj :as time]
             [duckling.learn :as learn]
-            [duckling.util :as util]
+            [duckling.resource :as res]
             [duckling.time.api :as api]
-            [clojure.java.io :as io]
-            [duckling.corpus :as corpus]))
+            [duckling.time.obj :as time]
+            [duckling.util :as util]))
 
 (defonce rules-map (atom {}))
 (defonce corpus-map (atom {}))
@@ -207,50 +209,75 @@
      (def token (fn [n]
                   (nth stash n))))))
 
-
 ;--------------------------------------------------------------------------
 ; Configuration loading
 ;--------------------------------------------------------------------------
 
+(defn- gen-config-for-lang
+  "Generates the full config for a language from directory structure."
+  [lang]
+  (->> ["corpus" "rules"]
+       (map (fn [dir]
+              (let [files (->> (format "languages/%s/%s" lang dir)
+                               res/get-files
+                               (filter (comp not #(.startsWith % "_")))
+                               (map #(subs % 0 (- (count %) 4)))
+                               vec)]
+                [(keyword dir) files])))
+       (into {})))
+
+(defn- gen-config-for-langs
+  "Generates the full config for langs from directory structure."
+  [langs]
+  (->> langs
+       (map (fn [lang]
+              [(keyword (format "%s$core" lang)) (gen-config-for-lang lang)]))
+       (into {})))
+
 (defn- merge-rules
-  [current config-key new-file]
-  (let [new-file (io/resource (str "duckling/rules/" new-file ".clj"))
-        new-rules (engine/rules (read-string (slurp new-file)))]
-    (assoc
-        current
-      config-key
-      (concat (config-key current) new-rules))))
+  [current config-key lang new-file]
+  (let [new-rules (-> (format "languages/%s/rules/%s.clj" lang new-file)
+                      io/resource
+                      slurp
+                      read-string
+                      engine/rules)]
+    (update current config-key concat new-rules)))
 
 (defn- merge-corpus
-  [current config-key new-file]
-  (let [new-file (io/resource (str "duckling/corpus/" new-file ".clj"))
-        new-corpus (corpus/read-corpus new-file)]
-    (assoc
-        current
-      config-key
-      (util/merge-according-to {:tests concat :context merge} (config-key current) new-corpus))))
+  [current config-key lang new-file]
+  (let [new-corpus (-> (format "languages/%s/corpus/%s.clj" lang new-file)
+                       io/resource
+                       corpus/read-corpus)
+        f (partial util/merge-according-to {:tests concat :context merge})]
+    (update current config-key f new-corpus)))
 
 (defn load!
-  "Load/Reload rules and classifiers from the config in parameter.
-  If no config provided, load the default config"
-  ([]
-   (let [config (-> "default-config.clj" io/resource slurp read-string)]
-     (load! config)))
-  ([config]
-   (reset! rules-map {})
-   (reset! corpus-map {})
-   (reset! classifiers-map {})
-   (doseq [[config-key {corpus-files :corpus rules-files :rules}] config]
-     (printf "Loading module %s\n" config-key)
-     (doseq [corpus-file corpus-files]
-       (swap! corpus-map merge-corpus config-key corpus-file))
-     (doseq [rules-file rules-files]
-       (swap! rules-map merge-rules config-key rules-file)))
-   (doseq [[config-key rules] @rules-map]
-     (swap! classifiers-map assoc config-key
-            (learn/train-classifiers (get @corpus-map config-key)
-                                     rules
-                                     learn/extract-route-features)))))
+  "(Re)loads rules and classifiers for languages or/and config.
+   If no language list nor config provided, loads all languages."
+  ([] (load! nil))
+  ([{:keys [languages config]}]
+   (let [langs (seq languages)
+         lang-config (when (or langs (empty? config))
+                       (cond-> (set (res/get-subdirs "languages"))
+                         langs (set/intersection (set langs))
+                         true gen-config-for-langs))
+         config (merge lang-config config)]
+     (reset! rules-map {})
+     (reset! corpus-map {})
+     (reset! classifiers-map {})
+     (doseq [[config-key {corpus-files :corpus rules-files :rules}] config]
+       (let [lang (-> config-key name (subs 0 2))]
+         (printf "Loading module %s\n" config-key)
+         (doseq [corpus-file corpus-files]
+           (swap! corpus-map merge-corpus config-key lang corpus-file))
+         (doseq [rules-file rules-files]
+           (swap! rules-map merge-rules config-key lang rules-file))))
+     (doseq [[config-key rules] @rules-map]
+       (swap! classifiers-map assoc config-key
+              (learn/train-classifiers (get @corpus-map config-key)
+                                       rules
+                                       learn/extract-route-features)))
+     (map key config))))
 
 
 ;--------------------------------------------------------------------------
