@@ -133,5 +133,28 @@
 ;  "Mother's Day"; fourth Sunday of Lent. Need Lent.
 ;  #"(?i)mother'?s? day"
 ;  (intersect (day-of-week 7) (month 5) (cycle-nth-after :week 1 (month-day 5 1)))
+  "absorption of , after named day"
+  [{:form :day-of-week} #","]
+  %1
+
+  "now"
+  #"(?i)(just|right)? ?now|immediately"
+  (cycle-nth :second 0)
+
+  "today"
+  #"(?i)today|(at this time)"
+  (cycle-nth :day 0)
+
+  "am"
+  #"(?i)(tmrw?|tomm?or?row)"
+  (cycle-nth :day 1)
+
+  "inné"
+  #"(?i)inn[ée]"
+  (cycle-nth :day -1)
+
+  "arú inné"
+  #"(?i)ar[úu] inn[ée]"
+  (cycle-nth :day -2)
 
 )
