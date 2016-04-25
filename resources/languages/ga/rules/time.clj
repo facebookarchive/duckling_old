@@ -162,7 +162,7 @@
   (cycle-nth :day -2)
 
   "<time> seo chugainn"
-  [(dim :time #(not (:latent %))) #"(?i)seo chugainn"]
+  [(dim :time #(not (:latent %))) #"(?i)seo (chugainn|at[aá] ag teacht)"]
   (pred-nth-not-immediate %1 0)
 
   "<time> seo chaite"
