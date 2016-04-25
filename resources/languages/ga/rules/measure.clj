@@ -1,18 +1,32 @@
 (
-  ;measures need metrics
-  ;are converted for normalization purpose
-  ;International Bureau of Weights and Measures
-  ;http://www.bipm.org/en/si/si_brochure/chapter2/2-1/metre.html
+  "<dist> meters"
+  [(dim :distance) #"(?i)mh?[eé]adai?r"]
+  (-> %1
+      (dissoc  :latent)
+      (merge {:unit "metre"}))
 
-  "meter metric"
-  #"(?i)mh?[eé]adai?r"
-  (metric :distance-unit "metre" 1 "metre")
+  "<dist> centimeters"
+  [(dim :distance) #"(?i)cm|g?ch?eintimh?[eé]adai?r"]
+  (-> %1
+      (dissoc  :latent)
+      (merge {:unit "centimetre"
+              :normalized {:value (* 0.01 (-> %1 :value))
+                           :unit "metre"}}))
 
-  "miles metric"
-  #"(?i)mh?[íi]lt?e"
-  (metric :distance-unit "mile" 1609.34 "metre")
+  "<dist> miles"
+  [(dim :distance) #"(?i)mh?[íi]lt?e"]
+  (-> %1
+      (dissoc :latent)
+      (merge {:unit "mile"
+              :normalized {:value (* 1609 (-> %1 :value))
+                           :unit "metre"}}))
 
-  "km metric"
-  #"(?i)km|g?ch?ilim[eé]dai?r"
-  (metric :distance-unit "kilometre" 1000 "metre")
+  "<latent dist> km"
+  [(dim :distance) #"(?i)km|g?ch?ilim[eé]dai?r"]
+  (-> %1
+      (dissoc  :latent)
+      (merge {:unit "kilometre"
+              :normalized {:value (* 1000 (-> %1 :value))
+                           :unit "metre"}}))
+
 )
