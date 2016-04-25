@@ -5,7 +5,7 @@
   (compose-money %1 %2)
 
   "intersect (and X cents)" ;
-  [(dim :amount-of-money) #"(?i)and" (dim :amount-of-money #(= (:unit %) "cent"))]
+  [(dim :amount-of-money) #"(?i)agus|is" (dim :amount-of-money #(= (:unit %) "cent"))]
   (compose-money %1 %3)
 
   "intersect" ;
@@ -78,7 +78,7 @@
   [#"(?i)thart( ar)?|beagnach|breis (is|agus)" (dim :amount-of-money)]
   (assoc %2 :precision "approximate")
 
-  "exactly <amount-of-money>"
+  "<amount-of-money> glan"
   [(dim :amount-of-money) #"(?i)glan|baileach|(go )?d[íi]reach" ]
   (assoc %2 :precision "exact")
 
