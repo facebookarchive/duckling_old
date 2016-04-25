@@ -47,12 +47,18 @@
    :integer true
    :value 10 }
 
+  "integer (numeric)"
+  #"(\d{1,18})"
+  {:dim :number
+   :integer true
+   :value (Long/parseLong (first (:groups %1)))}
+
   ;;
   ;; Ordinal numbers
   ;;
 
   "ordinals (chéad, dara, etc.)"
-  #"(?i)ch[ée]ad|aon[úu]|t-aon[úu]|dara|tr[íi][úu]|ceathr[úu]|c[úu]igi[úu]|s[ée][úu]|seacht[úu]|ocht[úu]|t-ocht[úu]|nao[úu]|deichi[úu]|fichi[úu]|tr[íi]ochad[úu]|daichead[úu]|caogad[úu]|seascad[úu]|seacht[óo]d[úu]|ocht[óo]d[úu]|t-ocht[óo]d[úu]|n[óo]chad[úu]|c[ée]ad[úu]|mili[úu]|milli[úu]n[úu]"
+  #"(?i)(ch[ée]ad|aon[úu]|t-aon[úu]|dara|tr[íi][úu]|ceathr[úu]|c[úu]igi[úu]|s[ée][úu]|seacht[úu]|ocht[úu]|t-ocht[úu]|nao[úu]|deichi[úu]|fichi[úu]|tr[íi]ochad[úu]|daichead[úu]|caogad[úu]|seascad[úu]|seacht[óo]d[úu]|ocht[óo]d[úu]|t-ocht[óo]d[úu]|n[óo]chad[úu]|c[ée]ad[úu]|mili[úu]|milli[úu]n[úu])"
   {:dim :ordinal
    :value (get {"chéad" 1 "chead" 1 "aonú" 1 "aonu" 1 "t-aonú" 1 "t-aonu" 1 "dara" 2 "tríú" 3 "tríu" 3 "triú" 3 "triu" 3 "ceathrú" 4 "ceathru" 4 "cúigiú" 5  "cuigiú" 5 "cúigiu" 5 "cuigiu" 5 "séú" 6 "séu" 6 "seú" 6 "seu" 6 "seachtú" 7 "seachtu" 7 "ochtú" 8 "ochtu" 8 "t-ochtú" 8 "t-ochtu" 8 "naoú" 9 "naou" 9 "deichiú" 10 "deichiu" 10 "fichiú" 20 "fichiu" 20 "tríochadú" 30 "triochadú" 30 "tríochadu" 30 "triochadu" 30 "daicheadú" 40 "daicheadu" 40 "caogadú" 50 "caogadu" 50 "seascadú" 60 "seascadu" 60 "seachtódú" 70 "seachtodú" 70 "seachtódu" 70 "seachtodu" 70 "ochtódú" 80 "ochtodú" 80 "ochtódu" 80 "ochtodu" 80 "t-ochtódú" 80 "t-ochtodú" 80 "t-ochtódu" 80 "t-ochtodu" 80 "nóchadú" 90 "nóchadu" 90 "nochadú" 90 "nochadu" 90 "céadú" 100 "céadu" 100 "ceadú" 100 "ceadu" 100 "miliú" 1000 "miliu" 1000 "milliúnú" 1000000 "milliúnu" 1000000 "milliunú" 1000000 "milliunu" 1000000}
                (-> %1 :groups first .toLowerCase))}
