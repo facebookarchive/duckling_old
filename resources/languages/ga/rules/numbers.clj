@@ -10,7 +10,7 @@
                (-> %1 :groups first .toLowerCase))}
 
   "ordinal (digits)"
-  #"0*(\d+) ?(a|d|[úu])"
+  #"0*(\d+) ?(?i)(a|d|[úu])"
   {:dim :ordinal
    :value (read-string (first (:groups %1)))}  ; read-string not the safest
 
@@ -23,7 +23,7 @@
 
   ;; Integers
   "numbers, 20-90"
-  #"(i?)(fiche|tr[íi]ocha|daichead|caoga|seasca|seacht[óo]|ocht[óo]|n[óo]cha)"
+  #"(?i)(fiche|tr[íi]ocha|daichead|caoga|seasca|seacht[óo]|ocht[óo]|n[óo]cha)"
   {:dim :number
    :integer true
    :value (get {"fiche" 20 "tríocha" 30 "triocha" 30
@@ -33,7 +33,7 @@
    :grain 1}
 
   "numbers, 1-10"
-  #"(i?)(aon|dh[áa]|tr[íi]|ceithre|c[úu]ig|seacht|s[ée]|ocht|naoi|deich)"
+  #"(?i)(aon|dh[áa]|tr[íi]|ceithre|c[úu]ig|seacht|s[ée]|ocht|naoi|deich)"
   {:dim :number
    :integer true
    :value (get {"aon" 1 "dhá" 2 "dha" 2 "trí" 3 "tri" 3 "ceithre" 4
