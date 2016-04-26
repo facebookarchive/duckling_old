@@ -11,7 +11,7 @@
  ;;
  
   "integer (0..19)"
-  #"(?i)(keine?|keine?s|keiner?|keinen|null|nichts|eins?(er)?|zwei|drei|vierzehn|vier|fünf|sechzehn|sechs|siebzehn|sieben|achtzehn|acht|neunzehn|neun|elf|zwölf|dreizehn|füfzehn)"
+  #"(?i)(keine?|keine?s|keiner?|keinen|null|nichts|eins?(er)?|zwei|dreizehn|drei|vierzehn|vier|fünf|sechzehn|sechs|siebzehn|sieben|achtzehn|acht|neunzehn|neun|elf|zwölf|füfzehn)"
   ; fourteen must be before four, or it won't work because the regex will stop at four
   {:dim :number
    :integer true
