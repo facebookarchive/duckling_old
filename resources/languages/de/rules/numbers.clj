@@ -58,6 +58,17 @@
              (-> %1 :groups first .toLowerCase))
    :grain 1}
 
+ "integer ([2-9][1-9])"
+ #"(?i)(ein|zwei|drei|vier|fünf|sechs|sieben|acht|neun)und(zwanzig|dreissig|vierzig|fünfzig|sechzig|siebzig|achtzig|neunzig)"
+ {:dim :number
+  :integer true
+  :value (+ (get {"ein" 1 "zwei" 2 "drei" 3 "vier" 4 "fünf" 5
+                  "sechs" 6 "sieben" 7 "acht" 8 "neun" 9}
+                 (-> %1 :groups first .toLowerCase))
+            (get {"zwanzig" 20 "dreissig" 30 "vierzig" 40 "fünfzig" 50
+                  "sechzig" 60 "siebzig" 70 "achtzig" 80 "neunzig" 90}
+                 (-> %1 :groups second .toLowerCase)))}
+
  ; "integer 21..99"
  ; [(integer 10 90 #(#{20 30 40 50 60 70 80 90} (:value %))) (integer 1 9)]
  ; {:dim :number
