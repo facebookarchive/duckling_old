@@ -16,6 +16,15 @@
   [(dim :amount-of-money) #"(?i)agus|is" (dim :number)]
   (compose-money %1 %3)
 
+  ;precision for "about $15"
+  "thart ar <amount-of-money>"
+  [#"(?i)thart( ar)?|beagnach|breis (is|agus)" (dim :amount-of-money)]
+  (assoc %2 :precision "approximate")
+
+  "<amount-of-money> glan"
+  [(dim :amount-of-money) #"(?i)glan|baileach|(go )?d[íi]reach" ]
+  (assoc %1 :precision "exact")
+
   ; #(not (:number-prefixed %)
 
   "$"
@@ -72,14 +81,5 @@
    :value (:value %1)
    :unit (:unit %2)
    :fields {(:unit %1) (:value %2)}}
-
-  ;precision for "about $15"
-  "thart ar <amount-of-money>"
-  [#"(?i)thart( ar)?|beagnach|breis (is|agus)" (dim :amount-of-money)]
-  (assoc %2 :precision "approximate")
-
-  "<amount-of-money> glan"
-  [(dim :amount-of-money) #"(?i)glan|baileach|(go )?d[íi]reach" ]
-  (assoc %2 :precision "exact")
 
 )
