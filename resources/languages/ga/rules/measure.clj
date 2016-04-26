@@ -45,7 +45,7 @@
                            :unit "metre"}}))
 
   "<latent dist> orlach"
-  [(dim :distance) #"(?i)(''|([nth]-?)?orl(ach|aigh|a[íi]|\.)"]
+  [(dim :distance) #"(?i)(''|([nth]-?)?orl(ach|aigh|a[íi]|\.))"]
   (-> %1
       (dissoc  :latent)
       (merge {:unit "inch"
