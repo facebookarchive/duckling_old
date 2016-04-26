@@ -13,7 +13,7 @@
       (merge {:unit "metre"}))
 
   "<dist> centimeters"
-  [(dim :distance) #"(?i)cm|g?ch?eintimh?[eé]adai?r"]
+  [(dim :distance) #"(?i)(c\.?m\.?|g?ch?eintimh?[eé]adai?r)"]
   (-> %1
       (dissoc  :latent)
       (merge {:unit "centimetre"
@@ -29,7 +29,7 @@
                            :unit "metre"}}))
 
   "<latent dist> km"
-  [(dim :distance) #"(?i)k\.?m\.?|g?ch?ilim[eé]dai?r"]
+  [(dim :distance) #"(?i)(k\.?m\.?|g?ch?ilim[eé]dai?r)"]
   (-> %1
       (dissoc  :latent)
       (merge {:unit "kilometre"
