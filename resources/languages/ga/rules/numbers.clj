@@ -1,6 +1,6 @@
 (
   "count numbers"
-  #"(?i)a (n[áa]id|haon|d[óo]|tr[íi]|ceathair|c[úu]ig|s[ée]|seacht|hocht|naoi|deich)"
+  [#"(?i)a (n[áa]id|haon|d[óo]|tr[íi]|ceathair|c[úu]ig|s[ée]|seacht|hocht|naoi|deich)"]
   {:dim :number
    :integer true
    :value (get {"náid" 0 "naid" 0 "haon" 1 "dó" 2 "do" 2 "trí" 3 "tri" 3 "ceathair" 4 "cúig" 5 "cuig" 5 "sé" 6 "se" 6 "seacht" 7 "hocht" 8 "naoi" 9 "deich" 10}
@@ -8,7 +8,7 @@
 
   ;; Integers
   "numbers, 20-90"
-  #"(i?)(fiche|tr[íi]ocha|daichead|caoga|seasca|seacht[óo]|ocht[óo]|n[óo]cha)"
+  [#"(i?)(fiche|tr[íi]ocha|daichead|caoga|seasca|seacht[óo]|ocht[óo]|n[óo]cha)"]
   {:dim :number
    :integer true
    :value (get {"fiche" 20 "tríocha" 30 "triocha" 30
@@ -18,7 +18,7 @@
    :grain 1}
 
   "numbers, 1-10"
-  #"(i?)(aon|dh[áa]|tr[íi]|ceithre|c[úu]ig|seacht|s[ée]|ocht|naoi|deich)"
+  [#"(i?)(aon|dh[áa]|tr[íi]|ceithre|c[úu]ig|seacht|s[ée]|ocht|naoi|deich)"]
   {:dim :number
    :integer true
    :value (get {"aon" 1 "dhá" 2 "dha" 2 "trí" 3 "tri" 3 "ceithre" 4
@@ -28,14 +28,14 @@
 
   ;; Post-nominal numbers
   "old vigesimal numbers, 20s"
-  #"(i?)is (d[áa] fhichead|tr[íi] fichid|ceithre fichid)"
+  [#"(i?)is (d[áa] fhichead|tr[íi] fichid|ceithre fichid)"]
   {:dim :number
    :integer true
    :value (get {"dá fhichead" 40 "da fhichead" 40 "trí fichid" 60 "tri fichid" 60 "ceithre fichid" 80}
                (-> %1 :groups first .toLowerCase))}
 
   "old vigesimal numbers, 20s + 10"
-  #"(i?)d[ée]ag is (fiche|d[áa] fhichead|tr[íi] fichid|ceithre fichid)"
+  [#"(i?)d[ée]ag is (fiche|d[áa] fhichead|tr[íi] fichid|ceithre fichid)"]
   {:dim :number
    :integer true
    :value (get {"fiche" 30 "dá fhichead" 50 "da fhichead" 50 "trí fichid" 70 "tri fichid" 70 "ceithre fichid" 90}

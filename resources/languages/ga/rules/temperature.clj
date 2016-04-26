@@ -31,5 +31,4 @@
   (-> %1
       (dissoc :latent)
       (merge {:value (* -1 (-> %1 :value))}))
-
-  )
+)
