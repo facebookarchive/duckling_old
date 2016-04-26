@@ -37,7 +37,7 @@
                            :unit "metre"}}))
 
   "<latent dist> troigh"
-  [(dim :distance) #"(?i)('|troi[tg]he?|tr\.?"]
+  [(dim :distance) #"(?i)('|d?th?roi[tg]he?|tr\.?"]
   (-> %1
       (dissoc  :latent)
       (merge {:unit "foot"
