@@ -83,11 +83,11 @@
   ;(cycle-n-not-immediate (:grain %3) (- (:value %2)))
 
   "<cycle> ó inniu"
-  [(integer 1 9999) (dim :cycle) #"[óo](n l[áa] (at[áa] )?)?inniu"]
+  [(integer 1 9999) (dim :cycle) #"(?i)[óo](n l[áa] (at[áa] )?)?inniu"]
   (cycle-n-not-immediate (:grain %2) (:value %1))
 
   "i gceann <cycle>"
-  [#"(i|faoi) g?ch?eann" (integer 1 9999) (dim :cycle)]
+    [#"(?i)(i|faoi) g?ch?eann" (integer 1 9999) (dim :cycle)]
   (cycle-n-not-immediate (:grain %3) (:value %2))
 
   "<ordinal> <cycle> de <time>"
