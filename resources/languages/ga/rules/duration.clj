@@ -17,7 +17,7 @@
    :grain :hour}
 
   "lá (unit-of-duration)"
-  #"(?i)l([áa]|ae(thanta)?)"
+  #"(?i)l(ae(thanta)?|[áa])"
   {:dim :unit-of-duration
    :grain :day}
 
@@ -36,4 +36,26 @@
   {:dim :unit-of-duration
    :grain :year}
 
+  "coicís" ;14 days
+  #"(?i)coic[íi]s[íie]?"
+  {:dim :duration
+   :value (duration :day 14)}
+
+  "leathuair"
+  #"(?i)leathuair(e|eanta)?"
+  {:dim :duration
+   :value (duration :minute 30)}
+
+  "<integer> <unit-of-duration>"
+  [(integer 0) (dim :unit-of-duration)]; duration can't be negative...
+  {:dim :duration
+   :value (duration (:grain %2) (:value %1))}
+
+  ;"<integer> <unit-of-duration> <integer>"
+  ;[(integer 0) (dim :unit-of-duration) (integer 0)]; duration can't be negative...
+  ;{:dim :duration
+  ; (if (and (matches #"(?i)([thn]?-)?aon" (:body %1))
+  ;          (matches #"(?i)amh[áa]in" (:body %3)))
+  ;      (:value (duration (:grain %2) 1))
+  ;      (:value (duration (:grain %2) (+ (:value %1) (:value %3)))))}
 )

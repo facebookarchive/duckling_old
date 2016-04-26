@@ -26,7 +26,7 @@
    :grain :hour}
 
   "lá (cycle)"
-  #"(?i)l([áa]|ae(thanta)?)"
+  #"(?i)l(ae(thanta)?|[áa])"
   {:dim :cycle
    :grain :day}
 
