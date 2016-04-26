@@ -127,8 +127,16 @@
   (month-day 1 6)
 
   "Lá Fhéile Vailintín"
-  [#"(?i)(l[áa] )?fh[eé]ile|'?le vailint[íi]n"]
+  [#"(?i)(l[áa] )?(fh[eé]ile|'?le) vailint[íi]n"]
   (month-day 2 14)
+
+  "Lá Fhéile Pádraig"
+  [#"(?i)(l[áa] )?(fh[eé]ile|'?le) ph?[áa]draig"]
+  (month-day 3 17)
+
+  "Lá Fhéile Bríde"
+  [#"(?i)(l[áa] )?(fh[eé]ile|'?le) bh?r[íi]de"]
+  (month-day 2 1)
 
   "Lá na nAithreacha"; third Sunday of June
   [#"(?i)l[áa] na naithreacha"]
