@@ -67,7 +67,7 @@
                  (-> %1 :groups first .toLowerCase))
             (get {"zwanzig" 20 "dreissig" 30 "vierzig" 40 "fünfzig" 50
                   "sechzig" 60 "siebzig" 70 "achtzig" 80 "neunzig" 90}
-                 (-> %2 :groups first .toLowerCase)))}
+                 (-> %1 :groups second .toLowerCase)))}
 
  ; "integer 21..99"
  ; [(integer 10 90 #(#{20 30 40 50 60 70 80 90} (:value %))) (integer 1 9)]
