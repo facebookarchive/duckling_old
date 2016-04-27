@@ -184,4 +184,37 @@
   "<time> seo"
   [(dim :time) #"(?i)seo"]
   (pred-nth %1 0)
+
+  ; Years
+  ; Between 1000 and 2100 we assume it's a year
+  ; Outside of this, it's safer to consider it's latent
+
+  "year"
+  (integer 1000 2100)
+  (year (:value %1))
+
+  "year (latent)"
+  (integer -10000 999)
+  (assoc (year (:value %1)) :latent true)
+
+  "year (latent)"
+  (integer 2101 10000)
+  (assoc (year (:value %1)) :latent true)
+
+
+  ; Day of month appears in the following context:
+  ; - an 5ú
+  ; - 6ú Feabhra
+  ; - 6ú lá de Feabhra
+  ; - dd/mm (and other numerical formats like yyyy-mm-dd etc.)
+  ; In general we are flexible and accept both ordinals (3rd) and numbers (3)
+
+  "an <day-of-month> (ordinal)" ; this one is not latent
+  [#"(?i)an|na" (dim :ordinal #(<= 1 (:value %) 31))]
+  (day-of-month (:value %2))
+
+  ;"(ordinal) <day-of-month>" ; this one is latent
+  ;[(dim :ordinal #(<= 1 (:value %) 31))]
+  ;(assoc (day-of-month (:value %2)) :latent true)
+
 )
