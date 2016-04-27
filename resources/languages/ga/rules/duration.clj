@@ -54,11 +54,11 @@
   ; unit-integer duration tens-integer
   ; *but* aon X amháin = one single X
   ; but either alone can mean one
-  ;"<integer> <unit-of-duration> <integer>"
-  ;[(integer 0) (dim :unit-of-duration) (integer 0)]
-  ;{:dim :duration
-  ; :value (if (and (re-matches #"(?i)([thn]-?)?aon" (:body %1))
-  ;                 (re-matches #"(?i)amh[áa]in" (:body %3)))
-  ;          (duration (:grain %2) (:value %1))
-  ;          (duration (:grain %2) (compose-numbers %1 %3)))}
+  "<integer> <unit-of-duration> <integer>"
+  [(integer 0) (dim :unit-of-duration) (integer 0)]
+  {:dim :duration
+   :value (if (and (re-matches #"(?i)([thn]-?)?aon" (:text %1))
+                   (re-matches #"(?i)amh[áa]in" (:text %3)))
+            (duration (:grain %2) (:value %1))
+            (duration (:grain %2) (+ (:value %1) (:value %3))))}
 )
