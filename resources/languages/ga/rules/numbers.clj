@@ -43,17 +43,17 @@
 
   ;; Post-nominal numbers
   "old vigesimal numbers, 20s"
-  #"(?i)is (d[áa] fhichead|tr[íi] fichid|ceithre fichid)"
+  #"(?i)is (dh?[áa] fhichead|tr[íi] fichid|ceithre fichid)"
   {:dim :number
    :integer true
-   :value (get {"dá fhichead" 40 "da fhichead" 40 "trí fichid" 60 "tri fichid" 60 "ceithre fichid" 80}
+   :value (get {"dá fhichead" 40 "da fhichead" 40 "dhá fhichead" 40 "dha fhichead" 40 "trí fichid" 60 "tri fichid" 60 "ceithre fichid" 80}
                (-> %1 :groups first .toLowerCase))}
 
   "old vigesimal numbers, 20s + 10"
-  #"(?i)d[ée]ag is (fiche|d[áa] fhichead|tr[íi] fichid|ceithre fichid)"
+  #"(?i)d[ée]ag is (fiche|dh?[áa] fhichead|tr[íi] fichid|ceithre fichid)"
   {:dim :number
    :integer true
-   :value (get {"fiche" 30 "dá fhichead" 50 "da fhichead" 50 "trí fichid" 70 "tri fichid" 70 "ceithre fichid" 90}
+   :value (get {"fiche" 30 "dá fhichead" 50 "da fhichead" 50 "dhá fhichead" 50 "dha fhichead" 50 "trí fichid" 70 "tri fichid" 70 "ceithre fichid" 90}
                (-> %1 :groups first .toLowerCase))}
 
   "déag"
