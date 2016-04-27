@@ -150,16 +150,20 @@
   %1
 
   "anois"
-  #"(?i)anois"
+  #"(?i)anois|(ag an (t-?)?am seo)"
   (cycle-nth :second 0)
 
   "inniu"
-  #"(?i)inniu|(ag an t-?am seo)"
+  #"(?i)inniu"
   (cycle-nth :day 0)
 
   "amárach"
   #"(?i)am[áa]rach"
   (cycle-nth :day 1)
+
+  "arú amárach"
+  #"(?i)ar[úu] am[áa]rach"
+  (cycle-nth :day 2)
 
   "inné"
   #"(?i)inn[ée]"
