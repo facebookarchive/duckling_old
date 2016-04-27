@@ -213,8 +213,20 @@
   [#"(?i)an|na" (dim :ordinal #(<= 1 (:value %) 31))]
   (day-of-month (:value %2))
 
-  ;"(ordinal) <day-of-month>" ; this one is latent
-  ;[(dim :ordinal #(<= 1 (:value %) 31))]
-  ;(assoc (day-of-month (:value %2)) :latent true)
+  "<day-of-month> (ordinal)" ; this one is latent
+  [(dim :ordinal #(<= 1 (:value %) 31))]
+  (assoc (day-of-month (:value %1)) :latent true)
+
+  "an <day-of-month> (non ordinal)" ; this one is latent
+  [#"(?i)an|na" (integer 1 31)]
+  (assoc (day-of-month (:value %2)) :latent true)
+
+  "<day-of-month>(ordinal) <named-month>" ; 12ú feabhra
+  [(dim :ordinal #(<= 1 (:value %) 31)) {:form :month}]
+  (intersect %2 (day-of-month (:value %1)))
+
+  "<day-of-month>(ordinal) <named-month> year" ; 12ú feabhra 2012
+  [(dim :ordinal #(<= 1 (:value %) 31)) {:form :month} #"(\d{2,4})"]
+  (intersect %2 (day-of-month (:value %1)) (year (Integer/parseInt(first (:groups %3)))))
 
 )
