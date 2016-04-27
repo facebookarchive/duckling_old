@@ -51,11 +51,14 @@
   {:dim :duration
    :value (duration (:grain %2) (:value %1))}
 
+  ; unit-integer duration tens-integer
+  ; *but* aon X amháin = one single X
+  ; but either alone can mean one
   ;"<integer> <unit-of-duration> <integer>"
-  ;[(integer 0) (dim :unit-of-duration) (integer 0)]; duration can't be negative...
+  ;[(integer 0) (dim :unit-of-duration) (integer 0)]
   ;{:dim :duration
-  ; (if (and (matches #"(?i)([thn]?-)?aon" (:body %1))
-  ;          (matches #"(?i)amh[áa]in" (:body %3)))
-  ;      (:value (duration (:grain %2) 1))
-  ;      (:value (duration (:grain %2) (+ (:value %1) (:value %3)))))}
+  ; :value (if (and (re-matches #"(?i)([thn]-?)?aon" (:body %1))
+  ;                 (re-matches #"(?i)amh[áa]in" (:body %3)))
+  ;          (duration (:grain %2) (:value %1))
+  ;          (duration (:grain %2) (compose-numbers %1 %3)))}
 )
