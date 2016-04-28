@@ -102,8 +102,8 @@
                      (map-vals set (load! arg))))]
       (testing "load! should load all languages by default"
         (with-redefs [res/get-files (constantly ["numbers.clj"])
-                      res/get-subdirs (constantly ["en" "cn" "pt"])]
-          (are [arg] (check arg [:en$core :cn$core :pt$core])
+                      res/get-subdirs (constantly ["en" "zh" "pt"])]
+          (are [arg] (check arg [:en$core :zh$core :pt$core])
             nil
             {}
             {:config {} :languages []})))
