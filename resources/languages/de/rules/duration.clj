@@ -36,7 +36,7 @@
   {:dim :unit-of-duration
    :grain :year}
   
-   "half an hour"
+  "half an hour"
   [#"(?i)(1/2\s?|halbe?n? )stunde"]
   {:dim :duration
    :value (duration :minute 30)}
@@ -45,8 +45,12 @@
   #"(?i)(a|one)? fortnight"
   {:dim :duration
    :value (duration :day 14)}
+  
+  "a <duration>"
+  [#"(?i)eine?(r|n)?" (dim :duration)]
+ (in-duration (:value %2))
 
-  "<integer> <unit-of-duration>"
+ "<integer> <unit-of-duration>"
   [(integer 0) (dim :unit-of-duration)]; duration can't be negative...
   {:dim :duration
    :value (duration (:grain %2) (:value %1))}
@@ -69,12 +73,18 @@
    :value (duration :minute (+ 30 (* 60 (:value %1))))}
 
   "a <unit-of-duration>"
-  [#"(?i)eine?n?" (dim :unit-of-duration)]
+  [#"(?i)eine?(r|n)?" (dim :unit-of-duration)]
   {:dim :duration
    :value (duration (:grain %2) 1)}
+  
+  
+  
+ "in <duration>"
+  [#"(?i)in" (dim :duration)]
+  (in-duration (:value %2))
 
-  "in/after <duration>"
-  [#"(?i)in|nach" (dim :duration)]
+  "after <duration>"
+  [#"(?i)nach" (dim :duration)]
   (in-duration (:value %2))
 
   "<duration> from now"
@@ -105,6 +115,6 @@
   "exactly <duration>" ; sharp
   [#"(?i)genau|exakt" (dim :duration)]
   (-> %2
-    (merge {:precision "exact"}))
+    (merge {:precision "exact"})))
 
-)
+

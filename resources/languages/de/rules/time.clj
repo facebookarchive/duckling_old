@@ -175,10 +175,18 @@
   "tomorrow"
   #"(?i)morgen"
   (cycle-nth :day 1)
+  
+  "after tomorrow"
+  #"(?i)übermorgen"
+  (cycle-nth :day 2)
 
   "yesterday"
   #"(?i)gestern"
   (cycle-nth :day -1)
+  
+  "before yesterday"
+  #"(?i)vorgestern"
+  (cycle-nth :day -2)
 
   "EOM|End of month"
   #"(?i)(das )?(EOM|monats? ?ende|ende (des )?jahr(es)?)"
@@ -213,12 +221,12 @@
   (pred-nth %2 -1)
 
   "<time> after next"
-  [(dim :time) #"(?i)übernächsten?|über ?nächstes?"]
-  (pred-nth-not-immediate %1 1)
+  [#"(?i)übernächsten?|über ?nächstes?" (dim :time)]
+  (pred-nth-not-immediate %2 1)
 
-   "<time> before last"
-  [(dim :time) #"(?i)vorletzten?|vor ?letztes?"]
-  (pred-nth %1 -2)
+  "<time> before last"
+  [#"(?i)vorletzten?|vor ?letztes?" (dim :time)]
+  (pred-nth %2 -2)
 
   "last <day-of-week> of <time>"
   [#"(?i)letzten?" {:form :day-of-week} #"(?i)um" (dim :time)];Check me OF
@@ -327,7 +335,7 @@
   #"(?i)((?:[01]?\d)|(?:2[0-3]))[:.]([0-5]\d)"
   (hour-minute (Integer/parseInt (first (:groups %1)))
                (Integer/parseInt (second (:groups %1)))
-               true)
+               false)
 
   "hhmm (military)"
   #"(?i)((?:[01]?\d)|(?:2[0-3]))([0-5]\d)"
@@ -528,7 +536,7 @@
     (merge {:precision "approximate"}));Check me NO TRANSLATION NECESSARY
 
   "exactly <time-of-day>" ; sharp
-  [#"(?i)genau|exakt|punkt (um)?" {:form :time-of-day} ]
+  [#"(?i)genau|exakt|punkt (um)?" {:form :time-of-day}]
   (-> %2
     (dissoc :latent)
     (merge {:precision "exact"}));Check me NO TRANSLATION NECESSARY
@@ -591,7 +599,7 @@
 
   "after <time-of-day>"
   [#"(?i)nach" (dim :time)]
-  (merge %2 {:direction :after})
+  (merge %2 {:direction :after}))
 
   ; ;; In this special case, the upper limit is exclusive
   ; "<hour-of-day> - <hour-of-day> (interval)"
@@ -608,4 +616,4 @@
   ; (dim :time)
   ; (assoc %1 :dim :time2)
 
-)
+

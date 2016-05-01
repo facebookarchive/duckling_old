@@ -43,6 +43,14 @@
   "200"
   "zwei hundert"
   (number 200)
+  
+  "102"
+  "hundertzwei"
+  (number 102)
+  
+  "zweieinhalb"
+  "2.5"
+  (number 2.5)
 
   "1.1"
   "1.10"
@@ -94,11 +102,11 @@
   "sieben hundert einundzwanzig tausend zwölf"
   (number 721012)
 
-  "einunddreissig millionen zwei hundert sechsundfünfzig tausend sieben hundert einundzwanzig"
+  "ein und dreissig millionen zwei hundert sechs und fünfzig tausend sieben hundert ein und zwanzig"
   (number 31256721)
 
   "vierter"
   "4ter"
-  (ordinal 4)
-)
+  (ordinal 4))
+
 

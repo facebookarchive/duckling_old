@@ -231,7 +231,7 @@
 
   "3:18"
   "3:18 früh"
-  (datetime 2013 2 12 3 18)
+  (datetime 2013 2 13 3 18)
 
   "um 3 am nachmittag"
   "um 15"
@@ -267,8 +267,7 @@
   (datetime 2013 2 12 15 30 :hour 3 :minute 30 :meridiem :pm)
 
   "3:30"
-  "halb vier"
-  (datetime 2013 2 12 15 30 :hour 3 :minute 30)
+  (datetime 2013 2 13 3 30 :hour 3 :minute 30)
 
   "viertel vor 12"
   "11:45"
@@ -278,7 +277,7 @@
   "8 uhr am abend"
   "heute abend um 20 Uhr"
   "heute um 20:00"
-  (datetime 2013 2 12 20)
+  (datetime 2013 2 12 20 00)
 
   ;; Mixing date and time
 
@@ -309,7 +308,7 @@
   "in einer halben stunde"
   "in 30 minuten"
   (datetime 2013 2 12 5 0 0)
-
+  
   "in 2.5 stunden"
   "in zweieinhalb stunden"
   (datetime 2013 2 12 7 0 0)
@@ -537,13 +536,13 @@
   "Donnerstag Vormittag von 9 bis 11"
   (datetime-interval [2013 2 14 9] [2013 2 14 12])
 
-  "11:30-1:30" ; go train this rule!
-  "11:30-1:30"
-  "11:30-1:30"
-  "11:30-1:30"
-  "11:30-1:30"
-  "11:30-1:30"
-  "11:30-1:30"
+  "11:30-13:30" ; go train this rule!
+  "11:30-13:30"
+  "11:30-13:30"
+  "11:30-13:30"
+  "11:30-13:30"
+  "11:30-13:30"
+  "11:30-13:30"
   (datetime-interval [2013 2 12 11 30] [2013 2 12 13 31])
 
   "1:30 am Sa, 21. Sept"
@@ -575,18 +574,18 @@
   (datetime 2013 2 14 8 00 :timezone "GMT")
 
   ;; Bookface tests
-  "heute um 2 Uhr"
+  "heute um 14 Uhr"
   "um 2"
   (datetime 2013 2 12 14)
 
   "25.4. um 4"
   (datetime 2013 4 25 16 0)
 
-  "morgen um 3 Uhr"
+  "morgen um 15 Uhr"
   "morgen um 3"
   (datetime 2013 2 13 15)
 
-  "nach 2 Uhr"
+  "nach 14 Uhr"
   "nach 14h"
   "nach 2"
   (datetime 2013 2 12 14 :direction :after)
@@ -625,5 +624,5 @@
 
   "nächsten montag"
   "kommenden montag"
-  (datetime 2013 2 18 :day-of-week 1)
-)
+  (datetime 2013 2 18 :day-of-week 1))
+
