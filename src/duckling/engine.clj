@@ -99,10 +99,8 @@
   "Parses a set of rules and 'add' them into 'the-rules'.
   Can be called several times, since rules might spread into several files."
   [forms]
-  (let [triples (partition 3 forms)
-        tests (mapv (fn [[nam pat prod]] (build-rule nam pat prod))
-                triples)]
-    tests))
+  (->> (partition 3 forms)
+       (mapv (partial apply build-rule))))
 
 ;;
 ;; Runtime parsing (core algorithm)
@@ -179,7 +177,7 @@
       (for [rule rules]
         (try
           (->> (match (:pattern rule) stash) ; get the routes that match this rule
-               (filter #(never-produced? stash rule %)) ; remove what we already have
+               (filter (partial never-produced? stash rule)) ; remove what we already have
                (map (fn [route] (produce rule route sentence)))) ; produce
           (catch Exception e
             (throw (Exception. (str "Exception matching rule: "

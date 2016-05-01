@@ -3,7 +3,7 @@
         [plumbing.core])
   (:require [clojure.java.io :as io]
             [clojure.set :as set]
-            [clojure.string :as strings]
+            [clojure.string :as string]
             [duckling.corpus :as corpus]
             [duckling.engine :as engine]
             [duckling.learn :as learn]
@@ -89,7 +89,7 @@
   {:pre [s context module]}
   (let [classifiers (get-classifier module)
         _ (when-not (map? classifiers)
-            (errorf "[duckling] Module %s is not loaded. Did you (load!) ?" module))
+            (errorf "[duckling] Module %s is not loaded. Did you (load!)?" module))
         rules (get-rules module)
         stash (engine/pass-all s rules base-stash)
         ; add an index to tokens in the stash
@@ -101,9 +101,8 @@
         winners (->> stash
                      (filter :pos)
                      ; just keep the dims we want, and add the label key
-                     (?>> dim-label (map #(when-let [label (get dim-label (:dim %))]
-                                            (assoc % :label label))))
-                     (remove nil?)
+                     (?>> dim-label (keep #(when-let [label (get dim-label (:dim %))]
+                                             (assoc % :label label))))
 
                      (select-winners
                        #(compare-tokens %1 %2 classifiers dim-label)
@@ -114,9 +113,10 @@
                      ; low confidence for numbers covered by datetime
                      (engine/estimate-confidence context module)
                      ; adapt the keys for the outside world
-                     (map #(merge % {:start (:pos %)
-                                     :end (:end %)
-                                     :body (:text %)})))]
+                     (map (fn [{:keys [pos end text] :as token}]
+                            (merge token {:start pos
+                                          :end end
+                                          :body text}))))]
     {:stash stash :winners winners}))
 
 
@@ -142,7 +142,7 @@
                   (when-let [x (:dim tok)] (name x))
                   (when-let [x (-> tok :rule :name)] (name x))
                   (float (learn/route-prob tok classifiers))
-                  (strings/join " + " (mapv #(get-in % [:rule :name]) (:route tok))))
+                  (string/join " + " (mapv #(get-in % [:rule :name]) (:route tok))))
           (printf "  %s\n" (:text tok)))))))
 
 (defn- print-tokens
@@ -234,26 +234,57 @@
               [(keyword (format "%s$core" lang)) (gen-config-for-lang lang)]))
        (into {})))
 
-(defn- merge-rules
-  [current config-key lang new-file]
-  (let [new-rules (-> (format "languages/%s/rules/%s.clj" lang new-file)
-                      io/resource
-                      slurp
-                      read-string
-                      engine/rules)]
-    (update current config-key concat new-rules)))
+(defn- read-rules
+  [lang new-file]
+  (-> (format "languages/%s/rules/%s.clj" lang new-file)
+      io/resource
+      slurp
+      read-string
+      engine/rules))
 
-(defn- merge-corpus
-  [current config-key lang new-file]
-  (let [new-corpus (-> (format "languages/%s/corpus/%s.clj" lang new-file)
-                       io/resource
-                       corpus/read-corpus)
-        f (partial util/merge-according-to {:tests concat :context merge})]
-    (update current config-key f new-corpus)))
+(defn- read-corpus
+  [lang new-file]
+  (-> (format "languages/%s/corpus/%s.clj" lang new-file)
+      io/resource
+      corpus/read-corpus))
+
+(defn- make-corpus
+  [lang corpus-files]
+  (->> corpus-files
+       (pmap (partial read-corpus lang))
+       (reduce (partial util/merge-according-to {:tests concat :context merge}))))
+
+(defn- make-rules
+  [lang rules-files]
+  (->> rules-files
+       (pmap (partial read-rules lang))
+       (apply concat)))
+
+(defn- get-dims-for-test
+  [context module {:keys [text]}]
+  (mapcat (fn [text]
+            (try
+              (->> (analyze text context module nil nil)
+                   :stash
+                   (keep :dim))
+              (catch Exception e
+                (warnf "Error while analyzing module=%s context=%s text=%s"
+                       module context text)
+                [])))
+          text))
+
+(defn get-dims
+  "Retrieves all available dimensions for module by running its corpus."
+  [module {:keys [context tests]}]
+  (->> tests
+       (pmap (partial get-dims-for-test context module))
+       (apply concat)
+       distinct))
 
 (defn load!
   "(Re)loads rules and classifiers for languages or/and config.
-   If no language list nor config provided, loads all languages."
+   If no language list nor config provided, loads all languages.
+   Returns a map of loaded modules with available dimensions."
   ([] (load! nil))
   ([{:keys [languages config]}]
    (let [langs (seq languages)
@@ -264,20 +295,22 @@
          config (merge lang-config config)]
      (reset! rules-map {})
      (reset! corpus-map {})
-     (reset! classifiers-map {})
-     (doseq [[config-key {corpus-files :corpus rules-files :rules}] config]
-       (let [lang (-> config-key name (subs 0 2))]
-         (printf "Loading module %s\n" config-key)
-         (doseq [corpus-file corpus-files]
-           (swap! corpus-map merge-corpus config-key lang corpus-file))
-         (doseq [rules-file rules-files]
-           (swap! rules-map merge-rules config-key lang rules-file))))
-     (doseq [[config-key rules] @rules-map]
-       (swap! classifiers-map assoc config-key
-              (learn/train-classifiers (get @corpus-map config-key)
-                                       rules
-                                       learn/extract-route-features)))
-     (map key config))))
+     (let [data (->> config
+                     (pmap (fn [[config-key {corpus-files :corpus rules-files :rules}]]
+                             (let [lang (-> config-key name (string/split #"\$") first)
+                                   corpus (make-corpus lang corpus-files)
+                                   rules (make-rules lang rules-files)
+                                   c (learn/train-classifiers corpus rules learn/extract-route-features)]
+                               [config-key {:corpus corpus :rules rules :classifier c}])))
+                     (into {}))]
+       (doseq [[config-key {:keys [classifier corpus rules]}] data]
+         (swap! corpus-map assoc config-key corpus)
+         (swap! rules-map assoc config-key rules)
+         (swap! classifiers-map assoc config-key classifier)))
+     (->> @corpus-map
+          (pmap (fn [[module corpus]]
+                  [module (get-dims module corpus)]))
+          (into {})))))
 
 
 ;--------------------------------------------------------------------------
@@ -297,10 +330,9 @@
             check-results (map (partial check context) winners)] ; return nil if OK, [expected actual] if not OK
         (if (some #(or (nil? %) (false? %)) check-results)
           [0 text nil]
-          [1 text [(first (first check-results)) (map second check-results)]]))
+          [1 text [(ffirst check-results) (map second check-results)]]))
       (catch Exception e
         [1 text (.getMessage e)]))))
-
 
 (defn run
   "Runs the corpus and prints the results to the terminal."
