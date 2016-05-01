@@ -2,6 +2,7 @@
   (:use [duckling.core]
         [clojure.test])
   (:require [clojure.java.io :as io]
+            [plumbing.core :refer [map-from-keys map-vals]]
             [duckling.resource :as res]))
 
 (def tokens (map (fn [x] {:pred x}) (range 10)))
@@ -26,7 +27,6 @@
 (deftest select-winners-test
   (is (= '({:value "ok", :pred 9} {:value "ok", :pred 6})
          (select-winners' compare-fn (constantly nil) resolve-fn tokens))))
-
 
 (defn diag-corpus
   "Returns :ok if the corpus runs well, or a string with list of failures otherwise."
@@ -96,28 +96,30 @@
                                                                     :label "T"}])))))))
 
 (deftest load!-api-test
-  (let [check (fn [arg exp]
-                (= (set exp) (set (load! arg))))]
-    (testing "load! should load all languages by default"
-      (with-redefs [res/get-files (constantly ["numbers.clj"])
-                    res/get-subdirs (constantly ["en" "cn" "pt"])]
-        (is (check nil [:en$core :cn$core :pt$core]))
-        (is (check {} [:en$core :cn$core :pt$core]))
-        (is (check {:config {} :languages []} [:en$core :cn$core :pt$core]))))
-    (testing "load! should accept a list of languages"
-      (are [arg exp] (check {:languages arg} exp)
-        ["fr"] [:fr$core]
-        ["foo" "bar"] []
-        ["bar" "es" "pt" "ru"] [:es$core :pt$core :ru$core]))
-    (testing "load! should accept a custom config"
-      (is (check {:config {:en$numbers {:corpus ["numbers"] :rules ["numbers"]}}}
-                 [:en$numbers])))
-    (testing "load! should return the list of loaded modules"
-      (are [arg exp] (check arg exp)
-        {:languages ["fr"]} [:fr$core]
-        {:languages ["fr" "foo" "en"]} [:fr$core :en$core]
-        {:config {:en$numbers {:corpus ["numbers"] :rules ["numbers"]}}} [:en$numbers]
+  (with-redefs [get-dims (constantly [:number :time])]
+    (let [check (fn [arg exp]
+                  (= (map-vals set (map-from-keys get-dims exp))
+                     (map-vals set (load! arg))))]
+      (testing "load! should load all languages by default"
+        (with-redefs [res/get-files (constantly ["numbers.clj"])
+                      res/get-subdirs (constantly ["en" "zh" "pt"])]
+          (are [arg] (check arg [:en$core :zh$core :pt$core])
+            nil
+            {}
+            {:config {} :languages []})))
+      (testing "load! should accept a list of languages"
+        (are [arg exp] (check {:languages arg} exp)
+          ["fr"] [:fr$core]
+          ["foo" "bar"] []
+          ["bar" "es" "pt" "ru"] [:es$core :pt$core :ru$core]))
+      (testing "load! should accept a custom config"
+        (is (check {:config {:en$numbers {:corpus ["numbers"] :rules ["numbers"]}}} [:en$numbers])))
+      (testing "load! should return a map of loaded modules with dimensions"
+        (are [arg exp] (check arg exp)
+          {:languages ["fr"]} [:fr$core]
+          {:languages ["fr" "foo" "en"]} [:fr$core :en$core]
+          {:config {:en$numbers {:corpus ["numbers"] :rules ["numbers"]}}} [:en$numbers]
 
-        {:config {:en$numbers {:corpus ["numbers"] :rules ["numbers"]}}
-         :languages ["fr" "blah"]}
-        [:fr$core :en$numbers]))))
+          {:config {:en$numbers {:corpus ["numbers"] :rules ["numbers"]}}
+           :languages ["fr" "blah"]}
+          [:fr$core :en$numbers])))))
