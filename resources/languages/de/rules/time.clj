@@ -6,14 +6,14 @@
   (intersect %1 %2)
 
   ; same thing, with "of" in between like "Sunday of last week"
-  "intersect by \"of\", \"from\", \"'s\""
-  [(dim :time #(not (:latent %))) #"(?i)von|der" (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
+  "intersect by 'of', 'from', 's"
+  [(dim :time #(not (:latent %))) #"(?i)von|der|im" (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
 
   ; mostly for January 12, 2005
   ; this is a separate rule, because commas separate very specific tokens
   ; so we want this rule's classifier to learn this
-  "intersect by \",\""
+  "intersect by ','"
   [(dim :time #(not (:latent %))) #"," (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
 
@@ -189,7 +189,7 @@
   (cycle-nth :day -2)
 
   "EOM|End of month"
-  #"(?i)(das )?(EOM|monats? ?ende|ende (des )?jahr(es)?)"
+  #"(?i)(das )?ende des monats?"
   (cycle-nth :month 1)
 
   "EOY|End of year"
@@ -220,20 +220,24 @@
   [#"(?i)letzten?|letztes" (dim :time)]
   (pred-nth %2 -1)
 
-  "<time> after next"
+  "after next <time>"
   [#"(?i)übernächsten?|über ?nächstes?" (dim :time)]
   (pred-nth-not-immediate %2 1)
+  
+  "<time> after next"
+  [ (dim :time) #"(?i)nach dem nächsten"]
+  (pred-nth-not-immediate %1 1)
 
   "<time> before last"
   [#"(?i)vorletzten?|vor ?letztes?" (dim :time)]
   (pred-nth %2 -2)
 
   "last <day-of-week> of <time>"
-  [#"(?i)letzten?" {:form :day-of-week} #"(?i)um" (dim :time)];Check me OF
+  [#"(?i)letzte(r|n|s)?" {:form :day-of-week} #"(?i)um|im" (dim :time)];Check me OF
   (pred-last-of %2 %4)
 
   "last <cycle> of <time>"
-  [#"(?i)letzten?|letztes" (dim :cycle) #"(?i)um" (dim :time)];Check me OF
+  [#"(?i)letzte(r|n|s)?" (dim :cycle) #"(?i)um|im" (dim :time)];Check me OF
   (cycle-last-of %2 %4)
 
   ; Ordinals
@@ -577,7 +581,7 @@
   (interval %1 %3 true)
 
   "from <time-of-day> - <time-of-day> (interval)"
-  [#"(?i)(ab|frühestens (um)?)" {:form :time-of-day} #"((noch|aber|jedoch )?vor)|\-|bis" {:form :time-of-day}]
+  [#"(?i)(von|nach|ab|frühestens (um)?)" {:form :time-of-day} #"((noch|aber|jedoch)? vor)|\-|bis" {:form :time-of-day}]
   (interval %2 %4 true)
 
   "between <time-of-day> and <time-of-day> (interval)"

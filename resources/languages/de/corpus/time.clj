@@ -249,19 +249,19 @@
 
   "um viertel nach 3"
   "viertel nach drei Uhr"
-  "3:15 am nachmittag"
+  "3 uhr 15 am nachmittag"
   "15:15"
   (datetime 2013 2 12 15 15 :hour 3 :minute 15 :meridiem :pm)
 
   "um 20 nach 3"
-  "3:20 am nachmittag"
-  "3:20 uhr nachmittags"
+  "15:20 am nachmittag"
+  "15 uhr 20 nachmittags"
   "zwanzig nach 3"
   "15:20"
   (datetime 2013 2 12 15 20 :hour 3 :minute 20 :meridiem :pm)
 
   "um halb 4"
-  (datetime 2013 2 12 3 30)
+  (datetime 2013 2 12 15 30)
   
   "halb vier uhr nachmittags"
   "halb vier am nachmittag"
@@ -278,8 +278,10 @@
 
   "8 uhr am abend"
   "heute abend um 20 Uhr"
+  (datetime 2013 2 12 20 00 :grain :hour)
+  
   "heute um 20:00"
-  (datetime 2013 2 12 20 00)
+  (datetime 2013 2 12 20 00 :grain :minute)
 
   ;; Mixing date and time
 
@@ -289,8 +291,8 @@
   "am samstag um 9 Uhr"
   (datetime 2013 2 16 9 :day-of-week 6 :hour 9 :meridiem :am)
 
-  "Fr, 18. Juli 2014 07:00 abends"
-  (datetime 2014 7 18 19 0 :day-of-week 5 :hour 7 :meridiem :pm)
+  "Fr, 18. Juli 2014 7 uhr abends"
+  (datetime 2014 7 18 19 0 :day-of-week 5 :hour 7 :meridiem :pm :grain :hour)
 
 
 ; ;; Involving periods
@@ -530,9 +532,9 @@
   (datetime-interval [2013 2 12 9 30] [2013 2 12 11 1])
 
   "am Donnerstag von 9:30 - 11:00 Uhr"
-  "zwischen 9:30 und 11:00 am Donnerstag"
+  "am Donnerstag zwischen 9:30 und 11:00"
   "Donnerstag 9:30 - 11:00"
-  "nach 9:30 aber vor 11:00 am Donnerstag"
+  "am Donnerstag nach 9:30 aber vor 11:00"
   "Donnerstag von 9:30 bis 11:00"
   (datetime-interval [2013 2 14 9 30] [2013 2 14 11 1])
 
@@ -549,24 +551,23 @@
   (datetime-interval [2013 2 12 11 30] [2013 2 12 13 31])
 
   "1:30 am Sa, 21. Sept"
-  (datetime 2013 9 21 13 30)
+  (datetime 2013 9 21 1 30)
 
   "binnen 2 wochen"
   "innerhalb von 2 wochen"
   (datetime-interval [2013 2 12 4 30 0] [2013 2 26])
 
-  "bis 2:00 Uhr nachmittag"
+  "bis 2 Uhr nachmittag"
   (datetime 2013 2 12 14 0 :direction :before)
 
-  "bis 2:00 Uhr nachmittag"
+  "bis 2 Uhr nachmittag"
   (datetime-interval [2013 2 12 4 30 0] [2013 2 12 14])
 
   "bis zum ende des tages"
-  (datetime-interval [2013 2 12 4 30 0] [2013 2 13 0])
+  (datetime 2013 2 13 0 0 :grain :hour :direction :before)
 
   "bis zum ende des monats"
-  "bis ende des laufenden monats"
-  (datetime-interval [2013 2 12 4 30 0] [2013 3 1 0])
+  (datetime 2013 3 1 0 0 :grain :month :direction :before)
 
   ; Timezones
 
@@ -603,8 +604,8 @@
   "am nachmittag"
   (datetime-interval [2013 2 12 12] [2013 2 12 19])
 
-  "um 1:30 am nachmittag"
-  "nachmittags um 1:30"
+  "um 13:30 am nachmittag"
+  "nachmittags um 1 uhr 30"
   "13:30"
   (datetime 2013 2 12 13 30)
 
