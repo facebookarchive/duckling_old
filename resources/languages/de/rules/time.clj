@@ -202,14 +202,14 @@
   ;; assumed to be strictly in the future:
   ;; "this Monday" => next week if today in Monday
   "this|next <day-of-week>"
-  [#"(?i)diesen|kommenden|nächsten montag" {:form :day-of-week}]
+  [#"(?i)diese(n|r)|kommenden|nächsten" {:form :day-of-week}]
   (pred-nth-not-immediate %2 0)
 
   ;; for other preds, it can be immediate:
   ;; "this month" => now is part of it
   ; See also: cycles in en.cycles.clj
   "this <time>"
-  [#"(?i)diesen|(im )?laufenden" (dim :time)]
+  [#"(?i)diese(n|r|s)?|(im )?laufenden" (dim :time)]
   (pred-nth %2 0)
 
   "next <time>"
@@ -435,15 +435,21 @@
 
   "morning" ;; TODO "3am this morning" won't work since morning starts at 4...
   [#"(?i)morgens|(in der )?früh|vor ?mittags?|am morgen"]
-  (assoc (interval (hour 4 false) (hour 12 false) false) :form :part-of-day :latent true)
+  (assoc (interval (hour 3 false) (hour 12 false) false) :form :part-of-day :latent true)
 
   "afternoon"
   [#"(?i)nach ?mittags?"]
   (assoc (interval (hour 12 false) (hour 19 false) false) :form :part-of-day :latent true)
 
-  "evening|night"
-  [#"(?i)abends?|nachts?"]
+  
+  "evening"
+  [#"(?i)abends?"]
   (assoc (interval (hour 18 false) (hour 0 false) false) :form :part-of-day :latent true)
+  
+  
+  "night"
+  [#"(?i)nachts?"]
+  (assoc (interval (hour 0 false) (hour 4 false) false) :form :part-of-day :latent true)
 
   "lunch"
   [#"(?i)(am |zu )?mittags?"]
@@ -528,25 +534,25 @@
   ;-  shouldn't remove latency, except maybe -ish
 
   "<time-of-day> approximately" ; 7ish
-  [{:form :time-of-day} #"(?i)(um)? zirka|ungefähr|etwa"]
+  [{:form :time-of-day} #"(?i)(um )?zirka|ungefähr|etwa"]
   (-> %1
     (dissoc :latent)
     (merge {:precision "approximate"}));Check me NO TRANSLATION NECESSARY
 
   "<time-of-day> sharp" ; sharp
-  [{:form :time-of-day} #"(?i)genau|exakt|punkt (um)?"]
+  [{:form :time-of-day} #"(?i)genau|exakt|pünktlich|punkt( um)?"]
   (-> %1
     (dissoc :latent)
     (merge {:precision "exact"}));Check me NO TRANSLATION NECESSARY
 
   "about <time-of-day>" ; about
-  [#"(?i)(um)? zirka|ungefähr|etwa" {:form :time-of-day}]
+  [#"(?i)(um )?zirka|ungefähr|etwa" {:form :time-of-day}]
   (-> %2
     (dissoc :latent)
     (merge {:precision "approximate"}));Check me NO TRANSLATION NECESSARY
 
   "exactly <time-of-day>" ; sharp
-  [#"(?i)genau|exakt|punkt (um)?" {:form :time-of-day}]
+  [#"(?i)genau|exakt|pünktlich|punkt( um)?" {:form :time-of-day}]
   (-> %2
     (dissoc :latent)
     (merge {:precision "exact"}));Check me NO TRANSLATION NECESSARY

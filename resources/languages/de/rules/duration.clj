@@ -37,7 +37,7 @@
    :grain :year}
   
   "half an hour"
-  [#"(?i)(1/2\s?|halbe?n? )stunde"]
+  [#"(?i)(1/2\s?|(einer )halbe?n? )stunde"]
   {:dim :duration
    :value (duration :minute 30)}
 
@@ -47,7 +47,7 @@
    :value (duration :day 14)}
   
   "a <duration>"
-  [#"(?i)eine?(r|n)?" (dim :duration)]
+  [#"(?i)(in )?eine?(r|n)?" (dim :duration)]
  (in-duration (:value %2))
 
  "<integer> <unit-of-duration>"
@@ -108,7 +108,7 @@
   (duration-before (:value %1) %3)
 
   "about <duration>" ; about
-  [#"(?i)(ungefähr|zirka)" (dim :duration)]
+  [#"(?i)ungefähr|zirka" (dim :duration)]
   (-> %2
     (merge {:precision "approximate"}))
 

@@ -223,14 +223,19 @@
 
   ;; Hours
 
-  "um 3"
   "um 3 in der früh"
+  (datetime 2013 2 12 3)
+  
+  "um 3"
   "3 uhr"
   "um drei"
-  (datetime 2013 2 13 3)
+  (datetime 2013 2 12 15)
 
-  "3:18"
+  
   "3:18 früh"
+  (datetime 2013 2 12 3 18)
+  
+  "3:18"
   (datetime 2013 2 13 3 18)
 
   "um 3 am nachmittag"
@@ -242,7 +247,7 @@
   "zirka 15 uhr" ;; FIXME pm overrides precision
   "zirka 3 uhr am nachmittag"
   "um ungefähr 15 uhr"
-  (datetime 2013 2 12 15 :hour 3 :meridiem :pm) ;; :precision "approximate"
+  (datetime 2013 2 12 15) ;; :precision "approximate"
 
   "pünktlich um 17 uhr morgen" ;; FIXME precision is lost
   (datetime 2013 2 13 17 :hour 5 :meridiem :pm) ;; :precision "exact"
@@ -273,10 +278,12 @@
 
   "viertel vor 12"
   "11:45"
-  "15 minuten vor 12" ; Ambiguous with interval
   (datetime 2013 2 12 11 45 :hour 11 :minute 45)
-
-  "8 uhr am abend"
+  
+  "15 minuten vor 12" ; Ambiguous with interval
+ (datetime 2013 2 12 11 45 :hour 11 :minute 45 :grain :second)
+  
+ "8 uhr am abend"
   "heute abend um 20 Uhr"
   (datetime 2013 2 12 20 00 :grain :hour)
   
@@ -314,7 +321,7 @@
   (datetime 2013 2 12 5 0 0)
   
   "in 2.5 stunden"
-  "in zweieinhalb stunden"
+  "in zwei ein halb stunden"
   (datetime 2013 2 12 7 0 0)
 
   "in einer stunde"
@@ -438,80 +445,77 @@
   (datetime-interval [2013 2 15 18] [2013 2 18 00])
 
   "montag morgens"
-  (datetime-interval [2013 2 18 4] [2013 2 18 12])
+  (datetime-interval [2013 2 18 3] [2013 2 18 12])
 
   "morgens am 15. februar"
   "15. februar morgens"
   "am morgen des 15. februar"
-  (datetime-interval [2013 2 15 4] [2013 2 15 12])
+  (datetime-interval [2013 2 15 3] [2013 2 15 12])
 
 
   ; Intervals involving cycles
 
-  "in den letzten 2 sekunden"
-  "die letzten zwei sekunden"
+  "letzte 2 sekunden"
+  "letzten zwei sekunden"
   (datetime-interval [2013 2 12 4 29 58] [2013 2 12 4 30 00])
 
-  "in den nächsten 3 sekunden"
-  "die nächsten drei sekunden"
+  "nächste 3 sekunden"
+  "nächsten drei sekunden"
   (datetime-interval [2013 2 12 4 30 01] [2013 2 12 4 30 04])
 
-  "in den letzten 2 minuten"
-  "die letzten zwei minuten"
+  "letzte 2 minuten"
+  "letzten zwei minuten"
   (datetime-interval [2013 2 12 4 28] [2013 2 12 4 30])
 
-  "in den nächsten 3 minuten"
-  "die nächsten drei minuten"
+  "nächste 3 minuten"
+  "nächsten drei minuten"
   (datetime-interval [2013 2 12 4 31] [2013 2 12 4 34])
 
-  "in der letzten stunde"
-  (datetime-interval [2013 2 12 3] [2013 2 12 4])
-
-  "in den nächsten 3 stunden"
-  "die nächsten drei stunden"
+  "nächste 3 stunden"
+  "nächsten drei stunden"
   (datetime-interval [2013 2 12 5] [2013 2 12 8])
 
-  "in den letzten 2 tagen"
-  "die letzten zwei tage"
-  "die vergangenen zwei tage"
+  "letzte 2 tage"
+  "letzten zwei tage"
+  "vergangenen zwei tage"
   (datetime-interval [2013 2 10] [2013 2 12])
 
-  "in den nächsten 3 tagen"
-  "die nächsten drei tage"
-  "in den kommenden drei tagen"
+  "nächsten 3 tagen"
+  "nächsten drei tage"
+  "kommenden drei tagen"
   (datetime-interval [2013 2 13] [2013 2 16])
 
-  "in den nächsten paar tagen"
-  "in den kommenden paar tagen"
+  "nächsten paar tagen"
+  "kommenden paar tagen"
   (datetime-interval [2013 2 13] [2013 2 15])
 
-  "in den letzten 2 wochen"
+  "letzten 2 wochen"
   "letzte zwei wochen"
   "vergangenen 2 wochen"
   (datetime-interval [2013 1 28 :grain :week] [2013 2 11 :grain :week])
 
-  "in den nächsten 3 wochen"
+  "nächsten 3 wochen"
   "nächste drei wochen"
-  "in den kommenden drei wochen"
+  "kommenden drei wochen"
   (datetime-interval [2013 2 18 :grain :week] [2013 3 11 :grain :week])
 
-  "in den letzten 2 monaten"
+  "letzten 2 monaten"
   "letzte zwei monate"
-  "in den vergangenen zwei monaten"
+  "vergangenen zwei monaten"
   (datetime-interval [2012 12] [2013 02])
 
-  "in den nächsten 3 monaten"
+  "nächsten 3 monaten"
   "nächste drei monate"
-  "in den kommenden drei monaten"
+  "kommenden drei monaten"
   (datetime-interval [2013 3] [2013 6])
 
-  "in den letzten 2 jahren"
+  "letzten 2 jahren"
   "letzten zwei jahre"
-  "in den vergangenen zwei jahren"
+  "vergangenen zwei jahren"
   (datetime-interval [2011] [2013])
 
-  "in den nächsten 3 jahren"
-  "in den kommenden drei jahren"
+  "nächsten 3 jahren"
+  "kommenden drei jahren"
   "nächste drei jahre"
   (datetime-interval [2014] [2017])
 
@@ -531,7 +535,7 @@
   "9:30 - 11:00"
   (datetime-interval [2013 2 12 9 30] [2013 2 12 11 1])
 
-  "am Donnerstag von 9:30 - 11:00 Uhr"
+  "am Donnerstag von 9:30 - 11:00"
   "am Donnerstag zwischen 9:30 und 11:00"
   "Donnerstag 9:30 - 11:00"
   "am Donnerstag nach 9:30 aber vor 11:00"
@@ -558,10 +562,8 @@
   (datetime-interval [2013 2 12 4 30 0] [2013 2 26])
 
   "bis 2 Uhr nachmittag"
-  (datetime 2013 2 12 14 0 :direction :before)
+  (datetime 2013 2 12 14 :direction :before)
 
-  "bis 2 Uhr nachmittag"
-  (datetime-interval [2013 2 12 4 30 0] [2013 2 12 14])
 
   "bis zum ende des tages"
   (datetime 2013 2 13 0 0 :grain :hour :direction :before)
@@ -620,7 +622,7 @@
 
   "in der früh"
   "am morgen" ;; how should we deal with fb mornings?
-  (datetime-interval [2013 2 12 4] [2013 2 12 12])
+  (datetime-interval [2013 2 12 3] [2013 2 12 12])
 
   "nächsten montag"
   "kommenden montag"
