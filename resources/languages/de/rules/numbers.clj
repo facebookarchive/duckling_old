@@ -1,8 +1,8 @@
 (
 
   "numbers und"
-[(integer 1 9) #"und" (integer 20 90 #(#{20 30 40 50 60 70 80 90} (:value %)))]
-  {:dim :number
+ [(integer 1 9) #"und" (integer 20 90 #(#{20 30 40 50 60 70 80 90} (:value %)))]
+ {:dim :number
   :integer true
   :value (+ (:value %1) (:value %3))}
 
@@ -10,15 +10,15 @@
  ;; Integers
  ;;
  
-  "integer (0..19)"
+ "integer (0..19)"
   #"(?i)(keine?|keine?s|keiner?|keinen|null|nichts|eins?(er)?|zwei|dreizehn|drei|vierzehn|vier|fünf|sechzehn|sechs|siebzehn|sieben|achtzehn|acht|neunzehn|neun|elf|zwölf|füfzehn)"
   ; fourteen must be before four, or it won't work because the regex will stop at four
   {:dim :number
    :integer true
    :value (get {"keines" 0 "keiner" 0 "keinen" 0 "null" 0 "nichts" 0 "ein" 1 "eins" 1 "eine" 1 "einer" 1 "zwei" 2 "drei" 3 "vier" 4 "fünf" 5
-              "sechs" 6 "sieben" 7 "acht" 8 "neun" 9 "zehn" 10 "elf" 11
-              "zwölf" 12 "dreizehn" 13 "vierzehn" 14 "fünfzehn" 15 "sechzehn" 16
-              "siebzehn" 17 "achtzehn" 18 "neunzehn" 19}
+                "sechs" 6 "sieben" 7 "acht" 8 "neun" 9 "zehn" 10 "elf" 11
+                "zwölf" 12 "dreizehn" 13 "vierzehn" 14 "fünfzehn" 15 "sechzehn" 16
+                "siebzehn" 17 "achtzehn" 18 "neunzehn" 19}
               (-> %1 :groups first .toLowerCase))}
   
   "ten"
@@ -54,7 +54,7 @@
   {:dim :number
    :integer true
    :value (get {"zwanzig" 20 "dreissig" 30 "vierzig" 40 "fünfzig" 50 "sechzig" 60
-              "siebzig" 70 "achtzig" 80 "neunzig" 90}
+                "siebzig" 70 "achtzig" 80 "neunzig" 90}
              (-> %1 :groups first .toLowerCase))
    :grain 1}
 
@@ -75,7 +75,7 @@
  ;  :integer true
  ;  :value (+ (:value %1) (:value %2))}
 
-  "integer (numeric)"
+ "integer (numeric)"
   #"(\d{1,18})"
   {:dim :number
    :integer true
@@ -175,18 +175,27 @@
   ;;
   
   "ordinals (first..19th)"
-  #"(?i)(erster?|zweiter|dritter|vierter|fuenfter|sechster|siebter|achter|neunter|zehnter|elfter|zwölfter|dreizenter|vierzehnter|fünfzehnter|sechzenter|siebzehnter|achtzehnter|neunzehnter)"
+  #"(?i)(erste(r|s)?|zweite(r|s)|dritte(r|s)|vierte(r|s)|fuenfte(r|s)|sechste(r|s)|siebte(r|s)|achte(r|s)|neunte(r|s)|zehnte(r|s)|elfter|zwölfter|dreizenter|vierzehnter|fünfzehnter|sechzenter|siebzehnter|achtzehnter|neunzehnter)"
   {:dim :ordinal
-:value (get {"erste" 1 "erster" 1 "zweiter" 2 "dritter" 3 "vierter" 4 "fünfter" 5
-              "sechster" 6 "siebter" 7 "achter" 8 "neunter" 9 "zehnter" 10 "elfter" 11
-              "zwölfter" 12 "dreizehnter" 13 "vierzehnter" 14 "fünfzehnter" 15 "sechzehnter" 16
-              "siebzehnter" 17 "achtzehnter" 18 "neunzehnter" 19}
-              (-> %1 :groups first .toLowerCase))}
+   :value (get {"erste" 1 "erster" 1 "erstes" 1
+                "zweite" 2 "zweiter" 2 "zweites" 2
+                "dritte" 3 "dritter" 3 "drittes" 3
+                "vierte" 4 "vierter" 4 "viertes" 4
+                "fünfte" 5 "fünfter" 5 "fünftes" 5
+                "sechste" 6 "sechster" 6 "sechstes" 6
+                "siebte" 7 "siebter" 7 "siebtes" 7 
+                "achte" 8 "achter" 8 "achtes" 8
+                "neunte" 9 "neunter" 9 "neuntes" 9
+                "zehnte" 10 "zehnter" 10 "zehntes" 10
+                "elfter" 11
+                 "zwölfter" 12 "dreizehnter" 13 "vierzehnter" 14 "fünfzehnter" 15 "sechzehnter" 16
+                 "siebzehnter" 17 "achtzehnter" 18 "neunzehnter" 19}
+               (-> %1 :groups first .toLowerCase))}
 
   "ordinal (digits)"
   #"0*(\d+)(\.| ?(te(n|r|s)?)|(ste(n|r|s)?))"
   {:dim :ordinal
-   :value (read-string (first (:groups %1)))}  ; read-string not the safest
+   :value (read-string (first (:groups %1)))})  ; read-string not the safest
 
   
-  )
+  

@@ -46,6 +46,7 @@
   
   "102"
   "hundertzwei"
+  "hundert zwei"
   (number 102)
   
   "zweieinhalb"

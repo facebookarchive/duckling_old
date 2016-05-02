@@ -345,8 +345,10 @@
   (datetime 2013 2 5 4)
 
   "vor 14 tagen"
-  "vor zwei wochen"
   (datetime 2013 1 29 4)
+  
+  "vor zwei wochen"
+  (datetime 2013 1 29 :grain :day)
 
   "vor einer woche"
   (datetime 2013 2 5)
@@ -528,7 +530,7 @@
 
   "am Donnerstag von 9:30 - 11:00 Uhr"
   "zwischen 9:30 und 11:00 am Donnerstag"
-  "Donnerstags 9:30 - 11:00"
+  "Donnerstag 9:30 - 11:00"
   "nach 9:30 aber vor 11:00 am Donnerstag"
   "Donnerstag von 9:30 bis 11:00"
   (datetime-interval [2013 2 14 9 30] [2013 2 14 11 1])
@@ -591,14 +593,13 @@
   (datetime 2013 2 12 14 :direction :after)
 
 
-  "vor 11 uhr"
-  "vor 11h vormittags"
-  "vor 11 am vormittag"
+  "bis 11 uhr"
+  "bis 11h vormittags"
+  "bis 11 am vormittag"
   (datetime 2013 2 12 11 :direction :before)
 
   
   "morgen bis 11 uhr"
-  "morgen vor 11 uhr" ;; FIXME this is actually not ambiguous. it's midnight to 11 am
   (datetime 2013 2 13 11 :direction :before)
 
   "am nachmittag"

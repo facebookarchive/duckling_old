@@ -79,11 +79,11 @@
   (cycle-n-not-immediate (:grain %3) (:value %2))
   
   "<ordinal> <cycle> of <time>"
-  [(dim :ordinal) (dim :cycle) #"(?i)of|in|von" (dim :time)]
+  [(dim :ordinal) (dim :cycle) #"(?i)im|in|von" (dim :time)]
   (cycle-nth-after-not-immediate (:grain %2) (dec (:value %1)) %4)
   
   "the <ordinal> <cycle> of <time>"
-  [#"(?i)the" (dim :ordinal) (dim :cycle) #"(?i)of|in|von" (dim :time)]
+  [#"(?i)der|die|das" (dim :ordinal) (dim :cycle) #"(?i)im|in|von" (dim :time)]
   (cycle-nth-after-not-immediate (:grain %3) (dec (:value %2)) %5)
 
   ; the 2 following rules may need a different helper
@@ -105,5 +105,5 @@
 
   "<ordinal> quarter <year>"
   [(dim :ordinal) (dim :cycle #(= :quarter (:grain %))) (dim :time)]
-  (cycle-nth-after :quarter (dec (:value %1)) %3)
-)
+  (cycle-nth-after :quarter (dec (:value %1)) %3))
+
