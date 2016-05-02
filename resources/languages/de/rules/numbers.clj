@@ -1,4 +1,6 @@
-(
+(  "intersect" ;handles things like hundert zwei
+  [(dim :number :grain #(> (:grain %) 1)) (dim :number)] ; grain 1 are taken care of by specific rule
+  (compose-numbers %1 %2) 
 
   "numbers und"
  [(integer 1 9) #"und" (integer 20 90 #(#{20 30 40 50 60 70 80 90} (:value %)))]
@@ -68,6 +70,7 @@
             (get {"zwanzig" 20 "dreissig" 30 "vierzig" 40 "fünfzig" 50
                   "sechzig" 60 "siebzig" 70 "achtzig" 80 "neunzig" 90}
                  (-> %1 :groups second .toLowerCase)))}
+  
 
  ; "integer 21..99"
  ; [(integer 10 90 #(#{20 30 40 50 60 70 80 90} (:value %))) (integer 1 9)]

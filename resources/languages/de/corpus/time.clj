@@ -261,6 +261,8 @@
   (datetime 2013 2 12 15 20 :hour 3 :minute 20 :meridiem :pm)
 
   "um halb 4"
+  (datetime 2013 2 12 3 30)
+  
   "halb vier uhr nachmittags"
   "halb vier am nachmittag"
   "15:30"
@@ -320,7 +322,7 @@
   (datetime 2013 2 12 6 30)
 
   "in ein paar stunden"
-  (datetime 2013 2 12 7 30)
+  (datetime 2013 2 12 6 30)
 
   "in 24 stunden"
   (datetime 2013 2 13 4 30)
@@ -433,7 +435,7 @@
   "dieses wochenende"
   (datetime-interval [2013 2 15 18] [2013 2 18 00])
 
-  "montag morgen"
+  "montag morgens"
   (datetime-interval [2013 2 18 4] [2013 2 18 12])
 
   "morgens am 15. februar"
@@ -461,7 +463,6 @@
   (datetime-interval [2013 2 12 4 31] [2013 2 12 4 34])
 
   "in der letzten stunde"
-  "in der vergangenen stunde"
   (datetime-interval [2013 2 12 3] [2013 2 12 4])
 
   "in den nächsten 3 stunden"
@@ -478,9 +479,9 @@
   "in den kommenden drei tagen"
   (datetime-interval [2013 2 13] [2013 2 16])
 
-  "in den nächsten tagen"
-  "in den kommenden tagen"
-  (datetime-interval [2013 2 13] [2013 2 16])
+  "in den nächsten paar tagen"
+  "in den kommenden paar tagen"
+  (datetime-interval [2013 2 13] [2013 2 15])
 
   "in den letzten 2 wochen"
   "letzte zwei wochen"
@@ -598,9 +599,6 @@
   "bis 11 am vormittag"
   (datetime 2013 2 12 11 :direction :before)
 
-  
-  "morgen bis 11 uhr"
-  (datetime 2013 2 13 11 :direction :before)
 
   "am nachmittag"
   (datetime-interval [2013 2 12 12] [2013 2 12 19])

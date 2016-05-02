@@ -59,7 +59,7 @@
   (cycle-nth (:grain %2) -1)
 
   "next <cycle>"
-  [#"(?i)nächste(r|n|s)?" (dim :cycle)]
+  [#"(?i)nächste(r|n|s)?|kommende(r|n|s)?" (dim :cycle)]
   (cycle-nth (:grain %2) 1)
   
   "the <cycle> after <time>"
@@ -75,7 +75,7 @@
   (cycle-n-not-immediate (:grain %3) (- (:value %2)))
   
   "next n <cycle>"
-  [#"(?i)nächsten?" (integer 1 9999) (dim :cycle)]
+  [#"(?i)nächsten?|kommenden?" (integer 1 9999) (dim :cycle)]
   (cycle-n-not-immediate (:grain %3) (:value %2))
   
   "<ordinal> <cycle> of <time>"

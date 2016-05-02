@@ -45,13 +45,9 @@
   (number 200)
   
   "102"
-  "hundertzwei"
   "hundert zwei"
   (number 102)
   
-  "zweieinhalb"
-  "2.5"
-  (number 2.5)
 
   "1.1"
   "1.10"

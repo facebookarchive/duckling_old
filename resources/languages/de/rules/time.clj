@@ -238,11 +238,11 @@
 
   ; Ordinals
   "nth <time> of <time>"
-  [(dim :ordinal) (dim :time) #"(?i)der" (dim :time)];Check me OF
+  [(dim :ordinal) (dim :time) #"(?i)im" (dim :time)];Check me OF
   (pred-nth (intersect %4 %2) (dec (:value %1)))
 
   "nth <time> of <time>"
-  [#"(?i)der|das" (dim :ordinal) (dim :time) #"(?i)der" (dim :time)];Check me OF
+  [#"(?i)der|die|das" (dim :ordinal) (dim :time) #"(?i)im" (dim :time)];Check me OF
   (pred-nth (intersect %5 %3) (dec (:value %2)))
 
   "nth <time> after <time>"
@@ -316,20 +316,26 @@
   [#"(?i)die iden (des?)" {:form :month}]
   (intersect %2 (day-of-month (if (#{3 5 7 10} (:month %2)) 15 13)))
 
-  ;; Hours and minutes (absolute time)
-
+  
+   ; Hours and minutes (absolute time)
+  ;
+  ; Assumptions:
+  ; - 0 is midnight
+  ; - 1..11 is ambiguous am or pm
+  ; - 12 is noon (whereas in English it is ambiguous)
+  ; - 13..23 is pm
+  
   "time-of-day (latent)"
   (integer 0 23)
-  (assoc (hour (:value %1) true) :latent true)
+  (assoc (hour (:value %1) (< (:value %1) 12)) :latent true)
 
-  "at <time-of-day>" ; at four
+  "<time-of-day>  o'clock"
+  [#(:full-hour %) #"(?i)uhr|h"]
+  (dissoc %1 :latent) 
+  
+  "at <time-of-day>" ; absorption
   [#"(?i)um|@" {:form :time-of-day}]
   (dissoc %2 :latent)
-
-
-  "<time-of-day> o'clock"
-  [{:form :time-of-day} #"(?i)uhr|h"]
-  (dissoc %1 :latent)
 
   "hh:mm"
   #"(?i)((?:[01]?\d)|(?:2[0-3]))[:.]([0-5]\d)"
@@ -424,7 +430,7 @@
   ; Part of day (morning, evening...). They are intervals.
 
   "morning" ;; TODO "3am this morning" won't work since morning starts at 4...
-  [#"(?i)morgens?|(in der )?früh|vor ?mittags?|am morgen"]
+  [#"(?i)morgens|(in der )?früh|vor ?mittags?|am morgen"]
   (assoc (interval (hour 4 false) (hour 12 false) false) :form :part-of-day :latent true)
 
   "afternoon"
@@ -471,7 +477,7 @@
   (intersect %2 %1)
 
   "<part-of-day> of <time>" ; since "morning" "evening" etc. are latent, general time+time is blocked
-  [{:form :part-of-day} #"(?i)des|von|vom" (dim :time)];Check me 
+  [{:form :part-of-day} #"(?i)des|von|vom|am" (dim :time)];Check me 
   (intersect %1 %3)
 
 
@@ -580,12 +586,9 @@
 
   ; Specific for within duration... Would need to be reworked
   "within <duration>"
-  [#"(?i)binnen" (dim :duration)]
+  [#"(?i)binnen|innerhalb( von)?" (dim :duration)]
   (interval (cycle-nth :second 0) (in-duration (:value %2)) false)
 
-  "by <time>"; if time is interval, take the start of the interval (by tonight = by 6pm)
-  [#"(?i)bis|vor" (dim :time)]
-  (interval (cycle-nth :second 0) %2 false)
 
   "by the end of <time>"; in this case take the end of the time (by the end of next week = by the end of next sunday)
   [#"(?i)bis (zum)? ende (von)?|(noch)? vor" (dim :time)];Check me CODE OK? 
