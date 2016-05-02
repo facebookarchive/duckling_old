@@ -84,13 +84,13 @@
    :integer true
    :value (Long/parseLong (first (:groups %1)))}
   
-  "integer with thousands separator ,"
-  #"(\d{1,3}(,\d\d\d){1,5})" ;Check me PATRICK PLEASE REPLACE , WITH A . BECAUSE THATS WHAT THEY USE IN GERMAN
+  "integer with thousands separator ."
+  #"(\d{1,3}(\.\d\d\d){1,5})" 
   {:dim :number
    :integer true
    :value (-> (:groups %1)
             first
-            (clojure.string/replace #"," "")
+            (clojure.string/replace #"\." "")
             Long/parseLong)}
   
   ; composition
@@ -128,22 +128,25 @@
   ;;
   
   "decimal number"
-  #"(\d*\.\d+)"
+  #"(\d*,\d+)"
   {:dim :number
-   :value (Double/parseDouble (first (:groups %1)))}
+   :value (-> (:groups %1)
+            first
+            (clojure.string/replace #"," ".")
+            Double/parseDouble)}
 
   "number dot number"
-  [(dim :number #(not (:number-prefixed %))) #"(?i)dot|point" (dim :number #(not (:number-suffixed %)))]
+  [(dim :number #(not (:number-prefixed %))) #"(?i)komma" (dim :number #(not (:number-suffixed %)))]
   {:dim :number
    :value (+ (* 0.1 (:value %3)) (:value %1))}
    
 
-  "decimal with thousands separator";Check me NOT SURE WHAT THIS ONE IS, MIGHT REQUIRE , INSTEAD OF . ;)
-  #"(\d+(,\d\d\d)+\.\d+)"
+  "decimal with thousands separator"
+  #"(\d+(\.\d\d\d)+\,\d+)"
   {:dim :number
    :value (-> (:groups %1)
             first
-            (clojure.string/replace #"," "")
+            (clojure.string/replace #"\." "")
             Double/parseDouble)}
 
   ;; negative number
