@@ -87,7 +87,7 @@
   (month 8)
 
   "named-month"
-  #"(?i)setembro|set?\.?"
+  #"(?i)setembro|set\.?"
   (month 9)
 
   "named-month"
