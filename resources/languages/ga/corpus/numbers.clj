@@ -3,11 +3,12 @@
   {}
 
   "0"
-  "náid"
+  "a náid"
   (number 0)
 
   "1"
   "aon"
+  "a haon"
   "amháin"
   (number 1)
 
