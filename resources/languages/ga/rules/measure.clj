@@ -29,7 +29,7 @@
                            :unit "metre"}}))
 
   "<latent dist> km"
-  [(dim :distance) #"(?i)(k\.?m\.?|g?ch?ilim[eé]dai?r)"]
+  [(dim :distance) #"(?i)(k\.?(m\.?)?|g?ch?ilim[eé]adai?r)"]
   (-> %1
       (dissoc  :latent)
       (merge {:unit "kilometre"
