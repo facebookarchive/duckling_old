@@ -112,5 +112,13 @@
               :normalized {:value (* 3.785 (-> %1 :value))
                            :unit "litre"}}))
 
+  "leathghalún"
+  [#"(?i)leathgh?al[úu]i?n"]
+  (-> %1
+      (dissoc  :latent)
+      (merge {:unit "gallon"
+              :value 0.5
+              :normalized {:value (* 1.8925 (-> %1 :value))
+                           :unit "litre"}}))
 
 )
