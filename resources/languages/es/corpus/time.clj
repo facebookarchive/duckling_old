@@ -211,7 +211,6 @@
   ; (datetime 2013 2 13 15 15 :hour 15 :minute 15)
 
   "a las tres y media"
-  "para las tres y media"
   "a las 3 y treinta"
   "a las tres y media de la tarde"
   "a las 3 y treinta del mediodía"
