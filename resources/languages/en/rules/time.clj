@@ -565,7 +565,7 @@
   ; Intervals
 
   "<month> dd-dd (interval)"
-  [{:form :month} #"(3[01]|[12]\d|0?[1-9])" #"\-|to|th?ru|through|until" #"(3[01]|[12]\d|0?[1-9])"]
+  [{:form :month} #"(3[01]|[12]\d|0?[1-9])" #"\-|to|th?ru|through|(un)?til(l)?" #"(3[01]|[12]\d|0?[1-9])"]
   (interval (intersect %1 (day-of-month (Integer/parseInt (-> %2 :groups first))))
             (intersect %1 (day-of-month (Integer/parseInt (-> %4 :groups first))))
             true)
@@ -573,11 +573,11 @@
   ; Blocked for :latent time. May need to accept certain latents only, like hours
 
   "<datetime> - <datetime> (interval)"
-  [(dim :time #(not (:latent %))) #"\-|to|th?ru|through" (dim :time #(not (:latent %)))]
+  [(dim :time #(not (:latent %))) #"\-|to|th?ru|through|(un)?til(l)?" (dim :time #(not (:latent %)))]
   (interval %1 %3 true)
 
   "from <datetime> - <datetime> (interval)"
-  [#"(?i)from" (dim :time) #"\-|to|th?ru|through|until" (dim :time)]
+  [#"(?i)from" (dim :time) #"\-|to|th?ru|through|(un)?til(l)?" (dim :time)]
   (interval %2 %4 true)
 
   "between <datetime> and <datetime> (interval)"
@@ -587,11 +587,11 @@
   ; Specific for time-of-day, to help resolve ambiguities
 
   "<time-of-day> - <time-of-day> (interval)"
-  [#(and (= :time-of-day (:form %)) (not (:latent %))) #"\-|:|to|th?ru|through" {:form :time-of-day}] ; Prevent set alarm 1 to 5pm
+  [#(and (= :time-of-day (:form %)) (not (:latent %))) #"\-|:|to|th?ru|through|(un)?til(l)?" {:form :time-of-day}] ; Prevent set alarm 1 to 5pm
   (interval %1 %3 true)
 
   "from <time-of-day> - <time-of-day> (interval)"
-  [#"(?i)(later than|from)" {:form :time-of-day} #"((but )?before)|\-|to|th?ru|through|until" {:form :time-of-day}]
+  [#"(?i)(later than|from)" {:form :time-of-day} #"((but )?before)|\-|to|th?ru|through|(un)?til(l)?" {:form :time-of-day}]
   (interval %2 %4 true)
 
   "between <time-of-day> and <time-of-day> (interval)"
@@ -614,7 +614,7 @@
   ; One-sided Intervals
 
   "until <time-of-day>"
-  [#"(?i)(anytime |sometimes? )?(before|until|through|up to)" (dim :time)]
+  [#"(?i)(anytime |sometimes? )?(before|(un)?til(l)?|through|up to)" (dim :time)]
   (merge %2 {:direction :before})
 
   "after <time-of-day>"

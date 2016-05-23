@@ -603,6 +603,9 @@
   "9:30 - 11:00 on Thursday"
   "later than 9:30 but before 11:00 on Thursday"
   "Thursday from 9:30 to 11:00"
+  "from 9:30 untill 11:00 on thursday"
+  "Thursday from 9:30 untill 11:00"
+  "9:30 till 11:00 on Thursday"
   (datetime-interval [2013 2 14 9 30] [2013 2 14 11 1])
 
   "Thursday from 9a to 11a"
@@ -661,7 +664,7 @@
   (datetime 2013 2 12 14 :direction :after)
 
   "after 5 days"
-  (datetime 2013 2 17 4 :direction :after)  
+  (datetime 2013 2 17 4 :direction :after)
 
   "after tomorrow 2pm"
   "tomorrow after 2pm" ;; FIXME this is actually not ambiguous it's 2pm - midnight.
