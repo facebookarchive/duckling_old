@@ -8,7 +8,7 @@
   "nesse instante"
   "neste instante"
   (datetime 2013 2 12 4 30 00)
-  
+
   "hoje"
   "nesse momento"
   "neste momento"
@@ -89,7 +89,7 @@
   "5 de maio"
   "cinco de maio"
   (datetime 2013 5 5 :day 5 :month 5)
-  
+
   "cinco de maio de 2013"
   "5 de maio de 2013"
   "5/5"
@@ -136,7 +136,7 @@
   "20 de fevereiro"
   "20/2"
   (datetime 2013 2 20 :day 20 :month 2)
-  
+
   "31/10/1974"
   "31/10/74" ; smart two-digit year resolution
   (datetime 1974 10 31 :day 31 :month 10 :year 1974)
@@ -158,32 +158,32 @@
   "terça dessa semana"
   "terça agora"
   (datetime 2013 2 12 :day-of-week 2)
-  
+
  ;  ;; Cycles
-  
+
   "esta semana"
   (datetime 2013 2 11 :grain :week)
 
   "a semana passada"
   (datetime 2013 2 4 :grain :week)
-  
+
   "a semana que vem"
   "a proxima semana"
   (datetime 2013 2 18 :grain :week)
-  
+
   "o mês passado"
   (datetime 2013 1)
 
   "o mes que vem"
   "o próximo mês"
   (datetime 2013 3)
-  
+
   "o ano passado"
   (datetime 2012)
-  
+
   "este ano"
   (datetime 2013)
-  
+
   "o ano que vem"
   "o proximo ano"
   (datetime 2014)
@@ -260,7 +260,7 @@
 
   "6 da manhã"
   (datetime 2013 2 12 6 - 7)
-  
+
   "quarta às onze da manhã"
   (datetime 2013 2 13 11 :hour 11 :day-of-week 3)
 
@@ -272,51 +272,51 @@
 
   "em um segundo"
   (datetime 2013 2 12 4 30 1)
-  
+
   "em um minuto"
   "em 1 min"
   (datetime 2013 2 12 4 31 0)
-  
+
   "em 2 minutos"
   "em dois minutos"
   (datetime 2013 2 12 4 32 0)
-  
+
   "em 60 minutos"
   (datetime 2013 2 12 5 30 0)
-  
+
   "em uma hora"
   (datetime 2013 2 12 5 30)
 
   "fazem duas horas"
   (datetime 2013 2 12 2 30)
-  
+
   "em 24 horas"
   "em vinte e quatro horas"
   (datetime 2013 2 13 4 30)
-  
+
   "em um dia"
   (datetime 2013 2 13 4)
-  
+
   "em 7 dias"
   (datetime 2013 2 19 4)
-  
+
   "em uma semana"
   (datetime 2013 2 19)
-  
+
   "faz tres semanas"
   "faz três semanas"
   (datetime 2013 1 22)
-  
+
   "em dois meses"
   (datetime 2013 4 12)
-  
+
   "faz tres meses"
   (datetime 2012 11 12)
 
   "em um ano"
   "em 1 ano"
   (datetime 2014 2)
-  
+
   "faz dois anos"
   (datetime 2011 2)
 
@@ -329,7 +329,7 @@
   "este inverno"
   (datetime-interval [2012 12 21] [2013 3 21])
 
-  ; ES holidays 
+  ; ES holidays
 
   "Natal"
   (datetime 2013 12 25)
@@ -351,10 +351,10 @@
   "amanhã a noite"
   ;"miércoles por la noche"
   (datetime-interval [2013 2 13 18] [2013 2 14 00])
-  
+
   "ontem a noite"
-  (datetime-interval [2013 2 11 18] [2013 2 12 00])  
-  
+  (datetime-interval [2013 2 11 18] [2013 2 12 00])
+
   "este final de semana"
   "este fim de semana"
   (datetime-interval [2013 2 15 18] [2013 2 18 00])
@@ -363,7 +363,7 @@
   (datetime-interval [2013 2 18 4] [2013 2 18 12])
 
   "dia 15 de fevereiro pela manhã"
-  "dia 15 de fevereiro de manhã" 
+  "dia 15 de fevereiro de manhã"
   (datetime-interval [2013 2 15 4] [2013 2 15 12])
 
   "às 8 da noite"
@@ -391,7 +391,7 @@
 
   "proximos 3 dias"
   (datetime-interval [2013 2 13] [2013 2 16])
-    
+
   "duas semanas atras"
   (datetime-interval [2013 1 28 :grain :week] [2013 2 11 :grain :week])
 
@@ -409,12 +409,12 @@
 
   "passados 2 anos"
   (datetime-interval [2011] [2013])
-  
+
   "3 próximos anos"
   "proximo tres anos"
   "3 anos que vem"
-  (datetime-interval [2014] [2017]) 
-  
+  (datetime-interval [2014] [2017])
+
   ; Explicit intervals
 
   "13 a 15 de julho"
@@ -432,4 +432,20 @@
 
   "as quatro da tarde PST"
   (datetime 2013 2 12 16 :hour 16 :timezone "PST")
+
+  "após ao meio dia"
+  "depois do meio dia"
+  (datetime 2013 2 12 12 :direction :after)
+
+  "antes do meio dia"
+  "não mais que meio dia"
+  (datetime 2013 2 12 12 :direction :before)
+
+  "amanhã depois das 15hs"
+  "amanha após as quinze horas"
+  (datetime 2013 2 13 15 :direction :after)
+
+  "antes da meia noite"
+  "até a meia noite"
+  (datetime 2013 2 13 00 :direction :before)
 )
