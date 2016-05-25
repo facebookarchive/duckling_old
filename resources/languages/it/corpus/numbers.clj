@@ -10,7 +10,43 @@
   "1"
   "uno"
   (number 1)
-
+  
+  "2"
+  "due"
+  (number 2)
+  
+  "3"
+  "tre"
+  (number 3)
+  
+  "4"
+  "quattro"
+  (number 4)
+  
+  "5"
+  "cinque"
+  (number 5)
+  
+  "6"
+  "sei"
+  (number 6)
+  
+  "7"
+  "sette"
+  (number 7)
+  
+  "8"
+  "otto"
+  (number 8)
+  
+  "9"
+  "nove"
+  (number 9)
+  
+  "10"
+  "dieci"
+  (number 10)
+  
   "33"
   "trentatré"
   "0033"
