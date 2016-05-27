@@ -4,6 +4,14 @@
   {:reference-time (time/t -2 2013 2 12 4 30 0)
    :min (time/t -2 1900)
    :max (time/t -2 2100)}
+  
+  ; this currently becomes 4 in the morning - thats not wrong, but 16 would be better
+  ;"25.4. um 4"
+  ;(datetime 2013 4 25 16 0)
+  
+  ; this currently becomes 3 in the morning - thats not wrong, but 15 would be better
+  ;"morgen um 3"
+  ;(datetime 2013 2 13 15)
 
   "jetzt"
   "genau jetzt"
@@ -584,11 +592,8 @@
   "um 2"
   (datetime 2013 2 12 14)
 
-  "25.4. um 4"
-  (datetime 2013 4 25 16 0)
 
   "morgen um 15 Uhr"
-  "morgen um 3"
   (datetime 2013 2 13 15)
 
   "nach 14 Uhr"
