@@ -97,7 +97,7 @@
   (cycle-nth :second 0)
   
   "now"
-  #"(?i)(ora|al momento|attualmented|adesso|di oggi)"
+  #"(?i)(ora|al momento|attualmented|adesso|(di )?oggi)"
   (cycle-nth :day 0)
 
   "tomorrow"

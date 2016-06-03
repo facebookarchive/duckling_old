@@ -10,6 +10,7 @@
   
   "ora"
   "di oggi"
+  "oggi"
   "adesso"
   (datetime 2013 2 12)
 

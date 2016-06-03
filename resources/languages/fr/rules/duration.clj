@@ -62,4 +62,12 @@
   [(dim :duration) #"(?i)plus t[oô]t"]
   (duration-ago (:value %1))
 
+  "<duration> apres <time>"
+  [(dim :duration) #"(?i)apr[eè]s" (dim :time)]
+  (duration-after (:value %1) %3)
+
+  "<duration> avant <time>"
+  [(dim :duration) #"(?i)avant" (dim :time)]
+  (duration-before (:value %1) %3)
+
 )

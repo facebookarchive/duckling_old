@@ -225,11 +225,11 @@
   (dissoc %1 :latent) 
   
   "a las <time-of-day>" ;
-  [#"(?i)(para|al?)( las?)?|las?" {:form :time-of-day}]
+  [#"(?i)(al?)( las?)?|las?" {:form :time-of-day}]
   (dissoc %2 :latent) 
 
   "a las <hour-min>(time-of-day)" ; a las 12:00 horas
-  [#"(?i)((para|al?)( las?)?|las?)" {:form :time-of-day} #"horas?"]
+  [#"(?i)((al?)( las?)?|las?)" {:form :time-of-day} #"horas?"]
   %2
 
   "hh(:|.|h)mm (time-of-day)"
