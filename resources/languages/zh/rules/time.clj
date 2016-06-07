@@ -174,6 +174,15 @@
   [#"(?i)去" (dim :time)]
   (pred-nth %2 -1)
 
+  ;;Ordinals
+  "nth <time> of <time>"
+  [(dim :time) (dim :ordinal) (dim :time)]
+  (pred-nth (intersect %1 %3) (dec (:value %2)))
+
+  "nth <time> of <time>"
+  [(dim :time) #"的" (dim :ordinal) (dim :time)]
+  (pred-nth (intersect %1 %4) (dec (:value %3)))
+
   ;specific for year in chinese
   "last year"
   #"去年"
