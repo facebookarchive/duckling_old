@@ -34,7 +34,7 @@
   (day-of-week 1)
 
   "named-day"
-  #"(?i)die?nstag|di?\.?"
+  #"(?i)die?nstag|di\.?"
   (day-of-week 2)
 
   "named-day"
