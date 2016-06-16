@@ -30,6 +30,10 @@
   "single"
   #"(?i)single"
   {:dim :number :integer true :value 1 :grain 1}
+
+  "a pair"
+  #"(?i)a pair( of)?"
+  {:dim :number :integer true :value 2 :grain 1}
   
   "dozen"
   #"(?i)dozen"

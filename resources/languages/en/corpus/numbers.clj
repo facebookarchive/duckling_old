@@ -14,6 +14,11 @@
   "single"
   (number 1)
 
+  "2"
+  "two"
+  "a pair"
+  (number 2)
+
   "33"
   "thirty three"
   "0033"
