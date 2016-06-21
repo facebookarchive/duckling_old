@@ -52,9 +52,25 @@
   "0033"
   (number 33)
   
+  "11"
+  "undici"
+  (number 11)
+  
+  "12"
+  "dodici"
+  (number 12)
+  
+  "13"
+  "tredici"
+  (number 13)
+  
   "14"
   "quattordici"
   (number 14)
+  
+  "15"
+  "quindici"
+  (number 15)
   
   "16"
   "sedici"
@@ -68,6 +84,14 @@
   "diciotto"
   (number 18)
 
+  "19"
+  "diciannove"
+  (number 19)
+  
+  "20"
+  "venti"
+  (number 20)
+  
   "1,1"
   "1,10"
   "01,10"
@@ -106,12 +130,64 @@
   (number -1200000)
   
   "primo"
+  "prima"
   "1°"
   "1ª"
   (ordinal 1)
+
+  "secondo"
+  "seconda"
+  "2°"
+  "2ª"
+  (ordinal 2)
+
+  "terzo"
+  "terza"
+  "3°"
+  "3ª"
+  (ordinal 3)
   
+  "quarto"
+  "quarta"
   "4°"
   "4ª"
   (ordinal 4)
+  
+  "quinto"
+  "quinta"
+  "5°"
+  "5ª"
+  (ordinal 5)
+
+  "sesto"
+  "sesta"
+  "6°"
+  "6ª"
+  (ordinal 6)
+  
+  "settimo"
+  "settima"
+  "7°"
+  "7ª"
+  (ordinal 7)
+  
+  "ottavo"
+  "ottava"
+  "8°"
+  "8ª"
+  (ordinal 8)
+  
+  "nono"
+  "nona"
+  "9°"
+  "9ª"
+  (ordinal 9)
+  
+  "decimo"
+  "decima"
+  "10°"
+  "10ª"
+  (ordinal 10)
+  
 )
 
