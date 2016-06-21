@@ -97,7 +97,7 @@
       (dissoc  :latent)
       (merge {:unit "litre"}))
 
-  "half leathlítear"
+  "leathlítear"
   [#"(?i)leathl[íi]t(ea|i)r"]
   (-> %1
       (dissoc  :latent)
