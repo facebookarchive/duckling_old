@@ -4,7 +4,7 @@
 
 "$10"
 "10$"
-"ten dollars"
+"deich dollars"
 (money 10 "$")
 
 ;"under $15"
@@ -43,20 +43,20 @@
 ;Indian Currency
 "Rs. 20"
 "Rs 20"
-"20 Rupees"
+"20 Rúpaí"
 "20Rs"
 "Rs20"
 (money 20 "INR")
 
 "20 Rupees 43"
-"twenty rupees 43"
+"fiche rúpaí 43"
 (money 20.43 "INR")
 
 "INR33"
 (money 33 "INR")
 
-"3 bucks"
-(money 3) ; unknown unit
+;"3 bucks"
+;(money 3) ; unknown unit
 
 "£9"
 "nine pounds"
