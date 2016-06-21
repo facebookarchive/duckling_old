@@ -30,31 +30,31 @@
   ;; Named things
 
   "named-day"
-  #"(?i)montag|mo\.?"
+  #"(?i)montags?|mo\.?"
   (day-of-week 1)
 
   "named-day"
-  #"(?i)die?nstag|di?\.?"
+  #"(?i)die?nstags?|di\.?"
   (day-of-week 2)
 
   "named-day"
-  #"(?i)mittwoch|mi\.?"
+  #"(?i)mittwochs?|mi\.?"
   (day-of-week 3)
 
   "named-day"
-  #"(?i)donn?erstag|do\.?"
+  #"(?i)donn?erstags?|do\.?"
   (day-of-week 4)
 
   "named-day"
-  #"(?i)freitag|fr\.?"
+  #"(?i)freitags?|fr\.?"
   (day-of-week 5)
 
   "named-day"
-  #"(?i)samstag|sa\.?"
+  #"(?i)samstags?|sa\.?"
   (day-of-week 6)
 
   "named-day"
-  #"(?i)sonntag|so\.?"
+  #"(?i)sonntags?|so\.?"
   (day-of-week 7)
 
   "named-month"

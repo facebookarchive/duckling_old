@@ -6,7 +6,6 @@
   "naught"
   "nought"
   "zero"
-  "no"
   "nil"
   (number 0)
 
@@ -14,6 +13,11 @@
   "one"
   "single"
   (number 1)
+
+  "2"
+  "two"
+  "a pair"
+  (number 2)
 
   "33"
   "thirty three"
