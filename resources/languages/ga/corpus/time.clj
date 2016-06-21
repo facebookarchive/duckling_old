@@ -20,6 +20,9 @@
   "amárach"
   (datetime 2013 2 13)
 
+  "arú amárach"
+  (datetime 2013 2 14)
+
   "dé luain"
   "an luan"
   "an luan seo"
