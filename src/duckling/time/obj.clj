@@ -1,7 +1,7 @@
 (ns duckling.time.obj
   (:require [clj-time.core :as time]
             [clj-time.local :as local])
-  (:import [org.joda.time DateTimeFieldType DateTime]))
+  (:import [org.joda.time DateTimeFieldType DateTime DateTimeZone]))
 
 ; This ns constructs and operates time objects. It's a wall between Picsou and
 ; the actual implementation of time (here, clj-time).
@@ -18,7 +18,7 @@
 
 ; week is a special case (it's not a field byitself), it's managed as a special
 ; case in functions
-(def time-fields 
+(def time-fields
             [[:year    (DateTimeFieldType/year) 0]
              [:month   (DateTimeFieldType/monthOfYear) 1]
              [:day     (DateTimeFieldType/dayOfMonth) 1]
@@ -46,9 +46,9 @@
        (grain-order grain)
        (or (nil? end) (instance? org.joda.time.DateTime end))))
 
-(defn zone [timezone]
-  (cond (:start timezone) (.getZone (:start timezone))
-        (instance? DateTime timezone) (.getZone timezone)
+(defn ^DateTimeZone zone [timezone]
+  (cond (:start timezone) (.getZone ^DateTime (:start timezone))
+        (instance? DateTime timezone) (.getZone ^DateTime timezone)
         (integer? timezone) (time/time-zone-for-offset timezone)
         :else (throw (ex-info "Invalid timezone" {:tz timezone}))))
 
@@ -68,8 +68,9 @@
   ([timezone year month day hour minute second]
    (t :second timezone year month day hour minute second))
   ([grain timezone year month day hour minute second]
-   {:start (DateTime. year month day hour minute second (zone timezone)) 
-    :grain grain})) 
+   {:start (DateTime. (int year) (int month) (int day) (int hour) (int second)
+                      (zone timezone))
+    :grain grain}))
 
 (declare plus)
 
@@ -77,11 +78,11 @@
   "Returns the end *instant* of the time object"
   [{:keys [start grain end] :as t}]
   {:pre [(valid? t)]}
-  (or end (time/plus 
+  (or end (time/plus
             start
             (let [[g n] (period-fields grain)] (g n)))))
 
-(defn interval 
+(defn interval
   "Builds a time interval between start of t1 and *start* of t2.
   The grain is the smallest of the args."
   [t1 t2]
@@ -90,7 +91,7 @@
    :grain (max-key grain-order (:grain t1) (:grain t2))
    :end (:start t2)})
 
-(defn interval-start-end 
+(defn interval-start-end
   "Builds a time interval between start of t1 and *end* of t2.
   The grain is the smallest of the args."
   [t1 t2]
@@ -168,31 +169,32 @@
 (defn minus [tt grain n]
   (plus tt grain (- n)))
 
-(defn round 
+(defn round
   "Rounds the time grain to the grain: all smaller grain fields set to 0.
   If applied to a true interval (with :end), it turns the interval into
   a grain time objects (rounds start, removes :end)."
   [tt grain]
   {:pre [(valid? tt)]}
-  (cond 
+  (cond
     (= :week grain)
     (let [t-dow (day-of-week tt)]
       (-> (plus (round tt :day) :day (- 1 t-dow))
           (assoc :grain :week)
           (dissoc :end)))
-    
+
     (= :quarter grain)
     (let [t-mo (round tt :month)
           mo-delta (mod (dec (month t-mo)) 3)]
       (-> (minus t-mo :month mo-delta)
           (assoc :grain :quarter)
           (dissoc :end)))
-  
+
     :else
     (let [fields-to-reset (->> time-fields
                                (drop-while #(not= grain (first %)))
                                next)]
-          {:start (reduce (fn [tim [_ ty v]] (.withField tim ty v)) (:start tt)
+      {:start (reduce (fn [tim [_ ty v]]
+                        (.withField ^DateTime tim ty (int v))) (:start tt)
                           fields-to-reset)
            :grain grain})))
 
@@ -215,7 +217,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;
 ; Periods
 
-; Periods are almost durations, but not exactly. For instance the duration of 
+; Periods are almost durations, but not exactly. For instance the duration of
 ; "one month" depends on which month. (When added to a time instant, a period
 ; can become a duration.)
 
@@ -260,6 +262,3 @@
   (let [anchor (now)
         after (plus-period anchor period)]
     (time/in-seconds (time/interval (:start anchor) (:start after)))))
-   
-
-

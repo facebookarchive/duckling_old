@@ -220,7 +220,7 @@
        (map (fn [dir]
               (let [files (->> (format "languages/%s/%s" lang dir)
                                res/get-files
-                               (filter (comp not #(.startsWith % "_")))
+                               (filter (comp not #(.startsWith ^String % "_")))
                                (map #(subs % 0 (- (count %) 4)))
                                vec)]
                 [(keyword dir) files])))
