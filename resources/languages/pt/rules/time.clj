@@ -297,7 +297,7 @@
   "<time-of-day> am|pm"
   [{:form :time-of-day} #"(?i)([ap])\.?m?\.?"]
   ;; TODO set_am fn in helpers => add :ampm field
-  (let [[p meridiem] (if (= "a" (-> %2 :groups first .toLowerCase))
+  (let [[p meridiem] (if (= "a" (-> %2 :groups first clojure.string/lower-case))
                        [[(hour 0) (hour 11) true] :am]
                        [[(hour 12) (hour 23) true] :pm])]
     (-> (intersect %1 (apply interval p))
@@ -437,7 +437,7 @@
   "timezone"
   #"(?i)(YEKT|YEKST|YAPT|YAKT|YAKST|WT|WST|WITA|WIT|WIB|WGT|WGST|WFT|WEZ|WET|WESZ|WEST|WAT|WAST|VUT|VLAT|VLAST|VET|UZT|UYT|UYST|UTC|ULAT|TVT|TMT|TLT|TKT|TJT|TFT|TAHT|SST|SRT|SGT|SCT|SBT|SAST|SAMT|RET|PYT|PYST|PWT|PT|PST|PONT|PMST|PMDT|PKT|PHT|PHOT|PGT|PETT|PETST|PET|PDT|OMST|OMSST|NZST|NZDT|NUT|NST|NPT|NOVT|NOVST|NFT|NDT|NCT|MYT|MVT|MUT|MST|MSK|MSD|MMT|MHT|MEZ|MESZ|MDT|MAWT|MART|MAGT|MAGST|LINT|LHST|LHDT|KUYT|KST|KRAT|KRAST|KGT|JST|IST|IRST|IRKT|IRKST|IRDT|IOT|IDT|ICT|HOVT|HNY|HNT|HNR|HNP|HNE|HNC|HNA|HLV|HKT|HAY|HAT|HAST|HAR|HAP|HAE|HADT|HAC|HAA|GYT|GST|GMT|GILT|GFT|GET|GAMT|GALT|FNT|FKT|FKST|FJT|FJST|ET|EST|EGT|EGST|EET|EEST|EDT|ECT|EAT|EAST|EASST|DAVT|ChST|CXT|CVT|CST|COT|CLT|CLST|CKT|CHAST|CHADT|CET|CEST|CDT|CCT|CAT|CAST|BTT|BST|BRT|BRST|BOT|BNT|AZT|AZST|AZOT|AZOST|AWST|AWDT|AST|ART|AQTT|ANAT|ANAST|AMT|AMST|ALMT|AKST|AKDT|AFT|AEST|AEDT|ADT|ACST|ACDT)"
   {:dim :timezone
-   :value (-> %1 :groups first .toUpperCase)}
+   :value (-> %1 :groups first clojure.string/upper-case)}
 
   "<time> timezone"
   [(dim :time) (dim :timezone)]
