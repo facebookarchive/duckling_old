@@ -28,7 +28,7 @@
   ([tok1 tok2]
    (ti (p/compose (:pred tok1) (:pred tok2))
        {:timezone (or (:timezone tok1) (:timezone tok2))
-        :direction (or (:direction tok1 (:direction tok2)))}))
+        :direction (or (:direction tok1) (:direction tok2))}))
         ;; FIXME direction shouldn't appear in both tokens
   ([tok1 tok2 & more]
    (apply intersect (intersect tok1 tok2) more)))
