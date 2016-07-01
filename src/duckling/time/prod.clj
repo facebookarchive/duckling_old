@@ -115,8 +115,8 @@
 (defn hour-relativemin [h m & [twelve-hour-clock?]]
   {:pre [(<= 0 h 23) (<= -59 m 59)]}
   (if twelve-hour-clock?
-    (hour-minute (if (pos? m) h (case (int h) 0 23 1 12 (dec h))) (mod m 60) true)
-    (hour-minute (if (pos? m) h (case (int h) 0 23 1 0 (dec h))) (mod m 60) false)))
+    (hour-minute (if (pos? m) h (case h 0 23 1 12 (dec h))) (mod m 60) true)
+    (hour-minute (if (pos? m) h (case h 0 23 1 0 (dec h))) (mod m 60) false)))
 
 
 (defn cycle-nth [grain n]

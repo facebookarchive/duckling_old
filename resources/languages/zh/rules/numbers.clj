@@ -2,7 +2,7 @@
  ;;
  ;; Integers
  ;;
-
+ 
   "integer (0..10)"
   #"〇|零|一|二|两|兩|三|四|五|六|七|八|九|十"
   {:dim :number
@@ -43,7 +43,7 @@
             first
             (clojure.string/replace #"," "")
             Long/parseLong)}
-
+  
   "<number>个" ; any number followed by this is a number
   [(dim :number) #"个"]
   %1
@@ -51,7 +51,7 @@
   ;;
   ;; Decimals
   ;;
-
+  
   "decimal number"
   #"(\d*\.\d+)"
   {:dim :number
@@ -82,7 +82,7 @@
   "numbers suffixes (K, M, G)"
   [(dim :number #(not (:number-suffixed %))) #"(?i)([kmg])"]
   (let [multiplier (get {"k" 1000 "m" 1000000 "g" 1000000000}
-                        (-> %2 :groups first clojure.string/lower-case))
+                        (-> %2 :groups first .toLowerCase))
         value      (* (:value %1) multiplier)
         int?       (zero? (mod value 1)) ; often true, but we could have 1.1111K
         value      (if int? (long value) value)] ; cleaner if we have the right type
@@ -94,10 +94,10 @@
   ;; Ordinal numbers
   ;;
 
-  "ordinal (digits)"
+  "ordinal (digits)" 
   [#"第" (dim :number)]
   {:dim :ordinal
-   :value (:value %2)}
+   :value (:value %2)} 
 
   ;; Already covered by rules above
 
@@ -113,5 +113,5 @@
               "九个" 9 "九個" 9 "十个" 10 "十個" 10}
               (:text %1))}
 
-
+  
   )

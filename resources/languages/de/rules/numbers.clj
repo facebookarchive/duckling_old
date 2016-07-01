@@ -1,6 +1,6 @@
 (  "intersect" ;handles things like hundert zwei
   [(dim :number :grain #(> (:grain %) 1)) (dim :number)] ; grain 1 are taken care of by specific rule
-  (compose-numbers %1 %2)
+  (compose-numbers %1 %2) 
 
   "numbers und"
  [(integer 1 9) #"und" (integer 20 90 #(#{20 30 40 50 60 70 80 90} (:value %)))]
@@ -11,7 +11,7 @@
    ;;
  ;; Integers
  ;;
-
+ 
  "integer (0..19)"
   #"(?i)(keine?|keine?s|keiner?|keinen|null|nichts|eins?(er)?|zwei|dreizehn|drei|vierzehn|vier|fünf|sechzehn|sechs|siebzehn|sieben|achtzehn|acht|neunzehn|neun|elf|zwölf|füfzehn)"
   ; fourteen must be before four, or it won't work because the regex will stop at four
@@ -21,12 +21,12 @@
                 "sechs" 6 "sieben" 7 "acht" 8 "neun" 9 "zehn" 10 "elf" 11
                 "zwölf" 12 "dreizehn" 13 "vierzehn" 14 "fünfzehn" 15 "sechzehn" 16
                 "siebzehn" 17 "achtzehn" 18 "neunzehn" 19}
-              (-> %1 :groups first clojure.string/lower-case))}
-
+              (-> %1 :groups first .toLowerCase))}
+  
   "ten"
   #"(?i)zehn"
   {:dim :number :integer true :value 10 :grain 1}
-
+  
   "dozen"
   #"(?i)dutzend"
   {:dim :number :integer true :value 12 :grain 1 :grouping true} ;;restrict composition and prevent "2 12"
@@ -46,7 +46,7 @@
   "couple"
   #"(?i)(ein )?paar"
   {:dim :number :integer true :value 2}
-
+  
   "few" ; TODO set assumption
   #"(?i)mehrere"
   {:dim :number :integer true :precision :approximate :value 3}
@@ -57,7 +57,7 @@
    :integer true
    :value (get {"zwanzig" 20 "dreissig" 30 "vierzig" 40 "fünfzig" 50 "sechzig" 60
                 "siebzig" 70 "achtzig" 80 "neunzig" 90}
-             (-> %1 :groups first clojure.string/lower-case))
+             (-> %1 :groups first .toLowerCase))
    :grain 1}
 
  "integer ([2-9][1-9])"
@@ -66,11 +66,11 @@
   :integer true
   :value (+ (get {"ein" 1 "zwei" 2 "drei" 3 "vier" 4 "fünf" 5
                   "sechs" 6 "sieben" 7 "acht" 8 "neun" 9}
-                 (-> %1 :groups first clojure.string/lower-case))
+                 (-> %1 :groups first .toLowerCase))
             (get {"zwanzig" 20 "dreissig" 30 "vierzig" 40 "fünfzig" 50
                   "sechzig" 60 "siebzig" 70 "achtzig" 80 "neunzig" 90}
-                 (-> %1 :groups second clojure.string/lower-case)))}
-
+                 (-> %1 :groups second .toLowerCase)))}
+  
 
  ; "integer 21..99"
  ; [(integer 10 90 #(#{20 30 40 50 60 70 80 90} (:value %))) (integer 1 9)]
@@ -83,16 +83,16 @@
   {:dim :number
    :integer true
    :value (Long/parseLong (first (:groups %1)))}
-
+  
   "integer with thousands separator ."
-  #"(\d{1,3}(\.\d\d\d){1,5})"
+  #"(\d{1,3}(\.\d\d\d){1,5})" 
   {:dim :number
    :integer true
    :value (-> (:groups %1)
             first
             (clojure.string/replace #"\." "")
             Long/parseLong)}
-
+  
   ; composition
  ; "number dozen"
  ; [(integer 1 10) (dim :number #(:grouping %))]
@@ -126,7 +126,7 @@
   ;;
   ;; Decimals
   ;;
-
+  
   "decimal number"
   #"(\d*,\d+)"
   {:dim :number
@@ -139,7 +139,7 @@
   [(dim :number #(not (:number-prefixed %))) #"(?i)komma" (dim :number #(not (:number-suffixed %)))]
   {:dim :number
    :value (+ (* 0.1 (:value %3)) (:value %1))}
-
+   
 
   "decimal with thousands separator"
   #"(\d+(\.\d\d\d)+\,\d+)"
@@ -168,7 +168,7 @@
   "numbers suffixes (K, M, G)"
   [(dim :number #(not (:number-suffixed %))) #"(?i)([kmg])(?=[\W\$€]|$)"]
   (let [multiplier (get {"k" 1000 "m" 1000000 "g" 1000000000}
-                        (-> %2 :groups first clojure.string/lower-case))
+                        (-> %2 :groups first .toLowerCase))
         value      (* (:value %1) multiplier)
         int?       (zero? (mod value 1)) ; often true, but we could have 1.1111K
         value      (if int? (long value) value)] ; cleaner if we have the right type
@@ -179,7 +179,7 @@
   ;;
   ;; Ordinal numbers
   ;;
-
+  
   "ordinals (first..19th)"
   #"(?i)(erste(r|s)?|zweite(r|s)|dritte(r|s)|vierte(r|s)|fuenfte(r|s)|sechste(r|s)|siebte(r|s)|achte(r|s)|neunte(r|s)|zehnte(r|s)|elfter|zwölfter|dreizenter|vierzehnter|fünfzehnter|sechzenter|siebzehnter|achtzehnter|neunzehnter)"
   {:dim :ordinal
@@ -189,16 +189,19 @@
                 "vierte" 4 "vierter" 4 "viertes" 4
                 "fünfte" 5 "fünfter" 5 "fünftes" 5
                 "sechste" 6 "sechster" 6 "sechstes" 6
-                "siebte" 7 "siebter" 7 "siebtes" 7
+                "siebte" 7 "siebter" 7 "siebtes" 7 
                 "achte" 8 "achter" 8 "achtes" 8
                 "neunte" 9 "neunter" 9 "neuntes" 9
                 "zehnte" 10 "zehnter" 10 "zehntes" 10
                 "elfter" 11
                  "zwölfter" 12 "dreizehnter" 13 "vierzehnter" 14 "fünfzehnter" 15 "sechzehnter" 16
                  "siebzehnter" 17 "achtzehnter" 18 "neunzehnter" 19}
-               (-> %1 :groups first clojure.string/lower-case))}
+               (-> %1 :groups first .toLowerCase))}
 
   "ordinal (digits)"
   #"0*(\d+)(\.| ?(te(n|r|s)?)|(ste(n|r|s)?))"
   {:dim :ordinal
    :value (read-string (first (:groups %1)))})  ; read-string not the safest
+
+  
+  

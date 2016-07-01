@@ -135,7 +135,7 @@
   "Österreichischer Nationalfeiertag"
   #"(österreichischer?)? nationalfeiertag|national feiertag"
   (month-day 10 26)
-
+  
   "Schweizer Bundesfeiertag"
   #"(?i)schweiz(er)? (bundes)?feiertag|bundes feiertag"
   (month-day 8 1)
@@ -155,7 +155,7 @@
   "Allerheiligen"
   #"(?i)allerheiligen?|aller heiligen?"
   (month-day 11 1)
-
+  
   "Nikolaus"
   #"(?i)nikolaus(tag)?|nikolaus tag|nikolo"
   (month-day 12 6)
@@ -175,7 +175,7 @@
   "tomorrow"
   #"(?i)morgen"
   (cycle-nth :day 1)
-
+  
   "after tomorrow"
   #"(?i)übermorgen"
   (cycle-nth :day 2)
@@ -183,7 +183,7 @@
   "yesterday"
   #"(?i)gestern"
   (cycle-nth :day -1)
-
+  
   "before yesterday"
   #"(?i)vorgestern"
   (cycle-nth :day -2)
@@ -223,7 +223,7 @@
   "after next <time>"
   [#"(?i)übernächsten?|über ?nächstes?" (dim :time)]
   (pred-nth-not-immediate %2 1)
-
+  
   "<time> after next"
   [ (dim :time) #"(?i)nach dem nächsten"]
   (pred-nth-not-immediate %1 1)
@@ -320,7 +320,7 @@
   [#"(?i)die iden (des?)" {:form :month}]
   (intersect %2 (day-of-month (if (#{3 5 7 10} (:month %2)) 15 13)))
 
-
+  
    ; Hours and minutes (absolute time)
   ;
   ; Assumptions:
@@ -328,15 +328,15 @@
   ; - 1..11 is ambiguous am or pm
   ; - 12 is noon (whereas in English it is ambiguous)
   ; - 13..23 is pm
-
+  
   "time-of-day (latent)"
   (integer 0 23)
   (assoc (hour (:value %1) (< (:value %1) 12)) :latent true)
 
   "<time-of-day>  o'clock"
   [#(:full-hour %) #"(?i)uhr|h"]
-  (dissoc %1 :latent)
-
+  (dissoc %1 :latent) 
+  
   "at <time-of-day>" ; absorption
   [#"(?i)um|@" {:form :time-of-day}]
   (dissoc %2 :latent)
@@ -360,7 +360,7 @@
   ;                  (Integer/parseInt (second (:groups %1)))
   ;                  false) ; not a 12-hour clock)
   ;     (assoc :latent true))
-  (let [[p meridiem] (if (= "a" (-> %2 :groups first clojure.string/lower-case))
+  (let [[p meridiem] (if (= "a" (-> %2 :groups first .toLowerCase))
                        [[(hour 0) (hour 12) false] :am]
                        [[(hour 12) (hour 0) false] :pm])]
     (-> (intersect
@@ -373,7 +373,7 @@
   "<time-of-day> am|pm"
   [{:form :time-of-day} #"(?i)([ap])(\s|\.)?m?\.?"];Check me DO WE NEED THIS
   ;; TODO set_am fn in helpers => add :ampm field
-  (let [[p meridiem] (if (= "a" (-> %2 :groups first clojure.string/lower-case))
+  (let [[p meridiem] (if (= "a" (-> %2 :groups first .toLowerCase))
                        [[(hour 0) (hour 12) false] :am]
                        [[(hour 12) (hour 0) false] :pm])]
     (-> (intersect %1 (apply interval p))
@@ -441,12 +441,12 @@
   [#"(?i)nach ?mittags?"]
   (assoc (interval (hour 12 false) (hour 19 false) false) :form :part-of-day :latent true)
 
-
+  
   "evening"
   [#"(?i)abends?"]
   (assoc (interval (hour 18 false) (hour 0 false) false) :form :part-of-day :latent true)
-
-
+  
+  
   "night"
   [#"(?i)nachts?"]
   (assoc (interval (hour 0 false) (hour 4 false) false) :form :part-of-day :latent true)
@@ -487,7 +487,7 @@
   (intersect %2 %1)
 
   "<part-of-day> of <time>" ; since "morning" "evening" etc. are latent, general time+time is blocked
-  [{:form :part-of-day} #"(?i)des|von|vom|am" (dim :time)];Check me
+  [{:form :part-of-day} #"(?i)des|von|vom|am" (dim :time)];Check me 
   (intersect %1 %3)
 
 
@@ -521,7 +521,7 @@
   "timezone"
   #"(?i)(YEKT|YEKST|YAPT|YAKT|YAKST|WT|WST|WITA|WIT|WIB|WGT|WGST|WFT|WEZ|WET|WESZ|WEST|WAT|WAST|VUT|VLAT|VLAST|VET|UZT|UYT|UYST|UTC|ULAT|TVT|TMT|TLT|TKT|TJT|TFT|TAHT|SST|SRT|SGT|SCT|SBT|SAST|SAMT|RET|PYT|PYST|PWT|PT|PST|PONT|PMST|PMDT|PKT|PHT|PHOT|PGT|PETT|PETST|PET|PDT|OMST|OMSST|NZST|NZDT|NUT|NST|NPT|NOVT|NOVST|NFT|NDT|NCT|MYT|MVT|MUT|MST|MSK|MSD|MMT|MHT|MEZ|MESZ|MDT|MAWT|MART|MAGT|MAGST|LINT|LHST|LHDT|KUYT|KST|KRAT|KRAST|KGT|JST|IST|IRST|IRKT|IRKST|IRDT|IOT|IDT|ICT|HOVT|HNY|HNT|HNR|HNP|HNE|HNC|HNA|HLV|HKT|HAY|HAT|HAST|HAR|HAP|HAE|HADT|HAC|HAA|GYT|GST|GMT|GILT|GFT|GET|GAMT|GALT|FNT|FKT|FKST|FJT|FJST|ET|EST|EGT|EGST|EET|EEST|EDT|ECT|EAT|EAST|EASST|DAVT|ChST|CXT|CVT|CST|COT|CLT|CLST|CKT|CHAST|CHADT|CET|CEST|CDT|CCT|CAT|CAST|BTT|BST|BRT|BRST|BOT|BNT|AZT|AZST|AZOT|AZOST|AWST|AWDT|AST|ART|AQTT|ANAT|ANAST|AMT|AMST|ALMT|AKST|AKDT|AFT|AEST|AEDT|ADT|ACST|ACDT)"
   {:dim :timezone
-   :value (-> %1 :groups first clojure.string/upper-case)}
+   :value (-> %1 :groups first .toUpperCase)}
 
   "<time> timezone"
   [(dim :time) (dim :timezone)]
@@ -601,7 +601,7 @@
 
 
   "by the end of <time>"; in this case take the end of the time (by the end of next week = by the end of next sunday)
-  [#"(?i)bis (zum)? ende (von)?|(noch)? vor" (dim :time)];Check me CODE OK?
+  [#"(?i)bis (zum)? ende (von)?|(noch)? vor" (dim :time)];Check me CODE OK? 
   (interval (cycle-nth :second 0) %2 true)
 
   ; One-sided Intervals
@@ -628,3 +628,5 @@
   ; "time => time2 (experiment)"
   ; (dim :time)
   ; (assoc %1 :dim :time2)
+
+

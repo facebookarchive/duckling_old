@@ -3,7 +3,7 @@
   "intersect"
   [(dim :time #(not (:latent %))) (dim :time #(not (:latent %)))] ; sequence of two tokens with a time dimension
   (intersect %1 %2)
-
+  
   ; mostly for January 12, 2005
   ; this is a separate rule, because commas separate very specific tokens
   ; so we want this rule's classifier to learn this
@@ -152,8 +152,8 @@
 
 ;;
   ;; This, Next, Last
-
-  ;; assumed to be strictly in the future:
+  
+  ;; assumed to be strictly in the future: 
   ;; "this Monday" => next week if today in Monday
   "this|next <day-of-week>"
   [#"(?i)今|明|下[个|個]?" {:form :day-of-week}]
@@ -223,11 +223,11 @@
   "evening|night"
   [#"晚上|晚间"]
   (assoc (interval (hour 18 false) (hour 0 false) false) :form :part-of-day :latent true)
-
+  
   "<dim time> <part-of-day>" ; since "morning" "evening" etc. are latent, general time+time is blocked
   [(dim :time) {:form :part-of-day}]
   (intersect %1 %2)
-
+  
   "day of month (numeric with day symbol)"
   [(dim :number) #"号|號|日"]
   (assoc (day-of-month (:value %1)) :latent true :form :day-of-month)
@@ -239,7 +239,7 @@
   "year (numeric with year symbol)"
   [(integer 1000 9999) #"年"]
   (year (:value %1))
-
+  
   "absorption of , after named day"
   [{:form :named-day} #","]
   %1
@@ -248,7 +248,7 @@
   [{:form :named-month} {:form :day-of-month}]
   (intersect %1 %2)
 
-
+  
 
   ; ;; Hours and minutes (absolute time)
 
@@ -261,19 +261,19 @@
   "last night"
   [#"昨晚|昨天晚上"]  ;; special form in Chinese
   (assoc (intersect (cycle-nth :day -1)
-                    (interval (hour 18 false) (hour 0 false) false))
+                    (interval (hour 18 false) (hour 0 false) false)) 
          :form :part-of-day) ; no :latent
 
   "tonight"
   [#"今晚|今天晚上"]
   (assoc (intersect (cycle-nth :day 0)
-                    (interval (hour 18 false) (hour 0 false) false))
+                    (interval (hour 18 false) (hour 0 false) false)) 
          :form :part-of-day) ; no :latent
 
   "tomorrow night"
   [#"明晚|明天晚上"]  ;; special form in Chinese
   (assoc (intersect (cycle-nth :day 1)
-                    (interval (hour 18 false) (hour 0 false) false))
+                    (interval (hour 18 false) (hour 0 false) false)) 
          :form :part-of-day) ; no :latent
 
   "in|during the <part-of-day>" ;; removes latent
@@ -289,17 +289,17 @@
   (hour-minute (Integer/parseInt (first (:groups %1)))
                (Integer/parseInt (second (:groups %1)))
                true)
-
+  
   "hhmm (military time-of-day)"
   #"(?i)((?:[01]?\d)|(?:2[0-3]))([0-5]\d)"
   (-> (hour-minute (Integer/parseInt (first (:groups %1)))
                    (Integer/parseInt (second (:groups %1)))
                    false) ; not a 12-hour clock)
       (assoc :latent true))
-
+  
   "<time-of-day> am|pm"
   [{:form :time-of-day} #"(?i)([ap])(\s|\.)?m?\.?"]
-  (let [[p meridiem] (if (= "a" (-> %2 :groups first clojure.string/lower-case))
+  (let [[p meridiem] (if (= "a" (-> %2 :groups first .toLowerCase))
                        [[(hour 0) (hour 12) false] :am]
                        [[(hour 12) (hour 0) false] :pm])]
     (-> (intersect %1 (apply interval p))
@@ -333,17 +333,17 @@
   [(dim :time :full-hour) #"点|點" #(:relative-minutes %)]
   (hour-relativemin (:full-hour %1) (:relative-minutes %3) true)
 
-
+  
   "relative minutes to|till|before <integer> (hour-of-day)"
   [(dim :time :full-hour) #"[点點]差" #(:relative-minutes %)]
   (hour-relativemin (:full-hour %1) (- (:relative-minutes %3)) true)
-
+  
 
   ; special forms for midnight and noon
   "relative minutes to|till|before noon|midnight"
   [#(:for-relative-minutes %) #"差" #(:relative-minutes %)]
   (hour-relativemin (:value %1) true (- (:relative-minutes %3)))
-
+  
   "relative minutes after|past noon|midnight"
   [#(:for-relative-minutes %) #"过" #(:relative-minutes %)]
   (hour-relativemin (:value %1) true (:relative-minutes %3))
@@ -357,25 +357,25 @@
   "yyyy-mm-dd"
   #"(\d{2,4})-(0?[1-9]|1[0-2])-(3[01]|[12]\d|0?[1-9])"
   (parse-dmy (nth (:groups %1) 2) (second (:groups %1)) (first (:groups %1)) true)
-
+  
   "mm/dd"
   #"(0?[1-9]|1[0-2])/(3[01]|[12]\d|0?[1-9])"
   (parse-dmy (second (:groups %1)) (first (:groups %1)) nil true)
 
   ; Other intervals: week-end, seasons
-
+  
   "week-end"
   #"周末|週末"
   (interval (intersect (day-of-week 5) (hour 18 false))
             (intersect (day-of-week 1) (hour 0 false))
             false)
   ;; Time zones
-
+  
   "timezone"
   #"(?i)(YEKT|YEKST|YAPT|YAKT|YAKST|WT|WST|WITA|WIT|WIB|WGT|WGST|WFT|WEZ|WET|WESZ|WEST|WAT|WAST|VUT|VLAT|VLAST|VET|UZT|UYT|UYST|UTC|ULAT|TVT|TMT|TLT|TKT|TJT|TFT|TAHT|SST|SRT|SGT|SCT|SBT|SAST|SAMT|RET|PYT|PYST|PWT|PT|PST|PONT|PMST|PMDT|PKT|PHT|PHOT|PGT|PETT|PETST|PET|PDT|OMST|OMSST|NZST|NZDT|NUT|NST|NPT|NOVT|NOVST|NFT|NDT|NCT|MYT|MVT|MUT|MST|MSK|MSD|MMT|MHT|MEZ|MESZ|MDT|MAWT|MART|MAGT|MAGST|LINT|LHST|LHDT|KUYT|KST|KRAT|KRAST|KGT|JST|IST|IRST|IRKT|IRKST|IRDT|IOT|IDT|ICT|HOVT|HNY|HNT|HNR|HNP|HNE|HNC|HNA|HLV|HKT|HAY|HAT|HAST|HAR|HAP|HAE|HADT|HAC|HAA|GYT|GST|GMT|GILT|GFT|GET|GAMT|GALT|FNT|FKT|FKST|FJT|FJST|ET|EST|EGT|EGST|EET|EEST|EDT|ECT|EAT|EAST|EASST|DAVT|ChST|CXT|CVT|CST|COT|CLT|CLST|CKT|CHAST|CHADT|CET|CEST|CDT|CCT|CAT|CAST|BTT|BST|BRT|BRST|BOT|BNT|AZT|AZST|AZOT|AZOST|AWST|AWDT|AST|ART|AQTT|ANAT|ANAST|AMT|AMST|ALMT|AKST|AKDT|AFT|AEST|AEDT|ADT|ACST|ACDT)"
   {:dim :timezone
-   :value (-> %1 :groups first clojure.string/upper-case)}
-
+   :value (-> %1 :groups first .toUpperCase)}
+  
   "<time> timezone"
   [(dim :time) (dim :timezone)]
   (assoc %1 :timezone (:value %2))
