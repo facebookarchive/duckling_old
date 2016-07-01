@@ -1,6 +1,6 @@
 (
   ;; generic
-
+  
   "two time tokens in a row"
   [(dim :time #(not (:latent %))) (dim :time #(not (:latent %)))] ; sequence of two tokens with a time dimension
   (intersect %1 %2)
@@ -9,7 +9,7 @@
   "two time tokens separated by `di`"
   [(dim :time #(not (:latent %))) #"(?i)de" (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
-
+  
   ;;
 
   "named-day"
@@ -90,12 +90,12 @@
 
   ; Holiday TODO: check online holidays
   ; or define dynamtc rule (last thursday of october..)
-
+  
 
   "right now"
   #"(subito|immediatamente|proprio adesso|in questo momento)"
   (cycle-nth :second 0)
-
+  
   "now"
   #"(?i)(ora|al momento|attualmented|adesso|(di )?oggi)"
   (cycle-nth :day 0)
@@ -118,10 +118,10 @@
 
   ;;
   ;; This, Next, Last
-
-  ;; assumed to be strictly in the future:
+  
+  ;; assumed to be strictly in the future: 
   ;; "this Monday" => next week if today in Monday
-
+  
   "this <day-of-week>" ; assumed to be in the future
   [#"(?i)quest[oaie]" {:form :day-of-week}]
   (pred-nth-not-immediate %2 0)
@@ -153,7 +153,7 @@
   ; Years
   ; Between 1000 and 2100 we assume it's a year
   ; Outside of this, it's safer to consider it's latent
-
+  
   "year (1000-2100 not latent)"
   (integer 1000 2100)
   (year (:value %1))
@@ -180,12 +180,12 @@
   "the <day-of-month>" ; this one is not latent
   [#"(?i)il" (integer 1 31)]
   (assoc (day-of-month (:value %2)) :latent true)
-
+  
   "<day-of-month> <named-month>" ;  dodici luglio 2010 (this rule removes latency)
   [(integer 1 31) {:form :month}]
   (intersect %2 (day-of-month (:value %1)))
 
-  "il <day-of-month> de <named-month>" ; il dodici luglio 2010
+  "il <day-of-month> de <named-month>" ; il dodici luglio 2010 
   [#"(?i)il" (integer 1 31) {:form :month}]
   (intersect %3 (day-of-month (:value %2)))
 
@@ -193,7 +193,7 @@
   "<integer> (latent time-of-day)"
   (integer 0 23)
   (assoc (hour (:value %1) true) :latent true)
-
+  
   "noon"
   #"(?i)mezz?ogiorno"
   (hour 12 false)
@@ -204,8 +204,8 @@
 
   "<time-of-day> ora"
   [#(:full-hour %) #"(?i)or[ea]"]
-  (dissoc %1 :latent)
-
+  (dissoc %1 :latent) 
+  
   "at <time-of-day>" ; alle due
   [#"(?i)all[e']|le|a" {:form :time-of-day}]
   (dissoc %2 :latent)
@@ -216,14 +216,14 @@
   (hour-minute (Integer/parseInt (first (:groups %1)))
                (Integer/parseInt (second (:groups %1)))
                true)
-
+  
   "hhmm (military time-of-day)"
   #"(?i)((?:[01]?\d)|(?:2[0-3]))([0-5]\d)"
   (-> (hour-minute (Integer/parseInt (first (:groups %1)))
                 (Integer/parseInt (second (:groups %1)))
                 false) ; not a 12-hour clock
       (assoc :latent true))
-
+  
   "quarter (relative minutes)"
   #"(?i)quarto"
   {:relative-minutes 15}
@@ -239,7 +239,7 @@
   "number (as relative minutes)"
   (integer 1 59)
   {:relative-minutes (:value %1)}
-
+  
   "<integer> minutes (as relative minutes)"
   [(integer 1 59) #"(?i)min\.?(uto)?s?"]
   {:relative-minutes (:val %1)}
@@ -251,11 +251,11 @@
   "<hour-of-day> minus <integer> (as relative minutes)"
   [(dim :time :full-hour) #"meno( un)?" #(:relative-minutes %)]
   (hour-relativemin (:full-hour %1) (- (:relative-minutes %3)) (:twelve-hour-clock? %1))
-
+  
   "relative minutes to <integer> (as hour-of-day)"
   [#(:relative-minutes %) #"(?i)a" (dim :time :full-hour)]
   (hour-relativemin (:full-hour %3) (- (:relative-minutes %1)) true)
-
+  
   "<hour-of-day> and <relative minutes>"
   [(dim :time :full-hour) #"e( un)?" #(:relative-minutes %)]
   (hour-relativemin (:full-hour %1) (:relative-minutes %3) (:twelve-hour-clock? %1))
@@ -270,11 +270,11 @@
   "yyyy-mm-dd"
   #"(\d{2,4})-(0?[1-9]|1[0-2])-(3[01]|[12]\d|0?[1-9])"
   (parse-dmy (nth (:groups %1) 2) (second (:groups %1)) (first (:groups %1)) true)
-
+  
   "dd[/-]mm"
   #"(3[01]|[12]\d|0?[1-9])[/-](0?[1-9]|1[0-2])"
   (parse-dmy (first (:groups %1)) (second (:groups %1)) nil true)
-
+  
   ; Part of day (morning, evening...). They are intervals.
   "morning"
   #"(?i)mattin[aoe]"
@@ -283,11 +283,11 @@
   "afternoon"
   #"(?i)pomeriggio?"
   (assoc (interval (hour 12 false) (hour 19 false) false) :form :part-of-day :latent true)
-
+  
   "evening"
   #"(?i)ser[ae]"
   (assoc (interval (hour 18 false) (hour 0 false) false) :form :part-of-day :latent true)
-
+  
   "del|di <part-of-day>" ;; removes latent
   [#"(?i)del|di|al" {:form :part-of-day}]
   (dissoc %2 :latent)
@@ -299,13 +299,13 @@
   "<dim time> <part-of-day>" ; since "morning" "evening" etc. are latent, general time+time is blocked
   [(dim :time) {:form :part-of-day}]
   (intersect %1 %2)
-
+ 
    "<part-of-day> of <dim time>" ; since "morning" "evening" etc. are latent, general time+time is blocked
   [{:form :part-of-day} #"(?i)di" (dim :time)]
   (intersect %1 %3)
 
   ;specific rule to address "3 in the morning","3h du matin" and extend morning span from 0 to 12
-  "<dim time> del mattino"
+  "<dim time> del mattino" 
   [{:form :time-of-day} #"del mattino"]
   (intersect %1 (assoc (interval (hour 0 false) (hour 12 false) false) :form :part-of-day :latent true))
 
@@ -317,7 +317,7 @@
             false)
 
   ; Absorptions
-
+  
   ; a specific version of "il", above, removes :latent for integer as day of month
   ; this one is more general but does not remove latency
   "il <time>"
@@ -325,12 +325,12 @@
   %2
 
   ;; Time zones
-
+  
   "timezone"
   #"(?i)(YEKT|YEKST|YAPT|YAKT|YAKST|WT|WST|WITA|WIT|WIB|WGT|WGST|WFT|WEZ|WET|WESZ|WEST|WAT|WAST|VUT|VLAT|VLAST|VET|UZT|UYT|UYST|UTC|ULAT|TVT|TMT|TLT|TKT|TJT|TFT|TAHT|SST|SRT|SGT|SCT|SBT|SAST|SAMT|RET|PYT|PYST|PWT|PT|PST|PONT|PMST|PMDT|PKT|PHT|PHOT|PGT|PETT|PETST|PET|PDT|OMST|OMSST|NZST|NZDT|NUT|NST|NPT|NOVT|NOVST|NFT|NDT|NCT|MYT|MVT|MUT|MST|MSK|MSD|MMT|MHT|MEZ|MESZ|MDT|MAWT|MART|MAGT|MAGST|LINT|LHST|LHDT|KUYT|KST|KRAT|KRAST|KGT|JST|IST|IRST|IRKT|IRKST|IRDT|IOT|IDT|ICT|HOVT|HNY|HNT|HNR|HNP|HNE|HNC|HNA|HLV|HKT|HAY|HAT|HAST|HAR|HAP|HAE|HADT|HAC|HAA|GYT|GST|GMT|GILT|GFT|GET|GAMT|GALT|FNT|FKT|FKST|FJT|FJST|ET|EST|EGT|EGST|EET|EEST|EDT|ECT|EAT|EAST|EASST|DAVT|ChST|CXT|CVT|CST|COT|CLT|CLST|CKT|CHAST|CHADT|CET|CEST|CDT|CCT|CAT|CAST|BTT|BST|BRT|BRST|BOT|BNT|AZT|AZST|AZOT|AZOST|AWST|AWDT|AST|ART|AQTT|ANAT|ANAST|AMT|AMST|ALMT|AKST|AKDT|AFT|AEST|AEDT|ADT|ACST|ACDT)"
   {:dim :timezone
-   :value (-> %1 :groups first clojure.string/upper-case)}
-
+   :value (-> %1 :groups first .toUpperCase)}
+  
   "<time> timezone"
   [(dim :time) (dim :timezone)]
   (assoc %1 :timezone (:value %2))
