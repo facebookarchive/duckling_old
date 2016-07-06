@@ -1,4 +1,5 @@
 (ns duckling.corpus
+  (:refer-clojure :exclude [update])
   (:use     [clojure.tools.logging]
             [plumbing.core :except [millis]])
   (:require [duckling.time.obj :as time]

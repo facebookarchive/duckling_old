@@ -1,4 +1,5 @@
 (ns duckling.ml.naivebayes
+  (:refer-clojure :exclude [update])
   (:use [clojure.test])
   (:require [clojure.string :as strings]))
 
