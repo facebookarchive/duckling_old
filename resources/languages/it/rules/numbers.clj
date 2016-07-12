@@ -1,9 +1,9 @@
 (
   "number (0..19)"
-  #"(?i)(zero|nulla|niente|uno|due|tredici|tre|quattro|cinque|sei|sette|otto|nove|dieci|undici|dodici|quattordici|quindici|sedici|diciassette|diciotto|diciannove)"
+  #"(?i)(zero|nulla|niente|uno|due|tredici|tre|quattro|cinque|sei|sette|otto|nove|dieci|undici|dodici|quattordici|quindici|sedici|diciassette|diciotto|diciannove|un)"
   {:dim :number
    :integer true
-   :value (get {"zero" 0 "nulla" 0 "niente" 0 "uno" 1 "due" 2 "tre" 3 "quattro" 4 "cinque" 5 "sei" 6 "sette" 7 "otto" 8 "nove" 9 "dieci" 10 "undici" 11 "dodici" 12 "tredici" 13 "quattordici" 14 "quindici" 15 "sedici" 16 "diciassette" 17 "diciotto" 18 "diciannove" 19}
+   :value (get {"zero" 0 "nulla" 0 "niente" 0 "uno" 1 "un" 1 "due" 2 "tre" 3 "quattro" 4 "cinque" 5 "sei" 6 "sette" 7 "otto" 8 "nove" 9 "dieci" 10 "undici" 11 "dodici" 12 "tredici" 13 "quattordici" 14 "quindici" 15 "sedici" 16 "diciassette" 17 "diciotto" 18 "diciannove" 19}
               (-> %1 :groups first clojure.string/lower-case))}
 
   "number (20..90)"

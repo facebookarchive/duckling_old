@@ -331,12 +331,12 @@
                (Integer/parseInt (second (next (:groups %1))))
                false)
 
-  "hhmm (military)"
-  #"(?i)((?:[01]?\d)|(?:2[0-3]))([0-5]\d)"
-  (-> (hour-minute (Integer/parseInt (first (:groups %1)))
-        (Integer/parseInt (second (:groups %1)))
-        false) ; not a 12-hour clock)
-    (assoc :latent true))
+  ; "hhmm (military)" not sure if used and in conflict with year 1954
+  ; #"(?i)((?:[01]?\d)|(?:2[0-3]))([0-5]\d)"
+  ; (-> (hour-minute (Integer/parseInt (first (:groups %1)))
+  ;       (Integer/parseInt (second (:groups %1)))
+  ;       false) ; not a 12-hour clock)
+  ;   (assoc :latent true))
 
   "noon"
   #"(?i)middag|(kl(\.|okken)?)? tolv"
