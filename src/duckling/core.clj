@@ -1,4 +1,5 @@
 (ns duckling.core
+  (:refer-clojure :exclude [update])
   (:use [clojure.tools.logging :exclude [trace]]
         [plumbing.core])
   (:require [clojure.java.io :as io]
@@ -220,7 +221,7 @@
        (map (fn [dir]
               (let [files (->> (format "languages/%s/%s" lang dir)
                                res/get-files
-                               (filter (comp not #(.startsWith % "_")))
+                               (remove #(clojure.string/starts-with? % "_"))
                                (map #(subs % 0 (- (count %) 4)))
                                vec)]
                 [(keyword dir) files])))
