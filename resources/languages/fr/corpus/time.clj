@@ -133,6 +133,9 @@
   "le 17 2"
   (datetime 2013 2 17 :day 17 :month 2)
 
+  "mercredi 13" ; when today is Tuesday 12, "mercredi 13" should be tomorrow
+  (datetime 2013 2 13 :day-of-week 3)
+
   "20/02/2014"
   "20/2/2014"
   "20/02/14"
@@ -179,11 +182,10 @@
   "mardi d'après"
   "mardi la semaine prochaine"
   "mardi de la semaine prochaine"
-  ; FIXME
-  ;"mardi la semaine suivante"
-  ;"mardi de la semaine suivante"
-  ;"mardi la semaine d'après"
-  ;"mardi de la semaine d'après"
+  "mardi la semaine suivante"
+  "mardi de la semaine suivante"
+  "mardi la semaine d'après"
+  "mardi de la semaine d'après"
   (datetime 2013 2 19 :day-of-week 2)
 
   "mercredi prochain" ; when today is Tuesday, "mercredi prochain" should be tomorrow
@@ -193,11 +195,10 @@
   "mercredi d'après"
   "mercredi la semaine prochaine"
   "mercredi de la semaine prochaine"
-  ; FIXME
-  ;"mercredi la semaine suivante"
-  ;"mercredi de la semaine suivante"
-  ;"mercredi la semaine d'après"
-  ;"mercredi de la semaine d'après"
+  "mercredi la semaine suivante"
+  "mercredi de la semaine suivante"
+  "mercredi la semaine d'après"
+  "mercredi de la semaine d'après"
   (datetime 2013 2 20 :day-of-week 3)
 
   "lundi en huit" ;

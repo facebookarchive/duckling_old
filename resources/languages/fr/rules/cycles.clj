@@ -44,8 +44,8 @@
   [#"(?i)l[ae']? ?" (dim :cycle) #"(?i)derni[èe]re?|pass[ée]e?"]
   (cycle-nth (:grain %2) -1)
 
-  "le <cycle> prochain"
-  [#"(?i)l[ae']? ?" (dim :cycle) #"(?i)prochaine?"]
+  "le <cycle> prochain|suivant|d'après"
+  [#"(?i)l[ae']? ?" (dim :cycle) #"(?i)prochaine?|suivante?|d'apr[eèé]s"]
   (cycle-nth (:grain %2) 1)
   
   "le <cycle> après|suivant <time>"
