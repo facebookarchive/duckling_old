@@ -200,7 +200,7 @@
   (intersect %4 (day-of-month (:value %2)))
 
   "ultimo <day-of-week> de <time>"
-  [#"(?i)[ú|u]ltimo" {:form :day-of-week} #"(?i)de" (dim :time)]
+  [#"(?i)[ú|u]ltimo" {:form :day-of-week} #"(?i)de|en" (dim :time)]
   (pred-last-of %2 %4)
 
   "nth <time> de <time>"
