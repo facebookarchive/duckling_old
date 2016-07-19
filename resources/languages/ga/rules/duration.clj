@@ -27,7 +27,7 @@
    :grain :week}
 
   "mí (unit-of-duration)"
-  #"(?i)mh?[íi](sa|nna)"
+  #"(?i)mh?[íi](sa|nna)?"
   {:dim :unit-of-duration
    :grain :month}
 
