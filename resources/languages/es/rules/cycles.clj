@@ -92,4 +92,15 @@
   "n <cycle> (proximo|que viene)"
   [(integer 2 9999) (dim :cycle) #"(?i)(pr(ó|o)xim(o|a)s?|que vienen?|siguientes?)"]
   (cycle-n-not-immediate  (:grain %2) (:value %1))
+  
+  ; quarters are a little bit different, you can say "3rd quarter" alone
+  
+  "<ordinal> quarter"
+  [(dim :ordinal) (dim :cycle #(= :quarter (:grain %)))]
+  (cycle-nth-after :quarter (dec (:value %1)) (cycle-nth :year 0))
+
+  "<ordinal> quarter <year>"
+  [(dim :ordinal) (dim :cycle #(= :quarter (:grain %))) #"(?i)del? ?" (dim :time)]
+  (cycle-nth-after :quarter (dec (:value %1)) %3)
+  
 )
