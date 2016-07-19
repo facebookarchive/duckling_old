@@ -45,11 +45,11 @@
   ; (cycle-nth  (:grain %3) 1 (:value %2))
 
   "la <cycle> pasado"
-  [#"(?i)(el|los|la|las) ?" (dim :cycle) #"(?i)pasad(a|o)s?"]
+  [#"(?i)(el|los|la|las) ?" (dim :cycle) #"(?i)pasad(a|o)s?|[u|ú]ltim[a|o]s?"]
   (cycle-nth (:grain %2) -1)
 
   "la pasado <cycle>"
-  [#"(?i)(el|los|la|las) ?" #"(?i)pasad(a|o)s?" (dim :cycle)]
+  [#"(?i)(el|los|la|las) ?" #"(?i)pasad(a|o)s?|[u|ú]ltim[a|o]s?" (dim :cycle)]
   (cycle-nth  (:grain %3) -1)
 
   "el <cycle> (proximo|que viene)"
@@ -57,7 +57,7 @@
   (cycle-nth  (:grain %2) 1)
   
   "el proximo <cycle> "
-  [#"(?i)(el|los|la|las) ?" #"(?i)pr(ó|o)xim(o|a)s?" (dim :cycle)]
+  [#"(?i)(el|los|la|las) ?" #"(?i)pr(ó|o)xim(o|a)s?|siguientes?" (dim :cycle)]
   (cycle-nth  (:grain %3) 1)
 
   "el <cycle> proximo|que viene <time>"
