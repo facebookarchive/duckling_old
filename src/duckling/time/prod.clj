@@ -28,7 +28,7 @@
   ([tok1 tok2]
    (ti (p/compose (:pred tok1) (:pred tok2))
        {:timezone (or (:timezone tok1) (:timezone tok2))
-        :direction (or (:direction tok1 (:direction tok2)))}))
+        :direction (or (:direction tok1) (:direction tok2))}))
         ;; FIXME direction shouldn't appear in both tokens
   ([tok1 tok2 & more]
    (apply intersect (intersect tok1 tok2) more)))
@@ -115,8 +115,8 @@
 (defn hour-relativemin [h m & [twelve-hour-clock?]]
   {:pre [(<= 0 h 23) (<= -59 m 59)]}
   (if twelve-hour-clock?
-    (hour-minute (if (pos? m) h (case h 0 23 1 12 (dec h))) (mod m 60) true)
-    (hour-minute (if (pos? m) h (case h 0 23 1 0 (dec h))) (mod m 60) false)))
+    (hour-minute (if (pos? m) h (case (int h) 0 23 1 12 (dec h))) (mod m 60) true)
+    (hour-minute (if (pos? m) h (case (int h) 0 23 1 0 (dec h))) (mod m 60) false)))
 
 
 (defn cycle-nth [grain n]

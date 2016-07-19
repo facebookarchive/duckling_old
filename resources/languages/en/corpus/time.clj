@@ -700,4 +700,12 @@
 
   "next monday"
   (datetime 2013 2 18 :day-of-week 1)
+
+  "at 12pm"
+  "at noon"
+  (datetime 2013 2 12 12)
+
+  "at 12am"
+  "at midnight"
+  (datetime 2013 2 13 0)
 )

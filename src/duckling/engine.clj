@@ -22,10 +22,10 @@
          res []]
     (if (.find m)
       (recur m
-        (conj res
-          [(.start m)
-           (.group m)
-           (vec (map #(.group m %) (range 1 (inc (.groupCount m)))))]))
+             (conj res
+                   [(.start m)
+                    (.group m)
+                    (vec (map #(.group m (int %)) (range 1 (inc (.groupCount m)))))]))
       res)))
 
 (defn- lookup-re
