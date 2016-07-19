@@ -30,6 +30,11 @@
   #"(?i)mes(es)?"
   {:dim :cycle
    :grain :month}
+
+  "trimestre (cycle)"
+  #"(?i)trimestres?"
+  {:dim :cycle
+   :grain :quarter}
   
   "año (cycle)"
   #"(?i)a(n|ñ)os?"
