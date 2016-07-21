@@ -621,6 +621,10 @@
   [#"(?i)(anytime |sometimes? )?after" (dim :time)]
   (merge %2 {:direction :after})
 
+  "since <time-of-day>"
+  [#"(?i)since" (dim :time)]
+  (merge  (pred-nth %2 -1) {:direction :after})
+
   ; ;; In this special case, the upper limit is exclusive
   ; "<hour-of-day> - <hour-of-day> (interval)"
   ; [{:form :time-of-day} #"-|to|th?ru|through|until" #(and (= :time-of-day (:form %))
