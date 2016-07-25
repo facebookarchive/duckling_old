@@ -30,6 +30,8 @@
   (datetime 2013 2 18 :day-of-week 1 :day 18 :month 2)
 
   "tuesday"
+  "Tuesday the 19th"
+  "Tuesday 19th"
   (datetime 2013 2 19)
 
   "thursday"
