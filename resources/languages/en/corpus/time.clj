@@ -199,8 +199,14 @@
   "the day after tomorrow"
   (datetime 2013 2 14)
 
+  "day after tomorrow 5pm"
+  (datetime 2013 2 14 17)
+
   "the day before yesterday"
   (datetime 2013 2 10)
+
+  "day before yesterday 8am"
+  (datetime 2013 2 10 8)
 
   "last Monday of March"
   (datetime 2013 3 25 :day-of-week 1)
@@ -271,9 +277,6 @@
   "3pm approximately"
   "at about 3pm"
   (datetime 2013 2 12 15 :hour 3 :meridiem :pm) ;; :precision "approximate"
-
-  "tomorrow 5pm sharp" ;; FIXME precision is lost
-  (datetime 2013 2 13 17 :hour 5 :meridiem :pm) ;; :precision "exact"
 
   "at 15 past 3pm"
   "a quarter past 3pm"
@@ -671,15 +674,8 @@
   "after 5 days"
   (datetime 2013 2 17 4 :direction :after)
 
-  "after tomorrow 2pm"
-  "tomorrow after 2pm" ;; FIXME this is actually not ambiguous it's 2pm - midnight.
-  (datetime 2013 2 13 14 :direction :after)
-
   "before 11 am"
   (datetime 2013 2 12 11 :direction :before)
-
-  "tomorrow before 11 am" ;; FIXME this is actually not ambiguous. it's midnight to 11 am
-  (datetime 2013 2 13 11 :direction :before)
 
   "in the afternoon"
   (datetime-interval [2013 2 12 12] [2013 2 12 19])
