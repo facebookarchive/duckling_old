@@ -27,7 +27,7 @@
   :value (-> %1 :groups first)}
 
  "email"
- #"([\w\.]+@[\w\.]+)"
+ #"([\w\.]+@[\w\.\-]+)"
  {:dim :email
   :value (-> %1 :groups first)}
  
