@@ -21,10 +21,13 @@
   [#"(?i)on" (dim :time)]
   %2 ; does NOT dissoc latent
 
-  "on a named-day" ; on a sunday
+  "on a <named-day>" ; on a sunday
   [#"(?i)on a" {:form :day-of-week}]
   %2 ; does NOT dissoc latent
 
+  "in <named-month>" ; in September
+  [#"(?i)in" {:form :month}]
+  %2 ; does NOT dissoc latent
 
   ;;;;;;;;;;;;;;;;;;;
   ;; Named things

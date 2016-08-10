@@ -59,7 +59,7 @@
   (cycle-nth (:grain %2) -1)
 
   "next <cycle>"
-  [#"(?i)next" (dim :cycle)]
+  [#"(?i)next|the following" (dim :cycle)]
   (cycle-nth (:grain %2) 1)
   
   "the <cycle> after <time>"

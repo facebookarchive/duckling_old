@@ -136,6 +136,7 @@
   (datetime 2013 2 4 :grain :week)
 
   "next week"
+  "the following week"
   (datetime 2013 2 18 :grain :week)
 
   "last month"
@@ -706,4 +707,8 @@
   "at 12am"
   "at midnight"
   (datetime 2013 2 13 0)
+
+  "March"
+  "in March"
+  (datetime 2013 3)
 )
