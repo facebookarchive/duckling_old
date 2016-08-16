@@ -10,6 +10,10 @@
   [(dim :time #(not (:latent %))) #"(?i)de|," (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
 
+  "en <named-month>" ; en mars
+  [#"(?i)en" {:form :month}]
+  %2 ; does NOT dissoc latent
+
    ;;;;;;;;;;;;;;;;;;;
   ;; Named things
 
@@ -164,14 +168,13 @@
   [{:form :day-of-week} #"(?i)en (quinze|15)"]
   (pred-nth %1 2)
 
-  "dernier <day-of-week> de <time>"
+  "dernier <day-of-week> de <time> (latent)" ;; TODO without a 'le', this is latent.
   [#"(?i)derni[eéè]re?" {:form :day-of-week} #"(?i)d['e]" (dim :time)]
   (pred-last-of %2 %4)
 
-  "dernier <cycle> de <time>"
+  "dernier <cycle> de <time> (latent)" ;; TODO without a 'le', this is latent.
   [#"(?i)derni[eéè]re?" (dim :cycle) #"(?i)d['e]" (dim :time)]
   (cycle-last-of %2 %4)
-
 
   ; Years
   ; Between 1000 and 2100 we assume it's a year
@@ -322,32 +325,32 @@
   #"(?i)mat(in[ée]?e?)?"
   (assoc (interval (hour 4 false) (hour 12 false) false) :form :part-of-day :latent true)
 
-  "(en )début de matinée"
-  #"(?i)(en )?d[ée]but de matin[ée]e"
+  "début de matinée"
+  #"(?i)d[ée]but de matin[ée]e"
   (assoc (interval (hour 7 false) (hour 9 false) false) :form :part-of-day :latent true)
 
-  "(en )fin de matinée"
-  #"(?i)(en )?fin de matin[ée]e"
+  "fin de matinée"
+  #"(?i)fin de matin[ée]e"
   (assoc (interval (hour 10 false) (hour 12 false) false) :form :part-of-day :latent true)
 
   "après-midi"
-  #"(?i)(l')?apr[eéè]s?[ \-]?midi"
+  #"(?i)apr[eéè]s?[ \-]?midi"
   (assoc (interval (hour 12 false) (hour 19 false) false) :form :part-of-day :latent true)
 
-  "(en )début d'après-midi"
-  #"(?i)(en )?d[ée]but d'apr[eéè]s?[ \-]?midi"
+  "début d'après-midi"
+  #"(?i)d[ée]but d'apr[eéè]s?[ \-]?midi"
   (assoc (interval (hour 12 false) (hour 14 false) false) :form :part-of-day :latent true)
 
-  "(en )fin d'après-midi"
-  #"(?i)(en )?fin d'apr[eéè]s?[ \-]?midi"
+  "fin d'après-midi"
+  #"(?i)fin d'apr[eéè]s?[ \-]?midi"
   (assoc (interval (hour 17 false) (hour 19 false) false) :form :part-of-day :latent true)
 
-  "(en )début de journée"
-  #"(?i)(en )?d[ée]but de journ[ée]e"
+  "début de journée"
+  #"(?i)d[ée]but de journ[ée]e"
   (assoc (interval (hour 6 false) (hour 10 false) false) :form :part-of-day :latent true)
 
-  "(en )fin de journée"
-  #"(?i)(en )?fin de journ[ée]e"
+  "fin de journée"
+  #"(?i)fin de journ[ée]e"
   (assoc (interval (hour 17 false) (hour 21 false) false) :form :part-of-day :latent true)
 
   "soir"
@@ -355,7 +358,7 @@
   (assoc (interval (hour 18 false) (hour 0 false) false) :form :part-of-day :latent true)
 
   "du|dans le <part-of-day>" ;; removes latent
-  [#"(?i)du|dans l[ae']? ?|au|le|la|dès l?[ae']? ?" {:form :part-of-day}]
+  [#"(?i)du|dans l[ae']? ?|au|en|l[ae' ]|dès l?[ae']? ?" {:form :part-of-day}]
   (dissoc %2 :latent)
 
   "ce <part-of-day>"
@@ -408,7 +411,7 @@
   ; a specific version of "le", above, removes :latent for integer as day of month
   ; this one is more general but does not remove latency
   "le <time>"
-  [#"(?i)le" (dim :time #(not (:latent %)))]
+  [#"(?i)l[ea]" (dim :time #(not (:latent %)))]
   %2
 
   ; Time zones
@@ -482,9 +485,10 @@
   [#"(?i)entre" {:form :time-of-day} #"et" {:form :time-of-day}]
   (interval %2 %4 true)
 
-  "avant <time-of-day>(interval)"
-  [#"(?i)avant" {:form :time-of-day}]
-  (interval (cycle-nth :second 0) %2 false)
+  ; this should be a one-sided interval
+  ;"avant <time-of-day>(interval)"
+  ;[#"(?i)avant" {:form :time-of-day}]
+  ;(interval (cycle-nth :second 0) %2 false)
 
   ; Specific for within duration... Would need to be reworked to adapt the grain
   "d'ici <duration>"
@@ -493,7 +497,7 @@
 
   ; One-sided Intervals
   "avant <time-of-day>"
-  [#"(?i)(avant|jusqu'(a|à))" (dim :time)]
+  [#"(?i)(n[ ']importe quand )?(avant|jusqu'(a|à))" (dim :time)]
   (merge %2 {:direction :before})
 
   "après <time-of-day>"
