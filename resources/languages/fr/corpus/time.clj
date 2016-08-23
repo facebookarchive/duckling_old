@@ -56,6 +56,7 @@
   "le 1er mars"
   "premier mars"
   "le 1 mars"
+  "vendredi 1er mars"
   (datetime 2013 3 1 :day 1 :month 3)
 
   "le premier mars 2013"
@@ -574,7 +575,20 @@
   "13 juillet au 15 juillet"
   "13 juillet - 15 juillet"
   "entre le 13 et le 15 juillet"
+  "samedi 13 au dimanche 15 juillet"
   (datetime-interval [2013 7 13] [2013 7 16])
+
+  "1er au 10 juillet"
+  (datetime-interval [2013 7 1] [2013 7 11])
+
+  ;"du 10 au 15" FIXME
+  ;(datetime-interval [2013 3 10] [2013 3 16])
+
+  "du 13 au 18"
+  (datetime-interval [2013 2 13] [2013 2 19])
+
+  "10 juin au 1er juillet"
+  (datetime-interval [2013 6 10] [2013 7 2])
 
   "de 9h30 jusqu'à 11h jeudi"
   "de 9 heures 30 à 11h jeudi"
@@ -597,6 +611,9 @@
   "après 16h le 1er novembre"
   (datetime 2013 11 1 16 :direction :after) ; FIXME should be :
   ;(datetime-interval [2013 11 1 16] [2013 11 1 24])
+
+  "après le 1er novembre"
+  (datetime 2013 11 1 :direction :after)
 
   "avant 16h"
   "n'importe quand avant 16h"

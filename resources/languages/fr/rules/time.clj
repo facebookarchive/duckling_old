@@ -433,11 +433,47 @@
             (intersect %4 (day-of-month (Integer/parseInt (-> %3 :groups first))))
             true)
 
+  "<time>-dd <month>(interval)"
+  [{:dim :time} #"\-|au|jusqu'au" #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
+  (interval (intersect %4 %1)
+    (intersect %4 (day-of-month (Integer/parseInt (-> %3 :groups first))))
+    true)
+
+  "<time>-1er <month>(interval)"
+  [{:dim :time} #"\-|au|jusqu'au" #"(premier|prem\.?|1er|1 er)" {:form :month}]
+  (interval (intersect %4 %1)
+    (intersect %4 (day-of-month 1))
+    true)
+
+  "dd-<day-of-week> dd <month>(interval)"
+  [#"(3[01]|[12]\d|0?[1-9])" #"\-|au|jusqu'au" {:form :day-of-week} #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
+  (interval (intersect %5 (day-of-month (Integer/parseInt (-> %1 :groups first))))
+    (intersect %5 (day-of-month (Integer/parseInt (-> %4 :groups first))))
+    true)
+
+  "<time>-<day-of-week> dd <month>(interval)"
+  [{:dim :time} #"\-|au|jusqu'au" {:form :day-of-week} #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
+  (interval (intersect %5 %1)
+    (intersect %5 (day-of-month (Integer/parseInt (-> %4 :groups first))))
+    true)
+
+  "<time>-<day-of-week> 1er <month>(interval)"
+  [{:dim :time} #"\-|au|jusqu'au" {:form :day-of-week} #"(premier|prem\.?|1er|1 er)" {:form :month}]
+  (interval (intersect %5 %1)
+    (intersect %5 (day-of-month 1))
+    true)
+
   "entre dd et dd <month>(interval)"
   [#"entre( le)?" #"(3[01]|[12]\d|0?[1-9])" #"et( le)?" #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
   (interval (intersect %5 (day-of-month (Integer/parseInt (-> %2 :groups first))))
             (intersect %5 (day-of-month (Integer/parseInt (-> %4 :groups first))))
             true)
+
+  "du dd et dd(interval)"
+  [#"du" #"(3[01]|[12]\d|0?[1-9])" #"au" #"(3[01]|[12]\d|0?[1-9])"]
+  (interval (day-of-month (Integer/parseInt (-> %2 :groups first)))
+    (day-of-month (Integer/parseInt (-> %4 :groups first)))
+    true)
 
   "fin <named-month>(interval)"
   [#"fin( du mois d[e']? ?)?" {:form :month}]
@@ -464,7 +500,7 @@
   (interval %1 %3 true)
 
   "de <datetime> - <datetime> (interval)"
-  [#"(?i)de|depuis" (dim :time) #"\-|au|jusqu'(au|[aà])" (dim :time)]
+  [#"(?i)de|depuis|du" (dim :time) #"\-|au|jusqu'(au|[aà])" (dim :time)]
   (interval %2 %4 true)
 
   "entre <datetime> et <datetime> (interval)"
