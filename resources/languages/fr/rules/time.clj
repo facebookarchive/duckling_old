@@ -106,6 +106,14 @@
   #"(?i)(jour de l'|nouvel )an"
   (month-day 1 1)
 
+  "toussaint"
+  #"(?i)((la |la journée de la |jour de la )?toussaint|jour des morts)"
+  (month-day 11 1)
+
+  "1er mai"
+  #"(?i)f(e|ê)te du travail"
+  (month-day 5 1)
+
   "maintenant"
   #"maintenant|(tout de suite)"
   (cycle-nth :second 0)

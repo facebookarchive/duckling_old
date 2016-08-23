@@ -451,6 +451,16 @@
   "premier janvier"
   (datetime 2014 1 1)
 
+  "la toussaint"
+  "le jour de la toussaint"
+  "la journée de la toussaint"
+  "toussaint"
+  "le jour des morts"
+  (datetime 2013 11 1)
+
+  "fête du travail"
+  (datetime 2013 05 1)
+
   ; Part of day (morning, afternoon...)
   
   "cet après-midi"
