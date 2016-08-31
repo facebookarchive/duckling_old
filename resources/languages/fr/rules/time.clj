@@ -127,7 +127,7 @@
   (cycle-nth :day 1)
 
   "hier"
-  #"(?i)hier"
+  #"(?i)hier|la veille"
   (cycle-nth :day -1)
 
   "après-demain"
@@ -161,7 +161,7 @@
   (pred-nth %1 1)
 
   "<named-month|named-day> suivant|d'après"
-  [(dim :time) #"(?i)suivant|d'apr[eéè]s"]
+  [(dim :time) #"(?i)suivante?s?|d'apr[eéè]s"]
   (pred-nth %1 1)
 
   "<named-month|named-day> dernier|passé"
@@ -183,6 +183,17 @@
   "dernier <cycle> de <time> (latent)" ;; TODO without a 'le', this is latent.
   [#"(?i)derni[eéè]re?" (dim :cycle) #"(?i)d['e]" (dim :time)]
   (cycle-last-of %2 %4)
+
+  "<ordinal> week-end de <time>"
+  [(dim :ordinal) #"week(\s|-)?end (d['eu]|en|du mois de)" {:form :month}]
+  (pred-nth (intersect %3 (interval
+              (intersect (day-of-week 5) (hour 18 false))
+              (intersect (day-of-week 1) (hour 0 false)) false) ) (dec (:value %1)))
+
+  "dernier week-end de <time>"
+  [#"(?i)dernier week(\s|-)?end (d['eu]|en|du mois de)" {:form :month}]
+  (pred-last-of (interval (intersect (day-of-week 5) (hour 18 false))
+                          (intersect (day-of-week 1) (hour 0 false)) false)  %2)
 
   ; Years
   ; Between 1000 and 2100 we assume it's a year
@@ -224,9 +235,11 @@
   [(integer 1 31) {:form :month}]
   (intersect %2 (day-of-month (:value %1)))
 
+  ;use only the integer part, which is usually a better fit for an human point of view
+  ; ie "jeudi 31" where the 31 is mercredi will give "mercredi 31" - which is better than jeudi 31 [year + 1])
   "<day-of-week> <day-of-month>" ; vendredi 13
   [{:form :day-of-week} (integer 1 31)]
-  (intersect %1 (day-of-month (:value %2)))
+  (day-of-month (:value %2))
 
 
   ; Hours and minutes (absolute time)
@@ -441,34 +454,34 @@
             (intersect %4 (day-of-month (Integer/parseInt (-> %3 :groups first))))
             true)
 
-  "<time>-dd <month>(interval)"
+  "<datetime>-dd <month>(interval)"
   [{:dim :time} #"\-|au|jusqu'au" #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
   (interval (intersect %4 %1)
     (intersect %4 (day-of-month (Integer/parseInt (-> %3 :groups first))))
     true)
 
-  "<time>-1er <month>(interval)"
-  [{:dim :time} #"\-|au|jusqu'au" #"(premier|prem\.?|1er|1 er)" {:form :month}]
-  (interval (intersect %4 %1)
-    (intersect %4 (day-of-month 1))
-    true)
-
-  "dd-<day-of-week> dd <month>(interval)"
-  [#"(3[01]|[12]\d|0?[1-9])" #"\-|au|jusqu'au" {:form :day-of-week} #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
-  (interval (intersect %5 (day-of-month (Integer/parseInt (-> %1 :groups first))))
-    (intersect %5 (day-of-month (Integer/parseInt (-> %4 :groups first))))
-    true)
-
-  "<time>-<day-of-week> dd <month>(interval)"
+  "<datetime>-<day-of-week> dd <month>(interval)"
   [{:dim :time} #"\-|au|jusqu'au" {:form :day-of-week} #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
   (interval (intersect %5 %1)
     (intersect %5 (day-of-month (Integer/parseInt (-> %4 :groups first))))
     true)
 
-  "<time>-<day-of-week> 1er <month>(interval)"
-  [{:dim :time} #"\-|au|jusqu'au" {:form :day-of-week} #"(premier|prem\.?|1er|1 er)" {:form :month}]
-  (interval (intersect %5 %1)
-    (intersect %5 (day-of-month 1))
+  "<day-of-week> 1er-<day-of-week> dd <month>(interval)"
+  [{:form :day-of-week} #"premier|prem\.?|1er|1 er" #"\-|au|jusqu'au" {:form :day-of-week} #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
+  (interval (intersect %6 (day-of-month 1))
+    (intersect %6 (day-of-month (Integer/parseInt (-> %5 :groups first))))
+    true)
+
+  "du dd-<day-of-week> dd <month>(interval)"
+  [#"du" #"(3[01]|[12]\d|0?[1-9])" #"\-|au|jusqu'au" {:form :day-of-week} #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
+  (interval (intersect %6 (day-of-month (Integer/parseInt (-> %2 :groups first))))
+    (intersect %6 (day-of-month (Integer/parseInt (-> %5 :groups first))))
+    true)
+
+  "du <datetime>-<day-of-week> dd <month>(interval)"
+  [#"du" {:dim :time} #"\-|au|jusqu'au" {:form :day-of-week} #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
+  (interval (intersect %6 %2)
+    (intersect %6 (day-of-month (Integer/parseInt (-> %5 :groups first))))
     true)
 
   "entre dd et dd <month>(interval)"
@@ -477,8 +490,8 @@
             (intersect %5 (day-of-month (Integer/parseInt (-> %4 :groups first))))
             true)
 
-  "du dd et dd(interval)"
-  [#"du" #"(3[01]|[12]\d|0?[1-9])" #"au" #"(3[01]|[12]\d|0?[1-9])"]
+  "du dd au dd(interval)"
+  [#"du" #"(3[01]|[12]\d|0?[1-9])" #"au|jusqu'au" #"(3[01]|[12]\d|0?[1-9])"]
   (interval (day-of-month (Integer/parseInt (-> %2 :groups first)))
     (day-of-month (Integer/parseInt (-> %4 :groups first)))
     true)
@@ -536,7 +549,7 @@
 
   ; Specific for within duration... Would need to be reworked to adapt the grain
   "d'ici <duration>"
-  [#"(?i)d'ici" (dim :duration)]
+  [#"(?i)d'ici|dans l('|es?)" (dim :duration)]
   (interval (cycle-nth :second 0) (in-duration (:value %2)) false)
 
   ; One-sided Intervals
