@@ -71,10 +71,13 @@
   "le 2 mars à 5h"
   "2 mars à 5h"
   "le 2/3 à 5h"
-  "le 2 mars vers 5h"
-  "2 mars vers 5h"
-  "le 2/3 vers 5h"
   "le 2 mars à 5h du matin"
+  "le 2 mars vers 5h" ;; FIXME precision is lost
+  "2 mars vers 5h"
+  "2 mars à environ 5h"
+  "2 mars aux alentours de 5h"
+  "2 mars autour de 5h"
+  "le 2/3 vers 5h"
   (datetime 2013 3 2 5 :day 2 :hour 5)
 
   "le 2"
@@ -295,6 +298,8 @@
   "à 3 heures cet après-midi"
   "15h"
   "15H"
+  "vers 15 heures"
+  "à environ 15 heures"
   (datetime 2013 2 12 15)
 
   "15:00"
@@ -492,6 +497,15 @@
   "ce week-end"
   (datetime-interval [2013 2 15 18] [2013 2 18 00])
 
+  "en début de semaine"
+  (datetime-interval [2013 2 11] [2013 2 13])
+
+  "en milieu de semaine"
+  (datetime-interval [2013 2 13] [2013 2 15])
+
+  "en fin de semaine"
+  (datetime-interval [2013 2 14] [2013 2 18])
+
   "lundi matin"
   (datetime-interval [2013 2 18 4] [2013 2 18 12])
 
@@ -661,5 +675,7 @@
   
   "mars"
   "en mars"
+  "au mois de mars"
+  "le mois de mars"
   (datetime 2013 3)
 )

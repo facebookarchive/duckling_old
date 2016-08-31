@@ -11,7 +11,7 @@
   (intersect %1 %3)
 
   "en <named-month>" ; en mars
-  [#"(?i)en" {:form :month}]
+  [#"(?i)en|au mois de?'?" {:form :month}]
   %2 ; does NOT dissoc latent
 
    ;;;;;;;;;;;;;;;;;;;
@@ -246,7 +246,7 @@
   (dissoc %1 :latent)
 
   "à|vers <time-of-day>" ; absorption
-  [#"(?i)[aà]|vers" {:form :time-of-day}]
+  [#"(?i)(vers|autour de|[aà] environ|aux alentours de|[aà])" {:form :time-of-day}]
   (dissoc %2 :latent)
 
   "hh(:|h)mm (time-of-day)"
@@ -389,6 +389,18 @@
   (interval (intersect (day-of-week 5) (hour 18 false))
             (intersect (day-of-week 1) (hour 0 false))
             false)
+
+  "début de semaine"
+  #"(?i)(en)? début de semaine"
+  (interval (day-of-week 1) (day-of-week 2) false)
+
+  "milieu de semaine"
+  #"(?i)(en)? milieu de semaine"
+  (interval (day-of-week 3) (day-of-week 4) false)
+
+  "fin de semaine"
+    #"(?i)(en)? fin de semaine"
+    (interval (day-of-week 4) (day-of-week 7) false)
 
   "season"
   #"(?i)(cet )?été" ;could be smarter and take the exact hour into account... also some years the day can change
