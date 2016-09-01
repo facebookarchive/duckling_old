@@ -120,6 +120,7 @@
   "le 16 à 6h du soir"
   "le 16 vers 6h du soir"
   "le 16 vers 6h dans la soirée"
+  "samedi 16 à 18h"
   (datetime 2013 2 16 18 :day 16 :hour 18)
 
   "17 février"
@@ -167,7 +168,7 @@
   "le 24 12 2014"
   "le 24 12 14"
   (datetime 2014 12 24 :day 24 :month 12 :year 2014)
-  
+
   "31/10/1974"
   "31/10/74" ; smart two-digit year resolution
   (datetime 1974 10 31 :day 31 :month 10 :year 1974)
@@ -244,6 +245,8 @@
   (datetime 2013 2 4 :grain :week)
   
   "la semaine prochaine"
+  "la semaine suivante"
+  "la semaine qui suit"
   (datetime 2013 2 18 :grain :week)
   
   "le mois dernier"
@@ -266,15 +269,23 @@
   (datetime 2013 2 10 :day-of-week 7)
 
   "3eme jour d'octobre"
+  "le 3eme jour d'octobre"
   (datetime 2013 10 3)
   
   "premiere semaine d'octobre 2014"
+  "la premiere semaine d'octobre 2014"
   (datetime 2014 10 6 :grain :week)
   
+  "la semaine du 6 octobre"
+  "la semaine du 7 octobre"
+  (datetime 2013 10 7 :grain :week)
+
   "dernier jour d'octobre 2015"
+  "le dernier jour d'octobre 2015"
   (datetime 2015 10 31)
   
   "dernière semaine de septembre 2014"
+  "la dernière semaine de septembre 2014"
   (datetime 2014 9 22 :grain :week)
 
   ;; Hours
@@ -472,11 +483,12 @@
 
   "demain soir"
   "mercredi soir"
+  "mercredi en soirée"
   (datetime-interval [2013 2 13 18] [2013 2 14 00])
   
   "hier soir"
   (datetime-interval [2013 2 11 18] [2013 2 12 00])
-    
+  
   "ce week-end"
   (datetime-interval [2013 2 15 18] [2013 2 18 00])
 
@@ -484,6 +496,7 @@
   (datetime-interval [2013 2 18 4] [2013 2 18 12])
 
   "lundi après-midi"
+  "lundi dans l'après-midi"
   (datetime-interval [2013 2 18 12] [2013 2 18 19])
 
   "lundi fin d'après-midi"
@@ -574,23 +587,30 @@
 
   "à partir du 8"
   "à partir du 8 mars"
-  (datetime 2013 3 8)
+  (datetime 2013 3 8 :direction :after)
 
   "à partir de 9h30 jeudi"
   "jeudi après 9h30"
-  (datetime 2013 2 14 9 30) ; FIXME should be :
+  (datetime 2013 2 14 9 30 :direction :after) ; FIXME should be :
   ;(datetime-interval [2013 2 14 9 30] [2013 2 15])
 
   "après 16h le 1er novembre"
-  (datetime 2013 11 1 16) ; FIXME should be :
+  (datetime 2013 11 1 16 :direction :after) ; FIXME should be :
   ;(datetime-interval [2013 11 1 16] [2013 11 1 24])
 
+  "avant 16h"
+  "n'importe quand avant 16h"
+  (datetime 2013 2 12 16 :direction :before)
+  
+  "demain jusqu'à 16h"
+  (datetime-interval [2013 2 13 0] [2013 2 13 17])
+  
   "le 20 à partir de 10h"
-  (datetime 2013 2 20 10) ; FIXME should be :
+  (datetime 2013 2 20 10 :direction :after) ; FIXME should be :
   ;(datetime-interval [2013 2 20 10] [2013 2 21])
 
   "vendredi à partir de midi"
-  (datetime 2013 2 15 12) ; FIXME should be :
+  (datetime 2013 2 15 12 :direction :after) ; FIXME should be :
   ;(datetime-interval [2013 2 15 12] [2013 2 16])
 
   "le 20 jusqu'à 18h"
@@ -637,7 +657,9 @@
   (datetime-interval [2013 4 1] [2013 4 6])
 
   "mi-décembre"
-  "mi décembre"
   (datetime-interval [2013 12 10] [2013 12 20])
   
+  "mars"
+  "en mars"
+  (datetime 2013 3)
 )

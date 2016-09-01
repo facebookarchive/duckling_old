@@ -45,7 +45,7 @@
   (cycle-nth (:grain %2) -1)
 
   "le <cycle> prochain|suivant|d'après"
-  [#"(?i)l[ae']? ?" (dim :cycle) #"(?i)prochaine?|suivante?|d'apr[eèé]s"]
+  [#"(?i)l[ae']? ?" (dim :cycle) #"(?i)prochaine?|suivante?|qui suit|d'apr[eèé]s"]
   (cycle-nth (:grain %2) 1)
   
   "le <cycle> après|suivant <time>"
@@ -73,11 +73,15 @@
   (cycle-n-not-immediate (:grain %2) (:value %1))
 
   "<ordinal> <cycle> de <time>"
-  [(dim :ordinal) (dim :cycle) #"(?i)d['e]|en" (dim :time)]
+  [(dim :ordinal) (dim :cycle) #"(?i)d['eu]|en" (dim :time)]
   (cycle-nth-after-not-immediate (:grain %2) (dec (:value %1)) %4)
   
   "le <ordinal> <cycle> de <time>"
-  [#"(?i)le" (dim :ordinal) (dim :cycle) #"(?i)d['e]|en" (dim :time)]
-  (cycle-nth-after (:grain %3) (dec (:value %2)) %5)
+  [#"(?i)l[ea]" (dim :ordinal) (dim :cycle) #"(?i)d['eu]|en" (dim :time)]
+  (cycle-nth-after-not-immediate (:grain %3) (dec (:value %2)) %5)
+
+  "le <cycle> de <time>"
+  [#"(?i)l[ea]" (dim :cycle) #"(?i)d['eu]|en" (dim :time)]
+  (cycle-nth-after-not-immediate (:grain %2) 0 %4)
 
 )
