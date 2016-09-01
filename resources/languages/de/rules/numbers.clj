@@ -13,11 +13,12 @@
  ;;
 
  "integer (0..19)"
-  #"(?i)(keine?|keine?s|keiner?|keinen|null|nichts|eins?(er)?|zwei|dreizehn|drei|vierzehn|vier|fünf|sechzehn|sechs|siebzehn|sieben|achtzehn|acht|neunzehn|neun|elf|zwölf|füfzehn)"
+  #"(?i)(keine?|keine?s|keiner|keinen|null|nichts|eins?(er)?|zwei|dreizehn|drei|vierzehn|vier|fünf|sechzehn|sechs|siebzehn|sieben|achtzehn|acht|neunzehn|neun|elf|zwölf|füfzehn)"
   ; fourteen must be before four, or it won't work because the regex will stop at four
   {:dim :number
    :integer true
-   :value (get {"keines" 0 "keiner" 0 "keinen" 0 "null" 0 "nichts" 0 "ein" 1 "eins" 1 "eine" 1 "einer" 1 "zwei" 2 "drei" 3 "vier" 4 "fünf" 5
+   :value (get {"kein" 0 "keine" 0 "keins" 0 "keines" 0 "keiner" 0 "keinen" 0 "null" 0 "nichts" 0
+                "ein" 1 "eins" 1 "eine" 1 "einer" 1 "zwei" 2 "drei" 3 "vier" 4 "fünf" 5
                 "sechs" 6 "sieben" 7 "acht" 8 "neun" 9 "zehn" 10 "elf" 11
                 "zwölf" 12 "dreizehn" 13 "vierzehn" 14 "fünfzehn" 15 "sechzehn" 16
                 "siebzehn" 17 "achtzehn" 18 "neunzehn" 19}

@@ -5,7 +5,7 @@
   "maintenant"
   "tout de suite"
   (datetime 2013 2 12 4 30 00)
-  
+
   "aujourd'hui"
   "ce jour"
   "dans la journée"
@@ -13,18 +13,23 @@
   (datetime 2013 2 12)
 
   "hier"
+  "le jour d'avant"
+  "le jour précédent"
+  "la veille"
   (datetime 2013 2 11)
 
   "avant-hier"
   (datetime 2013 2 10)
 
   "demain"
-  (datetime 2013 2 13)
-
+  "jour suivant"
+  "le jour d'après"
   "le lendemain"
+  "un jour après"
   (datetime 2013 2 13)
 
   "après-demain"
+  "le lendemain du 13 février"
   (datetime 2013 2 14)
 
   "lundi"
@@ -42,6 +47,8 @@
   (datetime 2013 2 13 :day-of-week 3 :day 13 :month 2)
 
   "jeudi"
+  "deux jours plus tard"
+  "deux jours après"
   (datetime 2013 2 14)
 
   "vendredi"
@@ -56,6 +63,7 @@
   "le 1er mars"
   "premier mars"
   "le 1 mars"
+  "vendredi 1er mars"
   (datetime 2013 3 1 :day 1 :month 3)
 
   "le premier mars 2013"
@@ -253,6 +261,7 @@
   (datetime 2013 1)
 
   "le mois prochain"
+  "le mois suivant"
   (datetime 2013 3)
   
   "l'année dernière"
@@ -401,9 +410,6 @@
   ;"dans 2 jours au soir"
   ;(datetime 2013 2 14 10)
 
-  "deux jours plus tard"
-  (datetime 2013 2 14 4)
-  
   "dans 7 jours"
   (datetime 2013 2 19 4)
   
@@ -450,6 +456,16 @@
   "premier janvier"
   (datetime 2014 1 1)
 
+  "la toussaint"
+  "le jour de la toussaint"
+  "la journée de la toussaint"
+  "toussaint"
+  "le jour des morts"
+  (datetime 2013 11 1)
+
+  "fête du travail"
+  (datetime 2013 05 1)
+
   ; Part of day (morning, afternoon...)
   
   "cet après-midi"
@@ -487,10 +503,20 @@
   (datetime-interval [2013 2 13 18] [2013 2 14 00])
   
   "hier soir"
+  "la veille au soir"
   (datetime-interval [2013 2 11 18] [2013 2 12 00])
   
   "ce week-end"
   (datetime-interval [2013 2 15 18] [2013 2 18 00])
+
+  "le premier week-end de septembre"
+  (datetime-interval [2013 9 6 18] [2013 9 9 00])
+
+  "le deuxième week-end de septembre"
+  (datetime-interval [2013 9 13 18] [2013 9 16 00])
+
+  "le dernier week-end de septembre"
+  (datetime-interval [2013 9 27 18] [2013 9 30 00])
 
   "lundi matin"
   (datetime-interval [2013 2 18 4] [2013 2 18 12])
@@ -574,7 +600,29 @@
   "13 juillet au 15 juillet"
   "13 juillet - 15 juillet"
   "entre le 13 et le 15 juillet"
+  "samedi 13 au dimanche 15 juillet"
+  "du samedi 13 au dimanche 15 juillet"
+  "du 13 au dimanche 15 juillet"
   (datetime-interval [2013 7 13] [2013 7 16])
+
+  "1er au 10 juillet"
+  "lundi 1er au mercredi 10 juillet"
+  "lundi 1 au mercredi 10 juillet"
+  "du lundi 1er au mercredi 10 juillet"
+  "du 1er au mercredi 10 juillet"
+  (datetime-interval [2013 7 1] [2013 7 11])
+
+  ;"du 10 au 15" FIXME
+  ;(datetime-interval [2013 3 10] [2013 3 16])
+
+  "du 13 au 18"
+  "entre le 13 et le 18"
+  (datetime-interval [2013 2 13] [2013 2 19])
+
+  "10 juin au 1er juillet"
+  "entre le 10 juin et le 1er juillet"
+  "du 10 juin au 1er juillet"
+  (datetime-interval [2013 6 10] [2013 7 2])
 
   "de 9h30 jusqu'à 11h jeudi"
   "de 9 heures 30 à 11h jeudi"
@@ -597,6 +645,9 @@
   "après 16h le 1er novembre"
   (datetime 2013 11 1 16 :direction :after) ; FIXME should be :
   ;(datetime-interval [2013 11 1 16] [2013 11 1 24])
+
+  "après le 1er novembre"
+  (datetime 2013 11 1 :direction :after)
 
   "avant 16h"
   "n'importe quand avant 16h"
@@ -627,6 +678,10 @@
 
   "d'ici 2 semaines"
   (datetime-interval [2013 2 12 4 30 0] [2013 2 26])
+
+  ; 15j != 2 semaines
+  "dans les 15 jours"
+  (datetime-interval [2013 2 12 4 30 0] [2013 2 27 4]) ;TODO day grain
 
   "de 5 à 7"
   (datetime-interval [2013 2 12 5] [2013 2 12 8])
