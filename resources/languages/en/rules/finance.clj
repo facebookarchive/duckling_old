@@ -59,6 +59,12 @@
 {:dim :unit
  :unit "INR"}
 
+;Emirates Currency
+"AED"
+#"(?i)AED|AED(. )?|(D|d)irhams?"
+{:dim :unit
+ :unit "AED"}
+
 "unnamed currency"
 #"(?i)(buck|balle|pouloute)s?"
 {:dim :unit}

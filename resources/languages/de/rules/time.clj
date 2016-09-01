@@ -94,7 +94,7 @@
   (month 9)
 
   "named-month"
-  #"(?i)oktober|oct\.?"
+  #"(?i)oktober|okt\.?"
   (month 10)
 
   "named-month"
