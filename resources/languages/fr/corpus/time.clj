@@ -5,7 +5,7 @@
   "maintenant"
   "tout de suite"
   (datetime 2013 2 12 4 30 00)
-  
+
   "aujourd'hui"
   "ce jour"
   "dans la journée"
@@ -13,18 +13,23 @@
   (datetime 2013 2 12)
 
   "hier"
+  "le jour d'avant"
+  "le jour précédent"
+  "la veille"
   (datetime 2013 2 11)
 
   "avant-hier"
   (datetime 2013 2 10)
 
   "demain"
-  (datetime 2013 2 13)
-
+  "jour suivant"
+  "le jour d'après"
   "le lendemain"
+  "un jour après"
   (datetime 2013 2 13)
 
   "après-demain"
+  "le lendemain du 13 février"
   (datetime 2013 2 14)
 
   "lundi"
@@ -42,6 +47,8 @@
   (datetime 2013 2 13 :day-of-week 3 :day 13 :month 2)
 
   "jeudi"
+  "deux jours plus tard"
+  "deux jours après"
   (datetime 2013 2 14)
 
   "vendredi"
@@ -56,6 +63,7 @@
   "le 1er mars"
   "premier mars"
   "le 1 mars"
+  "vendredi 1er mars"
   (datetime 2013 3 1 :day 1 :month 3)
 
   "le premier mars 2013"
@@ -120,6 +128,7 @@
   "le 16 à 6h du soir"
   "le 16 vers 6h du soir"
   "le 16 vers 6h dans la soirée"
+  "samedi 16 à 18h"
   (datetime 2013 2 16 18 :day 16 :hour 18)
 
   "17 février"
@@ -167,7 +176,7 @@
   "le 24 12 2014"
   "le 24 12 14"
   (datetime 2014 12 24 :day 24 :month 12 :year 2014)
-  
+
   "31/10/1974"
   "31/10/74" ; smart two-digit year resolution
   (datetime 1974 10 31 :day 31 :month 10 :year 1974)
@@ -244,12 +253,15 @@
   (datetime 2013 2 4 :grain :week)
   
   "la semaine prochaine"
+  "la semaine suivante"
+  "la semaine qui suit"
   (datetime 2013 2 18 :grain :week)
   
   "le mois dernier"
   (datetime 2013 1)
 
   "le mois prochain"
+  "le mois suivant"
   (datetime 2013 3)
   
   "l'année dernière"
@@ -266,15 +278,23 @@
   (datetime 2013 2 10 :day-of-week 7)
 
   "3eme jour d'octobre"
+  "le 3eme jour d'octobre"
   (datetime 2013 10 3)
   
   "premiere semaine d'octobre 2014"
+  "la premiere semaine d'octobre 2014"
   (datetime 2014 10 6 :grain :week)
   
+  "la semaine du 6 octobre"
+  "la semaine du 7 octobre"
+  (datetime 2013 10 7 :grain :week)
+
   "dernier jour d'octobre 2015"
+  "le dernier jour d'octobre 2015"
   (datetime 2015 10 31)
   
   "dernière semaine de septembre 2014"
+  "la dernière semaine de septembre 2014"
   (datetime 2014 9 22 :grain :week)
 
   ;; Hours
@@ -390,9 +410,6 @@
   ;"dans 2 jours au soir"
   ;(datetime 2013 2 14 10)
 
-  "deux jours plus tard"
-  (datetime 2013 2 14 4)
-  
   "dans 7 jours"
   (datetime 2013 2 19 4)
   
@@ -439,6 +456,16 @@
   "premier janvier"
   (datetime 2014 1 1)
 
+  "la toussaint"
+  "le jour de la toussaint"
+  "la journée de la toussaint"
+  "toussaint"
+  "le jour des morts"
+  (datetime 2013 11 1)
+
+  "fête du travail"
+  (datetime 2013 05 1)
+
   ; Part of day (morning, afternoon...)
   
   "cet après-midi"
@@ -472,18 +499,30 @@
 
   "demain soir"
   "mercredi soir"
+  "mercredi en soirée"
   (datetime-interval [2013 2 13 18] [2013 2 14 00])
   
   "hier soir"
+  "la veille au soir"
   (datetime-interval [2013 2 11 18] [2013 2 12 00])
-    
+  
   "ce week-end"
   (datetime-interval [2013 2 15 18] [2013 2 18 00])
+
+  "le premier week-end de septembre"
+  (datetime-interval [2013 9 6 18] [2013 9 9 00])
+
+  "le deuxième week-end de septembre"
+  (datetime-interval [2013 9 13 18] [2013 9 16 00])
+
+  "le dernier week-end de septembre"
+  (datetime-interval [2013 9 27 18] [2013 9 30 00])
 
   "lundi matin"
   (datetime-interval [2013 2 18 4] [2013 2 18 12])
 
   "lundi après-midi"
+  "lundi dans l'après-midi"
   (datetime-interval [2013 2 18 12] [2013 2 18 19])
 
   "lundi fin d'après-midi"
@@ -561,7 +600,29 @@
   "13 juillet au 15 juillet"
   "13 juillet - 15 juillet"
   "entre le 13 et le 15 juillet"
+  "samedi 13 au dimanche 15 juillet"
+  "du samedi 13 au dimanche 15 juillet"
+  "du 13 au dimanche 15 juillet"
   (datetime-interval [2013 7 13] [2013 7 16])
+
+  "1er au 10 juillet"
+  "lundi 1er au mercredi 10 juillet"
+  "lundi 1 au mercredi 10 juillet"
+  "du lundi 1er au mercredi 10 juillet"
+  "du 1er au mercredi 10 juillet"
+  (datetime-interval [2013 7 1] [2013 7 11])
+
+  ;"du 10 au 15" FIXME
+  ;(datetime-interval [2013 3 10] [2013 3 16])
+
+  "du 13 au 18"
+  "entre le 13 et le 18"
+  (datetime-interval [2013 2 13] [2013 2 19])
+
+  "10 juin au 1er juillet"
+  "entre le 10 juin et le 1er juillet"
+  "du 10 juin au 1er juillet"
+  (datetime-interval [2013 6 10] [2013 7 2])
 
   "de 9h30 jusqu'à 11h jeudi"
   "de 9 heures 30 à 11h jeudi"
@@ -574,23 +635,33 @@
 
   "à partir du 8"
   "à partir du 8 mars"
-  (datetime 2013 3 8)
+  (datetime 2013 3 8 :direction :after)
 
   "à partir de 9h30 jeudi"
   "jeudi après 9h30"
-  (datetime 2013 2 14 9 30) ; FIXME should be :
+  (datetime 2013 2 14 9 30 :direction :after) ; FIXME should be :
   ;(datetime-interval [2013 2 14 9 30] [2013 2 15])
 
   "après 16h le 1er novembre"
-  (datetime 2013 11 1 16) ; FIXME should be :
+  (datetime 2013 11 1 16 :direction :after) ; FIXME should be :
   ;(datetime-interval [2013 11 1 16] [2013 11 1 24])
 
+  "après le 1er novembre"
+  (datetime 2013 11 1 :direction :after)
+
+  "avant 16h"
+  "n'importe quand avant 16h"
+  (datetime 2013 2 12 16 :direction :before)
+  
+  "demain jusqu'à 16h"
+  (datetime-interval [2013 2 13 0] [2013 2 13 17])
+  
   "le 20 à partir de 10h"
-  (datetime 2013 2 20 10) ; FIXME should be :
+  (datetime 2013 2 20 10 :direction :after) ; FIXME should be :
   ;(datetime-interval [2013 2 20 10] [2013 2 21])
 
   "vendredi à partir de midi"
-  (datetime 2013 2 15 12) ; FIXME should be :
+  (datetime 2013 2 15 12 :direction :after) ; FIXME should be :
   ;(datetime-interval [2013 2 15 12] [2013 2 16])
 
   "le 20 jusqu'à 18h"
@@ -607,6 +678,10 @@
 
   "d'ici 2 semaines"
   (datetime-interval [2013 2 12 4 30 0] [2013 2 26])
+
+  ; 15j != 2 semaines
+  "dans les 15 jours"
+  (datetime-interval [2013 2 12 4 30 0] [2013 2 27 4]) ;TODO day grain
 
   "de 5 à 7"
   (datetime-interval [2013 2 12 5] [2013 2 12 8])
@@ -637,7 +712,9 @@
   (datetime-interval [2013 4 1] [2013 4 6])
 
   "mi-décembre"
-  "mi décembre"
   (datetime-interval [2013 12 10] [2013 12 20])
   
+  "mars"
+  "en mars"
+  (datetime 2013 3)
 )

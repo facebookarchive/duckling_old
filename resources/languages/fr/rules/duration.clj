@@ -42,7 +42,7 @@
    :value (duration (:grain %2) (:value %1))}
 
   "une <unit-of-duration>"
-  [#"(?i)une?" (dim :unit-of-duration)]
+  [#"(?i)une|la|le?" (dim :unit-of-duration)]
   {:dim :duration
    :value (duration (:grain %2) 1)}
 
@@ -50,17 +50,9 @@
   [#"(?i)dans" (dim :duration)]
   (in-duration (:value %2))
 
-  "<duration> plus tard"
-  [(dim :duration) #"(?i)plus tard" ]
-  (in-duration (:value %1))
-
   "il y a <duration>"
   [#"(?i)il y a" (dim :duration)]
   (duration-ago (:value %2))
-
-  "<duration> plus tôt"
-  [(dim :duration) #"(?i)plus t[oô]t"]
-  (duration-ago (:value %1))
 
   "<duration> apres <time>"
   [(dim :duration) #"(?i)apr[eè]s" (dim :time)]
