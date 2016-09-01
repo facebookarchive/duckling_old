@@ -45,7 +45,7 @@
   (cycle-nth (:grain %2) -1)
 
   "le <cycle> prochain|suivant|d'après"
-  [#"(?i)l[ae']? ?|une? ?" (dim :cycle) #"(?i)prochaine?|suivante?|qui suit|(d' ?)?apr[eèé]s"]
+  [#"(?i)l[ae']? ?|une? ?" (dim :cycle) #"(?i)prochaine?|suivante?|qui suit|(d'? ?)?apr[eèé]s"]
   (cycle-nth (:grain %2) 1)
 
   "<cycle> dernier"
@@ -107,5 +107,4 @@
   "le veille du <time>"
   [#"(?i)(la )?veille du" (dim :time)]
   (cycle-nth-after-not-immediate :day -1 %2)
-
 )
