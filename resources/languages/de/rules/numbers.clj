@@ -89,10 +89,7 @@
   #"(\d{1,3}(\.\d\d\d){1,5})"
   {:dim :number
    :integer true
-   :value (-> (:groups %1)
-            first
-            (clojure.string/replace #"\." "")
-            Long/parseLong)}
+   :value (.longValue (.parse (NumberFormat/getInstance Locale/GERMAN) (first (:groups %1))))}
 
   ; composition
  ; "number dozen"
@@ -131,10 +128,7 @@
   "decimal number"
   #"(\d*,\d+)"
   {:dim :number
-   :value (-> (:groups %1)
-            first
-            (clojure.string/replace #"," ".")
-            Double/parseDouble)}
+   :value (.doubleValue (.parse (NumberFormat/getInstance Locale/GERMAN) (first (:groups %1))))}
 
   "number dot number"
   [(dim :number #(not (:number-prefixed %))) #"(?i)komma" (dim :number #(not (:number-suffixed %)))]
@@ -145,10 +139,7 @@
   "decimal with thousands separator"
   #"(\d+(\.\d\d\d)+\,\d+)"
   {:dim :number
-   :value (-> (:groups %1)
-            first
-            (clojure.string/replace #"\." "")
-            Double/parseDouble)}
+   :value (.doubleValue (.parse (NumberFormat/getInstance Locale/GERMAN) (first (:groups %1))))}
 
   ;; negative number
   "numbers prefix with -, negative or minus"
