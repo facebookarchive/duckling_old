@@ -61,7 +61,7 @@
 
 ;Emirates Currency
 "AED"
-#"(?a)AED|AED(. )?|(D|d)irhams?"
+#"(?i)AED|AED(. )?|(D|d)irhams?"
 {:dim :unit
  :unit "AED"}
 
