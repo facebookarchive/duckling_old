@@ -35,17 +35,19 @@
 "EUR29,99"
 (money 29.99 "EUR")
 
-;Indian Currency
-"Rp. 20,00"
+;Indonesian Currency
+"Rp. 315,00"
+(money 315.0 "IDR")
+
 "Rp 20"
 "20 Rupiah"
 "20Rp"
 "Rp20"
 (money 20 "IDR")
 
-"IDR33"
-"IDR 35.000"
-(money 33 "IDR")
+"IDR33000"
+"IDR 33.000"
+(money 33000 "IDR")
 
 "£9"
 "sembilan pound"

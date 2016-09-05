@@ -53,7 +53,7 @@
  :unit "INR"}
 
 ;Indonesian Currency
-"INR"
+"IDR"
 #"(?i)IDR|Rp(. )?|(R|r)upiah"
 {:dim :unit
  :unit "IDR"}
