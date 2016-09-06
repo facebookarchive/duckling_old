@@ -33,6 +33,12 @@
 {:dim :unit
  :unit "£"}
 
+;Australian Dollar Currency
+"AUD"
+#"(?i)AUD"
+{:dim :unit
+ :unit "AUD"}
+
 "USD"
 #"(?i)US[D\$]"
 {:dim :unit
