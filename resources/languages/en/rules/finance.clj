@@ -61,9 +61,14 @@
 
 ;Emirates Currency
 "AED"
-#"(?i)AED|AED(. )?|(D|d)irhams?"
+#"(?i)AED|(D|d)irhams?"
 {:dim :unit
  :unit "AED"}
+
+"AUD"
+#"(?i)AUD"
+{:dim :unit
+ :unit "AUD"}
 
 "unnamed currency"
 #"(?i)(buck|balle|pouloute)s?"
