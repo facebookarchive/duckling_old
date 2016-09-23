@@ -3,3 +3,5 @@ deployment:
     branch: master
     commands:
       - lein deploy private
+  environment:
+    _JAVA_OPTIONS: "-Xms4086m -Xmx4086m"
