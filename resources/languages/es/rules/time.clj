@@ -199,6 +199,18 @@
   [#"(?i)el" (integer 1 31) #"(?i)de" {:form :month}]
   (intersect %4 (day-of-month (:value %2)))
 
+  "ultimo <day-of-week> de <time>"
+  [#"(?i)[ú|u]ltimo" {:form :day-of-week} #"(?i)de|en" (dim :time)]
+  (pred-last-of %2 %4)
+
+  "nth <time> de <time>"
+  [(dim :ordinal) (dim :time) #"(?i)de|en" (dim :time)]
+  (pred-nth (intersect %4 %2) (dec (:value %1)))
+
+  "nth <time> de <time>"
+  [#"(?i)the" (dim :ordinal) (dim :time) #"(?i)de|en" (dim :time)]
+  (pred-nth (intersect %5 %3) (dec (:value %2)))
+
   "<named-month> <day-of-month>" ; mayo 5 in Latin America mostly (this rule removes latency)
   [{:form :month} (integer 1 31)]
   (intersect %1 (day-of-month (:value %2)))

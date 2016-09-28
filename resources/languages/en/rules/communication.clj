@@ -12,7 +12,7 @@
   			(:value %5) (:value %6) (:value %7) (:value %8) (:value %9) (:value %10)])}
  
  "url"
- #"((https?://)?(\w+\.)+\w{2,4}(:\d+)?[^ ]*)"
+ #"((https?://)?(\w+\.)+[A-z]{2,4}(:\d+)?[^ ]*)"
  {:dim :url
   :value (-> %1 :groups first)}
 
@@ -27,7 +27,7 @@
   :value (-> %1 :groups first)}
 
  "email"
- #"([\w\.]+@[\w\.]+)"
+ #"([\w\.\-_]+@[\w\.\-_]+)"
  {:dim :email
   :value (-> %1 :groups first)}
  

@@ -30,6 +30,11 @@
   #"(?i)mes(es)?"
   {:dim :cycle
    :grain :month}
+
+  "trimestre (cycle)"
+  #"(?i)trimestres?"
+  {:dim :cycle
+   :grain :quarter}
   
   "año (cycle)"
   #"(?i)a(n|ñ)os?"
@@ -45,11 +50,11 @@
   ; (cycle-nth  (:grain %3) 1 (:value %2))
 
   "la <cycle> pasado"
-  [#"(?i)(el|los|la|las) ?" (dim :cycle) #"(?i)pasad(a|o)s?"]
+  [#"(?i)(el|los|la|las) ?" (dim :cycle) #"(?i)pasad(a|o)s?|[u|ú]ltim[a|o]s?"]
   (cycle-nth (:grain %2) -1)
 
   "la pasado <cycle>"
-  [#"(?i)(el|los|la|las) ?" #"(?i)pasad(a|o)s?" (dim :cycle)]
+  [#"(?i)(el|los|la|las) ?" #"(?i)pasad(a|o)s?|[u|ú]ltim[a|o]s?" (dim :cycle)]
   (cycle-nth  (:grain %3) -1)
 
   "el <cycle> (proximo|que viene)"
@@ -57,7 +62,7 @@
   (cycle-nth  (:grain %2) 1)
   
   "el proximo <cycle> "
-  [#"(?i)(el|los|la|las) ?" #"(?i)pr(ó|o)xim(o|a)s?" (dim :cycle)]
+  [#"(?i)(el|los|la|las) ?" #"(?i)pr(ó|o)xim(o|a)s?|siguientes?" (dim :cycle)]
   (cycle-nth  (:grain %3) 1)
 
   "el <cycle> proximo|que viene <time>"
@@ -87,4 +92,15 @@
   "n <cycle> (proximo|que viene)"
   [(integer 2 9999) (dim :cycle) #"(?i)(pr(ó|o)xim(o|a)s?|que vienen?|siguientes?)"]
   (cycle-n-not-immediate  (:grain %2) (:value %1))
+  
+  ; quarters are a little bit different, you can say "3rd quarter" alone
+  
+  "<ordinal> quarter"
+  [(dim :ordinal) (dim :cycle #(= :quarter (:grain %)))]
+  (cycle-nth-after :quarter (dec (:value %1)) (cycle-nth :year 0))
+
+  "<ordinal> quarter <year>"
+  [(dim :ordinal) (dim :cycle #(= :quarter (:grain %))) #"(?i)del? ?" (dim :time)]
+  (cycle-nth-after :quarter (dec (:value %1)) %3)
+  
 )
