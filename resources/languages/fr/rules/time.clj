@@ -354,6 +354,28 @@
   #"(?i)fin de matin[ée]e"
   (assoc (interval (hour 10 false) (hour 12 false) false) :form :part-of-day :latent true)
 
+  "au déjeuner"
+  #"(?i)(pendant(le )?|au)? d[eéè]jeuner"
+  (assoc (interval (hour 12 false) (hour 14 false) false) :form :part-of-day :latent true)
+
+  "après le déjeuner"
+  #"(?i)apr[eè]s (le )?d[eéè]jeuner"
+  (assoc (intersect (cycle-nth :day 0)
+                    (interval (hour 13 false) (hour 17 false) false))
+         :form :part-of-day) ; no :latent
+
+  "avant le déjeuner"
+  #"(?i)avant (le )?d[eéè]jeuner"
+  (assoc (intersect (cycle-nth :day 0)
+                    (interval (hour 10 false) (hour 12 false) false))
+         :form :part-of-day)
+
+   "après le travail"
+   #"(?i)apr[eè]s (le )?travail"
+   (assoc (intersect (cycle-nth :day 0)
+                     (interval (hour 17 false) (hour 21 false) false))
+          :form :part-of-day)
+
   "après-midi"
   #"(?i)apr[eéè]s?[ \-]?midi"
   (assoc (interval (hour 12 false) (hour 19 false) false) :form :part-of-day :latent true)

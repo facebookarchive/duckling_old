@@ -254,25 +254,25 @@
 
   "la semaine dernière"
   (datetime 2013 2 4 :grain :week)
-  
+
   "la semaine prochaine"
   "la semaine suivante"
   "la semaine qui suit"
   (datetime 2013 2 18 :grain :week)
-  
+
   "le mois dernier"
   (datetime 2013 1)
 
   "le mois prochain"
   "le mois suivant"
   (datetime 2013 3)
-  
+
   "l'année dernière"
   (datetime 2012)
-  
+
   "cette année"
   (datetime 2013)
-  
+
   "l'année prochaine"
   (datetime 2014)
 
@@ -283,11 +283,11 @@
   "3eme jour d'octobre"
   "le 3eme jour d'octobre"
   (datetime 2013 10 3)
-  
+
   "premiere semaine d'octobre 2014"
   "la premiere semaine d'octobre 2014"
   (datetime 2014 10 6 :grain :week)
-  
+
   "la semaine du 6 octobre"
   "la semaine du 7 octobre"
   (datetime 2013 10 7 :grain :week)
@@ -295,7 +295,7 @@
   "dernier jour d'octobre 2015"
   "le dernier jour d'octobre 2015"
   (datetime 2015 10 31)
-  
+
   "dernière semaine de septembre 2014"
   "la dernière semaine de septembre 2014"
   (datetime 2014 9 22 :grain :week)
@@ -363,7 +363,7 @@
   "onze heures trois quarts"
   "aujourd'hui à 11h45"
   (datetime 2013 2 12 11 45 :hour 11 :minute 45)
-  
+
   "mercredi à 11h"
   (datetime 2013 2 13 11 :hour 11 :day-of-week 3)
 
@@ -384,28 +384,28 @@
   ;; Involving periods   ; look for grain-after-shift
   "dans une seconde"
   (datetime 2013 2 12 4 30 1)
-  
+
   "dans une minute"
   "dans 1 min"
   (datetime 2013 2 12 4 31 0)
-  
+
   "dans 2 minutes"
   "dans deux min"
   (datetime 2013 2 12 4 32 0)
-  
+
   "dans 60 minutes"
   (datetime 2013 2 12 5 30 0)
-  
+
   "dans une heure"
   (datetime 2013 2 12 5 30)
 
   "il y a deux heures"
   (datetime 2013 2 12 2 30)
-  
+
   "dans 24 heures"
   "dans vingt quatre heures"
   (datetime 2013 2 13 4 30)
-  
+
   "dans un jour"
   (datetime 2013 2 13 4)
 
@@ -417,24 +417,24 @@
 
   "dans 7 jours"
   (datetime 2013 2 19 4)
-  
+
   "dans 1 semaine"
   "dans une semaine"
   (datetime 2013 2 19)
-  
+
   "il y a trois semaines"
   (datetime 2013 1 22)
-  
+
   "dans deux mois"
   (datetime 2013 4 12)
-  
+
   "il y a trois mois"
   (datetime 2012 11 12)
 
   "dans une année"
   "dans 1 an"
   (datetime 2014 2)
-  
+
   "il y a deux ans"
   (datetime 2011 2)
 
@@ -446,7 +446,7 @@
   "cet hiver"
   (datetime-interval [2012 12 21] [2013 3 21])
 
-  ; FR holidays 
+  ; FR holidays
 
   "Noel"
   "noël"
@@ -472,7 +472,7 @@
   (datetime 2013 05 1)
 
   ; Part of day (morning, afternoon...)
-  
+
   "cet après-midi"
   "l'après-midi"
   (datetime-interval [2013 2 12 12] [2013 2 12 19])
@@ -482,6 +482,18 @@
 
   "en fin de matinée"
   (datetime-interval [2013 2 12 10] [2013 2 12 12])
+
+  "après déjeuner"
+  (datetime-interval [2013 2 12 13] [2013 2 12 17])
+
+  "avant déjeuner"
+  (datetime-interval [2013 2 12 10] [2013 2 12 12])
+
+  "pendant le déjeuner"
+  (datetime-interval [2013 2 12 12] [2013 2 12 14])
+
+  "après le travail"
+  (datetime-interval [2013 2 12 17] [2013 2 12 21])
 
   "dès le matin"
   "dès la matinée"
@@ -506,11 +518,11 @@
   "mercredi soir"
   "mercredi en soirée"
   (datetime-interval [2013 2 13 18] [2013 2 14 00])
-  
+
   "hier soir"
   "la veille au soir"
   (datetime-interval [2013 2 11 18] [2013 2 12 00])
-  
+
   "ce week-end"
   (datetime-interval [2013 2 15 18] [2013 2 18 00])
 
@@ -543,7 +555,7 @@
   "lundi en fin d'après-midi"
   (datetime-interval [2013 2 18 17] [2013 2 18 19])
 
-  "le 15 février dans la matinée" 
+  "le 15 février dans la matinée"
   "matinée du 15 février"
   "le 15 février le matin"
   (datetime-interval [2013 2 15 4] [2013 2 15 12])
@@ -551,13 +563,13 @@
   "8 heures ce soir"
   "8h du soir"
   (datetime 2013 2 12 20)
-  
+
   "3 heures du matin"
   "3h du mat"
   (datetime 2013 2 13 3)
 
  ; Intervals involving cycles
-  
+
   "2 dernières secondes"
   "deux dernieres secondes"
   (datetime-interval [2013 2 12 4 29 58] [2013 2 12 4 30 00])
@@ -602,9 +614,9 @@
   "2 dernieres annees"
   "2 années passées"
   (datetime-interval [2011] [2013])
-  
+
   "3 prochaines années"
-  (datetime-interval [2014] [2017]) 
+  (datetime-interval [2014] [2017])
 
   ; Explicit intervals
 
@@ -666,10 +678,10 @@
   "avant 16h"
   "n'importe quand avant 16h"
   (datetime 2013 2 12 16 :direction :before)
-  
+
   "demain jusqu'à 16h"
   (datetime-interval [2013 2 13 0] [2013 2 13 17])
-  
+
   "le 20 à partir de 10h"
   (datetime 2013 2 20 10 :direction :after) ; FIXME should be :
   ;(datetime-interval [2013 2 20 10] [2013 2 21])
@@ -683,7 +695,7 @@
 
   "14 - 20 sept. 2014"
   (datetime-interval [2014 9 14] [2014 9 21])
-  
+
   ; Alex: need special rule to say that 11h is not ambiguous, because of midi
   ; "ven., 19 septembre, 11h - midi"
   ; (datetime-interval [2014 9 19 11] [2014 9 19 12])
@@ -702,7 +714,7 @@
 
   "jeudi de 9h à 11h"
   (datetime-interval [2013 2 14 9] [2013 2 14 12])
-  
+
   "entre midi et 2"
   (datetime-interval [2013 2 12 12] [2013 2 12 15])
 
@@ -710,10 +722,10 @@
   "de 11h30 à 1h30"
   "de 11h30 jusqu'à 1h30"
   (datetime-interval [2013 2 12 11 30] [2013 2 12 13 31])
-  
+
   "13h30 samedi 21 septembre"
    (datetime 2013 9 21 13 30)
-  
+
   "à seize heures PST"
   (datetime 2013 2 12 16 :hour 16 :timezone "PST")
 
@@ -727,7 +739,7 @@
 
   "mi-décembre"
   (datetime-interval [2013 12 10] [2013 12 20])
-  
+
   "mars"
   "en mars"
   "au mois de mars"
