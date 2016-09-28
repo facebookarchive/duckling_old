@@ -28,7 +28,7 @@
   ; #(not (:number-prefixed %)
 
   "$"
-  #"\$|doll?ars?"
+  #"\$|n?dh?oll?ai?rs?"
   {:dim :unit
    :unit "$"} ; ambiguous
 
@@ -58,7 +58,7 @@
    :unit "PTS"}
 
   "cent"
-  #"(?i)cents?|b?ph?ingin|c|¢" ; to do:localize the corpus and rules per language
+  #"(?i)cents?|g?ch?eint(eanna)?|c|¢" ; to do:localize the corpus and rules per language
   {:dim :unit
    :unit "cent"}
 
