@@ -4,7 +4,7 @@
 
 "$10"
 "10$"
-"deich dollars"
+"deich dollair"
 (money 10 "$")
 
 ;"under $15"
@@ -13,7 +13,7 @@
 ;"less than fifteen dollars"
 ;(money 15 "$" "<")
 
-"ten cents"
+"deich ceinteanna"
 (money 10 "cent")
 
 "$10,000"
