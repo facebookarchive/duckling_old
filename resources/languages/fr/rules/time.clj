@@ -355,7 +355,7 @@
   (assoc (interval (hour 10 false) (hour 12 false) false) :form :part-of-day :latent true)
 
   "au déjeuner"
-  #"(?i)(pendant(le )?|au)? d[eéè]jeuner"
+  #"(?i)(pendant( le)?|au)? d[eéè]jeuner"
   (assoc (interval (hour 12 false) (hour 14 false) false) :form :part-of-day :latent true)
 
   "après le déjeuner"
