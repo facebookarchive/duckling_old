@@ -74,6 +74,15 @@
    :integer true
    :value (Long/parseLong (first (:groups %1)))}
 
+  "integer with thousands separator ,"
+  #"(\d{1,3}(,\d\d\d){1,5})"
+  {:dim :number
+   :integer true
+   :value (-> (:groups %1)
+            first
+            (clojure.string/replace #"," "")
+            Long/parseLong)}
+
   "decimal number"
   #"(\d*\.\d+)"
   {:dim :number
