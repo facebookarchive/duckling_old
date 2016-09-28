@@ -74,5 +74,27 @@
    :integer true
    :value (Long/parseLong (first (:groups %1)))}
 
+  "decimal number"
+  #"(\d*\.\d+)"
+  {:dim :number
+   :value (Double/parseDouble (first (:groups %1)))}
 
+  "decimal with thousands separator"
+  #"(\d+(,\d\d\d)+\.\d+)"
+  {:dim :number
+   :value (-> (:groups %1)
+            first
+            (clojure.string/replace #"," "")
+            Double/parseDouble)}
+
+  ;; negative number
+  "numbers prefix with -, negative or minus"
+  [#"(?i)-|m[íi]neas(\sa)?\s?" (dim :number #(not (:number-prefixed %)))]
+  (let [multiplier -1
+        value      (* (:value %2) multiplier)
+        int?       (zero? (mod value 1)) ; often true, but we could have 1.1111K
+        value      (if int? (long value) value)] ; cleaner if we have the right type
+    (assoc %2 :value value
+              :integer int?
+              :number-prefixed true)) ; prevent "- -3km" to be 3 billions
 )
