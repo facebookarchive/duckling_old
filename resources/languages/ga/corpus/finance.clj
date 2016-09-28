@@ -24,10 +24,10 @@
 "USD1.23"
 (money 1.23 "USD")
 
-"2 dollar and 23 cents"
-"two dollar 23 cents"
-"2 dollar 23"
-"two dollar and 23"
+"2 dhollair agus 23 ceinteanna"
+"dhá dhollair 23 ceinteanna"
+"2 dhollair 23"
+"dhá dhollair agus 23"
 (money 2.23 "$")
 
 "20€"
