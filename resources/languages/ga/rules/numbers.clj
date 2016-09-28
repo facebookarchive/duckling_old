@@ -87,6 +87,21 @@
             (clojure.string/replace #"," "")
             Double/parseDouble)}
 
+  ;; suffixes
+
+  ; note that we check for a space-like char after the M, K or G
+  ; to avoid matching 3 Mandarins
+  "numbers suffixes (K, M, G)"
+  [(dim :number #(not (:number-suffixed %))) #"(?i)([kmg])(?=[\W\$€]|$)"]
+  (let [multiplier (get {"k" 1000 "m" 1000000 "g" 1000000000}
+                        (-> %2 :groups first clojure.string/lower-case))
+        value      (* (:value %1) multiplier)
+        int?       (zero? (mod value 1)) ; often true, but we could have 1.1111K
+        value      (if int? (long value) value)] ; cleaner if we have the right type
+    (assoc %1 :value value
+              :integer int?
+              :number-suffixed true)) ; prevent "3km" to be 3 billions
+
   ;; negative number
   "numbers prefix with -, negative or minus"
   [#"(?i)-|m[íi]neas(\sa)?\s?" (dim :number #(not (:number-prefixed %)))]
