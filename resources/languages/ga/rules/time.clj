@@ -27,7 +27,7 @@
   %2 ; does NOT dissoc latent
 
   "dé named-day" ; dé luain
-  [#"(?i)dé" {:form :day-of-week}]
+  [#"(?i)d[ée]" {:form :day-of-week}]
   %2 ; does NOT dissoc latent
 
   "an named-day" ; an luan
@@ -178,7 +178,7 @@
   (pred-nth-not-immediate %1 0)
 
   "<time> seo chaite"
-  [(dim :time) #"(?i)seo chaite"]
+  [(dim :time) #"(?i)seo ch?aite"]
   (pred-nth %1 -1)
 
   "<time> seo"
