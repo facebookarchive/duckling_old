@@ -10,7 +10,7 @@
                  [org.clojure/tools.nrepl "0.2.3"]
                  [org.clojure/tools.logging "0.2.6"]
                  [clj-time "0.8.0"]
-                 [prismatic/plumbing "0.3.3"]]
+                 [prismatic/plumbing "0.5.3"]]
   :deploy-repositories [["clojars" {:creds :gpg}]]
   :profiles {:dev {:dependencies [[org.clojure/tools.trace "0.7.6"]
                                   [midje "1.6.3"]
