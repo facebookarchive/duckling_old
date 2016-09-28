@@ -59,7 +59,7 @@
 ;(money 3) ; unknown unit
 
 "£9"
-"nine pounds"
+"naoi bpunt"
 (money 9 "£")
 
 "GBP3.01"
