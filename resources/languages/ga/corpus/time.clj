@@ -32,4 +32,7 @@
   "an luan seo atá ag teacht"
   "dé luain seo chugainn"
   (datetime 2013 2 18 :day-of-week 1)
+  
+  "18/2/2013"
+  (datetime 2013 2 18)
 )
