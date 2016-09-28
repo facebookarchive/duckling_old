@@ -15,7 +15,7 @@
       (merge {:unit "degree"}))
 
   "<temp> Celsius"
-  [(dim :temperature) #"(?i)c(el[cs]?(ius)?)?\.?|ceinteagr[áa]d"]
+  [(dim :temperature) #"(?i)ceinteagr[áa]d|c(el[cs]?(ius)?)?\.?"]
   (-> %1
       (dissoc :latent)
       (merge {:unit "celsius"}))
