@@ -9,12 +9,12 @@
   "intersect by 'de' or ','"
   [(dim :time #(not (:latent %))) #"(?i)de|," (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
-  
+
   ; same thing, with "mais/par exemple/plutôt/" in between like "mardi, mais à 14 heures"
   "intersect by 'mais/par exemple/plutôt'"
   [(dim :time #(not (:latent %))) #"(?i)mais|par exemple|plutôt" (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
-  
+
   "en <named-month>" ; en mars
   [#"(?i)en|au mois de?'?" {:form :month}]
   %2 ; does NOT dissoc latent
@@ -249,7 +249,7 @@
   "<day-of-week> <day-of-month> à <time-of-day>)"
   [{:form :day-of-week} (integer 1 31) {:form :time-of-day}]
   (intersect (day-of-month (:value %2)) %3)
-  
+
   ; Hours and minutes (absolute time)
   ;
   ; Assumptions:
@@ -452,7 +452,11 @@
   "fin de semaine"
   [#"(?i)(en |à la )?fin de (cette |la )?semaine"]
     (interval (day-of-week 4) (day-of-week 7) false)
-    
+
+  "en semaine"
+  [#"(?i)(pendant la|cette |en )?semaine"]
+    (cycle-nth :week 0)
+
   "season"
   #"(?i)(cet )?été" ;could be smarter and take the exact hour into account... also some years the day can change
   (interval (month-day 6 21) (month-day 9 23) false)

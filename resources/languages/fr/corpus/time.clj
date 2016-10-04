@@ -250,6 +250,7 @@
   ;; Cycles
 
   "cette semaine"
+  "en semaine"
   "dans la semaine"
   (datetime 2013 2 11 :grain :week)
 
@@ -385,7 +386,7 @@
   "vendredi 15 à 16h"
   "vendredi quinze à 16h"
   (datetime 2013 2 15 16 :hour 16 :day-of-week 4)
-  
+
 
   ;; Involving periods   ; look for grain-after-shift
   "dans une seconde"
@@ -544,7 +545,7 @@
   ; TODO
   ;"en début de semaine prochaine"
   ;(datetime-interval [2013 2 18] [2013 2 20])
-  
+
   "le premier week-end de septembre"
   (datetime-interval [2013 9 6 18] [2013 9 9 00])
 
@@ -752,14 +753,14 @@
 
   "la première quinzaine d'avril"
   (datetime-interval [2013 4 1] [2013 4 15])
-  
+
   "la deuxième quinzaine d'avril"
   (datetime-interval [2013 4 15] [2013 5 01])
-  
+
   "début avril"
   "début du mois d'avril"
   (datetime-interval [2013 4 1] [2013 4 6])
-  
+
   "mi-décembre"
   (datetime-interval [2013 12 10] [2013 12 20])
 
