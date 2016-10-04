@@ -1,6 +1,6 @@
 # Duckling
 
-[![Clojars Project](http://clojars.org/wit/duckling/latest-version.svg)](http://clojars.org/wit/duckling)
+[![Clojars Project](https://clojars.org/wit/duckling/latest-version.svg)](http://clojars.org/wit/duckling)
 
 Duckling is a Clojure library that parses text into structured data:
 
