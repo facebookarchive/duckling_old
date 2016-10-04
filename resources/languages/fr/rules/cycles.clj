@@ -39,7 +39,7 @@
   "ce|dans le <cycle>"
   [#"(?i)(cet?t?e?s?)|(dans l[ae']? ?)" (dim :cycle)]
   (cycle-nth (:grain %2) 0)
-
+  
   "le <cycle> dernier"
   [#"(?i)l[ae']? ?" (dim :cycle) #"(?i)derni[èe]re?|pass[ée]e?"]
   (cycle-nth (:grain %2) -1)

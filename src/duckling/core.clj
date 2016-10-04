@@ -1,5 +1,4 @@
 (ns duckling.core
-  (:refer-clojure :exclude [update])
   (:use [clojure.tools.logging :exclude [trace]]
         [plumbing.core])
   (:require [clojure.java.io :as io]

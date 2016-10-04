@@ -1,8 +1,8 @@
 (ns duckling.time.pred
+  (:refer-clojure :exclude [cycle resolve])
   (:use [clojure.tools.logging]
         [plumbing.core])
-  (:require [duckling.time.obj :as t])
-  (:refer-clojure :exclude [cycle resolve]))
+  (:require [duckling.time.obj :as t]))
 
 ;; Contains the time semantics.
 ;; Knows nothing  about tokens, morphology, syntax, forms.

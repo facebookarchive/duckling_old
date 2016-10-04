@@ -128,6 +128,7 @@
 
   "le 16 à 18h"
   "le 16 vers 18h"
+  "le 16 plutôt vers 18h"
   "le 16 à 6h du soir"
   "le 16 vers 6h du soir"
   "le 16 vers 6h dans la soirée"
@@ -380,6 +381,11 @@
   "vendredi à 12h"
   (datetime 2013 2 15 12 :hour 12 :day-of-week 4)
 
+  "vendredi quinze à seize heures"
+  "vendredi 15 à 16h"
+  "vendredi quinze à 16h"
+  (datetime 2013 2 15 16 :hour 16 :day-of-week 4)
+  
 
   ;; Involving periods   ; look for grain-after-shift
   "dans une seconde"
@@ -535,6 +541,10 @@
   "en fin de semaine"
   (datetime-interval [2013 2 14] [2013 2 18])
 
+  ; TODO
+  ;"en début de semaine prochaine"
+  ;(datetime-interval [2013 2 18] [2013 2 20])
+  
   "le premier week-end de septembre"
   (datetime-interval [2013 9 6 18] [2013 9 9 00])
 
@@ -654,6 +664,8 @@
   "de 9 heures 30 à 11h jeudi"
   "de 9 heures 30 a 11h jeudi"
   "entre 9h30 et 11h jeudi"
+  "jeudi mais entre 9h30 et 11h"
+  "jeudi par exemple entre 9h30 et 11h"
   (datetime-interval [2013 2 14 9 30] [2013 2 14 12])
 
   "9h30 - 11h00 Jeudi"
@@ -665,6 +677,7 @@
 
   "à partir de 9h30 jeudi"
   "jeudi après 9h30"
+  "jeudi matin à partir de 9 heures 30"
   (datetime 2013 2 14 9 30 :direction :after) ; FIXME should be :
   ;(datetime-interval [2013 2 14 9 30] [2013 2 15])
 
@@ -737,6 +750,16 @@
   "début du mois d'avril"
   (datetime-interval [2013 4 1] [2013 4 6])
 
+  "la première quinzaine d'avril"
+  (datetime-interval [2013 4 1] [2013 4 15])
+  
+  "la deuxième quinzaine d'avril"
+  (datetime-interval [2013 4 15] [2013 5 01])
+  
+  "début avril"
+  "début du mois d'avril"
+  (datetime-interval [2013 4 1] [2013 4 6])
+  
   "mi-décembre"
   (datetime-interval [2013 12 10] [2013 12 20])
 

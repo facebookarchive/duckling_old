@@ -9,7 +9,12 @@
   "intersect by 'de' or ','"
   [(dim :time #(not (:latent %))) #"(?i)de|," (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
-
+  
+  ; same thing, with "mais/par exemple/plutôt/" in between like "mardi, mais à 14 heures"
+  "intersect by 'mais/par exemple/plutôt'"
+  [(dim :time #(not (:latent %))) #"(?i)mais|par exemple|plutôt" (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
+  (intersect %1 %3)
+  
   "en <named-month>" ; en mars
   [#"(?i)en|au mois de?'?" {:form :month}]
   %2 ; does NOT dissoc latent
@@ -241,7 +246,10 @@
   [{:form :day-of-week} (integer 1 31)]
   (day-of-month (:value %2))
 
-
+  "<day-of-week> <day-of-month> à <time-of-day>)"
+  [{:form :day-of-week} (integer 1 31) {:form :time-of-day}]
+  (intersect (day-of-month (:value %2)) %3)
+  
   ; Hours and minutes (absolute time)
   ;
   ; Assumptions:
@@ -434,17 +442,17 @@
             false)
 
   "début de semaine"
-  #"(?i)(en)? début de semaine"
+  [#"(?i)(en |au )?début de (cette |la )?semaine"]
   (interval (day-of-week 1) (day-of-week 2) false)
 
   "milieu de semaine"
-  #"(?i)(en)? milieu de semaine"
+  [#"(?i)(en |au )?milieu de (cette |la )?semaine"]
   (interval (day-of-week 3) (day-of-week 4) false)
 
   "fin de semaine"
-    #"(?i)(en)? fin de semaine"
+  [#"(?i)(en |à la )?fin de (cette |la )?semaine"]
     (interval (day-of-week 4) (day-of-week 7) false)
-
+    
   "season"
   #"(?i)(cet )?été" ;could be smarter and take the exact hour into account... also some years the day can change
   (interval (month-day 6 21) (month-day 9 23) false)
@@ -542,6 +550,17 @@
         (intersect %2 (day-of-month 5))
         true)
 
+  "première quinzaine de <named-month>(interval)"
+  [#"(premi[èe]re|1 ?[èe]re) (quinzaine|15 ?aine) d[e']" {:form :month}]
+  (interval (intersect %2 (day-of-month 1))
+        (intersect %2 (day-of-month 14))
+              true)
+
+  "deuxième quinzaine de <named-month>(interval)"
+  [#"(deuxi[èe]me|2 ?[èe]me) (quinzaine|15 ?aine) d[e']" {:form :month}]
+  (interval (intersect %2 (day-of-month 15))
+        (cycle-last-of {:dim :cycle :grain :day} %2)
+              true)
   "<named-month>"
   [#"(?i)mi[- ]" {:form :month}]
   (interval (intersect %2 (day-of-month 10))
