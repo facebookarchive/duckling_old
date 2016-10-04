@@ -454,8 +454,8 @@
     (interval (day-of-week 4) (day-of-week 7) false)
 
   "en semaine"
-  [#"(?i)(pendant la|cette |en )?semaine"]
-    (cycle-nth :week 0)
+  [#"(?i)(pendant la |en )?semaine"]
+    (interval (day-of-week 1) (day-of-week 5) false)
 
   "season"
   #"(?i)(cet )?été" ;could be smarter and take the exact hour into account... also some years the day can change

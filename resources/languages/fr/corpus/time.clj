@@ -250,7 +250,6 @@
   ;; Cycles
 
   "cette semaine"
-  "en semaine"
   "dans la semaine"
   (datetime 2013 2 11 :grain :week)
 
@@ -541,6 +540,9 @@
 
   "en fin de semaine"
   (datetime-interval [2013 2 14] [2013 2 18])
+
+  "en semaine"
+  (datetime-interval [2013 2 11] [2013 2 16])
 
   ; TODO
   ;"en début de semaine prochaine"
