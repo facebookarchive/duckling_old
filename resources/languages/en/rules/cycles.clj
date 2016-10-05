@@ -21,7 +21,7 @@
    :grain :minute}
 
   "hour (cycle)"
-  #"(?i)hours?"
+  #"(?i)h(ou)?rs?"
   {:dim :cycle
    :grain :hour}
 

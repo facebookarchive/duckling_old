@@ -12,7 +12,7 @@
    :grain :minute}
 
   "hour (unit-of-duration)"
-  #"(?i)h((ours?)|r)?"
+  #"(?i)h(((ou)?rs?)|r)?"
   {:dim :unit-of-duration
    :grain :hour}
 
