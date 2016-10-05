@@ -487,6 +487,9 @@
   "labor day"
   (datetime 2013 9 2)
 
+  "labor day weekend"
+  (datetime-interval [2013 8 30 18] [2013 9 3 0])
+
   "halloween"
   (datetime 2013 10 31)
 
