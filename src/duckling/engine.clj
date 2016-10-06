@@ -6,6 +6,7 @@
   3. tokens containing final info are produced using their production rules"
   (:use [clojure.tools.logging])
   (:require [clojure.set :as sets]
+            [clojure.stacktrace]
             [duckling.time.prod]
             [duckling.time.api :as time]
             [duckling.util :as util]))
