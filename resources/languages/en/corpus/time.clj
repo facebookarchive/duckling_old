@@ -372,6 +372,8 @@
   (datetime 2013 2 12 7 30)
 
   "in 24 hours"
+  "in 24hrs"
+  "in 24 hrs"
   (datetime 2013 2 13 4 30)
 
   "in a day"
@@ -550,8 +552,16 @@
   (datetime-interval [2013 2 12 4 31] [2013 2 12 4 34])
 
   "last 1 hour"
+  "last 1 hr"
   "last one hour"
   (datetime-interval [2013 2 12 3] [2013 2 12 4])
+
+  "last 24 hours"
+  "last twenty four hours"
+  "last twenty four hrs"
+  "last 24 hrs"
+  "last 24hrs"
+  (datetime-interval [2013 2 11 4] [2013 2 12 4])
 
   "next 3 hours"
   "next three hours"
