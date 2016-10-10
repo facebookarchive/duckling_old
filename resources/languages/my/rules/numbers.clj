@@ -17,7 +17,7 @@
                (:text %1))}
 
 
-  "integer (1..10) - pali"
+  "integer (1..3) - pali"
   #"ပထမ|ဒုတိယ|တတိယ"
   {:dim :number
    :integer true
