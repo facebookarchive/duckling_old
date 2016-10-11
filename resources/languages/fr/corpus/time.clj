@@ -483,6 +483,9 @@
   "l'après-midi"
   (datetime-interval [2013 2 12 12] [2013 2 12 19])
 
+  "en milieu d'après-midi"
+  (datetime-interval [2013 2 12 15] [2013 2 12 17])
+
   "en début de matinée"
   (datetime-interval [2013 2 12 7] [2013 2 12 9])
 
@@ -496,6 +499,7 @@
   (datetime-interval [2013 2 12 10] [2013 2 12 12])
 
   "pendant le déjeuner"
+  "à l'heure du déjeuner"
   (datetime-interval [2013 2 12 12] [2013 2 12 14])
 
   "après le travail"
@@ -513,6 +517,9 @@
 
   "en début de journée"
   (datetime-interval [2013 2 12 6] [2013 2 12 10])
+
+  "milieu de journée"
+  (datetime-interval [2013 2 12 11] [2013 2 12 16])
 
   "en fin de journée"
   (datetime-interval [2013 2 12 17] [2013 2 12 21])
