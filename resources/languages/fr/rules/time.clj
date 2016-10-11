@@ -402,7 +402,7 @@
   #"(?i)d[ée]but d'apr[eéè]s?[ \-]?midi"
   (assoc (interval (hour 12 false) (hour 14 false) false) :form :part-of-day :latent true)
 
-  "milieu d'après-m/soiridi"
+  "milieu d'après-midi"
   #"(?i)milieu d'apr[eéè]s?[ \-]?midi"
   (assoc (interval (hour 15 false) (hour 17 false) false) :form :part-of-day :latent true)
 
