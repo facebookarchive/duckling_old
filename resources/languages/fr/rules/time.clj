@@ -135,6 +135,12 @@
   #"(?i)hier|la veille"
   (cycle-nth :day -1)
 
+  "fin du mois"
+  #"(?i)(([aà] )?la )?fin (du|de) mois"
+  (assoc (interval (cycle-nth-after :day -10 (cycle-nth :month 1))
+                   (cycle-nth :month 1) false)
+          :form :part-of-day :latent true)
+
   "après-demain"
   #"(?i)apr(e|è)s[- ]?demain"
   (cycle-nth :day 2)

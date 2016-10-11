@@ -554,6 +554,9 @@
   "en semaine"
   (datetime-interval [2013 2 11] [2013 2 16])
 
+  "à la fin du mois"
+  (datetime-interval [2013 2 19] [2013 3 01])
+
   ; TODO
   ;"en début de semaine prochaine"
   ;(datetime-interval [2013 2 18] [2013 2 20])
