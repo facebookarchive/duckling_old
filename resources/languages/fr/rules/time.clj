@@ -358,6 +358,10 @@
   #"(?i)d[ée]but de matin[ée]e"
   (assoc (interval (hour 7 false) (hour 9 false) false) :form :part-of-day :latent true)
 
+  "milieu de matinée"
+  #"(?i)milieu de matin[ée]e"
+  (assoc (interval (hour 9 false) (hour 11 false) false) :form :part-of-day :latent true)
+
   "fin de matinée"
   #"(?i)fin de matin[ée]e"
   (assoc (interval (hour 10 false) (hour 12 false) false) :form :part-of-day :latent true)
@@ -392,7 +396,7 @@
   #"(?i)d[ée]but d'apr[eéè]s?[ \-]?midi"
   (assoc (interval (hour 12 false) (hour 14 false) false) :form :part-of-day :latent true)
 
-  "milieu d'après-midi"
+  "milieu d'après-m/soiridi"
   #"(?i)milieu d'apr[eéè]s?[ \-]?midi"
   (assoc (interval (hour 15 false) (hour 17 false) false) :form :part-of-day :latent true)
 

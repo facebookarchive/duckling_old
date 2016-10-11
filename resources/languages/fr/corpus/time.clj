@@ -489,6 +489,9 @@
   "en début de matinée"
   (datetime-interval [2013 2 12 7] [2013 2 12 9])
 
+  "milieu de matinée"
+  (datetime-interval [2013 2 12 9] [2013 2 12 11])
+
   "en fin de matinée"
   (datetime-interval [2013 2 12 10] [2013 2 12 12])
 
