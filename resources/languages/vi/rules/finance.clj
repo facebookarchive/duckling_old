@@ -1,11 +1,11 @@
 (
 
-"intersect (X cents)" ;
+"intersect (X xu|xen)" ;
 [(dim :amount-of-money) (dim :amount-of-money #(= (:unit %) "cent"))]
 (compose-money %1 %2) 
 
-"intersect (and X cents)" ;
-[(dim :amount-of-money) #"(?i)and" (dim :amount-of-money #(= (:unit %) "cent"))]
+"intersect (và X xu|xen)" ;
+[(dim :amount-of-money) #"(?i)và" (dim :amount-of-money #(= (:unit %) "cent"))]
 (compose-money %1 %3) 
 
 "intersect" ;
@@ -17,9 +17,13 @@
 (compose-money %1 %3) 
 
 ; #(not (:number-prefixed %)
+"đồng"
+#"\đồng?"
+{:dim :unit
+ :unit "đồng"} ; ambiguous
 
 "$"
-#"\$|dollars?"
+#"\$|đô la|đô mỹ|đô?"
 {:dim :unit
  :unit "$"} ; ambiguous
  
@@ -33,16 +37,20 @@
 {:dim :unit
  :unit "£"}
 
-;Australian Dollar Currency
-"AUD"
-#"(?i)AUD"
-{:dim :unit
- :unit "AUD"}
-
 "USD"
 #"(?i)US[D\$]"
 {:dim :unit
  :unit "USD"}
+
+"VND"
+#"(?i)VN[D\$]"
+{:dim :unit
+ :unit "VND"}
+
+"VNĐ"
+#"(?i)VN[Đ\$]"
+{:dim :unit
+ :unit "VNĐ"}
 
 "GBP"
 #"(?i)GBP"
@@ -55,7 +63,7 @@
  :unit "PTS"}
 
 "cent"
-#"(?i)cents?|penn(y|ies)|c|¢" ; to do:localize the corpus and rules per language
+#"(?i)xen|xu?|penn(y|ies)|c|¢" ; to do:localize the corpus and rules per language
 {:dim :unit
  :unit "cent"}
 
@@ -67,7 +75,7 @@
 
 ;Emirates Currency
 "AED"
-#"(?i)AED|(D|d)irhams?"
+#"(?i)AED|AED(. )?|(D|d)irhams?"
 {:dim :unit
  :unit "AED"}
 

@@ -1,6 +1,6 @@
 # Duckling
 
-[![Clojars Project](http://clojars.org/wit/duckling/latest-version.svg)](http://clojars.org/wit/duckling)
+[![Clojars Project](https://clojars.org/wit/duckling/latest-version.svg)](http://clojars.org/wit/duckling)
 
 Duckling is a Clojure library that parses text into structured data:
 
@@ -22,7 +22,7 @@ To use Duckling in your project, you just need two functions: `load!` to load th
 
 (p/load!) ;; Load all languages
 
-(p/parse :en$core ;; core configuration for English ; see also :fr$core, :es$core, :cn$core
+(p/parse :en$core ;; core configuration for English ; see also :fr$core, :es$core, :zh$core
          "wake me up the last Monday of January 2015 at 6am"
          [:time]) ;; We are interested in :time expressions only ; see also :duration, :temperature, etc.
 

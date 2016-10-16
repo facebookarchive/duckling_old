@@ -10,8 +10,13 @@
   [(dim :time #(not (:latent %))) #"(?i)de|," (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
 
+  ; same thing, with "mais/par exemple/plutôt/" in between like "mardi, mais à 14 heures"
+  "intersect by 'mais/par exemple/plutôt'"
+  [(dim :time #(not (:latent %))) #"(?i)mais|par exemple|plutôt" (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
+  (intersect %1 %3)
+
   "en <named-month>" ; en mars
-  [#"(?i)en" {:form :month}]
+  [#"(?i)en|au mois de?'?" {:form :month}]
   %2 ; does NOT dissoc latent
 
    ;;;;;;;;;;;;;;;;;;;
@@ -106,6 +111,14 @@
   #"(?i)(jour de l'|nouvel )an"
   (month-day 1 1)
 
+  "toussaint"
+  #"(?i)((la |la journée de la |jour de la )?toussaint|jour des morts)"
+  (month-day 11 1)
+
+  "1er mai"
+  #"(?i)f(e|ê)te du travail"
+  (month-day 5 1)
+
   "maintenant"
   #"maintenant|(tout de suite)"
   (cycle-nth :second 0)
@@ -119,7 +132,7 @@
   (cycle-nth :day 1)
 
   "hier"
-  #"(?i)hier"
+  #"(?i)hier|la veille"
   (cycle-nth :day -1)
 
   "après-demain"
@@ -153,7 +166,7 @@
   (pred-nth %1 1)
 
   "<named-month|named-day> suivant|d'après"
-  [(dim :time) #"(?i)suivant|d'apr[eéè]s"]
+  [(dim :time) #"(?i)suivante?s?|d'apr[eéè]s"]
   (pred-nth %1 1)
 
   "<named-month|named-day> dernier|passé"
@@ -175,6 +188,17 @@
   "dernier <cycle> de <time> (latent)" ;; TODO without a 'le', this is latent.
   [#"(?i)derni[eéè]re?" (dim :cycle) #"(?i)d['e]" (dim :time)]
   (cycle-last-of %2 %4)
+
+  "<ordinal> week-end de <time>"
+  [(dim :ordinal) #"week(\s|-)?end (d['eu]|en|du mois de)" {:form :month}]
+  (pred-nth (intersect %3 (interval
+              (intersect (day-of-week 5) (hour 18 false))
+              (intersect (day-of-week 1) (hour 0 false)) false) ) (dec (:value %1)))
+
+  "dernier week-end de <time>"
+  [#"(?i)dernier week(\s|-)?end (d['eu]|en|du mois de)" {:form :month}]
+  (pred-last-of (interval (intersect (day-of-week 5) (hour 18 false))
+                          (intersect (day-of-week 1) (hour 0 false)) false)  %2)
 
   ; Years
   ; Between 1000 and 2100 we assume it's a year
@@ -216,10 +240,15 @@
   [(integer 1 31) {:form :month}]
   (intersect %2 (day-of-month (:value %1)))
 
+  ;use only the integer part, which is usually a better fit for an human point of view
+  ; ie "jeudi 31" where the 31 is mercredi will give "mercredi 31" - which is better than jeudi 31 [year + 1])
   "<day-of-week> <day-of-month>" ; vendredi 13
   [{:form :day-of-week} (integer 1 31)]
-  (intersect %1 (day-of-month (:value %2)))
+  (day-of-month (:value %2))
 
+  "<day-of-week> <day-of-month> à <time-of-day>)"
+  [{:form :day-of-week} (integer 1 31) {:form :time-of-day}]
+  (intersect (day-of-month (:value %2)) %3)
 
   ; Hours and minutes (absolute time)
   ;
@@ -246,7 +275,7 @@
   (dissoc %1 :latent)
 
   "à|vers <time-of-day>" ; absorption
-  [#"(?i)[aà]|vers" {:form :time-of-day}]
+  [#"(?i)(vers|autour de|[aà] environ|aux alentours de|[aà])" {:form :time-of-day}]
   (dissoc %2 :latent)
 
   "hh(:|h)mm (time-of-day)"
@@ -333,6 +362,28 @@
   #"(?i)fin de matin[ée]e"
   (assoc (interval (hour 10 false) (hour 12 false) false) :form :part-of-day :latent true)
 
+  "au déjeuner"
+  #"(?i)(pendant( le)?|au)? d[eéè]jeuner"
+  (assoc (interval (hour 12 false) (hour 14 false) false) :form :part-of-day :latent true)
+
+  "après le déjeuner"
+  #"(?i)apr[eè]s (le )?d[eéè]jeuner"
+  (assoc (intersect (cycle-nth :day 0)
+                    (interval (hour 13 false) (hour 17 false) false))
+         :form :part-of-day) ; no :latent
+
+  "avant le déjeuner"
+  #"(?i)avant (le )?d[eéè]jeuner"
+  (assoc (intersect (cycle-nth :day 0)
+                    (interval (hour 10 false) (hour 12 false) false))
+         :form :part-of-day)
+
+   "après le travail"
+   #"(?i)apr[eè]s (le )?travail"
+   (assoc (intersect (cycle-nth :day 0)
+                     (interval (hour 17 false) (hour 21 false) false))
+          :form :part-of-day)
+
   "après-midi"
   #"(?i)apr[eéè]s?[ \-]?midi"
   (assoc (interval (hour 12 false) (hour 19 false) false) :form :part-of-day :latent true)
@@ -390,6 +441,22 @@
             (intersect (day-of-week 1) (hour 0 false))
             false)
 
+  "début de semaine"
+  [#"(?i)(en |au )?début de (cette |la )?semaine"]
+  (interval (day-of-week 1) (day-of-week 2) false)
+
+  "milieu de semaine"
+  [#"(?i)(en |au )?milieu de (cette |la )?semaine"]
+  (interval (day-of-week 3) (day-of-week 4) false)
+
+  "fin de semaine"
+  [#"(?i)(en |à la )?fin de (cette |la )?semaine"]
+    (interval (day-of-week 4) (day-of-week 7) false)
+
+  "en semaine"
+  [#"(?i)(pendant la |en )?semaine"]
+    (interval (day-of-week 1) (day-of-week 5) false)
+
   "season"
   #"(?i)(cet )?été" ;could be smarter and take the exact hour into account... also some years the day can change
   (interval (month-day 6 21) (month-day 9 23) false)
@@ -433,11 +500,47 @@
             (intersect %4 (day-of-month (Integer/parseInt (-> %3 :groups first))))
             true)
 
+  "<datetime>-dd <month>(interval)"
+  [{:dim :time} #"\-|au|jusqu'au" #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
+  (interval (intersect %4 %1)
+    (intersect %4 (day-of-month (Integer/parseInt (-> %3 :groups first))))
+    true)
+
+  "<datetime>-<day-of-week> dd <month>(interval)"
+  [{:dim :time} #"\-|au|jusqu'au" {:form :day-of-week} #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
+  (interval (intersect %5 %1)
+    (intersect %5 (day-of-month (Integer/parseInt (-> %4 :groups first))))
+    true)
+
+  "<day-of-week> 1er-<day-of-week> dd <month>(interval)"
+  [{:form :day-of-week} #"premier|prem\.?|1er|1 er" #"\-|au|jusqu'au" {:form :day-of-week} #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
+  (interval (intersect %6 (day-of-month 1))
+    (intersect %6 (day-of-month (Integer/parseInt (-> %5 :groups first))))
+    true)
+
+  "du dd-<day-of-week> dd <month>(interval)"
+  [#"du" #"(3[01]|[12]\d|0?[1-9])" #"\-|au|jusqu'au" {:form :day-of-week} #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
+  (interval (intersect %6 (day-of-month (Integer/parseInt (-> %2 :groups first))))
+    (intersect %6 (day-of-month (Integer/parseInt (-> %5 :groups first))))
+    true)
+
+  "du <datetime>-<day-of-week> dd <month>(interval)"
+  [#"du" {:dim :time} #"\-|au|jusqu'au" {:form :day-of-week} #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
+  (interval (intersect %6 %2)
+    (intersect %6 (day-of-month (Integer/parseInt (-> %5 :groups first))))
+    true)
+
   "entre dd et dd <month>(interval)"
   [#"entre( le)?" #"(3[01]|[12]\d|0?[1-9])" #"et( le)?" #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
   (interval (intersect %5 (day-of-month (Integer/parseInt (-> %2 :groups first))))
             (intersect %5 (day-of-month (Integer/parseInt (-> %4 :groups first))))
             true)
+
+  "du dd au dd(interval)"
+  [#"du" #"(3[01]|[12]\d|0?[1-9])" #"au|jusqu'au" #"(3[01]|[12]\d|0?[1-9])"]
+  (interval (day-of-month (Integer/parseInt (-> %2 :groups first)))
+    (day-of-month (Integer/parseInt (-> %4 :groups first)))
+    true)
 
   "fin <named-month>(interval)"
   [#"fin( du mois d[e']? ?)?" {:form :month}]
@@ -451,6 +554,17 @@
         (intersect %2 (day-of-month 5))
         true)
 
+  "première quinzaine de <named-month>(interval)"
+  [#"(premi[èe]re|1 ?[èe]re) (quinzaine|15 ?aine) d[e']" {:form :month}]
+  (interval (intersect %2 (day-of-month 1))
+        (intersect %2 (day-of-month 14))
+              true)
+
+  "deuxième quinzaine de <named-month>(interval)"
+  [#"(deuxi[èe]me|2 ?[èe]me) (quinzaine|15 ?aine) d[e']" {:form :month}]
+  (interval (intersect %2 (day-of-month 15))
+        (cycle-last-of {:dim :cycle :grain :day} %2)
+              true)
   "<named-month>"
   [#"(?i)mi[- ]" {:form :month}]
   (interval (intersect %2 (day-of-month 10))
@@ -464,7 +578,7 @@
   (interval %1 %3 true)
 
   "de <datetime> - <datetime> (interval)"
-  [#"(?i)de|depuis" (dim :time) #"\-|au|jusqu'(au|[aà])" (dim :time)]
+  [#"(?i)de|depuis|du" (dim :time) #"\-|au|jusqu'(au|[aà])" (dim :time)]
   (interval %2 %4 true)
 
   "entre <datetime> et <datetime> (interval)"
@@ -492,7 +606,7 @@
 
   ; Specific for within duration... Would need to be reworked to adapt the grain
   "d'ici <duration>"
-  [#"(?i)d'ici" (dim :duration)]
+  [#"(?i)d'ici|dans l('|es?)" (dim :duration)]
   (interval (cycle-nth :second 0) (in-duration (:value %2)) false)
 
   ; One-sided Intervals
