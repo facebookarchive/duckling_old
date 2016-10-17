@@ -439,6 +439,8 @@
   (datetime-interval [2013 2 11 18] [2013 2 12 00])
 
   "denne helgen"
+  "denne helga"
+  "i helga"
   "i helgen"
   (datetime-interval [2013 2 15 18] [2013 2 18 00])
 
