@@ -157,10 +157,12 @@
   "3rd quarter"
   "third qtr"
   "3rd qtr"
+  "the 3rd qtr"
   (datetime 2013 7 1 :grain :quarter)
 
   "4th quarter 2018"
   "4th qtr 2018"
+  "the 4th qtr of 2018"
   (datetime 2018 10 1 :grain :quarter)
 
   "last year"
