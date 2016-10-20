@@ -115,6 +115,10 @@
   [(dim :ordinal) (dim :cycle #(= :quarter (:grain %)))]
   (cycle-nth-after :quarter (dec (:value %1)) (cycle-nth :year 0))
 
+  "the <ordinal> quarter"
+  [#"(?i)the" (dim :ordinal) (dim :cycle #(= :quarter (:grain %)))]
+  (cycle-nth-after :quarter (dec (:value %2)) (cycle-nth :year 0))
+
   "<ordinal> quarter <year>"
   [(dim :ordinal) (dim :cycle #(= :quarter (:grain %))) (dim :time)]
   (cycle-nth-after :quarter (dec (:value %1)) %3)
