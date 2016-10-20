@@ -41,12 +41,12 @@
    :grain :month}
   
   "quarter (cycle)"
-  #"(?i)quarters?"
+  #"(?i)(quarter|qtr)s?"
   {:dim :cycle
    :grain :quarter}
   
   "year (cycle)"
-  #"(?i)years?"
+  #"(?i)y(ea)?rs?"
   {:dim :cycle
    :grain :year}
   

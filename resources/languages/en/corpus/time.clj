@@ -146,24 +146,33 @@
   (datetime 2013 3)
 
   "this quarter"
+  "this qtr"
   (datetime 2013 1 1 :grain :quarter)
 
   "next quarter"
+  "next qtr"
   (datetime 2013 4 1 :grain :quarter)
 
   "third quarter"
+  "3rd quarter"
+  "third qtr"
+  "3rd qtr"
   (datetime 2013 7 1 :grain :quarter)
 
   "4th quarter 2018"
+  "4th qtr 2018"
   (datetime 2018 10 1 :grain :quarter)
 
   "last year"
+  "last yr"
   (datetime 2012)
 
   "this year"
+  "this yr"
   (datetime 2013)
 
   "next year"
+  "next yr"
   (datetime 2014)
 
   "last sunday"
