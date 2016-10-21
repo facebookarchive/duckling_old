@@ -133,6 +133,8 @@
   (datetime 2013 2 11 :grain :week)
 
   "last week"
+  "past week"
+  "previous week"
   (datetime 2013 2 4 :grain :week)
 
   "next week"
