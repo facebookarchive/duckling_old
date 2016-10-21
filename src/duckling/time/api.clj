@@ -55,7 +55,9 @@
                                                    :unit unit})]
                     (merge value
                            add-fields
-                           {:normalized {:value (t/period->duration value)
+                           {:normalized {:value (try
+                                                  (t/period->duration value)
+                                                (catch ArithmeticException e (.getMessage e)))
                                          :unit "second"}}))
 
         (:temperature :distance :amount-of-money :number :volume)
