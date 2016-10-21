@@ -55,7 +55,7 @@
   (cycle-nth (:grain %2) 0)
 
   "last <cycle>"
-  [#"(?i)last|past" (dim :cycle)]
+  [#"(?i)last|past|previous" (dim :cycle)]
   (cycle-nth (:grain %2) -1)
 
   "next <cycle>"
