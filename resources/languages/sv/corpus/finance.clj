@@ -33,7 +33,7 @@
 
 "2 kronor och 23 öre"
 "två kronor 23 öre"
-"två kronor og 23 öre"
+"två kronor och 23 öre"
 (money 2.23 "SEK")
 
 "20€"
@@ -62,7 +62,7 @@
 (money 33 "INR")
 
 "£9"
-"ni pund"
+"nio pund"
 (money 9 "£")
 
 "GBP3,01"

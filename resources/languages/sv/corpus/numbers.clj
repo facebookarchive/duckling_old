@@ -29,7 +29,7 @@
   (number 16)
 
   "17"
-  "sjuton"
+  "sjutton"
   (number 17)
 
   "18"
