@@ -7,7 +7,7 @@
   {:dim :number :integer true :value 0}
 
   "integer 1"
-  #"(?i)(واحد|واحدة|واحده)"
+  #"(?i)(واحدة|واحده|واحد)"
   {:dim :number :integer true :value 1}
 
   "integer 2"
@@ -19,32 +19,53 @@
   {:dim :number :integer true :value 3}
   
   "integer 4"
-  #"(?i)(أربع|أربعة)"
+  #"(?i)(أربع)"
+  {:dim :number :integer true :value 4}
+  
+  "integer 4"
+  #"(?i)(أربعة)"
   {:dim :number :integer true :value 4}
   
   "integer 5"
-  #"(?i)(خمس|خمسة)"
+  #"(?i)(خمس)"
+  {:dim :number :integer true :value 5}
+  
+  "integer 5"
+  #"(?i)(خمسة)"
   {:dim :number :integer true :value 5}
   
   "integer 6"
-  #"(?i)(ست|ستة)"
+  #"(?i)(ستة)"
+  {:dim :number :integer true :value 6}
+  
+  "integer 6"
+  #"(?i)(ست)"
   {:dim :number :integer true :value 6}
   
   "integer 7"
-  #"(?i)(سبع|سبعة)"
+  #"(?i)(سبعة|سبع)"
   {:dim :number :integer true :value 7}
   
   "integer 8"
-  #"(?i)(ثمان|ثمانية)"
+  #"(?i)(ثمانية|ثمان)"
   {:dim :number :integer true :value 8}
   
   "integer 9"
-  #"(?i)(تسع|تسعة)"
+  #"(?i)(تسعة|تسع)"
   {:dim :number :integer true :value 9}
 
-   "integer 10"
+  "integer 10"
   #"(?i)(عشرة|عشر)"
   {:dim :number :integer true :value 10}
+  
+  
+  "integer 11"
+  #"(?i)(إحدى عشر|إحدى عشرة)"
+  {:dim :number :integer true :value 11}
+  
+  "integer 12"
+  #"(?i)([إثنى|إثنتى] [عشرة|عشر])"
+  {:dim :number :integer true :value 12}
 
   "integer (20..90)"
   #"(?i)(عشرون|ثلاثون|أربعون|خمسون|ستون|سبعون|ثمانون|تسعون)"
@@ -63,11 +84,11 @@
              (-> %1 :groups first clojure.string/lower-case))}
 
 
-  "integer (11..19)"
-  [(integer 1 9) (integer 10 10)]
+  "integer (13..19)"
+  [ (integer 3 9) (integer 10 10) ]
   {:dim :number
    :integer true
-   :value (+ 10 (:value %1))}
+   :value (+ (:value %1) 10)}
 
 
   "integer 21..99"
