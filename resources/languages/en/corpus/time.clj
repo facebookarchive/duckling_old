@@ -129,6 +129,7 @@
 ;   ;; Cycles
 
   "this week"
+  "current week"
   "coming week"
   (datetime 2013 2 11 :grain :week)
 
@@ -172,6 +173,7 @@
   (datetime 2012)
 
   "this year"
+  "current year"
   "this yr"
   (datetime 2013)
 
@@ -458,6 +460,7 @@
   ; Seasons
 
   "this summer"
+  "current summer"
   (datetime-interval [2013 6 21] [2013 9 24])
 
   "this winter"

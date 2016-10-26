@@ -51,7 +51,7 @@
    :grain :year}
   
   "this <cycle>"
-  [#"(?i)this|coming" (dim :cycle)]
+  [#"(?i)this|current|coming" (dim :cycle)]
   (cycle-nth (:grain %2) 0)
 
   "last <cycle>"
