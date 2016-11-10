@@ -158,7 +158,7 @@
   "i fjol"
   (datetime 2012)
 
-  "iår"
+  "i år"
   "detta år"
   (datetime 2013)
 
@@ -642,9 +642,9 @@
   "nästa måndag"
   (datetime 2013 2 18 :day-of-week 1)
 
-  "morsdag"
+  "mors dag"
   (datetime 2013 5 26)
 
-  "farsdag"
+  "fars dag"
   (datetime 2013 11 10)
 )
