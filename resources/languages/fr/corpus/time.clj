@@ -771,4 +771,13 @@
   "au mois de mars"
   "le mois de mars"
   (datetime 2013 3)
+
+  "dans une demi heure"
+  (datetime 2013 2 12 5 0 0)
+
+  "dans un quart d'heure"
+  (datetime 2013 2 12 4 45 0)
+
+  "dans trois quarts d'heure"
+  (datetime 2013 2 12 5 15 0)
 )
