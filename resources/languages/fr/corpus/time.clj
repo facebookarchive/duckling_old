@@ -772,12 +772,22 @@
   "le mois de mars"
   (datetime 2013 3)
 
-  "dans une demi heure"
-  (datetime 2013 2 12 5 0 0)
-
   "dans un quart d'heure"
+  "environ un quart d'heure"
+  "dans 1/4h"
+  "dans 1/4 h"
+  "dans 1/4 heure"
   (datetime 2013 2 12 4 45 0)
 
+  "dans une demi heure"
+  "dans 1/2h"
+  "dans 1/2 h"
+  "dans 1/2 heure"
+  (datetime 2013 2 12 5 0 0)
+
   "dans trois quarts d'heure"
+  "dans 3/4h"
+  "dans 3/4 h"
+  "dans 3/4 heure"
   (datetime 2013 2 12 5 15 0)
 )

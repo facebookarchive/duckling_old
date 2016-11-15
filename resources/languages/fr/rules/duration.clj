@@ -37,17 +37,17 @@
    :grain :year}
 
    "un quart heure"
-  [#"(?i)(un|1) quart d'heure"]
+  [#"(?i)(1/4\s?h(eure)?|(un|1) quart d'heure)"]
   {:dim :duration
    :value (duration :minute 15)}
 
    "une demi heure"
-  [#"(?i)(1|une) demi(e)?(\s|-)heure"]
+  [#"(?i)(1/2\s?h(eure)?|(1|une) demi(e)?(\s|-)heure)"]
   {:dim :duration
    :value (duration :minute 30)}
 
    "trois quarts d'heure"
-  [#"(?i)(3|trois) quart(s)? d'heure"]
+  [#"(?i)(3/4\s?h(eure)?|(3|trois) quart(s)? d'heure)"]
   {:dim :duration
    :value (duration :minute 45)}
 
@@ -63,6 +63,10 @@
 
   "dans <duration>"
   [#"(?i)dans" (dim :duration)]
+  (in-duration (:value %2))
+
+  "environ <duration>"
+  [#"(?i)environ" (dim :duration)]
   (in-duration (:value %2))
 
   "il y a <duration>"
