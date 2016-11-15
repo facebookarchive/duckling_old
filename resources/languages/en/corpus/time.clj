@@ -352,8 +352,23 @@
   "in 60 minutes"
   (datetime 2013 2 12 5 30 0)
 
+  "about a quarter of an hour"
+  "about 1/4h"
+  "about 1/4 h"
+  "about 1/4 hour"
+  (datetime 2013 2 12 4 45 0)
+
   "in half an hour"
+  "in 1/2h"
+  "in 1/2 h"
+  "in 1/2 hour"
   (datetime 2013 2 12 5 0 0)
+
+  "for three-quarters of an hour"
+  "for 3/4h"
+  "for 3/4 h"
+  "for 3/4 hour"
+  (datetime 2013 2 12 5 15 0)
 
   "in 2.5 hours"
   "in 2 and an half hours"
