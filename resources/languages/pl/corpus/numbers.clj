@@ -100,4 +100,7 @@
   "4ty"
   "czwarty"
   (ordinal 4)
+
+  "piętnasta"
+  (number 15)
 )
