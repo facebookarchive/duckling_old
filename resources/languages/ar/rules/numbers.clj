@@ -60,11 +60,19 @@
   
   
   "integer 11"
-  #"(?i)(إحدى عشر|إحدى عشرة)"
+  #"(?i)(إحدى عشرة)"
+  {:dim :number :integer true :value 11}
+  
+  "integer 11"
+  #"(?i)(إحدى عشر)"
   {:dim :number :integer true :value 11}
   
   "integer 12"
-  #"(?i)([إثنى|إثنتى] [عشرة|عشر])"
+  #"(?i)(إثنتى عشر)"
+  {:dim :number :integer true :value 12}
+  
+  "integer 12"
+  #"(?i)(إثنى عشر)"
   {:dim :number :integer true :value 12}
 
   "integer (20..90)"
