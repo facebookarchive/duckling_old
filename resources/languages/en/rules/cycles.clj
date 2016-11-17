@@ -41,21 +41,21 @@
    :grain :month}
   
   "quarter (cycle)"
-  #"(?i)quarters?"
+  #"(?i)(quarter|qtr)s?"
   {:dim :cycle
    :grain :quarter}
   
   "year (cycle)"
-  #"(?i)years?"
+  #"(?i)y(ea)?rs?"
   {:dim :cycle
    :grain :year}
   
   "this <cycle>"
-  [#"(?i)this|coming" (dim :cycle)]
+  [#"(?i)this|current|coming" (dim :cycle)]
   (cycle-nth (:grain %2) 0)
 
   "last <cycle>"
-  [#"(?i)last|past" (dim :cycle)]
+  [#"(?i)last|past|previous" (dim :cycle)]
   (cycle-nth (:grain %2) -1)
 
   "next <cycle>"
@@ -114,6 +114,10 @@
   "<ordinal> quarter"
   [(dim :ordinal) (dim :cycle #(= :quarter (:grain %)))]
   (cycle-nth-after :quarter (dec (:value %1)) (cycle-nth :year 0))
+
+  "the <ordinal> quarter"
+  [#"(?i)the" (dim :ordinal) (dim :cycle #(= :quarter (:grain %)))]
+  (cycle-nth-after :quarter (dec (:value %2)) (cycle-nth :year 0))
 
   "<ordinal> quarter <year>"
   [(dim :ordinal) (dim :cycle #(= :quarter (:grain %))) (dim :time)]

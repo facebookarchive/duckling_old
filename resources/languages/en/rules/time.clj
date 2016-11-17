@@ -220,7 +220,7 @@
   ;; "this month" => now is part of it
   ; See also: cycles in en.cycles.clj
   "this <time>"
-  [#"(?i)this|coming" (dim :time)]
+  [#"(?i)this|current|coming" (dim :time)]
   (pred-nth %2 0)
 
   "next <time>"

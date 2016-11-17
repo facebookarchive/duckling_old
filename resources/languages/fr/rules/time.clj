@@ -135,6 +135,12 @@
   #"(?i)hier|la veille"
   (cycle-nth :day -1)
 
+  "fin du mois"
+  #"(?i)(([aà] )?la )?fin (du|de) mois"
+  (assoc (interval (cycle-nth-after :day -10 (cycle-nth :month 1))
+                   (cycle-nth :month 1) false)
+          :form :part-of-day :latent true)
+
   "après-demain"
   #"(?i)apr(e|è)s[- ]?demain"
   (cycle-nth :day 2)
@@ -358,12 +364,16 @@
   #"(?i)d[ée]but de matin[ée]e"
   (assoc (interval (hour 7 false) (hour 9 false) false) :form :part-of-day :latent true)
 
+  "milieu de matinée"
+  #"(?i)milieu de matin[ée]e"
+  (assoc (interval (hour 9 false) (hour 11 false) false) :form :part-of-day :latent true)
+
   "fin de matinée"
   #"(?i)fin de matin[ée]e"
   (assoc (interval (hour 10 false) (hour 12 false) false) :form :part-of-day :latent true)
 
   "au déjeuner"
-  #"(?i)(pendant( le)?|au)? d[eéè]jeuner"
+  #"(?i)([àa] l(')?heure du|pendant( le)?|au)? d[eéè]jeuner"
   (assoc (interval (hour 12 false) (hour 14 false) false) :form :part-of-day :latent true)
 
   "après le déjeuner"
@@ -392,6 +402,10 @@
   #"(?i)d[ée]but d'apr[eéè]s?[ \-]?midi"
   (assoc (interval (hour 12 false) (hour 14 false) false) :form :part-of-day :latent true)
 
+  "milieu d'après-midi"
+  #"(?i)milieu d'apr[eéè]s?[ \-]?midi"
+  (assoc (interval (hour 15 false) (hour 17 false) false) :form :part-of-day :latent true)
+
   "fin d'après-midi"
   #"(?i)fin d'apr[eéè]s?[ \-]?midi"
   (assoc (interval (hour 17 false) (hour 19 false) false) :form :part-of-day :latent true)
@@ -399,6 +413,10 @@
   "début de journée"
   #"(?i)d[ée]but de journ[ée]e"
   (assoc (interval (hour 6 false) (hour 10 false) false) :form :part-of-day :latent true)
+
+  "milieu de journée"
+  #"(?i)milieu de journ[ée]e"
+  (assoc (interval (hour 11 false) (hour 16 false) false) :form :part-of-day :latent true)
 
   "fin de journée"
   #"(?i)fin de journ[ée]e"
