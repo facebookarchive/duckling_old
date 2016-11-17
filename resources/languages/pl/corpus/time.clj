@@ -360,23 +360,23 @@
  "szósta popoludniu"
  "o szostej popoludniu"
  "o 18stej"
- "osiemnasta"
- "osiemnastej"
+ "osiemnasta godzina"
+ "o osiemnastej"
  (datetime 2013 2 12 18 :hour 6 :meridiem :pm)
 
  "7 po południu"
  "7 popołudniu"
  "siódma popoludniu"
  "o siodmej popoludniu"
- "dziewiętnastej"
- "dziewietnasta"
+ "o dziewiętnastej"
+ "dziewietnasta godzina"
  (datetime 2013 2 12 19 :hour 7 :meridiem :pm)
 
  "8 wieczorem"
  "8 popołudniu"
  "osma w nocy"
  "ósma wieczorem"
- "dwudziesta"
+ "dwudziesta godzina"
  (datetime 2013 2 12 20 :hour 8 :meridiem :pm)
 
  "dziewiata wieczorem"
@@ -392,8 +392,8 @@
  "9 nocą"
  "9 w nocy"
  "o dziewiatej w nocy"
- "dwudziesta pierwsza"
- "dwudziestapierwsza"
+ "dwudziesta pierwsza godzina"
+ "dwudziestapierwsza godzina"
  (datetime 2013 2 12 21 :hour 9 :meridiem :pm)
 
  "dziesiąta wieczorem"
@@ -403,7 +403,7 @@
  "dziesiata nocą"
  "10 w nocy"
  "o dziesiatej w nocy"
- "dwudziestej drugiej"
+ "o dwudziestej drugiej"
  (datetime 2013 2 12 22 :hour 10 :meridiem :pm)
 
  "jedenasta wieczorem"
@@ -411,7 +411,7 @@
  "11 w nocy"
  "11 wieczorem"
  "o jedenastej wieczorem"
- "dwudziestejtrzeciej"
+ "o dwudziestejtrzeciej"
  (datetime 2013 2 12 23 :hour 11 :meridiem :pm)
 
  "jutro o drugiej"
@@ -437,9 +437,10 @@
  (datetime 2013 2 13 17 :hour 5 :meridiem :pm) ;; :precision "exact"
 
  ;;   "at 15 past 3pm"
- "o 15 po trzeciej"
+ "piętnaście po trzeciej"
  "15 po trzeciej"
  "kwadrans po 3"
+ "trzecia piętnaście"
  ;;   "3:15 in the afternon"
  "15:15"
  ;; "3:15pm"
@@ -447,14 +448,14 @@
  ;; "3:15p"
  (datetime 2013 2 12 15 15 :hour 3 :minute 15 :meridiem :pm)
 
- "o 20 po 3 popoludniu"
  "20 po 3"
- "3:20 popoludniu"
+ "3:20"
  "3:20 w poludnie"
+ "trzecia dwadzieścia"
  (datetime 2013 2 12 15 20 :hour 3 :minute 20 :meridiem :pm)
 
  ;;   "at half past three pm"
- "pol po 3 popoludniu"
+ "w pół do szesnastej"
  "pol po trzeciej"
  "15:30"
  ;;   "3:30pm"
@@ -502,8 +503,8 @@
  "sekunde od teraz"
  (datetime 2013 2 12 4 30 1)
 
- "w minute"
- "w ciagu minuty"
+ "za minutę"
+ "za jedną minutę"
  "przez minutę"
  (datetime 2013 2 12 4 31 0)
 
@@ -529,14 +530,12 @@
 
 
  "w kilka godzin"
- "w ciągu kilku godzin"
  (datetime 2013 2 12 7 30)
 
  "w 24 godziny"
- "w ciągu 24 godzin"
  (datetime 2013 2 13 4 30)
 
- "w ciągu dnia"
+ "w jeden dzień"
  "dzień od dziś"
  (datetime 2013 2 13 4)
 
@@ -548,8 +547,8 @@
  "w 7 dni"
  (datetime 2013 2 19 4)
 
- "w ciągu 1 tygodnia"
- "w ciągu tygodnia"
+ "w jeden tydzień"
+ "w tydzień"
  (datetime 2013 2 19)
 
  "za około pół godziny" ;; FIXME precision is lost
@@ -598,14 +597,10 @@
   "dwa lata później"
   (datetime 2015 2)
 
-  "rok po bożym narodzeniu"
-  (datetime 2013 12) ; resolves as after last Xmas...
-
-
 ;;   ; Seasons
 
   "to lato"
-  "tego lata"
+  "w to lato"
   (datetime-interval [2013 6 21] [2013 9 24])
 
   "ta zima"
@@ -791,8 +786,8 @@
  "w ciągu dwóch tygodni"
  (datetime-interval [2013 2 12 4 30 0] [2013 2 26])
 
- "do drugiej popołudniu"
- "aż do 2giej"
+ "przed drugą po południu"
+ "przed drugą"
  (datetime 2013 2 12 14 :direction :before)
 
  ;;   "by 2:00pm"
@@ -827,15 +822,14 @@
  "3 popoludniu jutro"
  (datetime 2013 2 13 15)
 
- "po drugiej popoludniu"
+ "po drugiej po poludniu"
  (datetime 2013 2 12 14 :direction :after)
 
  "po pięciu dniach"
  (datetime 2013 2 17 4 :direction :after)
 
- "jutro po 2 popoludniu"
- ;; "tomorrow after 2pm" ;; FIXME this is actually not ambiguous it's 2pm - midnight.
- (datetime 2013 2 13 14 :direction :after)
+ "po drugiej po południu"
+ (datetime 2013 2 12 14 :direction :after)
 
  "przed 11 rano"
  (datetime 2013 2 12 11 :direction :before)
@@ -850,8 +844,8 @@
 ;;   "1:30pm"
 ;;   (datetime 2013 2 12 13 30)
 
- "w ciagu 15 minut"
- "w ciagu piętnastu minut"
+ "w 15 minut"
+ "w piętnaście minut"
  (datetime 2013 2 12 4 45 0)
 
 ;;   "after lunch"

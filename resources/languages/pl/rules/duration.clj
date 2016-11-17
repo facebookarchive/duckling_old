@@ -30,12 +30,12 @@
   #"(?i)miesi(a|ą)c(owi|em|u|e|om|ami|ach|a)?"
   {:dim :unit-of-duration
    :grain :month}
-  
+
   "year (unit-of-duration)"
   #"(?i)rok(u|owi|iem)?|lat(ami|ach|a|om)?"
   {:dim :unit-of-duration
    :grain :year}
-  
+
    "half an hour"
   [#"(?i)p(o|ó)(l|ł) godziny"]
   {:dim :duration
@@ -45,7 +45,7 @@
   [(integer 0) (dim :unit-of-duration)]; duration can't be negative...
   {:dim :duration
    :value (duration (:grain %2) (:value %1))}
-    
+
   "<integer> more <unit-of-duration>"
   [(integer 0) #"(?i)more|less" (dim :unit-of-duration)]; would need to add fields at some point
   {:dim :duration
@@ -67,9 +67,9 @@
  (dim :unit-of-duration)
  {:dim :duration
   :value (duration (:grain %1) 1)}
- 
+
  "in <duration>"
- [#"(?i)(w( ?(prze)?ci(a|ą)gu)?|za) ?(jeszcze)?|przez" (dim :duration)]
+ [#"(?i)(w( ?(prze)?ciągu)?|za) ?(jeszcze)?|przez" (dim :duration)]
  (in-duration (:value %2))
 
  "after <duration>"
@@ -83,11 +83,11 @@
   "<duration> ago"
   [(dim :duration) #"(?i)temu"]
   (duration-ago (:value %1))
-  
+
   "<duration> hence"
   [(dim :duration) #"(?i)p(o|ó)(z|ź)niej|potem"]
   (in-duration (:value %1))
-  
+
   "<duration> after <time>"
   [(dim :duration) #"(?i)po" (dim :time)]
   (duration-after (:value %1) %3)
@@ -100,10 +100,10 @@
   [#"(?i)(oko(l|ł)o|miej wi(ę|e)cej|jakie(s|ś))" (dim :duration)]
   (-> %2
     (merge {:precision "approximate"}))
- 
+
  "exactly <duration>" ; sharp
  [#"(?i)r(o|ó)wno|dok(l|ł)adnie" (dim :duration)]
  (-> %2
      (merge {:precision "exact"}))
- 
+
  )
