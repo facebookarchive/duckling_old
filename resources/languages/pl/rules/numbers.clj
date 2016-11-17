@@ -164,10 +164,6 @@
  #"(?i)trzydzieści|trzydziest(u|oma)"
  {:dim :number :integer true :value 30 :grain 1}
 
- "thirty"
- #"(?i)trzydzieści|trzydziest(u|oma)"
- {:dim :number :integer true :value 30 :grain 1}
-
  "fou?rty"
  #"(?i)czterdzieści|czterdziest(u|oma)"
  {:dim :number :integer true :value 40 :grain 1}

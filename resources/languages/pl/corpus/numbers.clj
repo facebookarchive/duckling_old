@@ -22,6 +22,10 @@
   "0033"
   (number 33)
 
+  "31"
+  "trzydzieści jeden"
+  (number 31)
+
   "14"
   "czternaście"
   (number 14)
