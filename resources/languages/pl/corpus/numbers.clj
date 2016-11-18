@@ -22,10 +22,6 @@
   "0033"
   (number 33)
 
-  "31"
-  "trzydzieści jeden"
-  (number 31)
-
   "14"
   "czternaście"
   (number 14)
@@ -104,4 +100,7 @@
   "4ty"
   "czwarty"
   (ordinal 4)
+
+  "piętnasta"
+  (number 15)
 )
