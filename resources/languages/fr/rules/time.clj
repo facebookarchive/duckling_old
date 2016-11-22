@@ -361,8 +361,8 @@
   (assoc (interval (hour 4 false) (hour 12 false) false) :form :part-of-day :latent true)
 
   "début de matinée"
-  #"(?i)d[ée]but de matin[ée]e"
-  (assoc (interval (hour 7 false) (hour 9 false) false) :form :part-of-day :latent true)
+  #"(?i)(le matin (tr[eè]s )?t[ôo]t|(tr[eè]s )?t[ôo]t le matin|d[ée]but de matin[ée]e)"
+  (assoc (interval (hour 4 false) (hour 9 false) false) :form :part-of-day :latent true)
 
   "milieu de matinée"
   #"(?i)milieu de matin[ée]e"
