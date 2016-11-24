@@ -163,6 +163,70 @@
   #"(?i)festa della mamma"
   (intersect (day-of-week 7) (month 5) (cycle-nth-after :week 1 (month-day 5 1)))
 
+  "christmas"
+  #"(?i)((il )?giorno di )?natale"
+  (month-day 12 25)
+
+  "christmas eve"
+  #"(?i)(la )?vigilia di natale"
+  (month-day 12 24)
+
+  "new year's eve"
+  #"(?i)((la )?vigilia di capodanno|san silvestro)"
+  (month-day 12 31)
+
+  "new year's day"
+  #"(?i)(capodanno|primo dell' ?anno)"
+  (month-day 1 1)
+
+  "epifania"
+  #"(?i)(epifania|befana)"
+  (month-day 1 6)
+
+  "valentine's day"
+  #"(?i)san valentino"
+  (month-day 2 14)
+
+  "festa del papà"
+  #"(?i)festa del pap[aà]|(festa di )?san giuseppe"
+  (month-day 3 19)
+
+  "festa della liberazione"
+  #"(?i)((festa|anniversario) della|la) liberazione"
+  (month-day 4 25)
+
+  "festa del lavoro"
+  #"(?i)festa del lavoro|(festa|giorno) dei lavoratori"
+  (month-day 5 1)
+
+  "festa della repubblica"
+  #"(?i)festa della repubblica"
+  (month-day 6 2)
+
+  "ferragosto"
+  #"(?i)ferragosto|assunzione"
+  (month-day 8 15)
+
+  "halloween day"
+  #"(?i)hall?owe?en"
+  (month-day 10 31)
+
+  "ognissanti"
+  #"(?i)(tutti i |ognis)santi"
+  (month-day 11 1)
+
+  "commemorazione dei defunti"
+  #"(?i)(giorno dei|commemorazione dei) (morti|defunti)"
+  (month-day 11 2)
+
+  "santo stefano"
+  #"(?i)santo stefano"
+  (month-day 12 26)
+
+  "Mother's Day";second Sunday in May.
+  #"(?i)festa della mamma"
+  (intersect (day-of-week 7) (month 5) (cycle-nth-after :week 1 (month-day 5 1)))
+
 
   "right now"
   #"(subito|immediatamente|proprio adesso|in questo momento)"
