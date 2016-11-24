@@ -93,18 +93,18 @@
   (month 12)
 
   ; Holiday TODO: check online holidays
-  ; or define dynamtc rule (last thursday of october..)
+  ; or define dynamyc rule (last thursday of october..)
 
   "christmas"
   #"(?i)((il )?giorno di )?natale"
   (month-day 12 25)
 
   "christmas eve"
-  #"(?i)(la )?vigilia di natale"
+  #"(?i)((al)?la )?vigig?lia( di natale)?"
   (month-day 12 24)
 
   "new year's eve"
-  #"(?i)((la )?vigilia di capodanno|san silvestro)"
+  #"(?i)((la )?vigig?lia di capodanno|san silvestro)"
   (month-day 12 31)
 
   "new year's day"
@@ -116,7 +116,7 @@
   (month-day 1 6)
 
   "valentine's day"
-  #"(?i)san valentino"
+  #"(?i)san valentino|festa degli innamorati"
   (month-day 2 14)
 
   "festa del papà"
@@ -124,7 +124,7 @@
   (month-day 3 19)
 
   "festa della liberazione"
-  #"(?i)((festa|anniversario) della|la) liberazione"
+  #"(?i)((festa|anniversario) della|(al)?la) liberazione"
   (month-day 4 25)
 
   "festa del lavoro"
@@ -132,7 +132,7 @@
   (month-day 5 1)
 
   "festa della repubblica"
-  #"(?i)festa della repubblica"
+  #"(?i)((festa del)?la )?repubblica"
   (month-day 6 2)
 
   "ferragosto"
@@ -144,12 +144,16 @@
   (month-day 10 31)
 
   "ognissanti"
-  #"(?i)(tutti i |ognis)santi"
+  #"(?i)(tutti i |ognis|festa dei |([ia]l )?giorno dei )santi"
   (month-day 11 1)
 
   "commemorazione dei defunti"
-  #"(?i)(giorno dei|commemorazione dei) (morti|defunti)"
+  #"(?i)((giorno dei|commemorazione dei|ai) )?(morti|defunti)"
   (month-day 11 2)
+
+  "immacolata concezione"
+  #"(?i)(all')?immacolata( concezione)?"
+  (month-day 12 8)
 
   "santo stefano"
   #"(?i)santo stefano"
@@ -218,7 +222,7 @@
   (pred-nth %1 1)
 
   "prossimi <unit-of-duration>"
-  [#"(?i)(i|le) prossim[ie]" (dim :unit-of-duration)]
+  [#"(?i)((ne)?i|(nel)?le) prossim[ie]" (dim :unit-of-duration)]
   (interval (cycle-nth (:grain %2) 1) (cycle-nth (:grain %2) 3) true)
 
   "<time> last"
@@ -605,7 +609,18 @@
   (merge %2 {:direction :before})
 
   "dopo le <time-of-day>"
-  [#"(?i)dopo( l[e'])?|dall['e]" (dim :time)]
+  [#"(?i)dopo l[e']|da(l(l['e])?)?" (dim :time)]
   (merge %2 {:direction :after})
 
+  "<time> dopo le <time-of-day>"
+  [(dim :time) #"(?i)dopo l[e']|dall['e]" {:form :time-of-day}]
+  (merge (intersect %1 %3) {:direction :after})
+
+  "<time> dopo le <time-of-day>"
+  [(dim :time) #"(?i)dopo l[e']|dall['e]" {:form :time-of-day}]
+  (merge (intersect %1 %3) {:direction :after})
+
+  "<time> entro le <time-of-day>"
+  [(dim :time) #"(?i)entro( l[e'])?|prima d(i|ell['e])" (dim :time)]
+  (merge (intersect %1 %3) {:direction :before})
 )

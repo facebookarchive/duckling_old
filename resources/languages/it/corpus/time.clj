@@ -324,6 +324,8 @@
   (datetime 2013 12 25)
 
   "vigilia di natale"
+  "alla vigilia"
+  "la vigilia"
   (datetime 2013 12 24)
 
   "vigilia di capodanno"
@@ -342,6 +344,7 @@
   (datetime 2014 1 6)
 
   "san valentino"
+  "festa degli innamorati"
   (datetime 2013 2 14)
 
   "festa del papà"
@@ -352,6 +355,7 @@
 
   "anniversario della liberazione"
   "la liberazione"
+  "alla liberazione"
   (datetime 2013 4 25)
 
   "festa del lavoro"
@@ -364,6 +368,8 @@
   (datetime 2013 5 12)
 
   "festa della repubblica"
+  "la repubblica"
+  "repubblica"
   (datetime 2013 6 2)
 
   "ferragosto"
@@ -375,11 +381,23 @@
 
   "tutti i santi"
   "ognissanti"
+  "festa dei santi"
+  "il giorno dei santi"
   (datetime 2013 11 1)
 
   "giorno dei morti"
   "commemorazione dei defunti"
   (datetime 2013 11 2)
+
+  "ai morti alle 2"
+  (datetime 2013 11 2 2)
+
+  "immacolata"
+  "immacolata concezione"
+  (datetime 2013 12 8)
+
+  "all'immacolata alle 18"
+  (datetime 2013 12 8 18)
 
   "santo stefano"
   (datetime 2013 12 26)
@@ -492,6 +510,7 @@
   (datetime-interval [2013 2 13] [2013 2 16])
 
   "i prossimi giorni"
+  "nei prossimi giorni"
   (datetime-interval [2013 2 13] [2013 2 16])
 
   "le ultime 2 settimane"
@@ -633,10 +652,25 @@
   (datetime 2013 2 13 15)
 
   "dopo le 14"
+  "dalle 14"
   (datetime 2013 2 12 14 :direction :after)
+
+  "domani dopo le 14"
+  "domani dalle 14"
+  (datetime 2013 2 13 14 :direction :after)
 
   "prima delle 11"
   (datetime 2013 2 12 11 :direction :before)
+
+  "dopodomani prima delle 11"
+  (datetime 2013 2 14 11 :direction :before)
+
+  "giovedì entro mezzogiorno"
+  (datetime 2013 2 14 12 :direction :before)
+
+  "da dopodomani"
+  "da giovedì"
+  (datetime 2013 2 14 :direction :after)
 
   "nel pomeriggio"
   (datetime-interval [2013 2 12 12] [2013 2 12 19])
