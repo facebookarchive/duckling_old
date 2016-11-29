@@ -423,7 +423,7 @@
   (parse-dmy (first (:groups %1)) (second (:groups %1)) (nth (:groups %1) 2) true)
 
   "yyyy-mm-dd"
-  #"(\d{2,4})-(0?[1-9]|10|11|12)-([012]?[1-9]|30|31)"
+  #"(\d{2,4})-(0?[1-9]|10|11|12)-([012]?[1-9]|10|20|30|31)"
   (parse-dmy (nth (:groups %1) 2) (second (:groups %1)) (first (:groups %1)) true)
 
   "mm/dd"
