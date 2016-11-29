@@ -2,59 +2,48 @@
 
 (
   "second (unit-of-duration)"
-  #"(?i)sec(ond)?s?"
+  #"(?i)sek(und(er(na)?)?)?"
   {:dim :unit-of-duration
    :grain :second}
 
   "minute (unit-of-duration)"
-  #"(?i)min(ute)?s?"
+  #"(?i)min(ut(er(na)?)?)?"
   {:dim :unit-of-duration
    :grain :minute}
 
   "hour (unit-of-duration)"
-  #"(?i)h(((ou)?rs?)|r)?"
+  #"(?i)t(imm(e(n)?|ar(na)?)?)?"
   {:dim :unit-of-duration
    :grain :hour}
 
   "day (unit-of-duration)"
-  #"(?i)days?"
+  #"(?i)dag(ar(na)?)?"
   {:dim :unit-of-duration
    :grain :day}
 
   "week (unit-of-duration)"
-  #"(?i)weeks?"
+  #"(?i)veck(a(n)?|or(na)?)?"
   {:dim :unit-of-duration
    :grain :week}
 
   "month (unit-of-duration)"
-  #"(?i)months?"
+  #"(?i)månad(er(na)?)?"
   {:dim :unit-of-duration
    :grain :month}
 
   "year (unit-of-duration)"
-  #"(?i)years?"
+  #"(?i)år"
   {:dim :unit-of-duration
    :grain :year}
 
-   "quarter of an hour"
-  [#"(?i)(1/4\s?h(our)?|(a\s)?quarter of an hour)"]
-  {:dim :duration
-   :value (duration :minute 15)}
-
    "half an hour"
-  [#"(?i)(1/2\s?h(our)?|half an? hour)"]
+  [#"(?i)(1/2|en halv) timme"]
   {:dim :duration
    :value (duration :minute 30)}
 
-   "three-quarters of an hour"
-  [#"(?i)(3/4\s?h(our)?|three(\s|-)quarters of an hour)"]
-  {:dim :duration
-   :value (duration :minute 45)}
-
-  "fortnight" ;14 days
-  #"(?i)(a|one)? fortnight"
-  {:dim :duration
-   :value (duration :day 14)}
+  "a <duration>"
+  [#"(?i)(om )?en|ett" (dim :duration)]
+  (in-duration (:value %2))
 
   "<integer> <unit-of-duration>"
   [(integer 0) (dim :unit-of-duration)]; duration can't be negative...
@@ -62,70 +51,58 @@
    :value (duration (:grain %2) (:value %1))}
 
   "<integer> more <unit-of-duration>"
-  [(integer 0) #"(?i)more|less" (dim :unit-of-duration)]; would need to add fields at some point
+  [(integer 0) (dim :unit-of-duration) #"(?i)fler|mer"]; would need to add fields at some point
   {:dim :duration
-   :value (duration (:grain %3) (:value %1))}
+   :value (duration (:grain %2) (:value %1))}
 
   ; TODO handle cases where ASR outputs "1. 5 hours"
   ; but allowing a space creates many false positive
   "number.number hours" ; in 1.5 hour but also 1.75
-  [#"(\d+)\.(\d+)" #"(?i)hours?"] ;duration can't be negative...
+  [#"(\d+)\,(\d+)" #"(?i)timm(e|ar)?"] ;duration can't be negative...
   {:dim :duration
    :value (duration :minute (int (+ (quot (* 6 (Long/parseLong (second (:groups %1)))) (java.lang.Math/pow 10 (- (count (second (:groups %1))) 1))) (* 60 (Long/parseLong (first (:groups %1)))))))}
 
   "<integer> and an half hours"
-  [(integer 0) #"(?i)and (an? )?half hours?"] ;duration can't be negative...
+  [(integer 0) #"(?i)och (en )?halv timme?"] ;duration can't be negative...
   {:dim :duration
    :value (duration :minute (+ 30 (* 60 (:value %1))))}
 
   "a <unit-of-duration>"
-  [#"(?i)an?" (dim :unit-of-duration)]
+  [#"(?i)en|ett?" (dim :unit-of-duration)]
   {:dim :duration
    :value (duration (:grain %2) 1)}
 
   "in <duration>"
-  [#"(?i)in" (dim :duration)]
-  (in-duration (:value %2))
-
-  "about <duration>"
-  [#"(?i)about" (dim :duration)]
-  (in-duration (:value %2))
-
-  "for <duration>"
-  [#"(?i)for" (dim :duration)]
+  [#"(?i)om" (dim :duration)]
   (in-duration (:value %2))
 
   "after <duration>"
-  [#"(?i)after" (dim :duration)]
+  [#"(?i)efter" (dim :duration)]
   (merge (in-duration (:value %2)) {:direction :after})
 
   "<duration> from now"
-  [(dim :duration) #"(?i)from (today|now)"]
+  [(dim :duration) #"(?i)från (idag|nu)"]
   (in-duration (:value %1))
 
   "<duration> ago"
-  [(dim :duration) #"(?i)ago"]
+  [(dim :duration) #"(?i)sedan"]
   (duration-ago (:value %1))
 
-  "<duration> hence"
-  [(dim :duration) #"(?i)hence"]
-  (in-duration (:value %1))
-
   "<duration> after <time>"
-  [(dim :duration) #"(?i)after" (dim :time)]
+  [(dim :duration) #"(?i)efter" (dim :time)]
   (duration-after (:value %1) %3)
 
   "<duration> before <time>"
-  [(dim :duration) #"(?i)before" (dim :time)]
+  [(dim :duration) #"(?i)före" (dim :time)]
   (duration-before (:value %1) %3)
 
   "about <duration>" ; about
-  [#"(?i)(about|around|approximately)" (dim :duration)]
+  [#"(?i)(omkring|cirka|ca.|ca|runt)" (dim :duration)]
   (-> %2
     (merge {:precision "approximate"}))
 
   "exactly <duration>" ; sharp
-  [#"(?i)exactly" (dim :duration)]
+  [#"(?i)(precis|exakt)" (dim :duration)]
   (-> %2
     (merge {:precision "exact"}))
 
