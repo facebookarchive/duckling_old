@@ -257,7 +257,7 @@
   [#"(?i)der|das" (dim :ordinal) (dim :time) #"(?i)nach" (dim :time)];Check me
   (pred-nth-after %3 %5 (dec (:value %2)))
 
-    ; Years
+  ; Years
   ; Between 1000 and 2100 we assume it's a year
   ; Outside of this, it's safer to consider it's latent
 
@@ -334,7 +334,7 @@
   (assoc (hour (:value %1) (< (:value %1) 12)) :latent true)
 
   "<time-of-day>  o'clock"
-  [#(:full-hour %) #"(?i)uhr|h"]
+  [#(:full-hour %) #"(?:(?i)uhr|h)(?:\s|$)"]
   (dissoc %1 :latent)
 
   "at <time-of-day>" ; absorption
@@ -371,7 +371,7 @@
         (assoc :form :time-of-day)))
 
   "<time-of-day> am|pm"
-  [{:form :time-of-day} #"(?i)([ap])(\s|\.)?m?\.?"];Check me DO WE NEED THIS
+  [{:form :time-of-day} #"(?i)([ap])\.?m\.?(?:\s|$)"];Check me DO WE NEED THIS
   ;; TODO set_am fn in helpers => add :ampm field
   (let [[p meridiem] (if (= "a" (-> %2 :groups first clojure.string/lower-case))
                        [[(hour 0) (hour 12) false] :am]
