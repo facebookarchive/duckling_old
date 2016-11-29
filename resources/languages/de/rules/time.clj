@@ -419,7 +419,7 @@
   ; Formatted dates and times
 
   "mm/dd/yyyy"
-  #"([012]?[1-9]|30|31)\.(0?[1-9]|10|11|12)\.(\d{2,4})"
+  #"([012]?[1-9]|10|20|30|31)\.(0?[1-9]|10|11|12)\.(\d{2,4})"
   (parse-dmy (first (:groups %1)) (second (:groups %1)) (nth (:groups %1) 2) true)
 
   "yyyy-mm-dd"
@@ -427,7 +427,7 @@
   (parse-dmy (nth (:groups %1) 2) (second (:groups %1)) (first (:groups %1)) true)
 
   "mm/dd"
-  #"([012]?[1-9]|30|31)\.(0?[1-9]|10|11|12)\."
+  #"([012]?[1-9]|10|20|30|31)\.(0?[1-9]|10|11|12)\."
   (parse-dmy (first (:groups %1)) (second (:groups %1)) nil true)
 
 
