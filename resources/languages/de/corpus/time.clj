@@ -631,5 +631,8 @@
 
   "nächsten montag"
   "kommenden montag"
-  (datetime 2013 2 18 :day-of-week 1))
+  (datetime 2013 2 18 :day-of-week 1)
+
+  "10.12."
+  (datetime 2013 12 10))
 
