@@ -342,10 +342,11 @@
   (dissoc %2 :latent)
 
   "hh:mm"
-  #"(?i)((?:[01]?\d)|(?:2[0-3]))[:.]([0-5]\d)"
-  (hour-minute (Integer/parseInt (first (:groups %1)))
-               (Integer/parseInt (second (:groups %1)))
-               false)
+  #"(?i)((?:[01]?\d)|(?:2[0-3]))[:.]([0-5]\d)(?:(?i)uhr|h)?"
+  (-> (hour-minute (Integer/parseInt (first (:groups %1)))
+                   (Integer/parseInt (second (:groups %1)))
+                   false)
+      (assoc :form :time-of-day))
 
   "hhmm (military)"
   #"(?i)((?:[01]?\d)|(?:2[0-3]))([0-5]\d)"
