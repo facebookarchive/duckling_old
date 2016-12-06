@@ -22,6 +22,8 @@
  
  "alex@wit.ai"
  "alex.lebrun@mail.wit.com"
+ "alex-lebrun@mail.wit.com"
+ "alex_lebrun@mail.wit.com"
  (fn [token _] (and (= :email (:dim token))
                     (= (:text token) (:val token))))
  
