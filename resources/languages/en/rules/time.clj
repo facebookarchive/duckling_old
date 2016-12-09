@@ -454,6 +454,10 @@
   [#"(?i)morning"]
   (assoc (interval (hour 4 false) (hour 12 false) false) :form :part-of-day :latent true)
 
+  "early morning"
+  [#"(?i)early ((in|hours of) the )?morning"]
+  (assoc (interval (hour 4 false) (hour 9 false) false) :form :part-of-day :latent true)
+
   "afternoon"
   [#"(?i)after ?noo?n"]
   (assoc (interval (hour 12 false) (hour 19 false) false) :form :part-of-day :latent true)
