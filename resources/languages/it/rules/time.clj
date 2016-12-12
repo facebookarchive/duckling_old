@@ -555,6 +555,10 @@
     (merge {:precision "approximate"}))
 
 
+  "verso <part-of-day>" ; about
+  [#"(?i)verso( la| il)?" {:form :part-of-day}]
+  (merge %2 {:precision "approximate"})
+
   ; Intervals
 
   "dd-dd <month> (interval)"

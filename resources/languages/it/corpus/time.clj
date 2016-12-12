@@ -260,6 +260,9 @@
   "verso le 15"
   (datetime 2013 2 12 15) ;; :precision "approximate"
 
+  "verso sera"
+  (datetime-interval [2013 2 12 18] [2013 2 13 00]) ;; :precision "approximate"
+
   "3:00"
   "03:00"
   (datetime 2013 2 13 3 0 :hour 3 :minute 0)
