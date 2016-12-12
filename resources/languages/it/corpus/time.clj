@@ -443,6 +443,10 @@
   "nella sera"
   (datetime-interval [2013 2 12 18] [2013 2 13 00])
 
+  "domani mattina"
+  "domattina"
+  (datetime-interval [2013 2 13 4] [2013 2 13 12])
+
   "in settimana"
   "per la settimana"
   (datetime-interval [2013 2 12 4 30 00] [2013 2 18])

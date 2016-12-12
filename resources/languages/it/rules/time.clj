@@ -464,6 +464,10 @@
   [#"(?i)stanotte"]
   (assoc (intersect (cycle-nth :day 1) (interval (hour 0 false) (hour 4 false) false)) :form :part-of-day)
 
+  "domattina"
+  [#"(?i)domattina"]
+  (assoc (intersect (cycle-nth :day 1) (interval (hour 4 false) (hour 12 false) false)) :form :part-of-day)
+
   "<dim time> <part-of-day>" ; since "morning" "evening" etc. are latent, general time+time is blocked
   [(dim :time) {:form :part-of-day}]
   (intersect %1 %2)
