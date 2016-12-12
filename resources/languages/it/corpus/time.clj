@@ -323,6 +323,9 @@
   "8 della sera"
   (datetime 2013 2 12 20)
 
+  "alla mezza"
+  (datetime 2013 2 12 12 30)
+
   ;; Mixing date and time
 
   "venerdì 20 settembre alle 7:30 del pomeriggio"
@@ -462,8 +465,23 @@
   "nella notte di domani"
   (datetime-interval [2013 2 14 00] [2013 2 14 04])
 
+  "oggi a pranzo"
+  (datetime-interval [2013 2 12 12] [2013 2 12 14])
+
+  "oggi a cena"
+  (datetime-interval [2013 2 12 19] [2013 2 12 22])
+
   "domani a pranzo"
   (datetime-interval [2013 2 13 12] [2013 2 13 14])
+
+  "domani a cena"
+  (datetime-interval [2013 2 13 19] [2013 2 13 22])
+
+  "ora aperitivo"
+  "per aperitivo"
+  "ad aperitivo"
+  "in aperitivo"
+  (datetime-interval [2013 2 13 18] [2013 2 13 19 30])
 
   "ieri sera"
   (datetime-interval [2013 2 11 18] [2013 2 12 00])
