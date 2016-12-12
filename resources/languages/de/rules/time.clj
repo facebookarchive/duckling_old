@@ -25,7 +25,6 @@
   [#"(?i)an einem" {:form :day-of-week}]
   %2 ; does NOT dissoc latent
 
-
   ;;;;;;;;;;;;;;;;;;;
   ;; Named things
 
@@ -257,7 +256,7 @@
   [#"(?i)der|das" (dim :ordinal) (dim :time) #"(?i)nach" (dim :time)];Check me
   (pred-nth-after %3 %5 (dec (:value %2)))
 
-    ; Years
+  ; Years
   ; Between 1000 and 2100 we assume it's a year
   ; Outside of this, it's safer to consider it's latent
 
@@ -334,7 +333,7 @@
   (assoc (hour (:value %1) (< (:value %1) 12)) :latent true)
 
   "<time-of-day>  o'clock"
-  [#(:full-hour %) #"(?i)uhr|h"]
+  [#(:full-hour %) #"(?:(?i)uhr|h)(?:\p{P}|\p{Z}|$)"]
   (dissoc %1 :latent)
 
   "at <time-of-day>" ; absorption
@@ -342,10 +341,11 @@
   (dissoc %2 :latent)
 
   "hh:mm"
-  #"(?i)((?:[01]?\d)|(?:2[0-3]))[:.]([0-5]\d)"
-  (hour-minute (Integer/parseInt (first (:groups %1)))
-               (Integer/parseInt (second (:groups %1)))
-               false)
+  #"(?i)((?:[01]?\d)|(?:2[0-3]))[:.]([0-5]\d)(?:(?i)uhr|h)?"
+  (-> (hour-minute (Integer/parseInt (first (:groups %1)))
+                   (Integer/parseInt (second (:groups %1)))
+                   false)
+      (assoc :form :time-of-day))
 
   "hhmm (military)"
   #"(?i)((?:[01]?\d)|(?:2[0-3]))([0-5]\d)"
@@ -355,7 +355,7 @@
       (assoc :latent true))
 
   "hhmm (military) am|pm" ; hh only from 00 to 12
-  [#"(?i)((?:1[012]|0?\d))([0-5]\d)" #"(?i)([ap])\.?m?\.?"]
+  [#"(?i)((?:1[012]|0?\d))([0-5]\d)" #"(?i)([ap])\.?m\.?(?:\p{P}|\p{Z}|$)"]
   ; (-> (hour-minute (Integer/parseInt (first (:groups %1)))
   ;                  (Integer/parseInt (second (:groups %1)))
   ;                  false) ; not a 12-hour clock)
@@ -371,7 +371,7 @@
         (assoc :form :time-of-day)))
 
   "<time-of-day> am|pm"
-  [{:form :time-of-day} #"(?i)([ap])(\s|\.)?m?\.?"];Check me DO WE NEED THIS
+  [{:form :time-of-day} #"(?i)([ap])\.?m\.?(?:\p{P}|\p{Z}|$)"];Check me DO WE NEED THIS
   ;; TODO set_am fn in helpers => add :ampm field
   (let [[p meridiem] (if (= "a" (-> %2 :groups first clojure.string/lower-case))
                        [[(hour 0) (hour 12) false] :am]
@@ -419,15 +419,15 @@
   ; Formatted dates and times
 
   "mm/dd/yyyy"
-  #"([012]?[1-9]|30|31)\.(0?[1-9]|10|11|12)\.(\d{2,4})"
+  #"([012]?[1-9]|10|20|30|31)\.(0?[1-9]|10|11|12)\.(\d{2,4})"
   (parse-dmy (first (:groups %1)) (second (:groups %1)) (nth (:groups %1) 2) true)
 
   "yyyy-mm-dd"
-  #"(\d{2,4})-(0?[1-9]|10|11|12)-([012]?[1-9]|30|31)"
+  #"(\d{2,4})-(0?[1-9]|10|11|12)-([012]?[1-9]|10|20|30|31)"
   (parse-dmy (nth (:groups %1) 2) (second (:groups %1)) (first (:groups %1)) true)
 
   "mm/dd"
-  #"([012]?[1-9]|30|31)\.(0?[1-9]|10|11|12)\."
+  #"([012]?[1-9]|10|20|30|31)\.(0?[1-9]|10|11|12)\."
   (parse-dmy (first (:groups %1)) (second (:groups %1)) nil true)
 
 

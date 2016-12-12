@@ -487,7 +487,11 @@
   (datetime-interval [2013 2 12 15] [2013 2 12 17])
 
   "en début de matinée"
-  (datetime-interval [2013 2 12 7] [2013 2 12 9])
+  "très tôt le matin"
+  "tôt le matin"
+  "le matin tôt"
+  "le matin très tôt"
+  (datetime-interval [2013 2 12 4] [2013 2 12 9])
 
   "milieu de matinée"
   (datetime-interval [2013 2 12 9] [2013 2 12 11])

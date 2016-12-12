@@ -558,6 +558,11 @@
   "monday morning"
   (datetime-interval [2013 2 18 4] [2013 2 18 12])
 
+  "monday early in the morning"
+  "monday early morning"
+  "monday in the early hours of the morning"
+  (datetime-interval [2013 2 18 4] [2013 2 18 9])
+
   "february the 15th in the morning"
   "15 of february in the morning"
   "morning of the 15th of february"

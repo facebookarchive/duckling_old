@@ -125,20 +125,50 @@
 
    ;; Cycles
 
+  "l'ultima ora"
+  "nell'ultima ora"
+  (datetime 2013 2 12 3)
+
   "questa settimana"
   (datetime 2013 2 11 :grain :week)
 
   "la settimana scorsa"
+  "la scorsa settimana"
+  "nella scorsa settimana"
+  "nella settimana scorsa"
   (datetime 2013 2 4 :grain :week)
 
   "la settimana prossima"
+  "la prossima settimana"
+  "nella prossima settimana"
   (datetime 2013 2 18 :grain :week)
 
   "il mese scorso"
+  "nel mese scorso"
+  "nel mese passato"
+  "lo scorso mese"
+  "nello scorso mese"
   (datetime 2013 1)
 
   "il mese prossimo"
+  "il prossimo mese"
   (datetime 2013 3)
+
+  "questo trimestre"
+  (datetime 2013 1 1 :grain :quarter)
+
+  "il prossimo trimestre"
+  "nel prossimo trimestre"
+  (datetime 2013 4 1 :grain :quarter)
+
+  "terzo trimestre"
+  "il terzo trimestre"
+  (datetime 2013 7 1 :grain :quarter)
+
+  "quarto trimestre 2018"
+  "il quarto trimestre 2018"
+  "nel quarto trimestre 2018"
+  (datetime 2018 10 1 :grain :quarter)
 
   "l'anno scorso"
   (datetime 2012)
@@ -324,6 +354,8 @@
   (datetime 2013 12 25)
 
   "vigilia di natale"
+  "alla vigilia"
+  "la vigilia"
   (datetime 2013 12 24)
 
   "vigilia di capodanno"
@@ -342,6 +374,7 @@
   (datetime 2014 1 6)
 
   "san valentino"
+  "festa degli innamorati"
   (datetime 2013 2 14)
 
   "festa del papà"
@@ -352,6 +385,7 @@
 
   "anniversario della liberazione"
   "la liberazione"
+  "alla liberazione"
   (datetime 2013 4 25)
 
   "festa del lavoro"
@@ -364,6 +398,8 @@
   (datetime 2013 5 12)
 
   "festa della repubblica"
+  "la repubblica"
+  "repubblica"
   (datetime 2013 6 2)
 
   "ferragosto"
@@ -375,11 +411,23 @@
 
   "tutti i santi"
   "ognissanti"
+  "festa dei santi"
+  "il giorno dei santi"
   (datetime 2013 11 1)
 
   "giorno dei morti"
   "commemorazione dei defunti"
   (datetime 2013 11 2)
+
+  "ai morti alle 2"
+  (datetime 2013 11 2 2)
+
+  "immacolata"
+  "immacolata concezione"
+  (datetime 2013 12 8)
+
+  "all'immacolata alle 18"
+  (datetime 2013 12 8 18)
 
   "santo stefano"
   (datetime 2013 12 26)
@@ -445,6 +493,7 @@
 
   "i prossimi 3 secondi"
   "i prossimi tre secondi"
+  "nei prossimi tre secondi"
   (datetime-interval [2013 2 12 4 30 01] [2013 2 12 4 30 04])
 
   "gli ultimi 2 minuti"
@@ -454,34 +503,38 @@
   (datetime-interval [2013 2 12 4 28] [2013 2 12 4 30])
 
   "i prossimi 3 minuti"
+  "nei prossimi 3 minuti"
   "i prossimi tre minuti"
   (datetime-interval [2013 2 12 4 31] [2013 2 12 4 34])
 
-  "l'ultima ora"
-  (datetime-interval [2013 2 12 3] [2013 2 12 4])
-
   "le ultime 2 ore"
   "le ultime due ore"
+  "nelle ultime due ore"
   "le scorse due ore"
   "le due ore scorse"
   "le scorse 2 ore"
   "le 2 ore scorse"
+  "nelle 2 ore scorse"
   (datetime-interval [2013 2 12 2] [2013 2 12 4])
 
   "le ultime 24 ore"
   "le ultime ventiquattro ore"
   "le 24 ore passate"
+  "nelle 24 ore scorse"
   "le ventiquattro ore passate"
   (datetime-interval [2013 2 11 4] [2013 2 12 4])
 
   "le prossime 3 ore"
   "le prossime tre ore"
+  "nelle prossime 3 ore"
   (datetime-interval [2013 2 12 5] [2013 2 12 8])
 
   "gli ultimi 2 giorni"
   "gli ultimi due giorni"
+  "negli ultimi 2 giorni"
   "i 2 giorni passati"
   "i due giorni passati"
+  "nei due giorni passati"
   "gli scorsi due giorni"
   "i 2 giorni scorsi"
   "i due giorni scorsi"
@@ -489,29 +542,35 @@
 
   "i prossimi 3 giorni"
   "i prossimi tre giorni"
+  "nei prossimi 3 giorni"
   (datetime-interval [2013 2 13] [2013 2 16])
 
   "i prossimi giorni"
+  "nei prossimi giorni"
   (datetime-interval [2013 2 13] [2013 2 16])
 
   "le ultime 2 settimane"
   "le ultime due settimane"
   "le 2 ultime settimane"
   "le due ultime settimane"
+  "nelle 2 ultime settimane"
   (datetime-interval [2013 1 28 :grain :week] [2013 2 11 :grain :week])
 
   "le prossime 3 settimane"
   "le prossime tre settimane"
   "le 3 prossime settimane"
+  "nelle prossime 3 settimane"
   "le tre prossime settimane"
   (datetime-interval [2013 2 18 :grain :week] [2013 3 11 :grain :week])
 
   "gli ultimi 2 mesi"
   "gli ultimi due mesi"
   "i 2 mesi passati"
+  "nei 2 mesi passati"
   "i due mesi passati"
   "i due mesi scorsi"
   "i 2 mesi scorsi"
+  "negli scorsi due mesi"
   "gli scorsi due mesi"
   "gli scorsi 2 mesi"
   (datetime-interval [2012 12] [2013 02])
@@ -520,10 +579,12 @@
   "i prossimi tre mesi"
   "i 3 prossimi mesi"
   "i tre prossimi mesi"
+  "nei prossimi tre mesi"
   (datetime-interval [2013 3] [2013 6])
 
   "gli ultimi 2 anni"
   "gli ultimi due anni"
+  "negli ultimi 2 anni"
   "i 2 anni passati"
   "i due anni passati"
   "i 2 anni scorsi"
@@ -534,6 +595,7 @@
 
   "i prossimi 3 anni"
   "i prossimi tre anni"
+  "nei tre prossimi anni"
   (datetime-interval [2014] [2017])
 
   ; Explicit intervals
@@ -633,10 +695,25 @@
   (datetime 2013 2 13 15)
 
   "dopo le 14"
+  "dalle 14"
   (datetime 2013 2 12 14 :direction :after)
+
+  "domani dopo le 14"
+  "domani dalle 14"
+  (datetime 2013 2 13 14 :direction :after)
 
   "prima delle 11"
   (datetime 2013 2 12 11 :direction :before)
+
+  "dopodomani prima delle 11"
+  (datetime 2013 2 14 11 :direction :before)
+
+  "giovedì entro mezzogiorno"
+  (datetime 2013 2 14 12 :direction :before)
+
+  "da dopodomani"
+  "da giovedì"
+  (datetime 2013 2 14 :direction :after)
 
   "nel pomeriggio"
   (datetime-interval [2013 2 12 12] [2013 2 12 19])
