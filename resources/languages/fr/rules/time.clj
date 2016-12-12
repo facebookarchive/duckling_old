@@ -426,6 +426,14 @@
   #"(?i)soir[ée]?e?"
   (assoc (interval (hour 18 false) (hour 0 false) false) :form :part-of-day :latent true)
 
+  "début de soirée"
+  #"(?i)d[ée]but de soir[ée]e?"
+  (assoc (interval (hour 18 false) (hour 21 false) false) :form :part-of-day :latent true)
+
+  "fin de soirée"
+  #"(?i)fin de soir[ée]e?"
+  (assoc (interval (hour 21 false) (hour 0 false) false) :form :part-of-day :latent true)
+
   "du|dans le <part-of-day>" ;; removes latent
   [#"(?i)du|dans l[ae']? ?|au|en|l[ae' ]|dès l?[ae']? ?" {:form :part-of-day}]
   (dissoc %2 :latent)

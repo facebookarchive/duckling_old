@@ -534,6 +534,12 @@
   "ce soir"
   (datetime-interval [2013 2 12 18] [2013 2 13 00])
 
+  "en début de soirée"
+  (datetime-interval [2013 2 12 18] [2013 2 12 21])
+
+  "en fin de soirée"
+  (datetime-interval [2013 2 12 21] [2013 2 13 00])
+
   "demain soir"
   "mercredi soir"
   "mercredi en soirée"
