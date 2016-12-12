@@ -116,11 +116,11 @@
   (month-day 1 6)
 
   "valentine's day"
-  #"(?i)san valentino|festa degli innamorati"
+  #"(?i)s(an|\.) valentino|festa degli innamorati"
   (month-day 2 14)
 
   "festa del papà"
-  #"(?i)festa del pap[aà]|(festa di )?san giuseppe"
+  #"(?i)festa del pap[aà]|(festa di )?s(an|\.) giuseppe"
   (month-day 3 19)
 
   "festa della liberazione"
@@ -156,7 +156,7 @@
   (month-day 12 8)
 
   "santo stefano"
-  #"(?i)santo stefano"
+  #"(?i)s(anto|\.) stefano"
   (month-day 12 26)
 
   "Mother's Day";second Sunday in May.
