@@ -135,19 +135,21 @@
   "la settimana scorsa"
   "la scorsa settimana"
   "nella scorsa settimana"
-  "nella settimana scorsa"
+  "della settimana scorsa"
   (datetime 2013 2 4 :grain :week)
 
   "la settimana prossima"
   "la prossima settimana"
   "nella prossima settimana"
+  "settimana prossima"
+  "prossima settimana"
   (datetime 2013 2 18 :grain :week)
 
   "il mese scorso"
   "nel mese scorso"
   "nel mese passato"
   "lo scorso mese"
-  "nello scorso mese"
+  "dello scorso mese"
   (datetime 2013 1)
 
   "il mese prossimo"
@@ -167,7 +169,7 @@
 
   "quarto trimestre 2018"
   "il quarto trimestre 2018"
-  "nel quarto trimestre 2018"
+  "del quarto trimestre 2018"
   (datetime 2018 10 1 :grain :quarter)
 
   "l'anno scorso"
