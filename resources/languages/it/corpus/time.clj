@@ -30,6 +30,7 @@
 
   "martedì"
   "Martedì 19"
+  "ma 19"
   (datetime 2013 2 19)
 
   "l'altro ieri"
@@ -38,6 +39,7 @@
 
   "lunedi"
   "lu."
+  "lun"
   (datetime 2013 2 18 :day-of-week 1)
 
   "lunedi 18 febbraio"
@@ -211,7 +213,7 @@
   (datetime 2014 10 6 :grain :week)
 
   "la settimana del 6 ottobre"
-  "la settimana del 7 ottobre"
+  "la settimana del 7 ott"
   (datetime 2013 10 7 :grain :week)
 
   "l'ultimo giorno di ottobre 2015"

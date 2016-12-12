@@ -17,7 +17,7 @@
   ;;
 
   "named-day"
-  #"(?i)luned[ìi]|lun?\."
+  #"(?i)luned[ìi]|lun?\.?"
   (day-of-week 1)
 
   "named-day"
@@ -29,27 +29,27 @@
   (day-of-week 3)
 
   "named-day"
-  #"(?i)gioved[iì]|gio\.?"
+  #"(?i)gioved[iì]|gio?\.?"
   (day-of-week 4)
 
   "named-day"
-  #"(?i)venerd[iì]|ven\.?"
+  #"(?i)venerd[iì]|ven?\.?"
   (day-of-week 5)
 
   "named-day"
-  #"(?i)sabato|sab\.?"
+  #"(?i)sabato|sab?\.?"
   (day-of-week 6)
 
   "named-day"
-  #"(?i)domenica|dom\.?"
+  #"(?i)domenica|dom?\.?"
   (day-of-week 7)
 
   "named-month"
-  #"(?i)gennaio|gene?\.?"
+  #"(?i)gennaio|genn?\.?"
   (month 1)
 
   "named-month"
-  #"(?i)febbraio|feb\.?"
+  #"(?i)febbraio|febb?\.?"
   (month 2)
 
   "named-month"
@@ -61,7 +61,7 @@
   (month 4)
 
   "named-month"
-  #"(?i)maggio|mag\.?"
+  #"(?i)maggio|magg?\.?"
   (month 5)
 
   "named-month"
