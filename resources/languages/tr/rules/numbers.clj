@@ -21,10 +21,6 @@
   #"(?i)on"
   {:dim :number :integer true :value 10 :grain 1}
 
-  "single"
-  #"(?i)single"
-  {:dim :number :integer true :value 1 :grain 1}
-
   "a couple (of)"
   #"(?i)(bir )?çift"
   {:dim :number :integer true :value 2 :grain 1}
@@ -156,7 +152,7 @@
    :grain (:grain %2)}
 
   "number millions"
-  [(integer 1 999) (integer 1000000 1000000)]
+  [(integer 2 999) (integer 1000000 1000000)]
   {:dim :number
    :integer true
    :value (* (:value %1) (:value %2))
@@ -272,7 +268,7 @@
 
 
   "decimal thousand | million"
-  [(dim :number #(< (:value %) 999.9)) (integer 1000 1000000 #(#{1000 1000000} (:value %)))]
+  [(dim :number #(< (:value %) 999.9) #(not (:integer %))) (integer 1000 1000000 #(#{1000 1000000} (:value %)))]
   (let [value (* (:value %1) (long (:value %2)))
   	    int?  (zero? (mod value 1))
 		value (if int? (long value) value)]
