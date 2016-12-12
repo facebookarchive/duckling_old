@@ -562,7 +562,7 @@
   ; Intervals
 
   "dd-dd <month> (interval)"
-  [#"(?i)(?:dal(?:(?:le)? |l'))?(3[01]|[12]\d|0?[1-9])" #"(?i)\-|([fs]ino )?al(l')?" #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
+  [#"(?i)(?:dal(?: |l'))?(3[01]|[12]\d|0?[1-9])" #"(?i)\-|([fs]ino )?al(l')?" #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
   (interval (intersect %4 (day-of-month (Integer/parseInt (-> %1 :groups first))))
             (intersect %4 (day-of-month (Integer/parseInt (-> %3 :groups first))))
             true)
