@@ -30,12 +30,27 @@
   #"(?i)mois?"
   {:dim :unit-of-duration
    :grain :month}
-  
+
   "année (unit-of-duration)"
   #"(?i)an(n[ée]e?)?s?"
   {:dim :unit-of-duration
    :grain :year}
-  
+
+   "un quart heure"
+  [#"(?i)(1/4\s?h(eure)?|(un|1) quart d'heure)"]
+  {:dim :duration
+   :value (duration :minute 15)}
+
+   "une demi heure"
+  [#"(?i)(1/2\s?h(eure)?|(1|une) demi(e)?(\s|-)heure)"]
+  {:dim :duration
+   :value (duration :minute 30)}
+
+   "trois quarts d'heure"
+  [#"(?i)(3/4\s?h(eure)?|(3|trois) quart(s)? d'heure)"]
+  {:dim :duration
+   :value (duration :minute 45)}
+
   "<integer> <unit-of-duration>"
   [(integer 0) (dim :unit-of-duration)] ;prevent negative duration...
   {:dim :duration
@@ -48,6 +63,10 @@
 
   "dans <duration>"
   [#"(?i)dans" (dim :duration)]
+  (in-duration (:value %2))
+
+  "environ <duration>"
+  [#"(?i)environ" (dim :duration)]
   (in-duration (:value %2))
 
   "il y a <duration>"

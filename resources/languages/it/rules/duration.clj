@@ -9,12 +9,12 @@
   "minute (unit-of-duration)"
   #"(?i)min(ut[oi])?"
   {:dim :unit-of-duration
-   :grain :minute} 
+   :grain :minute}
 
   "hour (unit-of-duration)"
   #"(?i)or[ae]"
   {:dim :unit-of-duration
-   :grain :hour} 
+   :grain :hour}
 
   "day (unit-of-duration)"
   #"(?i)giorn[oi]"
@@ -30,12 +30,12 @@
   #"(?i)mes[ei]"
   {:dim :unit-of-duration
    :grain :month}
-  
+
   "year (unit-of-duration)"
   #"(?i)ann[oi]"
   {:dim :unit-of-duration
    :grain :year}
-  
+
   "<integer> <unit-of-duration>"
   [(integer 0) (dim :unit-of-duration)] ;prevent negative duration...
   {:dim :duration
@@ -48,7 +48,7 @@
 
 
   "in/after <duration>"
-  [#"(?i)fra|in|dopo" (dim :duration)]
+  [#"(?i)[tf]ra|in|dopo" (dim :duration)]
   (in-duration (:value %2))
 
   "<duration> ago"

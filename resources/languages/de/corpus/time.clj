@@ -631,5 +631,11 @@
 
   "nächsten montag"
   "kommenden montag"
-  (datetime 2013 2 18 :day-of-week 1))
+  (datetime 2013 2 18 :day-of-week 1)
 
+  "10.12."
+  (datetime 2013 12 10)
+
+  "18:30h - 19:00h"
+  (datetime-interval [2013 2 12 18 30] [2013 2 12 19 1])
+)
