@@ -40,7 +40,7 @@
   {:dim :number :integer true :value 12 :grain 1 :grouping true} ;;restrict composition and prevent "2 12"
 
   "hundred"
-  #"(?i)hundrede?"
+  #"(?i)hundre(de)?"
   {:dim :number :integer true :value 100 :grain 2}
 
   "thousand"

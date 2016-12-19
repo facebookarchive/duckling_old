@@ -85,8 +85,10 @@
   "fem tusen"
   (number 5000)
 
+  "hundre"
+  (number 100)
+
   "4."
   "fjerde"
   (ordinal 4)
 )
-
