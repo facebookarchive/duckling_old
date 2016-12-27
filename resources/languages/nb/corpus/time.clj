@@ -447,6 +447,10 @@
   "mandag morgen"
   (datetime-interval [2013 2 18 4] [2013 2 18 12])
 
+  "i romjulen"
+  "i romjula"
+  (datetime-interval [2013 12 24] [2013 12 31])
+
   ; Intervals involving cycles
 
   "siste 2 sekunder"

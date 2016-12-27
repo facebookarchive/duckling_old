@@ -475,6 +475,10 @@
   ; #"(?i)forår"
   ; (interval (month-day 3 20) (month-day 6 21) false)
 
+  "christmas days"
+  #"(?i)romjul(a|en)"
+  (interval (month-day 12 24) (month-day 12 30) false)
+
 
   ; Time zones
 
