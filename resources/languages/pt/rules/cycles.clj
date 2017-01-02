@@ -30,31 +30,31 @@
   #"(?i)m[eê]s(es)?"
   {:dim :cycle
    :grain :month}
-  
+
   "ano (cycle)"
   #"(?i)anos?"
   {:dim :cycle
    :grain :year}
-  
+
   "este <cycle>"
   [#"(?i)(n?es[st](es?|as?))" (dim :cycle)]
   (cycle-nth (:grain %2) 0)
 
-  "o <cycle> passado"
-  [#"(?i)os?|as?" (dim :cycle) #"(?i)passad(a|o)s?"]
-  (cycle-nth (:grain %2) -1)
+  "<cycle> passado"
+  [(dim :cycle) #"(?i)passad(a|o)s?"]
+  (cycle-nth (:grain %1) -1)
 
-  "no <cycle> (que vem)"
-  [#"(?i)n?as?|n?os?" (dim :cycle) #"(?i)que vem|seguintes?"]
+  "<cycle> (que vem)"
+  [(dim :cycle) #"(?i)que vem|seguintes?"]
+  (cycle-nth  (:grain %1) 1)
+
+  "proximo <cycle>"
+  [#"(?i)pr(ó|o)xim(o|a)s?" (dim :cycle)]
   (cycle-nth  (:grain %2) 1)
-  
-  "no proximo <cycle> "
-  [#"(?i)n?as?|n?os?" #"(?i)pr(ó|o)xim(o|a)s?" (dim :cycle)]
-  (cycle-nth  (:grain %3) 1)
 
-  "o <cycle> antes de <time>"
-  [#"(?i) n?as?|n?os?" (dim :cycle) #"(?i)antes d[eo]" (dim :time)]
-  (cycle-nth-after (:grain %2) -1 %4)
+  "<cycle> antes de <time>"
+  [(dim :cycle) #"(?i)antes d[eo]" (dim :time)]
+  (cycle-nth-after (:grain %1) -1 %3)
 
   "passados n <cycle>"
   [#"(?i)passad(a|o)s?" (integer 2 9999) (dim :cycle)]
@@ -67,7 +67,7 @@
   "n passados <cycle>"
   [(integer 2 9999) #"(?i)passad(a|o)s?" (dim :cycle)]
   (cycle-n-not-immediate (:grain %3) (- (:value %1)))
-  
+
   "proximas n <cycle>"
   [#"(?i)pr(ó|o)xim(o|a)s?" (integer 2 9999) (dim :cycle)]
   (cycle-n-not-immediate (:grain %3) (:value %2))

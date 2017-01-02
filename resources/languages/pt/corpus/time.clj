@@ -164,28 +164,28 @@
   "esta semana"
   (datetime 2013 2 11 :grain :week)
 
-  "a semana passada"
+  "semana passada"
   (datetime 2013 2 4 :grain :week)
 
-  "a semana que vem"
-  "a proxima semana"
+  "semana que vem"
+  "proxima semana"
   (datetime 2013 2 18 :grain :week)
 
-  "o mês passado"
+  "mês passado"
   (datetime 2013 1)
 
-  "o mes que vem"
-  "o próximo mês"
+  "mes que vem"
+  "próximo mês"
   (datetime 2013 3)
 
-  "o ano passado"
+  "ano passado"
   (datetime 2012)
 
   "este ano"
   (datetime 2013)
 
-  "o ano que vem"
-  "o proximo ano"
+  "ano que vem"
+  "proximo ano"
   (datetime 2014)
 
   "domingo passado"
