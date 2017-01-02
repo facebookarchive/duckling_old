@@ -220,7 +220,7 @@
   ;; "this month" => now is part of it
   ; See also: cycles in en.cycles.clj
   "this <time>"
-  [#"(?i)this|coming" (dim :time)]
+  [#"(?i)this|current|coming" (dim :time)]
   (pred-nth %2 0)
 
   "next <time>"
@@ -453,6 +453,10 @@
   "morning" ;; TODO "3am this morning" won't work since morning starts at 4...
   [#"(?i)morning"]
   (assoc (interval (hour 4 false) (hour 12 false) false) :form :part-of-day :latent true)
+
+  "early morning"
+  [#"(?i)early ((in|hours of) the )?morning"]
+  (assoc (interval (hour 4 false) (hour 9 false) false) :form :part-of-day :latent true)
 
   "afternoon"
   [#"(?i)after ?noo?n"]

@@ -30,16 +30,26 @@
   #"(?i)months?"
   {:dim :unit-of-duration
    :grain :month}
-  
+
   "year (unit-of-duration)"
   #"(?i)years?"
   {:dim :unit-of-duration
    :grain :year}
-  
+
+   "quarter of an hour"
+  [#"(?i)(1/4\s?h(our)?|(a\s)?quarter of an hour)"]
+  {:dim :duration
+   :value (duration :minute 15)}
+
    "half an hour"
-  [#"(?i)(1/2\s?|half an? )hour"]
+  [#"(?i)(1/2\s?h(our)?|half an? hour)"]
   {:dim :duration
    :value (duration :minute 30)}
+
+   "three-quarters of an hour"
+  [#"(?i)(3/4\s?h(our)?|three(\s|-)quarters of an hour)"]
+  {:dim :duration
+   :value (duration :minute 45)}
 
   "fortnight" ;14 days
   #"(?i)(a|one)? fortnight"
@@ -50,7 +60,7 @@
   [(integer 0) (dim :unit-of-duration)]; duration can't be negative...
   {:dim :duration
    :value (duration (:grain %2) (:value %1))}
-    
+
   "<integer> more <unit-of-duration>"
   [(integer 0) #"(?i)more|less" (dim :unit-of-duration)]; would need to add fields at some point
   {:dim :duration
@@ -77,6 +87,14 @@
   [#"(?i)in" (dim :duration)]
   (in-duration (:value %2))
 
+  "about <duration>"
+  [#"(?i)about" (dim :duration)]
+  (in-duration (:value %2))
+
+  "for <duration>"
+  [#"(?i)for" (dim :duration)]
+  (in-duration (:value %2))
+
   "after <duration>"
   [#"(?i)after" (dim :duration)]
   (merge (in-duration (:value %2)) {:direction :after})
@@ -88,11 +106,11 @@
   "<duration> ago"
   [(dim :duration) #"(?i)ago"]
   (duration-ago (:value %1))
-  
+
   "<duration> hence"
   [(dim :duration) #"(?i)hence"]
   (in-duration (:value %1))
-  
+
   "<duration> after <time>"
   [(dim :duration) #"(?i)after" (dim :time)]
   (duration-after (:value %1) %3)
