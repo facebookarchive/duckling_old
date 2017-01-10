@@ -64,7 +64,7 @@
 
   "twintigduizend"
   "twintig duizend"
-  (number 200000)
+  (number 20000)
 
   "eenentwintigduizend en elf"
   (number 21011)
