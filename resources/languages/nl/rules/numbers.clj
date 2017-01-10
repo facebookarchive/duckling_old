@@ -95,6 +95,23 @@
   :integer true
   :value (* (:value %1) (:value %2))
   :grain (:grain %2)}
+  
+  ;;
+  ;; Decimals
+  ;;
+
+  "decimal number"
+  #"(\d*,\d+)"
+  {:dim :number
+   :value (parse-number-fr (first (:groups %1)))}
+
+  "decimal with thousands separator"
+  #"(\d+(\.\d\d\d)+,\d+)"
+  {:dim :number
+   :value (-> (:groups %1)
+            first
+            (clojure.string/replace #"\." "")
+            parse-number-fr)}
 
  ;;
  ;; Negative number
