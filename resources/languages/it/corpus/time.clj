@@ -223,6 +223,19 @@
   "l'ultima settimana di settembre 2014"
   (datetime 2014 9 22 :grain :week)
 
+  "tra un'ora"
+  "tra 1 ora"
+  (datetime 2013 2 12 5 30)
+
+  "tra un quarto d'ora"
+  (datetime 2013 2 12 4 45 00)
+
+  "tra mezz'ora"
+  (datetime 2013 2 12 5 00 00)
+
+  "tra tre quarti d'ora"
+  (datetime 2013 2 12 5 15 00)
+
   ;; nth of
   "primo martedì di ottobre"
   "primo martedì in ottobre"

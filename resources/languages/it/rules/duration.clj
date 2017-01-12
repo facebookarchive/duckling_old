@@ -42,10 +42,24 @@
    :value (duration (:grain %2) (:value %1))}
 
   "une <unit-of-duration>"
-  [#"(?i)una?" (dim :unit-of-duration)]
+  [#"(?i)un[a']?" (dim :unit-of-duration)]
   {:dim :duration
    :value (duration (:grain %2) 1)}
 
+  "un quarto d'ora"
+  [#"(?i)un quarto d['i] ?ora"]
+  {:dim :duration
+   :value (duration :minute 15)}
+
+  "mezz'ora"
+  [#"(?i)mezz[a'] ?ora"]
+  {:dim :duration
+   :value (duration :minute 30)}
+
+  "tre quarti d'ora"
+  [#"(?i)(3|tre) quarti d['i] ?ora"]
+  {:dim :duration
+   :value (duration :minute 45)}
 
   "in/after <duration>"
   [#"(?i)[tf]ra|in|dopo" (dim :duration)]
