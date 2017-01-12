@@ -298,8 +298,8 @@
   [{:form :day-of-week} (integer 1 31)]
   (intersect %1 (day-of-month (:value %2)))
 
-  "il <day-of-month> de <named-month>" ; il dodici luglio 2010
-  [#"(?i)il" (integer 1 31) {:form :month}]
+  "il <day-of-month> <named-month>" ; il dodici luglio 2010
+  [#"(?i)il|l'" (integer 1 31) {:form :month}]
   (intersect %3 (day-of-month (:value %2)))
 
   ;; hours and minutes (absolute time)
@@ -517,7 +517,7 @@
   ; a specific version of "il", above, removes :latent for integer as day of month
   ; this one is more general but does not remove latency
   "il <time>"
-  [#"(?i)il" (dim :time #(not (:latent %)))]
+  [#"(?i)il|l'" (dim :time #(not (:latent %)))]
   %2
 
   ;; Time zones
@@ -577,6 +577,12 @@
   [#"(?i)tra( (il|l'))?" (integer 1 31) #"(?i)e( (il|l'))?" (integer 1 31)]
   (interval (day-of-month (:value %2))
             (day-of-month (:value %4))
+            true)
+
+  "<integer> e <integer+1> (interval)"
+  [(integer 1 31) #"(?i)e(?: (il|l'))?" (and #(= (+ (:value %1) 1) (:value %)) (integer 1 31))]
+  (interval (day-of-month (:value %1))
+            (day-of-month (:value %3))
             true)
 
   ; Blocked for :latent time. May need to accept certain latents only, like hours
