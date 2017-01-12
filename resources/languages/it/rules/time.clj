@@ -222,7 +222,7 @@
   (pred-nth %1 1)
 
   "prossimi <unit-of-duration>"
-  [#"(?i)((ne)?i|(nel)?le) prossim[ie]" (dim :unit-of-duration)]
+  [#"(?i)((([nd]e)?i|([nd]el)?le) )?prossim[ie]" (dim :unit-of-duration)]
   (interval (cycle-nth (:grain %2) 1) (cycle-nth (:grain %2) 3) true)
 
   "<time> last"

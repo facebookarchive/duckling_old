@@ -549,7 +549,7 @@
   (datetime-interval [2013 2 11 4] [2013 2 12 4])
 
   "le prossime 3 ore"
-  "le prossime tre ore"
+  "prossime tre ore"
   "nelle prossime 3 ore"
   (datetime-interval [2013 2 12 5] [2013 2 12 8])
 
@@ -564,13 +564,14 @@
   "i due giorni scorsi"
   (datetime-interval [2013 2 10] [2013 2 12])
 
-  "i prossimi 3 giorni"
+  "prossimi 3 giorni"
   "i prossimi tre giorni"
   "nei prossimi 3 giorni"
   (datetime-interval [2013 2 13] [2013 2 16])
 
   "i prossimi giorni"
   "nei prossimi giorni"
+  "prossimi giorni"
   (datetime-interval [2013 2 13] [2013 2 16])
 
   "le ultime 2 settimane"
@@ -580,7 +581,7 @@
   "nelle 2 ultime settimane"
   (datetime-interval [2013 1 28 :grain :week] [2013 2 11 :grain :week])
 
-  "le prossime 3 settimane"
+  "prossime 3 settimane"
   "le prossime tre settimane"
   "le 3 prossime settimane"
   "nelle prossime 3 settimane"
@@ -601,6 +602,7 @@
 
   "i prossimi 3 mesi"
   "i prossimi tre mesi"
+  "prossimi 3 mesi"
   "i 3 prossimi mesi"
   "i tre prossimi mesi"
   "nei prossimi tre mesi"
