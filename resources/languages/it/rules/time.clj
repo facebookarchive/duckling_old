@@ -324,7 +324,7 @@
   (dissoc %2 :latent)
 
   "at <time-of-day>" ; alle due
-  [#"(?i)all[e']|le|a" {:form :time-of-day}]
+  [#"(?i)all[e']|l[e']|a" {:form :time-of-day}]
   (dissoc %2 :latent)
 
 
@@ -366,7 +366,7 @@
 
   "una"
   #"(?i)una"
-  (hour 1 true)
+  (assoc (hour 1 true) :latent true)
 
   "quarter (relative minutes)"
   #"(?i)un quarto"
