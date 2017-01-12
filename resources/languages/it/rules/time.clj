@@ -596,7 +596,7 @@
   (interval (cycle-nth :second 0) %2 false)
 
   "dal <datetime> al <datetime> (interval)"
-  [#"(?i)da(l(l')?)?" (dim :time #(not (:latent %))) #"([fs]ino )?al(l')?" (dim :time #(not (:latent %)))]
+  [#"(?i)da(l(l')?)?" (dim :time #(not (:latent %))) #"([fs]ino )?a(l(l')?)?" (dim :time #(not (:latent %)))]
   (interval %2 %4 true)
 
   "tra il <datetime> e il <datetime> (interval)"

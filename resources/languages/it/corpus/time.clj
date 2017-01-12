@@ -656,6 +656,9 @@
   "20 e 21 di questo mese"
   (datetime-interval [2013 2 20] [2013 2 22])
 
+  "da domani a giovedì"
+  "da domani a dopodomani"
+  (datetime-interval [2013 2 13] [2013 2 15])
 
   "9:30 - 11:00"
   (datetime-interval [2013 2 12 9 30] [2013 2 12 11 1])
