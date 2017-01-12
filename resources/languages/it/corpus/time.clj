@@ -630,8 +630,14 @@
   "dal 13 al 15 luglio"
   "tra il 13 e il 15 luglio"
   "tra 13 e 15 luglio"
+  "dal tredici al quindici luglio"
   "13 luglio - 15 luglio"
   (datetime-interval [2013 7 13] [2013 7 16])
+
+  "dal 3 al 5"
+  "tra il 3 e il 5"
+  "dal tre al cinque"
+  (datetime-interval [2013 3 3] [2013 3 6])
 
   "8 ago - 12 ago"
   (datetime-interval [2013 8 8] [2013 8 13])
@@ -655,6 +661,9 @@
 
   "dalle tre all'una di giovedì"
   (datetime-interval [2013 2 14 3] [2013 2 14 14])
+
+  "dalla mezzanotte alle 2"
+  (datetime-interval [2013 2 13 0] [2013 2 13 3])
 
   "domani dalle 15:00 alle 17:00"
   (datetime-interval [2013 2 13 15 00] [2013 2 13 17 01])

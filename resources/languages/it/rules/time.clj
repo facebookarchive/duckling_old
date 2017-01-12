@@ -562,15 +562,21 @@
   ; Intervals
 
   "dd-dd <month> (interval)"
-  [#"(?i)(?:dal(?: |l'))?(3[01]|[12]\d|0?[1-9])" #"(?i)\-|([fs]ino )?al(l')?" #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
+  [#"(3[01]|[12]\d|0?[1-9])" #"\-" #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
   (interval (intersect %4 (day-of-month (Integer/parseInt (-> %1 :groups first))))
             (intersect %4 (day-of-month (Integer/parseInt (-> %3 :groups first))))
             true)
 
-  "dd-dd <month> (interval)"
-  [#"(?i)tra( il|l')?" #"(3[01]|[12]\d|0?[1-9])" #"(?i)e( il|l')?" #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
-  (interval (intersect %5 (day-of-month (Integer/parseInt (-> %2 :groups first))))
-            (intersect %5 (day-of-month (Integer/parseInt (-> %4 :groups first))))
+  "dal <integer> al <integer> (interval)"
+  [#"(?i)dal(?:l')?" (integer 1 31) #"(?i)([fs]ino )?al(l')?" (integer 1 31)]
+  (interval (day-of-month (:value %2))
+            (day-of-month (:value %4))
+            true)
+
+  "tra il <integer> e il <integer> (interval)"
+  [#"(?i)tra( (il|l'))?" (integer 1 31) #"(?i)e( (il|l'))?" (integer 1 31)]
+  (interval (day-of-month (:value %2))
+            (day-of-month (:value %4))
             true)
 
   ; Blocked for :latent time. May need to accept certain latents only, like hours
@@ -580,15 +586,15 @@
   (interval %1 %3 true)
 
   "fino al <datetime> (interval)"
-  [#"\-|[fs]ino a(l(l[ae'])?)?" (dim :time #(not (:latent %)))]
+  [#"[fs]ino a(l(l[ae'])?)?" (dim :time #(not (:latent %)))]
   (interval (cycle-nth :second 0) %2 false)
 
   "dal <datetime> al <datetime> (interval)"
-  [#"(?i)da(l(l')?)?" (dim :time) #"\-|([fs]ino )?al(l')?" (dim :time)]
+  [#"(?i)da(l(l')?)?" (dim :time #(not (:latent %))) #"([fs]ino )?al(l')?" (dim :time #(not (:latent %)))]
   (interval %2 %4 true)
 
   "tra il <datetime> e il <datetime> (interval)"
-  [#"(?i)tra( il| l')?" (dim :time) #"e( il| l')?" (dim :time)]
+  [#"(?i)tra( il| l')?" (dim :time #(not (:latent %))) #"e( il| l')?" (dim :time #(not (:latent %)))]
   (interval %2 %4 true)
 
   "<time-of-day> - <time-of-day> <day-of-month> (interval)"
@@ -598,7 +604,7 @@
   ; Specific for time-of-day, to help resolve ambiguities
 
   "dalle <time-of-day> alle <time-of-day> (interval)"
-  [#"(?i)da(l(le|l')?)?" {:form :time-of-day} #"\-|([fs]ino )?a(l(l[e'])?)?" {:form :time-of-day}]
+  [#"(?i)da(ll[ae'])?" {:form :time-of-day} #"\-|([fs]ino )?a(ll[ae'])?" {:form :time-of-day}]
   (interval %2 %4 true)
 
   ; Specific for within duration... Would need to be reworked
