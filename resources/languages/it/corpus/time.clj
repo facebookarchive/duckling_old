@@ -457,8 +457,12 @@
   "questa sera"
   "sta sera"
   "stasera"
-  "in serata"
   "nella sera"
+  "la sera"
+  "alla sera"
+  "in serata"
+  "la serata"
+  "nella serata"
   (datetime-interval [2013 2 12 18] [2013 2 13 00])
 
   "domani mattina"
@@ -470,6 +474,7 @@
   (datetime-interval [2013 2 12 4 30 00] [2013 2 18])
 
   "stanotte"
+  "nella notte"
   (datetime-interval [2013 2 13 0] [2013 2 13 04])
 
   "ultimo weekend"
