@@ -619,7 +619,7 @@
   (interval (cycle-nth :second 0) (in-duration (:value %2)) false)
 
   "entro il <duration>"
-  [#"(?i)entro (il|l')|per (il|l[a'])|in|nel(l[a'])?" (dim :unit-of-duration)]
+  [#"(?i)entro (il|l[a'])|per (tutt[ao] )?(il|l[a'])|in|nel(l[a'])?" (dim :unit-of-duration)]
   (interval (cycle-nth :second 0) (cycle-nth (:grain %2) 1) false)
 
   ; One-sided Intervals
