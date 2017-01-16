@@ -188,15 +188,15 @@
   (cycle-nth :second 0)
 
   "today"
-  #"(?i)today|(at this time)"
+  #"(?i)todays?|(at this time)"
   (cycle-nth :day 0)
 
   "tomorrow"
-  #"(?i)(tmrw?|tomm?or?row)"
+  #"(?i)(tmrw?|tomm?or?rows?)"
   (cycle-nth :day 1)
 
   "yesterday"
-  #"(?i)yesterday"
+  #"(?i)yesterdays?"
   (cycle-nth :day -1)
 
   "EOM|End of month"
