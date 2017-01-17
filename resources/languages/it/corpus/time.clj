@@ -30,7 +30,7 @@
 
   "martedì"
   "Martedì 19"
-  "ma 19"
+  "mar 19"
   (datetime 2013 2 19)
 
   "l'altro ieri"
@@ -38,7 +38,6 @@
   (datetime 2013 2 10)
 
   "lunedi"
-  "lu."
   "lun"
   (datetime 2013 2 18 :day-of-week 1)
 

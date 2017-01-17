@@ -17,31 +17,31 @@
   ;;
 
   "named-day"
-  #"(?i)luned[ìi]|lun?\.?"
+  #"(?i)luned[iì]|lun\.?"
   (day-of-week 1)
 
   "named-day"
-  #"(?i)marted[iì]|mar?\.?"
+  #"(?i)marted[iì]|mar\.?"
   (day-of-week 2)
 
   "named-day"
-  #"(?i)mercoled[iì]|mer?\.?"
+  #"(?i)mercoled[iì]|mer\.?"
   (day-of-week 3)
 
   "named-day"
-  #"(?i)gioved[iì]|gio?\.?"
+  #"(?i)gioved[iì]|gio\.?"
   (day-of-week 4)
 
   "named-day"
-  #"(?i)venerd[iì]|ven?\.?"
+  #"(?i)venerd[iì]|ven\.?"
   (day-of-week 5)
 
   "named-day"
-  #"(?i)sabato|sab?\.?"
+  #"(?i)sabato|sab\.?"
   (day-of-week 6)
 
   "named-day"
-  #"(?i)domenica|dom?\.?"
+  #"(?i)domenica|dom\.?"
   (day-of-week 7)
 
   "named-month"
