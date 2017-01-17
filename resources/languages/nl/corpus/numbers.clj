@@ -50,6 +50,11 @@
   ",77"
   (number 0.77)
 
+  "3 honderd"
+  "drie honderd"
+  "driehonderd"
+  (number 300)
+
   "5 duizend"
   "vijf duizend"
   "vijfduizend"

@@ -95,7 +95,7 @@
   :integer true
   :value (* (:value %1) (:value %2))
   :grain (:grain %2)}
-  
+
   ;;
   ;; Decimals
   ;;
