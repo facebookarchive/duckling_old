@@ -94,6 +94,7 @@
 
     "10"
     "zece"
+    "zeci"
     (number 10)
 
     "10"

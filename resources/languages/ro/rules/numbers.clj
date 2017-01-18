@@ -12,14 +12,14 @@
  ;;
 
     "integer (0..19)"
-    #"(?i)(unsprezece|doisprezece|treisprezece|paisprezece|cincisprezece|[sș]aispreece|[sș]aptesprezece|optsprezece|nou[aă]sprezece|un[sș]pe|doi[sș]pe|trei[sș]pe|pai[sș]pe|cin[sș]pe|[sș]ai[sș]pe|[sș]apti[sș]pe|opti[sș]pe|nou[aă][sș]pe|zero|nimic|nici(.+)|una|unu(l?)|doi|dou[aă]|trei|patru|cinci|[sș]ase|[sș]apte|opt|nou[aă]|zece|[iî]nt[aâ]i|un|o)"
+    #"(?i)(unsprezece|doisprezece|treisprezece|paisprezece|cincisprezece|[sș]aispreece|[sș]aptesprezece|optsprezece|nou[aă]sprezece|un[sș]pe|doi[sș]pe|trei[sș]pe|pai[sș]pe|cin[sș]pe|[sș]ai[sș]pe|[sș]apti[sș]pe|opti[sș]pe|nou[aă][sș]pe|zero|nimic|nici(.+)|una|unu(l?)|doi|dou[aă]|trei|patru|cinci|[sș]ase|[sș]apte|opt|nou[aă]|zec[ei]|[iî]nt[aâ]i|un|o)"
     {:dim :number
     :integer true
     :value (get {"zero" 0 "nimic" 0 "nici unul" 0 "nici unu" 0 "nici una" 0 "nici o" 0 "nicio" 0
               "unul" 1 "unu" 1 "una" 1 "un" 1 "o" 1 "intai" 1 "întâi" 1
               "doi" 2 "doua" 2 "două" 2 "trei" 3 "patru" 4 "cinci" 5
               "sase" 6 "șase" 6 "sapte" 7 "șapte" 7 "opt" 8 "noua" 9 "nouă" 9
-              "zece" 10
+              "zece" 10 "zeci" 10
               "unsprezece" 11 "unspe" 11 "unșpe" 11
               "doisprezece" 12 "doispe" 12 "doișpe" 12
               "treisprezece" 13 "treispe" 13 "treișpe" 13
@@ -34,7 +34,7 @@
     }
 
     "zeci (cu spatiu)"
-    #"(?i)zeci?"
+    #"(?i)zeci"
     {:dim :number :integer true :value 10 :grain 2}
 
     "suta"
@@ -60,11 +60,13 @@
      :value (Long/parseLong (first (:groups %1)))}
 
     "integer (20..90)"
-    #"(?i)(dou[aă]zeci|treizeci|patruzeci|cincizeci|[sș]aizeci|[sș]apte?zeci|optzeci|nou[aă]zeci)"
+    #"(?i)(dou[aă].?zeci|trei.?zeci|patru.?zeci|cinci.?zeci|[sș]ai.?zeci|[sș]apte.?zeci|opt.?zeci|nou[aă].?zeci)"
     {:dim :number
     :integer true
-    :value (get {"douazeci" 20 "douăzeci" 20 "treizeci" 30 "patruzeci" 40 "cincizeci" 50 "saizeci" 60
-              "șaizeci" 60 "saptezeci" 70 "șaptezeci" 70 "optzeci" 80 "nouazeci" 90 "nouăzeci" 90}
+    :value (get {"douazeci" 20 "douăzeci" 20 "doua zeci" 20 "două zeci" 20 "treizeci" 30 "patruzeci" 40 "trei zeci" 30 "patru zeci" 40
+              "cincizeci" 50 "saizeci" 60 "cinci zeci" 50 "sai zeci" 60 "șaizeci" 60 "șai zeci" 60
+              "saptezeci" 70 "șaptezeci" 70 "sapte zeci" 70 "șapte zeci" 70 "optzeci" 80 "nouazeci" 90 "nouăzeci" 90
+              "opt zeci" 80 "noua zeci" 90 "nouă zeci" 90}
              (-> %1 :groups first clojure.string/lower-case))
     :grain 2}
 
@@ -81,10 +83,10 @@
     :value (Long/parseLong (first (:groups %1)))}
 
     "number zeci (cu spatiu)"
-    [(integer 1 9) (integer 10 10)]
+    [(integer 1 9) #"(?i).?zeci"]
     {:dim :number
     :integer true
-    :value (* (:value %1) (:value %2))
+    :value (* (:value %1) 10)
     :grain (:grain %2)}
 
     "number sute"
