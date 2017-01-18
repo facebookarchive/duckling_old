@@ -74,6 +74,10 @@
   "eenentwintigduizend en elf"
   (number 21011)
 
+  "1ste"
+  "eerste"
+  (ordinal 1)
+
   "4de"
   "vierde"
   (ordinal 4)

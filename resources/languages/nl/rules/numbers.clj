@@ -157,6 +157,6 @@
               (-> %1 :groups first clojure.string/lower-case))}
 
  "ordinal (digits)"
- #"0*(\d+)(\.| ?(de))"
+ #"0*(\d+)(\.| ?(ste|de))"
  {:dim :ordinal
   :value (read-string (first (:groups %1)))})  ; read-string not the safest
