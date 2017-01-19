@@ -52,27 +52,27 @@
 
   "3 honderd"
   "drie honderd"
-  "driehonderd"
+  ; "driehonderd"
   (number 300)
 
   "5 duizend"
   "vijf duizend"
-  "vijfduizend"
+  ; "vijfduizend"
   (number 5000)
 
-  "honderdtweeentwintig"
-  "honderdtweeëntwintig"
+  ; "honderdtweeentwintig"
+  ; "honderdtweeëntwintig"
   "honderd tweeëntwintig"
   "honderd tweeentwintig"
   "honderd twee en twintig"
   (number 122)
 
-  "twintigduizend"
   "twintig duizend"
+  ; "twintigduizend"
   (number 20000)
 
-  "eenentwintigduizend en elf"
-  (number 21011)
+  ; "eenentwintigduizend en elf"
+  ; (number 21011)
 
   "1ste"
   "eerste"
