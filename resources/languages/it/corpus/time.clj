@@ -216,6 +216,13 @@
   "la settimana del 7 ott"
   (datetime 2013 10 7 :grain :week)
 
+  "il weekend del 15"
+  "il we del 15 febbraio"
+  (datetime-interval [2013 2 15 18] [2013 2 18 00])
+
+  "il week-end del 10 aprile"
+  (datetime-interval [2013 4 12 18] [2013 4 15 00])
+
   "l'ultimo giorno di ottobre 2015"
   "l'ultimo giorno dell'ottobre 2015"
   (datetime 2015 10 31)

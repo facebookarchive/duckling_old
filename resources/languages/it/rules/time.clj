@@ -500,6 +500,12 @@
             (intersect (day-of-week 1) (hour 0 false))
             false)
 
+  "il week-end del <time>"
+  [#"(?i)il (week[ -]?end|fine ?settimana|we) del" (dim :time)]
+  (interval (intersect (intersect (cycle-nth-after :week 0 %2) (day-of-week 5)) (hour 18 false))
+            (intersect (intersect (cycle-nth-after :week 1 %2) (day-of-week 1)) (hour 0 false))
+            false)
+
   "season"
   #"(?i)(in )?estate" ;could be smarter and take the exact hour into account... also some years the day can change
   (interval (month-day 6 21) (month-day 9 23) false)
