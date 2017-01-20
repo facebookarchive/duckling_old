@@ -62,7 +62,7 @@
    :value (duration :minute 45)}
 
   "in/after <duration>"
-  [#"(?i)[tf]ra|in|dopo" (dim :duration)]
+  [#"(?i)[tf]ra|dopo" (dim :duration)]
   (in-duration (:value %2))
 
   "<duration> ago"

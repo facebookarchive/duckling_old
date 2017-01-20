@@ -790,6 +790,8 @@
   (datetime 2013 2 12 13 30)
 
   "in 15 minuti"
+  (datetime-interval [2013 2 12 4 30 0] [2013 2 12 4 45 0])
+
   "tra 15 minuti"
   (datetime 2013 2 12 4 45 0)
 
