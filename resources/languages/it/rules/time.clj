@@ -7,7 +7,7 @@
 
   ; same thing, with "de" in between like "domingo de la semana pasada"
   "two time tokens separated by `di`"
-  [(dim :time #(not (:latent %))) #"(?i)de" (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
+  [(dim :time #(not (:latent %))) #"(?i)di" (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
 
   "in <named-month>" ; in September
@@ -283,12 +283,16 @@
   ; In general we are flexible and accept both ordinals (3rd) and numbers (3)
 
   "day of month (1st)"
-  [#"(?i)(primo|1o|1º|1°)( di)?"];
+  [#"(?i)(primo|1o|1º|1°)"];
   (day-of-month 1)
 
-  "the <day-of-month>" ; this one is not latent
-  [#"(?i)il" (integer 1 31)]
-  (assoc (day-of-month (:value %2)) :latent true)
+  "<day-of-month> (latent)"
+  [(integer 1 31)]
+  (assoc (day-of-month (:value %1)) :latent true)
+
+  "il <day-of-month>" ; this one is not latent
+  [#"(?i)il|l'" (integer 1 31)]
+  (day-of-month (:value %2))
 
   "<day-of-month> <named-month>" ;  dodici luglio 2010 (this rule removes latency)
   [(integer 1 31) {:form :month}]
@@ -619,22 +623,26 @@
   (interval (cycle-nth :second 0) (in-duration (:value %2)) false)
 
   "entro il <duration>"
-  [#"(?i)entro (il|l[a'])|per (tutt[ao] )?(il|l[a'])|in|nel(l[a'])?" (dim :unit-of-duration)]
+  [#"(?i)(entro|durante|per( tutt[ao])?) (il|l[a'])|in|nel(l[a'])?" (dim :unit-of-duration)]
   (interval (cycle-nth :second 0) (cycle-nth (:grain %2) 1) false)
 
   ; One-sided Intervals
 
   "entro le <time-of-day>"
-  [#"(?i)entro( l[ea'])?|prima d(i|ell['e])" (dim :time)]
+  [#"(?i)entro( l[ea'])?|prima d(i|ell['ea])" {:form :time-of-day}]
+  (merge %2 {:direction :before})
+
+  "entro il <time>"
+  [#"(?i)entro( il| la)?|prima d(i|el(la)?)" (dim :time)]
   (merge %2 {:direction :before})
 
   "dopo le <time-of-day>"
-  [#"(?i)dopo l[e']|da(l(l['e])?)?" (dim :time)]
+  [#"(?i)dopo( l['ea])?|dal(l['ea])?" {:form :time-of-day}]
   (merge %2 {:direction :after})
 
-  "<time> dopo le <time-of-day>"
-  [(dim :time) #"(?i)dopo l[e']|dall['e]" {:form :time-of-day}]
-  (merge (intersect %1 %3) {:direction :after})
+  "dal <time>"
+  [#"(?i)dopo( il)?|dal?" (dim :time)]
+  (merge %2 {:direction :after})
 
   "<time> dopo le <time-of-day>"
   [(dim :time) #"(?i)dopo l[e']|dall['e]" {:form :time-of-day}]

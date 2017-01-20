@@ -31,6 +31,7 @@
   "martedì"
   "Martedì 19"
   "mar 19"
+  "il 19"
   (datetime 2013 2 19)
 
   "l'altro ieri"
@@ -750,6 +751,9 @@
   "dalle 14"
   (datetime 2013 2 12 14 :direction :after)
 
+  "dalla mezzanotte"
+  (datetime 2013 2 13 0 :direction :after)
+
   "domani dopo le 14"
   "domani dalle 14"
   (datetime 2013 2 13 14 :direction :after)
@@ -766,6 +770,18 @@
   "da dopodomani"
   "da giovedì"
   (datetime 2013 2 14 :direction :after)
+
+  "dal primo"
+  (datetime 2013 3 1 :direction :after)
+
+  "dal 20"
+  (datetime 2013 2 20 :direction :after)
+
+  "entro il 15"
+  (datetime 2013 2 15 :direction :before)
+
+  "prima del 20 aprile"
+  (datetime 2013 4 20 :direction :before)
 
   "nel pomeriggio"
   (datetime-interval [2013 2 12 12] [2013 2 12 19])
