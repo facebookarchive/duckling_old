@@ -164,12 +164,12 @@
   (intersect (day-of-week 7) (month 5) (cycle-nth-after :week 1 (month-day 5 1)))
 
 
-  "right now"
-  #"(subito|immediatamente|proprio adesso|in questo momento)"
+  "now"
+  #"(?i)subito|(immediata|attual)mente|(proprio )?adesso|(in questo|al) momento|ora"
   (cycle-nth :second 0)
 
-  "now"
-  #"(?i)(ora|al momento|attualmente|adesso|(di )?oggi|in giornata)"
+  "today"
+  #"(?i)(di )?oggi|in giornata"
   (cycle-nth :day 0)
 
   "tomorrow"

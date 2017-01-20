@@ -6,12 +6,12 @@
   "subito"
   "immediatamente"
   "in questo momento"
+  "ora"
+  "adesso"
   (datetime 2013 2 12 4 30 00)
 
-  "ora"
   "di oggi"
   "oggi"
-  "adesso"
   "in giornata"
   (datetime 2013 2 12)
 
