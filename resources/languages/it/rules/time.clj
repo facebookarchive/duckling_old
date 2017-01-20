@@ -286,10 +286,6 @@
   [#"(?i)(primo|1o|1º|1°)"];
   (day-of-month 1)
 
-  "<day-of-month> (latent)"
-  [(integer 1 31)]
-  (assoc (day-of-month (:value %1)) :latent true)
-
   "il <day-of-month>" ; this one is not latent
   [#"(?i)il|l'" (integer 1 31)]
   (day-of-month (:value %2))
@@ -389,7 +385,7 @@
   {:relative-minutes (:value %1)}
 
   "<integer> minutes (as relative minutes)"
-  [(integer 1 59) #"(?i)min\.?(ut[oi])?"]
+  [(integer 1 59) #"(?i)min(ut[oi]|\.)?"]
   {:relative-minutes (:val %1)}
 
   "<hour-of-day> <integer> (as relative minutes)"
@@ -632,17 +628,25 @@
   [#"(?i)entro( l[ea'])?|prima d(i|ell['ea])" {:form :time-of-day}]
   (merge %2 {:direction :before})
 
-  "entro il <time>"
-  [#"(?i)entro( il| la)?|prima d(i|el(la)?)" (dim :time)]
+  "entro <time>"
+  [#"(?i)entro( la)?|prima d(i|ella)" (dim :time)]
   (merge %2 {:direction :before})
+
+  "entro il <integer>"
+  [#"(?i)entro il|prima del" (integer 1 31)]
+  (merge (day-of-month (:value %2)) {:direction :before})
 
   "dopo le <time-of-day>"
   [#"(?i)dopo( l['ea])?|dal(l['ea])?" {:form :time-of-day}]
   (merge %2 {:direction :after})
 
-  "dal <time>"
-  [#"(?i)dopo( il)?|dal?" (dim :time)]
+  "dopo <time>"
+  [#"(?i)dopo|dal?" (dim :time)]
   (merge %2 {:direction :after})
+
+  "dal <integer>"
+  [#"(?i)dal" (integer 1 31)]
+  (merge (day-of-month (:value %2)) {:direction :after})
 
   "<time> dopo le <time-of-day>"
   [(dim :time) #"(?i)dopo l[e']|dall['e]" {:form :time-of-day}]
