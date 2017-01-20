@@ -482,6 +482,7 @@
 
   "stanotte"
   "nella notte"
+  "in nottata"
   (datetime-interval [2013 2 13 0] [2013 2 13 04])
 
   "ultimo weekend"

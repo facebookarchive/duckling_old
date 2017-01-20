@@ -461,7 +461,7 @@
   (assoc (intersect (cycle-nth :day 0) (interval (hour 18 false) (hour 0 false) false)) :form :part-of-day)
 
   "stanotte"
-  [#"(?i)(sta|nella )notte"]
+  [#"(?i)(sta|nella )notte|(in|nella) nottata"]
   (assoc (intersect (cycle-nth :day 1) (interval (hour 0 false) (hour 4 false) false)) :form :part-of-day)
 
   "domattina"
