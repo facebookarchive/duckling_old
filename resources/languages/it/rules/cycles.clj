@@ -70,14 +70,6 @@
   [#"(?i)((il|la|[nd]el(la)?) )?prossim[oa]" (dim :cycle)]
   (cycle-nth (:grain %2) 1)
 
-  "le <time> prossime <cycle>|i <time> prossimi <cycle>"
-  [#"(?i)([nd]e)?i|([nd]el)?le" (dim :time) #"(?i)prossim[ie]" (dim :cycle)]
-  (cycle-nth-after (:grain %4) 1 %2)
-
-  "le prossime <time> <cycle>|i prossimi <time> <cycle>"
-  [#"(?i)(([nd]e)?i|([nd]el)?le) prossim[ie]" (dim :time) (dim :cycle)]
-  (cycle-nth-after (:grain %3) 1 %2)
-
   "il <cycle> dopo <time>"
   [#"(?i)l[a']|il|[nd]el" (dim :cycle) #"(?i)dopo" (dim :time)]
   (cycle-nth-after (:grain %2) 1 %4)
@@ -99,11 +91,11 @@
   ;(cycle-n-not-immediate (:grain %2) -1)
 
   "next n <cycle>"
-  [#"(?i)(([nd]e)?i|([nd]el)?le) prossim[ei]" (integer 2 9999) (dim :cycle)]
+  [#"(?i)((([nd]e)?i|([nd]el)?le) )?prossim[ei]" (integer 2 9999) (dim :cycle)]
   (cycle-n-not-immediate (:grain %3) (:value %2))
 
   "next n <cycle>"
-  [#"(?i)(([nd]e)?i|([nd]el)?le)" (integer 2 9999) #"(?i)prossim[ei]" (dim :cycle)]
+  [#"(?i)([nd]e)?i|([nd]el)?le" (integer 2 9999) #"(?i)prossim[ei]" (dim :cycle)]
   (cycle-n-not-immediate (:grain %4) (:value %2))
 
   "last <day-of-week> of <time>"

@@ -6,12 +6,12 @@
   "subito"
   "immediatamente"
   "in questo momento"
+  "ora"
+  "adesso"
   (datetime 2013 2 12 4 30 00)
 
-  "ora"
   "di oggi"
   "oggi"
-  "adesso"
   "in giornata"
   (datetime 2013 2 12)
 
@@ -30,7 +30,8 @@
 
   "martedì"
   "Martedì 19"
-  "ma 19"
+  "mar 19"
+  "il 19"
   (datetime 2013 2 19)
 
   "l'altro ieri"
@@ -38,7 +39,6 @@
   (datetime 2013 2 10)
 
   "lunedi"
-  "lu."
   "lun"
   (datetime 2013 2 18 :day-of-week 1)
 
@@ -216,12 +216,32 @@
   "la settimana del 7 ott"
   (datetime 2013 10 7 :grain :week)
 
+  "il weekend del 15"
+  "il we del 15 febbraio"
+  (datetime-interval [2013 2 15 18] [2013 2 18 00])
+
+  "il week-end del 10 aprile"
+  (datetime-interval [2013 4 12 18] [2013 4 15 00])
+
   "l'ultimo giorno di ottobre 2015"
   "l'ultimo giorno dell'ottobre 2015"
   (datetime 2015 10 31)
 
   "l'ultima settimana di settembre 2014"
   (datetime 2014 9 22 :grain :week)
+
+  "tra un'ora"
+  "tra 1 ora"
+  (datetime 2013 2 12 5 30)
+
+  "tra un quarto d'ora"
+  (datetime 2013 2 12 4 45 00)
+
+  "tra mezz'ora"
+  (datetime 2013 2 12 5 00 00)
+
+  "tra tre quarti d'ora"
+  (datetime 2013 2 12 5 15 00)
 
   ;; nth of
   "primo martedì di ottobre"
@@ -444,8 +464,12 @@
   "questa sera"
   "sta sera"
   "stasera"
-  "in serata"
   "nella sera"
+  "la sera"
+  "alla sera"
+  "in serata"
+  "la serata"
+  "nella serata"
   (datetime-interval [2013 2 12 18] [2013 2 13 00])
 
   "domani mattina"
@@ -457,6 +481,8 @@
   (datetime-interval [2013 2 12 4 30 00] [2013 2 18])
 
   "stanotte"
+  "nella notte"
+  "in nottata"
   (datetime-interval [2013 2 13 0] [2013 2 13 04])
 
   "ultimo weekend"
@@ -536,7 +562,7 @@
   (datetime-interval [2013 2 11 4] [2013 2 12 4])
 
   "le prossime 3 ore"
-  "le prossime tre ore"
+  "prossime tre ore"
   "nelle prossime 3 ore"
   (datetime-interval [2013 2 12 5] [2013 2 12 8])
 
@@ -551,13 +577,14 @@
   "i due giorni scorsi"
   (datetime-interval [2013 2 10] [2013 2 12])
 
-  "i prossimi 3 giorni"
+  "prossimi 3 giorni"
   "i prossimi tre giorni"
   "nei prossimi 3 giorni"
   (datetime-interval [2013 2 13] [2013 2 16])
 
   "i prossimi giorni"
   "nei prossimi giorni"
+  "prossimi giorni"
   (datetime-interval [2013 2 13] [2013 2 16])
 
   "le ultime 2 settimane"
@@ -567,7 +594,7 @@
   "nelle 2 ultime settimane"
   (datetime-interval [2013 1 28 :grain :week] [2013 2 11 :grain :week])
 
-  "le prossime 3 settimane"
+  "prossime 3 settimane"
   "le prossime tre settimane"
   "le 3 prossime settimane"
   "nelle prossime 3 settimane"
@@ -588,6 +615,7 @@
 
   "i prossimi 3 mesi"
   "i prossimi tre mesi"
+  "prossimi 3 mesi"
   "i 3 prossimi mesi"
   "i tre prossimi mesi"
   "nei prossimi tre mesi"
@@ -615,11 +643,21 @@
   "dal 13 al 15 luglio"
   "tra il 13 e il 15 luglio"
   "tra 13 e 15 luglio"
+  "dal tredici al quindici luglio"
   "13 luglio - 15 luglio"
   (datetime-interval [2013 7 13] [2013 7 16])
 
+  "dal 3 al 5"
+  "tra il 3 e il 5"
+  "dal tre al cinque"
+  (datetime-interval [2013 3 3] [2013 3 6])
+
   "8 ago - 12 ago"
   (datetime-interval [2013 8 8] [2013 8 13])
+
+  "da domani a giovedì"
+  "da domani a dopodomani"
+  (datetime-interval [2013 2 13] [2013 2 15])
 
   "9:30 - 11:00"
   (datetime-interval [2013 2 12 9 30] [2013 2 12 11 1])
@@ -640,6 +678,9 @@
 
   "dalle tre all'una di giovedì"
   (datetime-interval [2013 2 14 3] [2013 2 14 14])
+
+  "dalla mezzanotte alle 2"
+  (datetime-interval [2013 2 13 0] [2013 2 13 3])
 
   "domani dalle 15:00 alle 17:00"
   (datetime-interval [2013 2 13 15 00] [2013 2 13 17 01])
@@ -709,6 +750,9 @@
   "dalle 14"
   (datetime 2013 2 12 14 :direction :after)
 
+  "dalla mezzanotte"
+  (datetime 2013 2 13 0 :direction :after)
+
   "domani dopo le 14"
   "domani dalle 14"
   (datetime 2013 2 13 14 :direction :after)
@@ -726,6 +770,18 @@
   "da giovedì"
   (datetime 2013 2 14 :direction :after)
 
+  "dal primo"
+  (datetime 2013 3 1 :direction :after)
+
+  "dal 20"
+  (datetime 2013 2 20 :direction :after)
+
+  "entro il 15"
+  (datetime 2013 2 15 :direction :before)
+
+  "prima del 20 aprile"
+  (datetime 2013 4 20 :direction :before)
+
   "nel pomeriggio"
   (datetime-interval [2013 2 12 12] [2013 2 12 19])
 
@@ -735,6 +791,8 @@
   (datetime 2013 2 12 13 30)
 
   "in 15 minuti"
+  (datetime-interval [2013 2 12 4 30 0] [2013 2 12 4 45 0])
+
   "tra 15 minuti"
   (datetime 2013 2 12 4 45 0)
 

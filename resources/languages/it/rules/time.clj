@@ -7,7 +7,7 @@
 
   ; same thing, with "de" in between like "domingo de la semana pasada"
   "two time tokens separated by `di`"
-  [(dim :time #(not (:latent %))) #"(?i)de" (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
+  [(dim :time #(not (:latent %))) #"(?i)di" (dim :time #(not (:latent %)))] ; sequence of two tokens with a time fn
   (intersect %1 %3)
 
   "in <named-month>" ; in September
@@ -17,31 +17,31 @@
   ;;
 
   "named-day"
-  #"(?i)luned[ìi]|lun?\.?"
+  #"(?i)luned[iì]|lun\.?"
   (day-of-week 1)
 
   "named-day"
-  #"(?i)marted[iì]|mar?\.?"
+  #"(?i)marted[iì]|mar\.?"
   (day-of-week 2)
 
   "named-day"
-  #"(?i)mercoled[iì]|mer?\.?"
+  #"(?i)mercoled[iì]|mer\.?"
   (day-of-week 3)
 
   "named-day"
-  #"(?i)gioved[iì]|gio?\.?"
+  #"(?i)gioved[iì]|gio\.?"
   (day-of-week 4)
 
   "named-day"
-  #"(?i)venerd[iì]|ven?\.?"
+  #"(?i)venerd[iì]|ven\.?"
   (day-of-week 5)
 
   "named-day"
-  #"(?i)sabato|sab?\.?"
+  #"(?i)sabato|sab\.?"
   (day-of-week 6)
 
   "named-day"
-  #"(?i)domenica|dom?\.?"
+  #"(?i)domenica|dom\.?"
   (day-of-week 7)
 
   "named-month"
@@ -164,12 +164,12 @@
   (intersect (day-of-week 7) (month 5) (cycle-nth-after :week 1 (month-day 5 1)))
 
 
-  "right now"
-  #"(subito|immediatamente|proprio adesso|in questo momento)"
+  "now"
+  #"(?i)subito|(immediata|attual)mente|(proprio )?adesso|(in questo|al) momento|ora"
   (cycle-nth :second 0)
 
-  "now"
-  #"(?i)(ora|al momento|attualmente|adesso|(di )?oggi|in giornata)"
+  "today"
+  #"(?i)(di )?oggi|in giornata"
   (cycle-nth :day 0)
 
   "tomorrow"
@@ -222,7 +222,7 @@
   (pred-nth %1 1)
 
   "prossimi <unit-of-duration>"
-  [#"(?i)((ne)?i|(nel)?le) prossim[ie]" (dim :unit-of-duration)]
+  [#"(?i)((([nd]e)?i|([nd]el)?le) )?prossim[ie]" (dim :unit-of-duration)]
   (interval (cycle-nth (:grain %2) 1) (cycle-nth (:grain %2) 3) true)
 
   "<time> last"
@@ -283,12 +283,12 @@
   ; In general we are flexible and accept both ordinals (3rd) and numbers (3)
 
   "day of month (1st)"
-  [#"(?i)(primo|1o|1º|1°)( di)?"];
+  [#"(?i)(primo|1o|1º|1°)"];
   (day-of-month 1)
 
-  "the <day-of-month>" ; this one is not latent
-  [#"(?i)il" (integer 1 31)]
-  (assoc (day-of-month (:value %2)) :latent true)
+  "il <day-of-month>" ; this one is not latent
+  [#"(?i)il|l'" (integer 1 31)]
+  (day-of-month (:value %2))
 
   "<day-of-month> <named-month>" ;  dodici luglio 2010 (this rule removes latency)
   [(integer 1 31) {:form :month}]
@@ -298,8 +298,8 @@
   [{:form :day-of-week} (integer 1 31)]
   (intersect %1 (day-of-month (:value %2)))
 
-  "il <day-of-month> de <named-month>" ; il dodici luglio 2010
-  [#"(?i)il" (integer 1 31) {:form :month}]
+  "il <day-of-month> <named-month>" ; il dodici luglio 2010
+  [#"(?i)il|l'" (integer 1 31) {:form :month}]
   (intersect %3 (day-of-month (:value %2)))
 
   ;; hours and minutes (absolute time)
@@ -324,7 +324,7 @@
   (dissoc %2 :latent)
 
   "at <time-of-day>" ; alle due
-  [#"(?i)all[e']|le|a" {:form :time-of-day}]
+  [#"(?i)all[e']|l[e']|a" {:form :time-of-day}]
   (dissoc %2 :latent)
 
 
@@ -366,7 +366,7 @@
 
   "una"
   #"(?i)una"
-  (hour 1 true)
+  (assoc (hour 1 true) :latent true)
 
   "quarter (relative minutes)"
   #"(?i)un quarto"
@@ -385,7 +385,7 @@
   {:relative-minutes (:value %1)}
 
   "<integer> minutes (as relative minutes)"
-  [(integer 1 59) #"(?i)min\.?(ut[oi])?"]
+  [(integer 1 59) #"(?i)min(ut[oi]|\.)?"]
   {:relative-minutes (:val %1)}
 
   "<hour-of-day> <integer> (as relative minutes)"
@@ -441,7 +441,7 @@
   (assoc (intersect (cycle-nth :day 1) (interval (hour 0 false) (hour 4 false) false)) :form :part-of-day :latent true)
 
   "this <part-of-day>"
-  [#"(?i)quest[oa]|sta|in|nel(la)?" {:form :part-of-day}]
+  [#"(?i)(que)?st[oa]|in|(al|nel)(la)?|la|il" {:form :part-of-day}]
   (assoc (intersect (cycle-nth :day 0) %2) :form :part-of-day) ;; removes :latent
 
   "<time> notte"
@@ -461,7 +461,7 @@
   (assoc (intersect (cycle-nth :day 0) (interval (hour 18 false) (hour 0 false) false)) :form :part-of-day)
 
   "stanotte"
-  [#"(?i)stanotte"]
+  [#"(?i)(sta|nella )notte|(in|nella) nottata"]
   (assoc (intersect (cycle-nth :day 1) (interval (hour 0 false) (hour 4 false) false)) :form :part-of-day)
 
   "domattina"
@@ -496,6 +496,12 @@
             (intersect (day-of-week 1) (hour 0 false))
             false)
 
+  "il week-end del <time>"
+  [#"(?i)il (week[ -]?end|fine ?settimana|we) del" (dim :time)]
+  (interval (intersect (intersect (cycle-nth-after :week 0 %2) (day-of-week 5)) (hour 18 false))
+            (intersect (intersect (cycle-nth-after :week 1 %2) (day-of-week 1)) (hour 0 false))
+            false)
+
   "season"
   #"(?i)(in )?estate" ;could be smarter and take the exact hour into account... also some years the day can change
   (interval (month-day 6 21) (month-day 9 23) false)
@@ -517,7 +523,7 @@
   ; a specific version of "il", above, removes :latent for integer as day of month
   ; this one is more general but does not remove latency
   "il <time>"
-  [#"(?i)il" (dim :time #(not (:latent %)))]
+  [#"(?i)il|l'" (dim :time #(not (:latent %)))]
   %2
 
   ;; Time zones
@@ -562,15 +568,21 @@
   ; Intervals
 
   "dd-dd <month> (interval)"
-  [#"(?i)(?:dal(?: |l'))?(3[01]|[12]\d|0?[1-9])" #"(?i)\-|([fs]ino )?al(l')?" #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
+  [#"(3[01]|[12]\d|0?[1-9])" #"\-" #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
   (interval (intersect %4 (day-of-month (Integer/parseInt (-> %1 :groups first))))
             (intersect %4 (day-of-month (Integer/parseInt (-> %3 :groups first))))
             true)
 
-  "dd-dd <month> (interval)"
-  [#"(?i)tra( il|l')?" #"(3[01]|[12]\d|0?[1-9])" #"(?i)e( il|l')?" #"(3[01]|[12]\d|0?[1-9])" {:form :month}]
-  (interval (intersect %5 (day-of-month (Integer/parseInt (-> %2 :groups first))))
-            (intersect %5 (day-of-month (Integer/parseInt (-> %4 :groups first))))
+  "dal <integer> al <integer> (interval)"
+  [#"(?i)dal(?:l')?" (integer 1 31) #"(?i)([fs]ino )?al(l')?" (integer 1 31)]
+  (interval (day-of-month (:value %2))
+            (day-of-month (:value %4))
+            true)
+
+  "tra il <integer> e il <integer> (interval)"
+  [#"(?i)tra( (il|l'))?" (integer 1 31) #"(?i)e( (il|l'))?" (integer 1 31)]
+  (interval (day-of-month (:value %2))
+            (day-of-month (:value %4))
             true)
 
   ; Blocked for :latent time. May need to accept certain latents only, like hours
@@ -580,15 +592,15 @@
   (interval %1 %3 true)
 
   "fino al <datetime> (interval)"
-  [#"\-|[fs]ino a(l(l[ae'])?)?" (dim :time #(not (:latent %)))]
+  [#"[fs]ino a(l(l[ae'])?)?" (dim :time #(not (:latent %)))]
   (interval (cycle-nth :second 0) %2 false)
 
   "dal <datetime> al <datetime> (interval)"
-  [#"(?i)da(l(l')?)?" (dim :time) #"\-|([fs]ino )?al(l')?" (dim :time)]
+  [#"(?i)da(l(l')?)?" (dim :time #(not (:latent %))) #"([fs]ino )?a(l(l')?)?" (dim :time #(not (:latent %)))]
   (interval %2 %4 true)
 
   "tra il <datetime> e il <datetime> (interval)"
-  [#"(?i)tra( il| l')?" (dim :time) #"e( il| l')?" (dim :time)]
+  [#"(?i)tra( il| l')?" (dim :time #(not (:latent %))) #"e( il| l')?" (dim :time #(not (:latent %)))]
   (interval %2 %4 true)
 
   "<time-of-day> - <time-of-day> <day-of-month> (interval)"
@@ -598,7 +610,7 @@
   ; Specific for time-of-day, to help resolve ambiguities
 
   "dalle <time-of-day> alle <time-of-day> (interval)"
-  [#"(?i)da(l(le|l')?)?" {:form :time-of-day} #"\-|([fs]ino )?a(l(l[e'])?)?" {:form :time-of-day}]
+  [#"(?i)da(ll[ae'])?" {:form :time-of-day} #"\-|([fs]ino )?a(ll[ae'])?" {:form :time-of-day}]
   (interval %2 %4 true)
 
   ; Specific for within duration... Would need to be reworked
@@ -607,22 +619,34 @@
   (interval (cycle-nth :second 0) (in-duration (:value %2)) false)
 
   "entro il <duration>"
-  [#"(?i)entro (il|l')|per (il|l[a'])|in|nel(l[a'])?" (dim :unit-of-duration)]
+  [#"(?i)(entro|durante|per( tutt[ao])?) (il|l[a'])|in|nel(l[a'])?" (dim :unit-of-duration)]
   (interval (cycle-nth :second 0) (cycle-nth (:grain %2) 1) false)
 
   ; One-sided Intervals
 
   "entro le <time-of-day>"
-  [#"(?i)entro( l[ea'])?|prima d(i|ell['e])" (dim :time)]
+  [#"(?i)entro( l[ea'])?|prima d(i|ell['ea])" {:form :time-of-day}]
   (merge %2 {:direction :before})
 
+  "entro <time>"
+  [#"(?i)entro( la)?|prima d(i|ella)" (dim :time)]
+  (merge %2 {:direction :before})
+
+  "entro il <integer>"
+  [#"(?i)entro il|prima del" (integer 1 31)]
+  (merge (day-of-month (:value %2)) {:direction :before})
+
   "dopo le <time-of-day>"
-  [#"(?i)dopo l[e']|da(l(l['e])?)?" (dim :time)]
+  [#"(?i)dopo( l['ea])?|dal(l['ea])?" {:form :time-of-day}]
   (merge %2 {:direction :after})
 
-  "<time> dopo le <time-of-day>"
-  [(dim :time) #"(?i)dopo l[e']|dall['e]" {:form :time-of-day}]
-  (merge (intersect %1 %3) {:direction :after})
+  "dopo <time>"
+  [#"(?i)dopo|dal?" (dim :time)]
+  (merge %2 {:direction :after})
+
+  "dal <integer>"
+  [#"(?i)dal" (integer 1 31)]
+  (merge (day-of-month (:value %2)) {:direction :after})
 
   "<time> dopo le <time-of-day>"
   [(dim :time) #"(?i)dopo l[e']|dall['e]" {:form :time-of-day}]
