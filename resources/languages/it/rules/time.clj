@@ -589,12 +589,6 @@
             (day-of-month (:value %4))
             true)
 
-  "<integer> e <integer+1> (interval)"
-  [(integer 1 31) #"(?i)e(?: (il|l'))?" (and #(= (+ (:value %1) 1) (:value %)) (integer 1 31))]
-  (interval (day-of-month (:value %1))
-            (day-of-month (:value %3))
-            true)
-
   ; Blocked for :latent time. May need to accept certain latents only, like hours
 
   "<datetime> - <datetime> (interval)"

@@ -654,15 +654,6 @@
   "8 ago - 12 ago"
   (datetime-interval [2013 8 8] [2013 8 13])
 
-  "l'8 e 9 agosto"
-  "l'8 e il 9 agosto"
-  (datetime-interval [2013 8 8] [2013 8 10])
-
-  "il 20 e 21"
-  "il 20 e il 21"
-  "20 e 21 di questo mese"
-  (datetime-interval [2013 2 20] [2013 2 22])
-
   "da domani a giovedì"
   "da domani a dopodomani"
   (datetime-interval [2013 2 13] [2013 2 15])
