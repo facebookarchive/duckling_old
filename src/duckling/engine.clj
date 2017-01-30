@@ -204,9 +204,9 @@
       (if (or max-iter-reached? max-stash-reached? finished?)
         (do
           (when max-iter-reached?
-            (warnf (format "@pass-all reached maximum iterations for sentence '%s'" sentence)))
+            (warnf "@pass-all reached maximum iterations for sentence '%s'" sentence))
           (when max-stash-reached?
-            (warnf (format "@pass-all reached maximum stash size for sentence '%s'" sentence)))
+            (warnf "@pass-all reached maximum stash size for sentence '%s'" sentence))
           stash)
         (recur (pass-once stash rules sentence) (count stash) (dec remaining-iter))))))
 

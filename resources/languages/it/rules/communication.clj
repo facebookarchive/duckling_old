@@ -27,7 +27,13 @@
   :value (-> %1 :groups first)}
 
  "email"
- #"([\w\.\-_]+@[\w\.\-_]+)"
+ #"([\w\.\-_]+ chiocciola ([\w\-_]+\.)+\w+)"
+ {:dim :email
+  :value ( clojure.string/replace (-> %1 :groups first)  #" chiocciola " "@")}
+ 
+ "email" 
+ ;#"([\w\.\-_]+@[\w\.\-_]+)"
+ #"([\w\.\-_]+@([\w\-_]+\.)+\w+)"
  {:dim :email
   :value (-> %1 :groups first)}
  
