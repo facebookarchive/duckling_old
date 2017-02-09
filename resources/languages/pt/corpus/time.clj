@@ -7,11 +7,15 @@
   "ja"
   "nesse instante"
   "neste instante"
+  "desse instante"
+  "deste instante"
   (datetime 2013 2 12 4 30 00)
 
   "hoje"
   "nesse momento"
   "neste momento"
+  "desse momento"
+  "deste momento"
   (datetime 2013 2 12)
 
   "ontem"
