@@ -605,9 +605,29 @@
   [#"(?i)(later than|from)" {:form :time-of-day} #"((but )?before)|\-|to|th?ru|through|(un)?til(l)?" {:form :time-of-day}]
   (interval %2 %4 true)
 
-  "between <time-of-day> and <time-of-day> (interval)"
-  [#"(?i)between" {:form :time-of-day} #"and" {:form :time-of-day}]
-  (interval %2 %4 true)
+  "from <time-of-day-latent> - <time-of-day-latent> (interval) am|pm"
+  [#"(?i)(later than|from)" #(and (= :time-of-day (:form %)) (:latent %)) #"\-|:|to|th?ru|through|(un)?til(l)?" #(and (= :time-of-day (:form %)) (:latent %)) #"(?i)([ap])\.?m?\.?"]
+  (let [[p meridiem] (if (= "a" (-> %5 :groups first clojure.string/lower-case))
+                       [[(hour 0) (hour 12) false] :am]
+                       [[(hour 12) (hour 0) false] :pm])]
+    (interval
+      (-> (intersect %2 (apply interval p))
+        (assoc :form :time-of-day))
+      (-> (intersect %4 (apply interval p))
+        (assoc :form :time-of-day))
+      true))
+
+  "between <time-of-day-latent> and <time-of-day-latent> (interval) am|pm"
+  [#"(?i)between" #(and (= :time-of-day (:form %)) (:latent %)) #"and" #(and (= :time-of-day (:form %)) (:latent %)) #"(?i)([ap])\.?m?\.?"]
+  (let [[p meridiem] (if (= "a" (-> %5 :groups first clojure.string/lower-case))
+                       [[(hour 0) (hour 12) false] :am]
+                       [[(hour 12) (hour 0) false] :pm])]
+    (interval
+      (-> (intersect %2 (apply interval p))
+        (assoc :form :time-of-day))
+      (-> (intersect %4 (apply interval p))
+        (assoc :form :time-of-day))
+      true))
 
   ; Specific for within duration... Would need to be reworked
   "within <duration>"
