@@ -617,6 +617,10 @@
         (assoc :form :time-of-day))
       true))
 
+  "between <time-of-day> and <time-of-day> (interval)"
+  [#"(?i)between" {:form :time-of-day} #"and" {:form :time-of-day}]
+  (interval %2 %4 true)
+
   "between <time-of-day-latent> and <time-of-day-latent> (interval) am|pm"
   [#"(?i)between" #(and (= :time-of-day (:form %)) (:latent %)) #"and" #(and (= :time-of-day (:form %)) (:latent %)) #"(?i)([ap])\.?m?\.?"]
   (let [[p meridiem] (if (= "a" (-> %5 :groups first clojure.string/lower-case))
