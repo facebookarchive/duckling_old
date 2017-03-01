@@ -44,6 +44,16 @@
   "tjue"
   (number 20)
 
+  "30"
+  "tretti"
+  "tredve"
+  (number 30)
+
+  "70"
+  "søtti"
+  "sytti"
+  (number 70)
+
   "1,1"
   "1,10"
   "01,10"

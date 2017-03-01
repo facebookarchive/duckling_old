@@ -205,7 +205,7 @@
   (pred-nth-not-immediate %2 0)
 
   "last <time>"
-  [#"(?i)(siste|forrige|seneste)" (dim :time)]
+  [#"(?i)(siste|sist|forrige|seneste)" (dim :time)]
   (pred-nth %2 -1)
 
   "<time> after next"
