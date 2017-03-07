@@ -2,7 +2,7 @@
   (:require [clojure.java.io :as io])
   (:import [java.io File]
            [java.net URL]
-           [java.util.jar JarEntry JarFile]))
+           [java.util.jar JarEntry]))
 
 (defn dir?
   "Whether filename is a directory."
@@ -27,9 +27,9 @@
       (subs name (inc (count prefix))))))
 
 (defn jar-url->entries
-  "Returns entries from jar-url."
-  [^URL jar-url]
-  (-> jar-url io/file (JarFile.) (.entries) enumeration-seq))
+  "Returns entries from url on a jar."
+  [^URL url]
+  (-> url (.openConnection) (.getJarFile) (.entries) enumeration-seq))
 
 (defn file-url->child-names
   "Lists the files under file url.
@@ -49,9 +49,8 @@
         idx (.lastIndexOf path "!")
         prefix (subs path (+ 2 idx))]
     (if (< -1 idx)
-      (let [jar-url (URL. (subs path 0 idx))]
-        (->> (jar-url->entries jar-url)
-             (keep (partial direct-child-name prefix))))
+      (->> (jar-url->entries url)
+             (keep (partial direct-child-name prefix)))
       (file-url->child-names url))))
 
 (defn ^URL get-resource
