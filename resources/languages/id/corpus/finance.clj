@@ -30,6 +30,7 @@
 "20 Euro"
 "20 Euros"
 "EUR 20"
+"dua puluh Euro"
 (money 20 "EUR")
 
 "EUR29,99"
