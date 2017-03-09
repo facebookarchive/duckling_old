@@ -604,17 +604,9 @@
   [#"(?i)between" {:form :time-of-day} #"and" {:form :time-of-day}]
   (interval %2 %4 true)
 
-  "between <time-of-day-latent> and <time-of-day-latent> (interval) am|pm"
-  [#"(?i)between" #(and (= :time-of-day (:form %)) (:latent %)) #"and" #(and (= :time-of-day (:form %)) (:latent %)) #"(?i)([ap])\.?m?\.?"]
-  (let [[p meridiem] (if (= "a" (-> %5 :groups first clojure.string/lower-case))
-                       [[(hour 0) (hour 12) false] :am]
-                       [[(hour 12) (hour 0) false] :pm])]
-    (interval
-      (-> (intersect %2 (apply interval p))
-        (assoc :form :time-of-day))
-      (-> (intersect %4 (apply interval p))
-        (assoc :form :time-of-day))
-      true))
+  "between <time-of-day-latent> and <time-of-day-ampm> (interval)"
+  [#"(?i)between" #(and (= :time-of-day (:form %)) (:latent %)) #"and" #(and (= :time-of-day (:form %)) (:ampm %))]
+  (interval (pred-nth-after %2 %4 -1) %4 true)
 
   ; Specific for within duration... Would need to be reworked
   "within <duration>"
