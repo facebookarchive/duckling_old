@@ -1,31 +1,74 @@
 (
-  ; "intersect"
-  ; [(dim :number :grain #(> (:grain %) 1)) (dim :number)] ; grain 1 are taken care of by specific rule
-  ; (compose-numbers %1 %2)
+  "intersect numbers"
+  [(dim :number :grain #(> (:grain %) 1)) (dim :number)]
+  (compose-numbers %1 %2)
 
   "intersect (with and)"
-  [(dim :number :grain #(> (:grain %) 1)) #"(?i)ו" (dim :number)] ; grain 1 are taken care of by specific rule
+  [(dim :number :grain #(> (:grain %) 0)) #"(?i)ו" (dim :number)]
   (compose-numbers %1 %3)
 
  ;;
  ;; Integers
  ;;
 
- ;; TODO: Hebrew can make with 1..12
-  "integer (0..19)"
-  #"(?i)(אפס|כלום|אחד עשר|שתיים עשר|שניים עשר|תרי עשר|שלוש עשר|ארבע עשר|חמש עשר|שש עשר|שבע עשר|שמונה עשר|תשע עשר|אחד|אחת|שני|שניים|שתיים|שלוש|ארבע|חמש|שש|שבע|שמונה|תשע|עשר)"
-  ; fourteen must be before four, or it won't work because the regex will stop at four
+ "integer 0"
+  #"(?i)(אפס|כלום)"
+  {:dim :number :integer true :value 0 :grain 1}
+
+  "integer 1"
+  #"(?i)(אחד|אחת)"
+  {:dim :number :integer true :value 1 :grain 1}
+
+  "integer 2"
+  #"(?i)(שתיים|שניים)"
+  {:dim :number :integer true :value 2 :grain 1}
+  
+  "integer 3"
+  #"(?i)(שלושה?)"
+  {:dim :number :integer true :value 3 :grain 1}
+  
+  "integer 4"
+  #"(?i)(ארבעה?)"
+  {:dim :number :integer true :value 4 :grain 1}
+  
+  "integer 5"
+  #"(?i)(חמש|חמישה)"
+  {:dim :number :integer true :value 5 :grain 1}
+  
+  "integer 6"
+  #"(?i)(ששה?)"
+  {:dim :number :integer true :value 6 :grain 1}
+  
+  "integer 7"
+  #"(?i)(שבעה?)"
+  {:dim :number :integer true :value 7 :grain 1}
+  
+  "integer 8"
+  #"(?i)(שמונה)"
+  {:dim :number :integer true :value 8 :grain 1}
+  
+  "integer 9"
+  #"(?i)(תשעה?)"
+  {:dim :number :integer true :value 9 :grain 1}
+
+  "integer 10"
+  #"(?i)(עשרה?)"
+  {:dim :number :integer true :value 10 :grain 1}
+
+  "integer 10"
+  #"(?i)(עשרה?)"
+  {:dim :number :integer true :value 10 :grain 1}  
+
+  "integer 12"
+  #"(?i)(שניים עשר|תרי עשר)"
+  {:dim :number :integer true :value 10 :grain 1}  
+
+  "integer 11..19"
+  [(integer 1 9) (integer 10 10)]
   {:dim :number
    :integer true
-   :value (get {"אפס" 0 "כלום" 0 "אחד" 1 "אחת" 1 "שתיים" 2 "שניים" 2 "שלוש" 3 "שלושה" 3 "ארבע" 4 "חמש" 5
-              "שש" 6 "שבע" 7 "שמונה" 8 "תשע" 9 "עשר" 10 "אחד עשר" 11
-              "שניים עשר" 12 "שתיים עשר" 12 "תרי עשר" 12 "שלוש עשר" 13 "ארבע עשר" 14 "חמש עשר" 15 "שש עשר" 16
-              "שבע עשר" 17 "שמונה עשר" 18 "תשע עשר" 19}
-              (-> %1 :groups first clojure.string/lower-case))}
-
-  "ten"
-  #"(?i)עשרה?"
-  {:dim :number :integer true :value 10 :grain 1}
+   :value (+ (:value %1) (:value %2))
+   :grain (:grain %2)}
 
   "single"
   #"(?i)יחיד"
@@ -47,6 +90,7 @@
   #"(?i)(מיליון|מיליונים)"
   {:dim :number :integer true :value 1000000 :grain 6}
 
+
   "integer (20..90)"
   #"(?i)(עשרים|שלושים|ארבעים|חמישים|שישים|שבעים|שמונים|תשעים)"
   {:dim :number
@@ -56,11 +100,11 @@
              (-> %1 :groups first clojure.string/lower-case))
    :grain 1}
 
-  "integer 21..99"
-  [(integer 20 90 #(#{20 30 40 50 60 70 80 90} (:value %))) #"(?i)ו" (integer 1 9)]
-  {:dim :number
-   :integer true
-   :value (+  (:value %1) (:value %3))}
+  ; "integer 21..99"
+  ; [(integer 20 90 #(#{20 30 40 50 60 70 80 90} (:value %))) #"(?i)ו" (integer 1 9)]
+  ; {:dim :number
+  ;  :integer true
+  ;  :value (+  (:value %1) (:value %3))}
 
   "integer 101..999"
   [(integer 100 900 #(#{100 200 300 400 500 600 700 800 900} (:value %))) (integer 1 99)]
@@ -82,21 +126,6 @@
             first
             (clojure.string/replace #"," "")
             Long/parseLong)}
-
-  ; composition
-  ; "special composition for missing hundreds like in one twenty two"
-  ; [(integer 1 9) (integer 10 99)] ; grain 1 are taken care of by specific rule
-  ; {:dim :number
-  ;  :integer true
-  ;  :value (+ (* (:value %1) 100) (:value %2))
-  ;  :grain 1}
-
-  "number dozen"
-  [(integer 1 10) (dim :number #(:grouping %))]
-  {:dim :number
-   :integer true
-   :value (* (:value %1) (:value %2))
-   :grain (:grain %2)}
 
   "number hundreds"
   [(integer 1 99) (integer 100 100)]
@@ -153,37 +182,21 @@
               :integer int?
               :number-prefixed true)) ; prevent "- -3km" to be 3 billions
 
-
-  ;; suffixes
-
-  ; note that we check for a space-like char after the M, K or G
-  ; to avoid matching 3 Mandarins
-  ; "numbers suffixes (K, M, G)"
-  ; [(dim :number #(not (:number-suffixed %))) #"(?i)([kmg])(?=[\W\$€]|$)"]
-  ; (let [multiplier (get {"k" 1000 "m" 1000000 "g" 1000000000}
-  ;                       (-> %2 :groups first clojure.string/lower-case))
-  ;       value      (* (:value %1) multiplier)
-  ;       int?       (zero? (mod value 1)) ; often true, but we could have 1.1111K
-  ;       value      (if int? (long value) value)] ; cleaner if we have the right type
-  ;   (assoc %1 :value value
-  ;             :integer int?
-  ;             :number-suffixed true)) ; prevent "3km" to be 3 billions
-
   ;;
   ;; Ordinal numbers
   ;;
 
-  ; "ordinals (first..31st)"
-  ; #"(?i)(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth|thirteenth|fourteenth|fifteenth|sixteenth|seventeenth|eighteenth|nineteenth|twentieth|twenty-first|twenty-second|twenty-third|twenty-fourth|twenty-fifth|twenty-sixth|twenty-seventh|twenty-eighth|twenty-ninth|thirtieth|thirty-first)"
-  ; {:dim :ordinal
-  ;  :value (get {"first" 1 "second" 2 "third" 3 "fourth" 4 "fifth" 5
-  ;             "sixth" 6 "seventh" 7 "eighth" 8 "ninth" 9 "tenth" 10 "eleventh" 11
-  ;             "twelfth" 12 "thirteenth" 13 "fourteenth" 14 "fifteenth" 15 "sixteenth" 16
-  ;             "seventeenth" 17 "eighteenth" 18 "nineteenth" 19 "twentieth" 20 "twenty-first" 21
-  ;             "twenty-second" 22 "twenty-third" 23 "twenty-fourth" 24 "twenty-fifth" 25
-  ;             "twenty-sixth" 26 "twenty-seventh" 27 "twenty-eighth" 28 "twenty-ninth" 29
-  ;             "thirtieth" 30 "thirty-first" 31}
-  ;             (-> %1 :groups first clojure.string/lower-case))}
+  "ordinals (first..31st)"
+  #"(?i)(אחד|שניים|שלושה|ארבעה|חמישה|שישה|שבעה|שמונה|תשעה|עשרה|אחד עשר|שניים עשר|שלושה עשר|ארבעה עשר|חמישה עשר|שישה עשר|שבעה עשר|שמונה עשר|תשעה עשר|עשרים|עשרים ואחד|עשרים ושניים|עשרים ושלושה|עשרים וארבעה|עשרים וחמישה|עשרים ושישה|עשרים ושבעה|עשרים ושמונה|עשרים ותשעה|שלושים|שלושים ואחד)"
+  {:dim :ordinal
+   :value (get {"אחד" 1 "שניים" 2 "שלושה" 3 "ארבעה" 4 "חמישה" 5
+              "שישה" 6 "שבעה" 7 "שמונה" 8 "תשעה" 9 "עשרה" 10 "אחד עשר" 11
+              "שניים עשר" 12 "שלושה עשר" 13 "ארבעה עשר" 14 "חמישה עשר" 15 "שישה עשר" 16
+              "שבעה עשר" 17 "שמונה עשר" 18 "תשעה עשר" 19 "עשרים" 20 "עשרים ואחד" 21
+              "עשרים ושניים" 22 "עשרים ושלושה" 23 "עשרים וארבעה" 24 "עשרים וחמישה" 25
+              "עשרים ושישה" 26 "עשרים ושבעה" 27 "עשרים ושמונה" 28 "עשרים ותשעה" 29
+              "שלושים" 30 "שלושים ואחד" 31}
+              (-> %1 :groups first clojure.string/lower-case))}
 
   ; "ordinal (digits)"
   ; #"0*(\d+) ?(st|nd|rd|th)"
