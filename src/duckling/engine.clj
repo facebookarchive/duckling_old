@@ -237,7 +237,14 @@
   "Returns the tokens with :confidence a rough confidence estimation for each.
    Numbers covered by datetime are very unlikely."
   [context module tokens]
-  (->>
-    tokens
-    (map #(assoc % :confidence (Math/exp (% :log-prob))))
-    (map #(dissoc % :log-prob))))
+  (let [len (fn [token]
+                   (if (:pos token)
+                     (- (:end token) (:pos token))
+                     0))
+
+        calc-conf (fn [token]
+          (Math/exp (* (:log-prob token) (Math/exp (* -1 (len token))))))
+
+        f (fn [token]
+            (dissoc (assoc token :confidence (calc-conf token)) :log-prob))]
+  (map f tokens)))
