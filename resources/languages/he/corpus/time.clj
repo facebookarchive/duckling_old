@@ -18,10 +18,10 @@
   "מחר"
   (datetime 2013 2 13)
 
-  "יום ראשון"
   "ראשון"
+  "יום ראשון"
   "בראשון הזה"
-  (datetime 2013 2 18 :day-of-week 7)
+  (datetime 2013 2 17 :day-of-week 7)
 
   "יום שני"
   "שני"
@@ -69,11 +69,10 @@
   "2015-03-03"
   (datetime 2015 3 3 :day 3 :month 3 :year 2015)
 
-  "ב15"
   "ב15 לחודש"
   "ב15 החודש"
   "חמש עשרה לחודש"
-  (datetime 2013 2 15 :day 15)
+  (datetime 2013 2 15 :dבay 15)
 
   "ה15 בפברואר"
   "15 לפברואר"
@@ -115,7 +114,7 @@
   "שני, השמונה עשרה לפברואר"
   (datetime 2013 2 18 :day-of-week 1 :day 18 :month 2)
 
-;   ;; Cycles
+  ;; Cycles
 
   "השבוע"
   "בשבוע הנוכחי"
@@ -298,7 +297,7 @@
   (datetime 2014 7 18 19 0 :day-of-week 5 :hour 7 :meridiem :pm)
 
 
-; ;; Involving periods
+  ;; Involving periods
 
   "עוד שנייה"
   "בעוד שנייה"
@@ -321,12 +320,6 @@
   "בעוד חצי שעה"
   "עוד חצי שעה"
   (datetime 2013 2 12 5 0 0)
-
-  "for three-quarters of an hour"
-  "for 3/4h"
-  "for 3/4 h"
-  "for 3/4 hour"
-  (datetime 2013 2 12 5 15 0)
 
   "בעוד שעתיים וחצי"
   (datetime 2013 2 12 7 0 0)
