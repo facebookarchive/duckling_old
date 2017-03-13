@@ -40,7 +40,7 @@
   {:dim :number :integer true :value 12 :grain 1 :grouping true} ;;restrict composition and prevent "2 12"
 
   "hundred"
-  #"(?i)hundrede?"
+  #"(?i)hundre(de)?"
   {:dim :number :integer true :value 100 :grain 2}
 
   "thousand"
@@ -60,11 +60,11 @@
   {:dim :number :integer true :precision :approximate :value 3}
 
   "integer (20..90)"
-  #"(?i)(tyve|tjue|tredve|førti|femti|seksti|sytti|åtti|nitti)"
+  #"(?i)(tyve|tjue|tredve|tretti|førti|femti|seksti|sytti|søtti|åtti|nitti)"
   {:dim :number
    :integer true
-   :value (get {"tyve" 20 "tjue" 20 "tredve" 30 "førti" 40 "femti" 50 "seksti" 60
-              "sytti" 70 "åtti" 80 "nitti" 90}
+   :value (get {"tyve" 20 "tjue" 20 "tredve" 30 "tretti" 30 "førti" 40 "femti" 50 "seksti" 60
+              "sytti" 70 "søtti" 70 "åtti" 80 "nitti" 90}
              (-> %1 :groups first .toLowerCase))
    :grain 1}
 

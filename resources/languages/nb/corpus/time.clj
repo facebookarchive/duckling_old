@@ -129,10 +129,14 @@
   "forrige uke"
   (datetime 2013 2 4 :grain :week)
 
+  "sist uke"
+  (datetime 2013 2 4 :grain :week)
+
   "neste uke"
   (datetime 2013 2 18 :grain :week)
 
   "forrige måned"
+  "sist måned"
   (datetime 2013 1)
 
   "neste måned"
@@ -153,6 +157,7 @@
   (datetime 2018 10 1 :grain :quarter)
 
   "forrige år"
+  "sist år"
   (datetime 2012)
 
   "i fjor"
@@ -166,10 +171,12 @@
   (datetime 2014)
 
   "forrige søndag"
+  "sist søndag"
   "søndag i forrige uke"
   (datetime 2013 2 10 :day-of-week 7)
 
   "forrige tirsdag"
+  "sist tirsdag"
   (datetime 2013 2 5 :day-of-week 2)
 
   "neste tirsdag" ; when today is Tuesday, "neste tirsdag" (next tuesday) is a week from now
@@ -427,6 +434,7 @@
   (datetime-interval [2013 2 12 18] [2013 2 13 00])
 
   "forrige helg"
+  "sist helg"
   (datetime-interval [2013 2 8 18] [2013 2 11 00])
 
   "i morgen kveld"
@@ -446,6 +454,10 @@
 
   "mandag morgen"
   (datetime-interval [2013 2 18 4] [2013 2 18 12])
+
+  "i romjulen"
+  "i romjula"
+  (datetime-interval [2013 12 24] [2013 12 31])
 
   ; Intervals involving cycles
 

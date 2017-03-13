@@ -44,6 +44,16 @@
   "tjue"
   (number 20)
 
+  "30"
+  "tretti"
+  "tredve"
+  (number 30)
+
+  "70"
+  "søtti"
+  "sytti"
+  (number 70)
+
   "1,1"
   "1,10"
   "01,10"
@@ -85,8 +95,10 @@
   "fem tusen"
   (number 5000)
 
+  "hundre"
+  (number 100)
+
   "4."
   "fjerde"
   (ordinal 4)
 )
-

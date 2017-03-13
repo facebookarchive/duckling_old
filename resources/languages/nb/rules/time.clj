@@ -205,7 +205,7 @@
   (pred-nth-not-immediate %2 0)
 
   "last <time>"
-  [#"(?i)(siste|forrige|seneste)" (dim :time)]
+  [#"(?i)(siste|sist|forrige|seneste)" (dim :time)]
   (pred-nth %2 -1)
 
   "<time> after next"
@@ -474,6 +474,10 @@
   ; "season"
   ; #"(?i)forår"
   ; (interval (month-day 3 20) (month-day 6 21) false)
+
+  "christmas days"
+  #"(?i)romjul(a|en)"
+  (interval (month-day 12 24) (month-day 12 30) false)
 
 
   ; Time zones

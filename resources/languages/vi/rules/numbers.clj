@@ -17,9 +17,9 @@
   ; mười một... must be before mười, or it won't work because the regex will stop at mười
   {:dim :number
    :integer true
-   :value (get {"không" 0 "một" 1 "linh một" 1 "lẻ một" 1 "hai" 2 "linh hai" 2 "lẻ hai" 2 "ba" 3 "linh ba" 3 "lẻ" 3 
+   :value (get {"không" 0 "một" 1 "linh một" 1 "lẻ một" 1 "hai" 2 "linh hai" 2 "lẻ hai" 2 "ba" 3 "linh ba" 3 "lẻ" 3
                 "bốn" 4 "linh bốn" 4 "lẻ bốn" 4 "năm" 5 "lẻ năm" 5 "linh năm" 5
-                "sáu" 6 "linh sáu" 6 "lẻ sáu" 6 "bảy" 7 "linh bảy" 7 "lẻ bảy" 7 
+                "sáu" 6 "linh sáu" 6 "lẻ sáu" 6 "bảy" 7 "linh bảy" 7 "lẻ bảy" 7
                 "tám" 8 "linh tám" 8 "lẻ tám" 8 "chín" 9 "linh chín" 9 "lẻ chín" 9
                 "mười một" 11
                 "mười hai" 12 "mười ba" 13 "mười bốn" 14 "mười lăm" 15 "mười sáu" 16
@@ -27,7 +27,7 @@
                 "mười" 10 "linh mười" 10 "lẻ mười" 10}
                 (-> %1 :groups first clojure.string/lower-case))}
 
-  
+
 
   "tá"
   #"(?i)tá"
@@ -140,7 +140,7 @@
   [(dim :number #(not (:number-prefixed %))) #"(?i)chấm|phẩy" (integer 1 9)]
   {:dim :number
    :value (+ (* 0.1 (:value %3)) (:value %1))}
-   
+
    "number dot 10 99"
   [(dim :number #(not (:number-prefixed %))) #"(?i)chấm|phẩy" (integer 10 99)]
   {:dim :number
@@ -199,7 +199,11 @@
   ;;
   ;; Ordinal numbers
   ;;
-
+  "ordinals"
+  #"(?i)(đầu tiên|thứ nhất|thứ 1)"
+  {:dim :ordinal
+   :value (get {"đầu tiên" 1 "thứ nhất" 1 "thứ 1" 1}
+              (-> %1 :groups first clojure.string/lower-case))}
 
 
   )
