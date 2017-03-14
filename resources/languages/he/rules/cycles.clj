@@ -51,16 +51,16 @@
    :grain :year}
   
   "this <cycle>"
-  [#"(?i)הקרוב?ה|הזה|הזאת" (dim :cycle)]
-  (cycle-nth (:grain %2) 0)
+  [(dim :cycle) #"(?i)הקרוב?ה|הזה|הזאת"]
+  (cycle-nth (:grain %1) 0)
 
   "last <cycle>"
-  [#"(?i)האחרון|האחרונה|שעבר|שעברה" (dim :cycle)]
-  (cycle-nth (:grain %2) -1)
+  [(dim :cycle) #"(?i)האחרון|האחרונה|שעבר|שעברה"]
+  (cycle-nth (:grain %1) -1)
 
   "next <cycle>"
-  [#"(?i)הבאה?" (dim :cycle)]
-  (cycle-nth (:grain %2) 1)
+  [(dim :cycle) #"(?i)הבאה?" ]
+  (cycle-nth (:grain %1) 1)
   
   "the <cycle> after <time>"
   [#"(?i)ה" (dim :cycle) #"(?i)אחרי" (dim :time)]
