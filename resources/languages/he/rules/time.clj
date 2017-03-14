@@ -206,14 +206,6 @@
   (integer 1000 2100)
   (year (:value %1))
 
-  "year (latent)"
-  (integer -10000 999)
-  (assoc (year (:value %1)) :latent true)
-
-  "year (latent)"
-  (integer 2101 10000)
-  (assoc (year (:value %1)) :latent true)
-
   ; Day of month appears in the following context:
   ; - the nth
   ; - March nth
@@ -275,8 +267,12 @@
   (integer 0 23)
   (assoc (hour (:value %1) true) :latent true)
 
-  "at <time-of-day>" ; at four
-  [#"(?i)ב|בשעה" {:form :time-of-day}]
+  "at <time-of-day>"
+  [#"(?i)ב" {:form :time-of-day}]
+  (dissoc %2 :latent)
+
+  "at hour <time-of-day>"
+  [#"(?i)בשעה" {:form :time-of-day}]
   (dissoc %2 :latent)
 
   "<time-of-day> o'clock"

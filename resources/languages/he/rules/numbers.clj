@@ -194,15 +194,15 @@
   {:dim :ordinal :integer true :value 2 :grain 1}
   
   "ordinal 3"
-  #"(?i)(שלושה?|שלישי)"
+  #"(?i)(שלושה|שלישי)"
   {:dim :ordinal :integer true :value 3 :grain 1}
   
   "ordinal 4"
-  #"(?i)(ארבעה?|רביעי)"
+  #"(?i)(ארבעה|רביעי)"
   {:dim :ordinal :integer true :value 4 :grain 1}
   
   "ordinal 5"
-  #"(?i)(חמישי|חמישה|חמש)"
+  #"(?i)(חמישי|חמישה)"
   {:dim :ordinal :integer true :value 5 :grain 1}
   
   "ordinal 6"
@@ -210,7 +210,7 @@
   {:dim :ordinal :integer true :value 6 :grain 1}
   
   "ordinal 7"
-  #"(?i)(שבעה?|שביעי)"
+  #"(?i)(שבעה|שביעי)"
   {:dim :ordinal :integer true :value 7 :grain 1}
   
   "ordinal 8"
@@ -218,15 +218,15 @@
   {:dim :ordinal :integer true :value 8 :grain 1}
   
   "ordinal 9"
-  #"(?i)(תשעה|תשיעי?)"
+  #"(?i)(תשעה|תשיעי)"
   {:dim :ordinal :integer true :value 9 :grain 1}
 
   "ordinal 10"
-  #"(?i)(עשרה?|עשירי)"
+  #"(?i)(עשרה|עשירי)"
   {:dim :ordinal :integer true :value 10 :grain 1}
 
   "ordinal 11"
-  #"(?i)(עשרה?|עשירי)"
+  #"(?i)(אחד עשרה?)"
   {:dim :ordinal :integer true :value 11 :grain 1}
 
   "ordinal 12"
