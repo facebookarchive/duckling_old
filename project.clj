@@ -1,8 +1,8 @@
-(defproject wit/duckling "0.4.23"
+(defproject gnardari/duckling "0.4.24"
   :description "Date & Number parser"
-  :license {:url "https://github.com/wit-ai/duckling"
+  :license {:url "https://github.com/gnardari/duckling"
             :comments "see LICENSE"}
-  :url "https://github.com/wit-ai/duckling"
+  :url "https://github.com/gnardari/duckling"
   :plugins [[s3-wagon-private "1.1.2"]
             [lein-midje "3.1.3"]]
   :repl-options {:init-ns duckling.core}
@@ -19,7 +19,7 @@
   :test-selectors {:default (complement :benchmark)
                    :benchmark :benchmark}
   :scm {:name "git"
-        :url "https://github.com/wit-ai/duckling"}
+        :url "https://github.com/gnardari/duckling"}
   :pom-addition [:developers [:developer
                                [:name "Wit.ai"]
                                [:url "https://wit.ai"]

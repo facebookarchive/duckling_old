@@ -77,8 +77,7 @@
   [compare-fn log-prob-fn resolve-fn candidates]
   (->> candidates
        (map #(assoc % :log-prob (log-prob-fn %)))
-       (select-winners* compare-fn resolve-fn [])
-       (map #(dissoc % :log-prob))))
+       (select-winners* compare-fn resolve-fn [])))
 
 (defn analyze
   "Parse a sentence, returns the stash and a curated list of winners.
@@ -113,10 +112,11 @@
                      ; low confidence for numbers covered by datetime
                      (engine/estimate-confidence context module)
                      ; adapt the keys for the outside world
-                     (map (fn [{:keys [pos end text] :as token}]
+                     (map (fn [{:keys [pos end text confidence] :as token}]
                             (merge token {:start pos
                                           :end end
-                                          :body text}))))]
+                                          :body text
+                                          :confidence confidence}))))]
     {:stash stash :winners winners}))
 
 
@@ -374,7 +374,7 @@
    (->> (analyze text context module (map (fn [dim] {:dim dim :label dim}) dims) nil)
         :winners
         (map #(assoc % :value (engine/export-value % {})))
-        (map #(select-keys % [:dim :body :value :start :end :latent])))))
+        (map #(select-keys % [:dim :body :value :start :end :latent :confidence])))))
 
 
 ;--------------------------------------------------------------------------
