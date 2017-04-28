@@ -1,4 +1,4 @@
-(defproject wit/duckling "0.4.23"
+(defproject wit/duckling "0.4.24"
   :description "Date & Number parser"
   :license {:url "https://github.com/wit-ai/duckling"
             :comments "see LICENSE"}
