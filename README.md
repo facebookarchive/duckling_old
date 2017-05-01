@@ -1,3 +1,9 @@
+# Deprecation notice
+
+As of May 1st, 2017 we're deprecating this repository in favor of [the new Duckling](https://github.com/facebookincubator/duckling). See our [blog post announcement](https://wit.ai/blog/2017/05/01/new-duckling).
+
+Thanks to all the contributors!
+
 # Duckling
 
 [![Clojars Project](https://clojars.org/wit/duckling/latest-version.svg)](http://clojars.org/wit/duckling)
