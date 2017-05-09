@@ -66,6 +66,11 @@
  :unit "INR"}
 
 ;Emirates Currency
+"AUD"
+#"(?i)AUD|(D|d)irhams?"
+{:dim :unit
+ :unit "AUD"}
+
 "AED"
 #"(?i)AED|(D|d)irhams?"
 {:dim :unit
