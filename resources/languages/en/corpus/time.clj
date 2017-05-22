@@ -656,6 +656,14 @@
   "9:30 - 11:00"
   (datetime-interval [2013 2 12 9 30] [2013 2 12 11 1])
 
+  "between 7 and 8 PM"
+  "between 7 PM and 8 PM"
+  (datetime-interval [2013 2 12 19] [2013 2 12 21])
+
+  "from 7 to 8 PM"
+  "from 7 PM to 8 PM"
+  (datetime-interval [2013 2 12 19] [2013 2 12 21])
+
   "from 9:30 - 11:00 on Thursday"
   "between 9:30 and 11:00 on thursday"
   "9:30 - 11:00 on Thursday"

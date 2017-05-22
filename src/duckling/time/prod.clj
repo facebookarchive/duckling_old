@@ -118,6 +118,13 @@
     (hour-minute (if (pos? m) h (case (int h) 0 23 1 12 (dec h))) (mod m 60) true)
     (hour-minute (if (pos? m) h (case (int h) 0 23 1 0 (dec h))) (mod m 60) false)))
 
+; helper for dealing with am|pm
+(defn set-meridiem [tod ampm-first-letter]
+  (let [[p meridiem] (if (= "a" ampm-first-letter)
+                       [[(hour 0) (hour 12) false] :am]
+                       [[(hour 12) (hour 0) false] :pm])]
+    (-> (intersect tod (apply interval p))
+        (assoc :form :time-of-day :ampm meridiem))))
 
 (defn cycle-nth [grain n]
   (ti (p/take-the-nth (p/cycle grain) n)))
