@@ -377,24 +377,15 @@
   ;                  (Integer/parseInt (second (:groups %1)))
   ;                  false) ; not a 12-hour clock)
   ;     (assoc :latent true))
-  (let [[p meridiem] (if (= "a" (-> %2 :groups first clojure.string/lower-case))
-                       [[(hour 0) (hour 12) false] :am]
-                       [[(hour 12) (hour 0) false] :pm])]
-    (-> (intersect
-          (hour-minute (Integer/parseInt (first (:groups %1)))
-                       (Integer/parseInt (second (:groups %1)))
-                   true)
-          (apply interval p))
-        (assoc :form :time-of-day)))
+  (set-meridiem
+        (hour-minute (Integer/parseInt (first (:groups %1)))
+                     (Integer/parseInt (second (:groups %1)))
+                 true)
+        (-> %2 :groups first clojure.string/lower-case))
 
   "<time-of-day> am|pm"
   [{:form :time-of-day} #"(?i)(in the )?([ap])(\s|\.)?m?\.?"]
-  ;; TODO set_am fn in helpers => add :ampm field
-  (let [[p meridiem] (if (= "a" (-> %2 :groups second clojure.string/lower-case))
-                       [[(hour 0) (hour 12) false] :am]
-                       [[(hour 12) (hour 0) false] :pm])]
-    (-> (intersect %1 (apply interval p))
-        (assoc :form :time-of-day)))
+  (set-meridiem %1 (-> %2 :groups second clojure.string/lower-case))
 
   "noon"
   #"(?i)noon"
@@ -605,9 +596,17 @@
   [#"(?i)(later than|from)" {:form :time-of-day} #"((but )?before)|\-|to|th?ru|through|(un)?til(l)?" {:form :time-of-day}]
   (interval %2 %4 true)
 
+  "from <time-of-day-latent> - <time-of-day-ampm> (interval)"
+  [#"(?i)(later than|from)" #(and (= :time-of-day (:form %)) (:latent %)) #"\-|:|to|th?ru|through|(un)?til(l)?" #(and (= :time-of-day (:form %)) (:ampm %))]
+  (interval (pred-nth-after %2 %4 -1) %4 true)
+
   "between <time-of-day> and <time-of-day> (interval)"
   [#"(?i)between" {:form :time-of-day} #"and" {:form :time-of-day}]
   (interval %2 %4 true)
+
+  "between <time-of-day-latent> and <time-of-day-ampm> (interval)"
+  [#"(?i)between" #(and (= :time-of-day (:form %)) (:latent %)) #"and" #(and (= :time-of-day (:form %)) (:ampm %))]
+  (interval (pred-nth-after %2 %4 -1) %4 true)
 
   ; Specific for within duration... Would need to be reworked
   "within <duration>"
