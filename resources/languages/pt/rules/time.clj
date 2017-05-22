@@ -173,7 +173,7 @@
   ; "this Monday" => next week if today is Monday
 
   "this|next <day-of-week>"
-  [#"(?i)es[ts][ae]|pr[óo]xim[ao]" {:form :day-of-week}]
+  [#"(?i)[nd]?es[ts][ae]|pr[óo]xim[ao]" {:form :day-of-week}]
   (pred-nth-not-immediate %2 0)
 
   ;; for other preds, it can be immediate:
@@ -181,7 +181,7 @@
   ; See also: cycles in en.cycles.clj
 
   "this <time>"
-  [#"(?i)es[ts][ae]" (dim :time)]
+  [#"(?i)[nd]?es[ts][ae]" (dim :time)]
   (pred-nth %2 0)
 
   "next <time>"
@@ -372,7 +372,7 @@
   (assoc (intersect (cycle-nth :day 0) %2) :form :part-of-day) ;; removes :latent
 
   "<part-of-day> dessa semana"
-  [(dim :time #(not (:latent %))) #"(?i)(d?es[ts]a semana)|agora"]
+  [(dim :time #(not (:latent %))) #"(?i)([nd]?es[ts]a semana)|agora"]
   (assoc (intersect (cycle-nth :day 0) %1) :form :part-of-day) ;; removes :latent
 
 ; ;specific rule to address "3 in the morning","3h du matin" and extend morning span from 0 to 12
