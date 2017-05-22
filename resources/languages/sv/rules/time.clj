@@ -486,7 +486,7 @@
     (merge {:precision "exact"}))
 
   "about <time-of-day>" ; about
-  [#"(?i)(omkring|cirka|runt|ca\.)( kl\.| klockan)?" {:form :time-of-day}]
+  [#"(?i)(omkring|cirka|vid|runt|ca\.)( kl\.| klockan)?" {:form :time-of-day}]
   (-> %2
     (dissoc :latent)
     (merge {:precision "approximate"}))
