@@ -1,10 +1,11 @@
-(defproject wit/duckling "0.4.25-dev"
+(defproject clj-duckling "0.4.25-dev"
   :description "A Clojure library that parses text into structured data"
   :license {:url "https://github.com/wit-ai/duckling"
             :comments "see LICENSE"}
   :url "https://github.com/wit-ai/duckling"
   :plugins [[s3-wagon-private "1.1.2"]
-            [lein-midje "3.1.3"]]
+            [lein-midje "3.1.3"]
+            [lein-codox "0.10.3"]]
   :repl-options {:init-ns duckling.core}
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/tools.nrepl "0.2.13"]
@@ -19,9 +20,13 @@
   :test-selectors {:default (complement :benchmark)
                    :benchmark :benchmark}
   :scm {:name "git"
-        :url "https://github.com/wit-ai/duckling"}
+        :url "https://github.com/dpom/clj-duckling"}
   :pom-addition [:developers [:developer
-                               [:name "Wit.ai"]
-                               [:url "https://wit.ai"]
-                               [:email "contact@wit.ai"]
-                               [:timezone "-7"]]])
+                               [:name "Dan Pomohaci"]
+                              [:url "https://github.com/dpom/clj-duckling"]
+                               [:email "dan.pomohaci@gmail.com"]
+                               [:timezone "+3"]]]
+  :codox {:doc-paths ["docs"]
+          :output-path "docs/api"}
+
+)

@@ -15,7 +15,7 @@
 
 (load ent-init-file)
 
-(task 'doc '(compile) "build the project documentation" '(lambda (&optional x) "lein doc"))
+(task 'doc '() "build the project documentation" '(lambda (&optional x) "lein codox"))
 
 (task 'format '() "format the project" '(lambda (&optional x) "lein cljfmt fix"))
 
