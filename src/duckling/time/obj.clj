@@ -96,9 +96,10 @@
   The grain is the smallest of the args."
   [t1 t2]
   {:pre [(valid? t1) (valid? t2)]}
-  {:start (:start t1)
-   :grain (max-key grain-order (:grain t1) (:grain t2))
-   :end (end t2)})
+  (let [grain (max-key grain-order (:grain t1) (:grain t2))]
+    {:start (:start (assoc t1 :grain grain))
+     :grain grain
+     :end (end (assoc t2 :grain grain))}))
 
 (defn intersect
   "With the special case of time grains, it's quite easy. Will need to generalize to
